@@ -1,11 +1,12 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { LucideAngularModule, Search, MapPin, User, Lock, PiggyBank, CreditCard, Banknote, Shield, BarChart3, RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, Monitor, Laptop, Award, ShoppingBag, Rocket, Menu, X, Plus, Minus, ChevronLeft, Briefcase, GraduationCap } from 'lucide-angular';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
+    provideRouter(routes),
+    importProvidersFrom(LucideAngularModule.pick({ Search, MapPin, User, Lock, PiggyBank, CreditCard, Banknote, Shield, BarChart3, RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, Monitor, Laptop, Award, ShoppingBag, Rocket, Menu, X, Plus, Minus, ChevronLeft, Briefcase, GraduationCap }))
   ]
 };

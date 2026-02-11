@@ -1,0 +1,292 @@
+<header class="bg-white shadow-sm py-4 relative z-50">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <!-- Left Side: Hamburger & Logo -->
+    <div class="flex items-center gap-4">
+      <!-- Hamburger Menu (Mobile Only) -->
+      <button (click)="toggleMobileMenu()" class="lg:hidden text-blue-900 focus:outline-none">
+        <lucide-icon [name]="isMobileMenuOpen() ? 'x' : 'menu'" size="28"></lucide-icon>
+      </button>
+
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a routerLink="/">
+          <img
+            src="/logo/logo.jpeg"
+            alt="Capital Finance Logo"
+            class="h-10 lg:h-12 w-auto object-contain"
+          />
+        </a>
+      </div>
+    </div>
+
+    <!-- Search Bar (Desktop Only) -->
+    <div class="hidden lg:block w-1/4 relative mx-4">
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="¿Qué estás buscando?"
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-sm"
+        />
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
+        >
+          <lucide-icon name="search" size="18"></lucide-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side Actions (Desktop) -->
+    <div class="hidden lg:flex items-center gap-6">
+      <!-- Agencia -->
+      <a
+        href="#"
+        class="flex flex-col items-center text-gray-600 hover:text-red-600 transition group"
+      >
+        <lucide-icon
+          name="map-pin"
+          class="mb-1 group-hover:scale-110 transition-transform"
+          size="20"
+        ></lucide-icon>
+        <span class="text-xs font-medium">Agencia</span>
+      </a>
+
+      <!-- Hazte Cliente -->
+      <a
+        href="#"
+        class="flex flex-col items-center text-gray-600 hover:text-red-600 transition group mr-4"
+      >
+        <lucide-icon
+          name="user"
+          class="mb-1 group-hover:scale-110 transition-transform"
+          size="20"
+        ></lucide-icon>
+        <span class="text-xs font-medium">Hazte Cliente</span>
+      </a>
+
+      <!-- Buttons -->
+      <div class="flex gap-3">
+        <a
+          routerLink="/simulator"
+          class="px-5 py-2.5 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 transition shadow-sm hover:shadow-md"
+        >
+          Obtener un préstamo
+        </a>
+        <a
+          routerLink="/login"
+          class="px-5 py-2.5 bg-blue-900 text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition shadow-sm hover:shadow-md flex items-center gap-2"
+        >
+          <lucide-icon name="lock" size="16"></lucide-icon>
+          Banca por Internet
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Side Buttons (Mobile Only - Simplified) -->
+    <div class="flex lg:hidden gap-2">
+      <a
+        routerLink="/simulator"
+        class="px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-lg hover:bg-red-700 transition"
+      >
+        Préstamo
+      </a>
+      <a
+        routerLink="/login"
+        class="px-3 py-2 bg-blue-900 text-white text-xs font-bold rounded-lg hover:bg-blue-800 transition flex items-center gap-1"
+      >
+        <lucide-icon name="lock" size="14"></lucide-icon>
+        Banca
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    *ngIf="isMobileMenuOpen()"
+    class="lg:hidden fixed inset-0 bg-black/50 z-40"
+    (click)="toggleMobileMenu()"
+  ></div>
+
+  <!-- Mobile Menu Sidebar -->
+  <div
+    class="lg:hidden fixed top-0 left-0 w-[85%] max-w-[320px] h-full bg-white z-50 shadow-2xl transform transition-transform duration-300 overflow-y-auto"
+    [class.translate-x-0]="isMobileMenuOpen()"
+    [class.-translate-x-full]="!isMobileMenuOpen()"
+  >
+    <!-- Header -->
+    <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+      <img src="/logo/logo.jpeg" alt="Logo" class="h-8 w-auto" />
+      <button (click)="toggleMobileMenu()" class="text-gray-500">
+        <lucide-icon name="x" size="24"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Search Mobile -->
+    <div class="p-4 bg-gray-50">
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="¿Qué deseas encontrar?"
+          class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
+        />
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
+        >
+          <lucide-icon name="search" size="18"></lucide-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segments -->
+    <div class="flex p-4 gap-2 overflow-x-auto no-scrollbar border-b border-gray-100">
+      <button
+        *ngFor="let seg of segments"
+        (click)="activeSegment.set(seg)"
+        [class.bg-gray-100]="activeSegment() === seg"
+        [class.font-bold]="activeSegment() === seg"
+        class="px-4 py-1.5 rounded-full text-sm text-gray-700 whitespace-nowrap transition-colors"
+      >
+        {{ seg }}
+      </button>
+    </div>
+
+    <!-- Menu Items (Accordions) -->
+    <div class="py-2">
+      <!-- Productos -->
+      <div class="border-b border-gray-100">
+        <button
+          (click)="toggleAccordion('products')"
+          class="w-full flex justify-between items-center p-4 text-left font-medium text-gray-800 hover:bg-gray-50"
+        >
+          <div class="flex items-center gap-3">
+            <lucide-icon name="credit-card" class="text-blue-600" size="20"></lucide-icon>
+            Productos
+          </div>
+          <lucide-icon
+            [name]="activeAccordion() === 'products' ? 'minus' : 'plus'"
+            size="16"
+            class="text-blue-900"
+          ></lucide-icon>
+        </button>
+
+        <div *ngIf="activeAccordion() === 'products'" class="bg-gray-50">
+          <div *ngFor="let item of products" class="border-t border-gray-200">
+            <button
+              (click)="toggleSubAccordion(item.category)"
+              class="w-full flex justify-between items-center px-8 py-3 text-sm text-gray-600 font-medium"
+            >
+              <span>{{ item.category }}</span>
+              <lucide-icon
+                [name]="activeSubAccordion() === item.category ? 'chevron-down' : 'chevron-right'"
+                size="16"
+              ></lucide-icon>
+            </button>
+
+            <div *ngIf="activeSubAccordion() === item.category" class="bg-white px-8 py-2">
+              <ul>
+                <li
+                  *ngFor="let sub of item.subItems"
+                  class="py-2 border-b border-gray-50 last:border-0"
+                >
+                  <a href="#" class="text-sm text-gray-500 block relative">
+                    {{ sub.label }}
+                    <span
+                      *ngIf="sub.isNew"
+                      class="ml-2 text-[10px] bg-lime-500 text-white px-1.5 py-0.5 rounded font-bold uppercase"
+                      >Nuevo</span
+                    >
+                  </a>
+                </li>
+                <li class="py-2">
+                  <a href="#" class="text-sm text-blue-600 font-medium">Ver todos</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soluciones Digitales -->
+      <div class="border-b border-gray-100">
+        <button
+          (click)="toggleAccordion('digital')"
+          class="w-full flex justify-between items-center p-4 text-left font-medium text-gray-800 hover:bg-gray-50"
+        >
+          <div class="flex items-center gap-3">
+            <lucide-icon name="smartphone" class="text-blue-600" size="20"></lucide-icon>
+            Soluciones Digitales
+          </div>
+          <lucide-icon
+            [name]="activeAccordion() === 'digital' ? 'minus' : 'plus'"
+            size="16"
+            class="text-blue-900"
+          ></lucide-icon>
+        </button>
+
+        <div *ngIf="activeAccordion() === 'digital'" class="bg-gray-50 px-8 py-2">
+          <ul>
+            <li *ngFor="let item of digitalChannels" class="py-2">
+              <a href="#" class="flex items-center gap-2 text-sm text-gray-600">
+                <lucide-icon [name]="item.icon" size="16" class="text-gray-400"></lucide-icon>
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Beneficios -->
+      <div class="border-b border-gray-100">
+        <button
+          (click)="toggleAccordion('benefits')"
+          class="w-full flex justify-between items-center p-4 text-left font-medium text-gray-800 hover:bg-gray-50"
+        >
+          <div class="flex items-center gap-3">
+            <lucide-icon name="award" class="text-blue-600" size="20"></lucide-icon>
+            Beneficios
+          </div>
+          <lucide-icon
+            [name]="activeAccordion() === 'benefits' ? 'minus' : 'plus'"
+            size="16"
+            class="text-blue-900"
+          ></lucide-icon>
+        </button>
+
+        <div *ngIf="activeAccordion() === 'benefits'" class="bg-gray-50 px-8 py-2">
+          <ul>
+            <li *ngFor="let item of benefits" class="py-2">
+              <a href="#" class="flex items-center gap-2 text-sm text-gray-600">
+                <lucide-icon [name]="item.icon" size="16" class="text-gray-400"></lucide-icon>
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Ayuda y Educación -->
+      <div class="border-b border-gray-100">
+        <button
+          class="w-full flex justify-between items-center p-4 text-left font-medium text-gray-800 hover:bg-gray-50"
+        >
+          <div class="flex items-center gap-3">
+            <lucide-icon name="briefcase" class="text-blue-600" size="20"></lucide-icon>
+            Ayuda y Educación
+          </div>
+          <lucide-icon name="plus" size="16" class="text-blue-900"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Language Toggle -->
+    <div class="p-4 mt-4 border-t border-gray-100 flex justify-between items-center">
+      <span class="text-sm font-medium text-gray-700">Rikuchiy en quechua</span>
+      <div
+        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+      ></div>
+      <!-- Toggle Switch Placeholder (Simple UI) -->
+      <div class="w-10 h-5 bg-gray-300 rounded-full relative">
+        <div class="w-5 h-5 bg-white rounded-full shadow absolute left-0 top-0"></div>
+      </div>
+    </div>
+  </div>
+</header>

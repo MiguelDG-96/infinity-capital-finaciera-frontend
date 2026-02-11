@@ -1,0 +1,168 @@
+<div class="bg-gray-50 border-b border-gray-200 relative hidden lg:block">
+  <div class="container mx-auto px-4 flex items-center h-12 gap-2">
+    <!-- Products Dropdown Trigger -->
+    <div
+      class="relative group"
+      (mouseenter)="toggleMenu('products', true)"
+      (mouseleave)="toggleMenu('products', false)"
+    >
+      <button
+        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        [class.text-red-600]="activeMenu() === 'products'"
+        [class.border-red-600]="activeMenu() === 'products'"
+      >
+        Productos
+        <lucide-icon name="chevron-down" size="16"></lucide-icon>
+      </button>
+
+      <!-- Mega Menu Panel -->
+      <div
+        *ngIf="activeMenu() === 'products'"
+        class="absolute top-full left-0 w-[900px] bg-white shadow-xl rounded-b-xl z-50 flex overflow-hidden border border-gray-100 mt-[1px]"
+      >
+        <!-- Column 1: Categories -->
+        <div class="w-1/4 bg-gray-50 py-2">
+          <button
+            *ngFor="let item of products"
+            (mouseenter)="activeCategory.set(item)"
+            [class.bg-white]="activeCategory() === item"
+            [class.text-red-600]="activeCategory() === item"
+            class="w-full text-left px-4 py-3 flex items-center gap-3 text-gray-600 hover:bg-white hover:text-red-600 transition-colors"
+          >
+            <lucide-icon [name]="item.icon" size="20"></lucide-icon>
+            <span class="font-medium text-sm">{{ item.category }}</span>
+            <lucide-icon
+              *ngIf="activeCategory() === item"
+              name="chevron-right"
+              size="16"
+              class="ml-auto opacity-50"
+            ></lucide-icon>
+          </button>
+        </div>
+
+        <!-- Column 2: Sub Items -->
+        <div class="w-1/2 p-6 bg-white min-h-[400px]">
+          <h3 class="text-red-600 font-bold mb-4 flex items-center gap-2">
+            <lucide-icon [name]="activeCategory().icon" size="20"></lucide-icon>
+            {{ activeCategory().category }}
+          </h3>
+          <ul class="space-y-3">
+            <li *ngFor="let sub of activeCategory().subItems">
+              <a
+                href="#"
+                class="text-gray-600 hover:text-red-600 flex items-center gap-2 group text-sm"
+              >
+                {{ sub.label }}
+                <span
+                  *ngIf="sub.isNew"
+                  class="text-[10px] bg-lime-500 text-white px-1.5 py-0.5 rounded font-bold uppercase"
+                  >Nuevo</span
+                >
+              </a>
+            </li>
+            <li class="pt-2 border-t border-gray-100 mt-2">
+              <a href="#" class="text-red-600 font-medium text-sm hover:underline">Ver todos</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Promo Banner -->
+        <div class="w-1/4 bg-red-50 p-6 flex flex-col justify-center items-center text-center">
+          <h4 class="text-red-600 font-bold text-lg mb-2">¡Punta Cana está cerca!</h4>
+          <p class="text-red-600 text-sm mb-4">Participa en nuestros sorteos exclusivos.</p>
+          <button
+            class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold transition-colors"
+          >
+            Participa aquí
+          </button>
+          <!-- Placeholder for Guinea Pig Image -->
+          <div
+            class="mt-8 w-24 h-24 bg-red-200 rounded-full flex items-center justify-center opacity-50"
+          >
+            <lucide-icon name="image" size="32"></lucide-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Digital Channels Dropdown Trigger -->
+    <div
+      class="relative group"
+      (mouseenter)="toggleMenu('channels', true)"
+      (mouseleave)="toggleMenu('channels', false)"
+    >
+      <button
+        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        [class.text-red-600]="activeMenu() === 'channels'"
+        [class.border-red-600]="activeMenu() === 'channels'"
+      >
+        Canales digitales
+        <lucide-icon name="chevron-down" size="16"></lucide-icon>
+      </button>
+
+      <!-- Digital Channels Menu Panel -->
+      <div
+        *ngIf="activeMenu() === 'channels'"
+        class="absolute top-full left-0 w-[280px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 mt-[1px] py-2"
+      >
+        <a
+          *ngFor="let channel of digitalChannels"
+          href="#"
+          class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors group"
+        >
+          <lucide-icon
+            [name]="channel.icon"
+            size="20"
+            class="group-hover:text-red-600 transition-colors"
+          ></lucide-icon>
+          <span class="font-medium text-sm">{{ channel.label }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Benefits Dropdown Trigger -->
+    <div
+      class="relative group"
+      (mouseenter)="toggleMenu('benefits', true)"
+      (mouseleave)="toggleMenu('benefits', false)"
+    >
+      <button
+        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        [class.text-red-600]="activeMenu() === 'benefits'"
+        [class.border-red-600]="activeMenu() === 'benefits'"
+      >
+        Beneficios
+        <lucide-icon name="chevron-down" size="16"></lucide-icon>
+      </button>
+
+      <!-- Benefits Menu Panel -->
+      <div
+        *ngIf="activeMenu() === 'benefits'"
+        class="absolute top-full left-0 w-[320px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 mt-[1px] py-2"
+      >
+        <a
+          *ngFor="let benefit of benefits"
+          href="#"
+          class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors group"
+        >
+          <lucide-icon
+            [name]="benefit.icon"
+            size="20"
+            class="group-hover:text-red-600 transition-colors"
+          ></lucide-icon>
+          <div class="flex items-center gap-2">
+            <span class="font-medium text-sm">{{ benefit.label }}</span>
+            <span
+              *ngIf="benefit.isNew"
+              class="text-[10px] bg-lime-500 text-white px-1.5 py-0.5 rounded font-bold uppercase"
+              >Nuevo</span
+            >
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Other Secondary Links -->
+    <a href="#" class="ml-4 text-gray-500 hover:text-red-600 text-sm font-medium">Ayuda</a>
+  </div>
+</div>
