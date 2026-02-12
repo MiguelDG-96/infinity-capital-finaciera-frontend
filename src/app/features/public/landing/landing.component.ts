@@ -3,16 +3,20 @@ import { RouterLink } from '@angular/router';
 import { HeroComponent } from '../components/hero/hero.component';
 import { ProductsComponent } from '../components/products/products.component';
 import { StoreComponent } from '../components/store/store.component';
+import { DigitalChannelsComponent } from '../components/digital-channels/digital-channels.component';
+import { InfinyCapitalInfoComponent } from '../components/infinycapital-info/infinycapital-info.component';
 
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, HeroComponent, ProductsComponent, StoreComponent],
+  imports: [RouterLink, HeroComponent, ProductsComponent, StoreComponent, DigitalChannelsComponent, InfinyCapitalInfoComponent],
   template: `
     <app-hero></app-hero>
     <app-products></app-products>
     <app-store></app-store>
+    <app-digital-channels></app-digital-channels>
+    <app-infinycapital-info></app-infinycapital-info>
     <div class="container mx-auto px-4 py-16 text-center">
       <h2 class="text-4xl font-bold text-gray-900 mb-4">Tu futuro financiero comienza aquí</h2>
       <p class="text-xl text-gray-600 mb-8">Préstamos rápidos, seguros y a tu medida.</p>

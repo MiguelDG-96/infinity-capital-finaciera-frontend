@@ -16,10 +16,18 @@
       >
         <!-- Icon Container -->
         <div
-          class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+          class="flex-shrink-0 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300"
+          [ngClass]="product.image ? 'w-18 h-18' : 'w-12 h-12'"
           [class]="product.colorClass"
         >
-          <lucide-icon [name]="product.iconName" class="w-6 h-6 text-white"></lucide-icon>
+          @if (product.image) {
+            <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" />
+          } @else {
+            <lucide-icon
+              [name]="product.iconName"
+              class="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+            ></lucide-icon>
+          }
         </div>
 
         <!-- Text Content -->

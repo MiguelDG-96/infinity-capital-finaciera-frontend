@@ -6,7 +6,8 @@ interface Product {
   title: string;
   subtitle: string;
   icon: any;
-  iconName: string; // For template reference if needed
+  iconName?: string; // For template reference if needed
+  image?: string;
   colorClass: string;
 }
 
@@ -31,8 +32,9 @@ export class ProductsComponent {
       title: 'Cuenta Digital',
       subtitle: 'Cero costo de mantenimiento',
       icon: PiggyBank,
-      iconName: 'piggy-bank',
-      colorClass: 'bg-pink-500'
+      // iconName: 'piggy-bank',
+      image: '/products/piggy-coins.gif',
+      colorClass: 'bg-gray-200'
     },
     {
       title: 'Inversiones',
