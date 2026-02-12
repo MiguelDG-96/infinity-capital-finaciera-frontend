@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HeroComponent } from '../components/hero/hero.component';
+import { ProductsComponent } from '../components/products/products.component';
+
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, HeroComponent],
+  imports: [RouterLink, HeroComponent, ProductsComponent],
   template: `
     <app-hero></app-hero>
+    <app-products></app-products>
     <div class="container mx-auto px-4 py-16 text-center">
       <h2 class="text-4xl font-bold text-gray-900 mb-4">Tu futuro financiero comienza aquí</h2>
       <p class="text-xl text-gray-600 mb-8">Préstamos rápidos, seguros y a tu medida.</p>
