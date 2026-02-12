@@ -84,9 +84,7 @@ export class ProductsComponent {
     this.scrollContainer.nativeElement.scrollLeft = this.scrollLeft - walk;
   }
 
-  // Touch support is native with overflow-x-auto, but we can add hooks if needed
   onTouchStart(e: TouchEvent) {
-    // Optional: Logic if needed
   }
 
   onTouchEnd(e: TouchEvent) {
@@ -96,7 +94,6 @@ export class ProductsComponent {
   onScroll(event: Event) {
     const container = this.scrollContainer.nativeElement as HTMLElement;
     const scrollPosition = container.scrollLeft;
-    // Calculate index based on scroll position and total scrollable width
     // Better approach for snap: find closest child
     const itemWidth = container.scrollWidth / this.products.length;
     let index = Math.round(scrollPosition / itemWidth);
@@ -112,8 +109,6 @@ export class ProductsComponent {
     // Calculate position
     const card = container.children[index] as HTMLElement;
     if (card) {
-        // Need to account for the container's left offset relative to the card's left offset
-        // But since we are scrolling the container, we just need the card's offsetLeft relative to the container
          container.scrollTo({
             left: card.offsetLeft, 
             behavior: 'smooth'
