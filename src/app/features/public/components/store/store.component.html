@@ -1,26 +1,20 @@
-<div class="container mx-auto px-4 py-16 relative">
+<div class="container mx-auto px-2 relative">
   <!-- Card Wrapper (Relative for Ribbon positioning) -->
   <div class="relative z-10 max-w-6xl mx-auto">
     <!-- Ribbon Tag (Now outside overflow-hidden) -->
-    <div class="absolute top-2 -left-1 z-30 filter drop-shadow-md">
-      <div class="bg-red-600 text-lg text-white font-bold py-1 px-8 rounded-tl-xl rounded-r-2xl relative">
+    <div class="absolute top-2 -left-1 z-30 filter">
+      <div
+        class="bg-red-600 text-lg text-white font-bold py-1 px-8 rounded-tl-xl rounded-r-2xl relative"
+      >
         Mi Espacio Capital
         <!-- Fold Triangle Effect -->
         <div class="absolute left-0 top-full w-1 h-1 rounded-bl-xl bg-red-800 clip-elipse"></div>
       </div>
     </div>
-    <style>
-      .clip-triangle {
-        clip-path: polygon(0 0, 100% 0, 100% 100%);
-      }
-      .clip-elipse {
-        clip-path: elipse();
-      }
-    </style>
 
     <!-- Card Container (Overflow Hidden for rounded corners/image) -->
     <div
-      class="bg-white rounded-[1.5rem] shadow-2xl overflow-hidden md:flex border border-gray-100 relative z-10"
+      class="bg-white rounded-[1.5rem] shadow-sm drop-shadow-md overflow-hidden md:flex border border-gray-100 relative z-10"
     >
       <!-- Left Column: Form & Content -->
       <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 pt-24 md:pt-16">
@@ -41,38 +35,35 @@
         </ul>
 
         <!-- Form -->
-        <div class="flex flex-col sm:flex-row gap-4 mb-4">
+        <div class="flex flex-col sm:flex-row gap-2 mb-4 mt-4 mr-2 md:mt-0 md:mr-0">
           <!-- Input Group -->
-          <div
-            class="flex-1 flex border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all bg-white h-14"
-          >
+          <!-- Input Group -->
+          <div class="w-full sm:flex-1 flex items-center gap-2 h-12">
             <!-- Select -->
-            <div class="relative min-w-[80px] border-r border-gray-200">
+            <div
+              class="relative h-full min-w-[90px] bg-white border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-red-500 transition-all"
+            >
               <select
                 [(ngModel)]="docType"
-                class="w-full h-full appearance-none bg-transparent pl-4 pr-8 outline-none text-gray-700 font-medium cursor-pointer"
+                class="select select-ghost w-full h-full text-lg font-medium text-gray-700 focus:bg-transparent px-4 focus:outline-none rounded-none"
               >
                 <option value="DNI">DNI</option>
                 <option value="CE">CE</option>
               </select>
-              <lucide-icon
-                name="chevron-down"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-              ></lucide-icon>
             </div>
             <!-- Input -->
             <input
               type="text"
               [(ngModel)]="docNumber"
               placeholder="Nro Documento"
-              class="flex-1 w-full h-full px-4 outline-none text-gray-700 placeholder-gray-400"
+              class="flex-1 h-12 w-24 px-4 outline-none text-gray-700 text-lg placeholder-gray-400 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 transition-all"
             />
           </div>
 
           <!-- Button -->
           <button
             (click)="onSubmit()"
-            class="bg-[#FF7A00] hover:bg-[#ff6a00] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 h-14 min-w-[140px]"
+            class="bg-[#FF7A00] hover:bg-[#ff6a00] text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 h-12 w-full sm:w-auto min-w-[120px] text-lg"
           >
             Conocer
           </button>
@@ -86,7 +77,7 @@
 
       <!-- Right Column: Image -->
       <div
-        class="w-full md:w-1/2 bg-blue-50 relative overflow-hidden flex items-center justify-center min-h-[300px]"
+        class="hidden md:flex w-full md:w-1/2 bg-blue-50 relative overflow-hidden items-center justify-center min-h-[300px]"
       >
         <!-- Decorative Circles -->
         <div
@@ -106,7 +97,7 @@
               class="absolute top-0 right-0 w-48 h-28 bg-gray-900 rounded-xl shadow-2xl transform rotate-6 z-20 flex flex-col justify-between p-4 border-t border-gray-700"
             >
               <div class="flex justify-between items-start">
-                <span class="text-white font-bold italic tracking-wide">Capital</span>
+                <span class="text-white font-bold italic tracking-wide">InfinyCapital</span>
                 <lucide-icon
                   name="wifi"
                   class="text-white w-5 h-5 opacity-70 rotate-90"

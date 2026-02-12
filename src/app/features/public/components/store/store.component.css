@@ -1,0 +1,6 @@
+.clip-triangle {
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+.clip-elipse {
+  clip-path: ellipse(100% 100% at 0% 0%);
+}
