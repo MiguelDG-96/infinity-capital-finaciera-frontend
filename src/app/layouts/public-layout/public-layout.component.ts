@@ -3,11 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { TopbarComponent } from '../../shared/components/topbar/topbar.component';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { SecondarybarComponent } from '../../shared/components/secondarybar/secondarybar.component';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
+
 
 @Component({
   selector: 'app-public-layout',
   standalone: true,
-  imports: [RouterOutlet, TopbarComponent, NavbarComponent, SecondarybarComponent],
+  imports: [RouterOutlet, TopbarComponent, NavbarComponent, SecondarybarComponent, FooterComponent],
   template: `
     <app-topbar></app-topbar>
     <app-navbar></app-navbar>
@@ -17,9 +19,7 @@ import { SecondarybarComponent } from '../../shared/components/secondarybar/seco
       <router-outlet></router-outlet>
     </main>
 
-    <footer class="p-8 bg-gray-100 mt-12 text-center text-gray-500">
-      <p>&copy; 2026 Capital Finance. Todos los derechos reservados.</p>
-    </footer>
+    <app-footer></app-footer>
   `,
   styles: []
 })

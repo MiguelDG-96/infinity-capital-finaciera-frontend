@@ -1,11 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+  scroll-behavior: smooth;
+}
 
 @import 'tailwindcss';
 @plugin "daisyui";
 
- @plugin "daisyui" {
-   themes: light --default, cupcake;
- }
+@plugin "daisyui" {
+  themes:
+    light --default,
+    cupcake;
+}
 
 @theme {
   --font-sans: 'Flexo-Demi', 'sans-serif';
