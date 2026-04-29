@@ -1,0 +1,46 @@
+/* src/app/features/dashboard/pages/dashboard-home/dashboard-home.component.css */
+
+.animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.table th {
+    text-transform: uppercase;
+    font-size: 10px;
+    opacity: 0.4;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+.btn-primary {
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 15px -3px rgba(var(--p), 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.bg-base-800 {
+    background-color: #1a1a1a;
+    color: white;
+}

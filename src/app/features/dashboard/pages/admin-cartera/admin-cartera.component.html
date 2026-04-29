@@ -1,0 +1,179 @@
+<!-- src/app/features/dashboard/pages/admin-cartera/admin-cartera.component.html -->
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-7xl mx-auto">
+    
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Cartera de Créditos</h1>
+            <p class="text-sm opacity-50 font-medium">Gestión administrativa de préstamos y desembolsos.</p>
+        </div>
+        <button (click)="cargarCartera()" class="btn btn-ghost btn-sm gap-2" [disabled]="cargando">
+            <span *ngIf="cargando" class="loading loading-spinner loading-xs"></span>
+            Actualizar
+        </button>
+    </div>
+
+    <!-- Metricas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" *ngIf="!cargando && !error">
+        <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
+            <div class="stat">
+                <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest">Cartera Total</div>
+                <div class="stat-value text-primary text-2xl">{{ totalCartera | currency:'S/ ' }}</div>
+                <div class="stat-desc mt-1 font-medium">Suma de montos aprobados</div>
+            </div>
+        </div>
+        <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
+            <div class="stat">
+                <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest">Créditos Activos</div>
+                <div class="stat-value text-secondary text-2xl">{{ totalActivos }}</div>
+                <div class="stat-desc mt-1 font-medium">Contratos vigentes hoy</div>
+            </div>
+        </div>
+        <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
+            <div class="stat">
+                <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest text-error">Riesgo Mora</div>
+                <div class="stat-value text-error text-2xl">{{ totalAtrasados | currency:'S/ ' }}</div>
+                <div class="stat-desc mt-1 text-error/60 font-bold italic">Saldo en atraso</div>
+            </div>
+        </div>
+    </div>
+
+    @if (cargando) {
+        <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+            <p class="text-xs font-bold uppercase tracking-widest">Sincronizando con el servidor...</p>
+        </div>
+    } @else if (error) {
+        <div class="alert alert-error shadow-xl rounded-2xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span class="font-bold underline">{{ error }}</span>
+        </div>
+    } @else {
+        <!-- Tabla de Cartera -->
+        <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+            <div class="overflow-x-auto">
+                <table class="table table-zebra table-md w-full">
+                    <thead>
+                        <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+                            <th class="py-4 pl-6">ID</th>
+                            <th>Cliente / Documento</th>
+                            <th>Producto / Moneda</th>
+                            <th>Monto Aprobado</th>
+                            <th>Saldo Act.</th>
+                            <th>Estado</th>
+                            <th class="text-right pr-6">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (c of creditos; track c.id) {
+                            <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                                <td class="pl-6 font-mono text-xs opacity-40">#{{ c.id }}</td>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-sm text-base-content/80">{{ c.nombreCliente }}</span>
+                                        <span class="text-[10px] opacity-40 font-mono tracking-tighter">{{ c.documento }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-medium">{{ c.tipoCredito }}</span>
+                                        <span class="text-[9px] opacity-40 uppercase">{{ c.moneda }}</span>
+                                    </div>
+                                </td>
+                                <td class="font-bold text-xs">{{ (c.montoAprobado || c.montoCredito) | currency:'S/ ' }}</td>
+                                <td class="font-black text-xs" [class.text-primary]="c.debeActualidad > 0" [class.opacity-20]="c.debeActualidad === 0">
+                                    {{ c.debeActualidad | currency:'S/ ' }}
+                                </td>
+                                <td>
+                                    <div class="badge badge-sm font-black whitespace-nowrap px-3 py-2 border-none" [ngClass]="getEstadoClase(c.estado)">
+                                        {{ c.estado.replace('_', ' ') }}
+                                    </div>
+                                </td>
+                                <td class="text-right pr-6">
+                                    <div class="flex justify-end gap-2">
+                                        <!-- Botón Desembolsar -->
+                                        @if (c.estado === 'APROBADO') {
+                                            <button (click)="iniciarDesembolso(c.id)"
+                                                    class="btn btn-success btn-xs text-white shadow-sm border-none px-4 hover:scale-105 active:scale-95 transition-all"
+                                                    [disabled]="procesando">
+                                                Desembolsar
+                                            </button>
+                                        }
+                                        
+                                        <!-- Botón Resolver -->
+                                        @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA') {
+                                            <button (click)="resolverContrato(c)"
+                                                    class="btn btn-outline btn-error btn-xs border-error/30 hover:border-error hover:scale-105 active:scale-95 transition-all"
+                                                    [disabled]="procesando">
+                                                Resolver
+                                            </button>
+                                        }
+
+                                        @if (c.estado === 'RESUELTO' || c.estado === 'RECHAZADO' || c.estado === 'PAGADO') {
+                                            <span class="text-[10px] italic opacity-20 font-medium">Finalizado</span>
+                                        }
+
+                                        <a [routerLink]="['/dashboard/admin/cartera', c.id]"
+                                           class="btn btn-ghost btn-xs text-primary hover:bg-primary/10">
+                                           Detalle
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@if (mostrarModalResolver && creditoSeleccionado) {
+    <app-resolver-contrato-modal 
+        [credito]="creditoSeleccionado" 
+        (cerrar)="mostrarModalResolver = false" 
+        (confirmado)="handleResolucionConfirmada()">
+    </app-resolver-contrato-modal>
+}
+
+<!-- Modal Confirmación de Desembolso -->
+@if (showDesembolsoModal) {
+    <div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm pr-0">
+        <div class="relative w-full max-w-sm m-4 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-base-content/10 animate-fade-in text-center overflow-hidden">
+            <!-- Fondo Decorativo Sutil -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <h3 class="font-bold text-xl text-base-content mb-4 flex items-center justify-center gap-2">
+                <lucide-icon name="send" class="w-6 h-6 text-primary"></lucide-icon>
+                Desembolsar Crédito
+            </h3>
+            <p class="py-2 text-base-content/80 relative z-10 leading-relaxed text-sm">¿Estás seguro de proceder? El dinero se transferirá instantáneamente a la Billetera Virtual del cliente y se generará su cronograma de pagos.</p>
+            <div class="mt-6 flex justify-center gap-4 relative z-10">
+                <button class="btn btn-ghost hover:bg-base-content/10 border-transparent" (click)="cancelarDesembolso()">Cancelar</button>
+                <button class="btn btn-primary text-white shadow-lg shadow-primary/30" (click)="confirmarDesembolso()" [disabled]="procesando">
+                    @if (procesando) {
+                        <span class="loading loading-spinner loading-xs"></span>
+                    } @else {
+                        Sí, desembolsar
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal de Éxito -->
+@if (desembolsoExitoso) {
+    <div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm pr-0">
+        <div class="relative w-full max-w-sm m-4 p-10 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-success/20 animate-fade-in text-center overflow-hidden">
+            <div class="absolute inset-0 bg-success/5 pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col items-center">
+                <div class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-success/20 text-success mb-6">
+                    <lucide-icon name="check-circle-2" class="w-10 h-10"></lucide-icon>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">¡Desembolso Exitoso!</h3>
+                <p class="text-base-content/70 text-sm">Los fondos ya están en la billetera del cliente.</p>
+                <button class="btn btn-success mt-8 w-full text-white shadow-lg shadow-success/30 rounded-full" (click)="desembolsoExitoso = false">Entendido</button>
+            </div>
+        </div>
+    </div>
+}

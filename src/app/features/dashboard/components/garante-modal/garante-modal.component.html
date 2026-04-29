@@ -1,0 +1,73 @@
+<div class="modal modal-open">
+    <div class="modal-box max-w-md p-0 overflow-hidden border border-base-content/10 shadow-2xl rounded-3xl bg-base-100">
+        <!-- Header -->
+        <div class="bg-primary/5 p-6 border-b border-base-content/5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-primary/10 rounded-xl text-primary">
+                    <lucide-icon name="user-plus" class="w-6 h-6"></lucide-icon>
+                </div>
+                <div>
+                    <h3 class="font-black text-lg">Añadir Garante</h3>
+                    <p class="text-[10px] uppercase tracking-widest opacity-40 font-bold">Respaldo de Crédito #{{ creditoId }}</p>
+                </div>
+            </div>
+            <button class="btn btn-ghost btn-sm btn-circle" (click)="cerrar.emit()" [disabled]="procesando()">
+                <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+            </button>
+        </div>
+
+        <form [formGroup]="garanteForm" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+            @if (error()) {
+                <div class="alert alert-error text-xs rounded-xl py-2">
+                    <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
+                    <span>{{ error() }}</span>
+                </div>
+            }
+
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-bold text-xs">Nombre Completo</span></label>
+                <input type="text" formControlName="nombreCompleto" class="input input-bordered w-full bg-base-200/30 rounded-xl focus:border-primary transition-all" placeholder="Ej: Juan Pérez Díaz">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text font-bold text-xs">Tipo Doc.</span></label>
+                    <select formControlName="tipoDocumento" class="select select-bordered bg-base-200/30 rounded-xl">
+                        <option value="DNI">DNI</option>
+                        <option value="CE">C.E.</option>
+                        <option value="PASAPORTE">Pasaporte</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text font-bold text-xs">N° Documento</span></label>
+                    <input type="text" formControlName="numeroDocumento" class="input input-bordered bg-base-200/30 rounded-xl" placeholder="8 dígitos">
+                </div>
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-bold text-xs">Dirección de Domicilio</span></label>
+                <input type="text" formControlName="direccion" class="input input-bordered w-full bg-base-200/30 rounded-xl" placeholder="Calle, N°, Distrito">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text font-bold text-xs">Teléfono / Celular</span></label>
+                    <input type="text" formControlName="telefono" class="input input-bordered bg-base-200/30 rounded-xl" placeholder="999 999 999">
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text font-bold text-xs">Relación / Parentesco</span></label>
+                    <input type="text" formControlName="relacion" class="input input-bordered bg-base-200/30 rounded-xl" placeholder="Ej: Familiar, Socio">
+                </div>
+            </div>
+
+            <div class="modal-action mt-8">
+                <button type="button" class="btn btn-ghost rounded-xl" (click)="cerrar.emit()" [disabled]="procesando()">Cancelar</button>
+                <button type="submit" class="btn btn-primary rounded-xl px-8 shadow-lg shadow-primary/20" [disabled]="garanteForm.invalid || procesando()">
+                    <span *ngIf="procesando()" class="loading loading-spinner loading-xs"></span>
+                    {{ procesando() ? 'Guardando...' : 'Vincular Garante' }}
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-backdrop bg-base-content/20 backdrop-blur-sm" (click)="cerrar.emit()"></div>
+</div>

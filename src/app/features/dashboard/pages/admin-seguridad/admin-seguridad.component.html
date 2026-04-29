@@ -1,0 +1,183 @@
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Seguridad y Personal</h1>
+            <p class="text-sm opacity-50 font-medium">Gestión de usuarios administrativos y permisos por rol.</p>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs tabs-boxed bg-base-200/50 p-1 rounded-2xl inline-flex">
+        <button class="tab px-8 rounded-xl transition-all font-bold text-xs" 
+                [class.tab-active]="activeTab() === 'usuarios'"
+                (click)="activeTab.set('usuarios')">
+            USUARIOS / TRABAJADORES
+        </button>
+        <button class="tab px-8 rounded-xl transition-all font-bold text-xs" 
+                [class.tab-active]="activeTab() === 'permisos'"
+                (click)="activeTab.set('permisos')">
+            MATRIZ DE PERMISOS
+        </button>
+    </div>
+
+    <!-- SECCIÓN USUARIOS -->
+    @if (activeTab() === 'usuarios') {
+        <div class="space-y-6">
+            <div class="flex justify-end">
+                <button (click)="abrirModalUsuario()" class="btn btn-primary gap-2 rounded-2xl shadow-lg shadow-primary/20">
+                    <lucide-icon name="user-plus" class="w-5 h-5"></lucide-icon>
+                    Nuevo Trabajador
+                </button>
+            </div>
+
+            <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+                <div class="overflow-x-auto">
+                    <table class="table table-zebra w-full">
+                        <thead>
+                            <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+                                <th class="py-4 pl-6">Usuario / Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th class="text-right pr-6">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (u of usuarios(); track u.id) {
+                                <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                                    <td class="pl-6">
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-sm">{{ u.nombreCompleto }}</span>
+                                            <span class="text-[10px] opacity-50 font-mono">{{ u.email }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="badge badge-ghost border-base-content/20 text-[10px] font-black uppercase">
+                                            {{ u.rol.nombre || u.rol }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="toggle toggle-primary toggle-sm" 
+                                               [checked]="u.habilitado"
+                                               (change)="toggleEstadoUsuario(u)">
+                                    </td>
+                                    <td class="text-right pr-6">
+                                        <button (click)="abrirModalUsuario(u)" class="btn btn-ghost btn-xs text-primary">Editar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- SECCIÓN PERMISOS -->
+    @if (activeTab() === 'permisos') {
+        <div class="space-y-6">
+            <div class="flex items-center gap-4 bg-base-100 p-4 rounded-2xl border border-base-content/5 shadow-sm">
+                <span class="text-sm font-bold opacity-60 uppercase tracking-widest">Configurar Rol:</span>
+                <select class="select select-bordered select-sm rounded-xl bg-base-200/50" (change)="onRolChange($event)">
+                    @for (rol of roles(); track rol.id) {
+                        <option [value]="rol.id" [selected]="rol.id === selectedRolId()">{{ rol.nombre }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+                @if (isLoading()) {
+                    <div class="flex justify-center p-20"><span class="loading loading-spinner loading-lg text-primary"></span></div>
+                } @else {
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60 text-center">
+                                    <th class="text-left py-4 pl-6">Módulo / Sección</th>
+                                    <th>Ver</th>
+                                    <th>Crear</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (row of matrixRows(); track row.modulo.id) {
+                                    <tr class="hover:bg-base-200/30 transition-colors text-center border-b border-base-content/5">
+                                        <td class="text-left pl-6">
+                                            <span class="font-bold text-sm">{{ row.modulo.nombre }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm"
+                                                   [checked]="row.permiso.verModulo"
+                                                   (change)="handleToggleChange(row, 'verModulo', $any($event.target).checked)">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm"
+                                                   [checked]="row.permiso.pCreate"
+                                                   [disabled]="!row.permiso.verModulo"
+                                                   (change)="handleToggleChange(row, 'pCreate', $any($event.target).checked)">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm"
+                                                   [checked]="row.permiso.pUpdate"
+                                                   [disabled]="!row.permiso.verModulo"
+                                                   (change)="handleToggleChange(row, 'pUpdate', $any($event.target).checked)">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm"
+                                                   [checked]="row.permiso.pDelete"
+                                                   [disabled]="!row.permiso.verModulo"
+                                                   (change)="handleToggleChange(row, 'pDelete', $any($event.target).checked)">
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Modal Usuario -->
+@if (mostrarModalUsuario()) {
+    <div class="modal modal-open">
+        <div class="modal-box max-w-md p-0 overflow-hidden rounded-3xl border border-base-content/10 shadow-2xl">
+            <div class="bg-primary/5 p-6 border-b border-base-content/5">
+                <h3 class="font-black text-lg">{{ editandoUsuario() ? 'Editar Trabajador' : 'Nuevo Trabajador' }}</h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="form-control w-full">
+                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Nombre Completo</span></label>
+                    <input type="text" [(ngModel)]="usuarioForm.nombreCompleto" class="input input-bordered rounded-xl bg-base-200/50" placeholder="Ej: Maria Lopez">
+                </div>
+                <div class="form-control w-full">
+                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Email</span></label>
+                    <input type="email" [(ngModel)]="usuarioForm.email" class="input input-bordered rounded-xl bg-base-200/50" placeholder="usuario@empresa.com">
+                </div>
+                <div class="form-control w-full">
+                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Rol en la Empresa</span></label>
+                    <select [(ngModel)]="usuarioForm.rolId" class="select select-bordered rounded-xl bg-base-200/50">
+                        <option value="0" disabled>Seleccionar Rol</option>
+                        @for (rol of rolesParaUsuarios(); track rol.id) {
+                            <option [value]="rol.id">{{ rol.nombre }}</option>
+                        }
+                    </select>
+                </div>
+                @if (!editandoUsuario()) {
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Contraseña Temporal</span></label>
+                        <input type="password" [(ngModel)]="usuarioForm.contrasena" class="input input-bordered rounded-xl bg-base-200/50" placeholder="••••••••">
+                    </div>
+                }
+            </div>
+            <div class="modal-action p-6 pt-0">
+                <button class="btn btn-ghost rounded-xl" (click)="mostrarModalUsuario.set(false)">Cancelar</button>
+                <button class="btn btn-primary rounded-xl px-10 shadow-lg shadow-primary/20" (click)="guardarUsuario()">
+                    {{ editandoUsuario() ? 'Actualizar' : 'Crear Usuario' }}
+                </button>
+            </div>
+        </div>
+        <div class="modal-backdrop bg-base-content/20 backdrop-blur-sm" (click)="mostrarModalUsuario.set(false)"></div>
+    </div>
+}

@@ -1,5 +1,5 @@
-<header class="bg-white shadow-sm py-4 relative z-50">
-  <div class="container mx-auto px-4 flex justify-between items-center">
+<header class="bg-base-100 border-b border-base-content/5 py-4 relative z-50 transition-colors duration-300">
+  <div class="container mx-auto px-4 flex justify-between items-center text-base-content">
     <!-- Left Side: Hamburger & Logo -->
     <div class="flex items-center gap-4">
       <!-- Hamburger Menu (Mobile Only) -->
@@ -9,12 +9,20 @@
 
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a routerLink="/">
+        <a routerLink="/" class="flex items-center gap-3">
           <img
-            src="/logo/logo.jpeg"
+            src="/logo/logo-red.svg"
             alt="Capital Finance Logo"
-            class="h-10 lg:h-12 w-auto object-contain"
+            class="h-10 lg:h-12 w-auto object-contain transition-all duration-300"
           />
+          <div class="flex flex-col">
+            <span class="text-xl lg:text-2xl font-bold tracking-tight text-primary leading-none uppercase">
+              InfinyCapital
+            </span>
+            <span class="text-[10px] bg-primary text-primary-content lg:text-xs font-bold tracking-widest uppercase px-0.5 rounded-sm">
+              Servicios financieros
+            </span>
+          </div>
         </a>
       </div>
     </div>
@@ -114,7 +122,7 @@
   >
     <!-- Header -->
     <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-      <img src="/logo/logo.jpeg" alt="Logo" class="h-8 w-auto" />
+      <img [src]="themeService.logoUrl()" alt="Logo" class="h-8 w-auto" />
       <button (click)="toggleMobileMenu()" class="text-gray-500">
         <lucide-icon name="x" size="24"></lucide-icon>
       </button>

@@ -14,23 +14,23 @@
 
     <!-- Card Container (Overflow Hidden for rounded corners/image) -->
     <div
-      class="bg-white rounded-[1.5rem] shadow-sm drop-shadow-md overflow-hidden md:flex border border-gray-100 relative z-10"
+      class="bg-base-100 rounded-[1.5rem] shadow-sm drop-shadow-md overflow-hidden md:flex border border-base-content/10 relative z-10"
     >
       <!-- Left Column: Form & Content -->
       <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 pt-24 md:pt-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-6 leading-tight">
+        <h2 class="text-3xl md:text-4xl font-bold text-base-content mb-6 leading-tight">
           ¡Conoce tus productos <br />
-          <span class="text-blue-600">preaprobados!</span>
+          <span class="text-primary">preaprobados!</span>
         </h2>
 
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-3 text-gray-600">
-            <lucide-icon name="check-circle-2" class="w-5 h-5 text-blue-500"></lucide-icon>
+          <li class="flex items-center gap-3 text-base-content/70">
+            <lucide-icon name="check-circle-2" class="w-5 h-5 text-primary"></lucide-icon>
             <span>Solo con tu número de documento</span>
           </li>
-          <li class="flex items-center gap-3 text-gray-600">
-            <lucide-icon name="check-circle-2" class="w-5 h-5 text-blue-500"></lucide-icon>
-            <span>Para clientes y no clientes de Capital Finance</span>
+          <li class="flex items-center gap-3 text-base-content/70">
+            <lucide-icon name="check-circle-2" class="w-5 h-5 text-primary"></lucide-icon>
+            <span>Para clientes y no clientes de InfinyCapital</span>
           </li>
         </ul>
 
@@ -41,11 +41,11 @@
           <div class="w-full sm:flex-1 flex items-center gap-2 h-12">
             <!-- Select -->
             <div
-              class="relative h-full min-w-[90px] bg-white border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-red-500 transition-all"
+              class="relative h-full min-w-[90px] bg-base-200 border border-base-content/20 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary transition-all"
             >
               <select
                 [(ngModel)]="docType"
-                class="select select-ghost w-full h-full text-lg font-medium text-gray-700 focus:bg-transparent px-4 focus:outline-none rounded-none"
+                class="select select-ghost w-full h-full text-lg font-medium text-base-content focus:bg-transparent px-4 focus:outline-none rounded-none"
               >
                 <option value="DNI">DNI</option>
                 <option value="RUC">RUC</option>
@@ -56,7 +56,7 @@
               type="text"
               [(ngModel)]="docNumber"
               placeholder="Nro Documento"
-              class="flex-1 h-12 w-24 px-4 outline-none text-gray-700 text-lg placeholder-gray-400 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 transition-all"
+              class="flex-1 h-12 w-24 px-4 outline-none text-base-content text-lg placeholder-base-content/30 bg-base-200 border border-base-content/20 rounded-xl focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
@@ -77,7 +77,7 @@
 
       <!-- Right Column: Image -->
       <div
-        class="hidden md:flex w-full md:w-1/2 bg-blue-50 relative overflow-hidden items-center justify-center min-h-[300px]"
+        class="hidden md:flex w-full md:w-1/2 bg-base-200 relative overflow-hidden items-center justify-center min-h-[300px]"
       >
         <!-- Decorative Circles -->
         <div

@@ -1,0 +1,76 @@
+<!-- ROOT WRAPPER PARA ELUDIR CLIPPING Y RESTRICCIONES DE VISTA -->
+<div class="relative h-screen w-full" [attr.data-theme]="themeService.currentTheme()">
+
+  <!-- DASHBOARD PRINCIPAL -->
+  <div
+    class="dashboard-wrapper flex h-screen overflow-hidden bg-base-200 transition-all duration-700"
+    [class.blur-md]="isLoggingOut()"
+    [class.pointer-events-none]="isLoggingOut()"
+  >
+    <!-- ══════════ SIDEBAR ══════════ -->
+    <div
+      [class.hidden]="!sidebarOpen()"
+      class="lg:flex"
+    >
+      <app-dashboard-sidebar (closeSidebar)="closeSidebar()" />
+    </div>
+
+    <!-- ══════════ CONTENIDO PRINCIPAL ══════════ -->
+    <div 
+      class="flex flex-1 flex-col overflow-hidden transition-all duration-500"
+      [class.blur-sm]="notificationService.isOpen()"
+      [class.pointer-events-none]="notificationService.isOpen()"
+    >
+      <!-- Navbar -->
+      <app-dashboard-navbar
+        (toggleSidebar)="toggleSidebar()"
+        (logoutRequested)="requestLogout()"
+      />
+
+      <!-- Área de contenido con scroll -->
+      <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+        <router-outlet />
+      </main>
+    </div>
+  </div>
+
+  <!-- Drawer de Notificaciones (Fuera de wrapper para evitar recortes de overflow) -->
+  <app-notification-drawer />
+
+  <!-- OVERLAYS: MODALES Y SPINNERS FUERA DEL AREA DE BLUR -->
+  <div class="fixed inset-0 z-[10000] pointer-events-none">
+    
+    <!-- Modal Confirmación -->
+    @if (showLogoutModal()) {
+      <div class="absolute inset-0 pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm pr-0">
+        <div class="relative w-full max-w-sm m-4 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-white/20 dark:border-white/5 animate-fade-in text-center">
+          <!-- Fondo Decorativo Sutil -->
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <h3 class="font-bold text-xl text-base-content mb-4 flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Cerrar Sesión
+          </h3>
+          <p class="py-2 text-base-content/80 relative z-10">¿Estás seguro de que deseas salir del panel de Infinity Capital?</p>
+          <div class="mt-6 flex justify-center gap-4 relative z-10">
+            <button class="btn btn-ghost hover:bg-base-content/10 border-transparent" (click)="cancelLogout()">Cancelar</button>
+            <button class="btn btn-error text-white shadow-lg shadow-error/30" (click)="confirmLogout()">Sí, salir</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Animación Despedida (Spinner Fullscreen) -->
+    @if (isLoggingOut()) {
+      <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center bg-base-100/10 text-base-content transition-all duration-500">
+        <!-- Spinner Sharp sin blur -->
+        <span class="loading loading-spinner text-primary loading-lg mb-4"></span>
+        <h2 class="text-xl font-bold animate-pulse">Cerrando sesión...</h2>
+        <p class="text-sm opacity-60">Protegiendo tu información. Nos vemos pronto.</p>
+      </div>
+    }
+
+  </div>
+</div>

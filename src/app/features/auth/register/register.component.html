@@ -1,0 +1,244 @@
+<div [attr.data-theme]="themeService.currentTheme()" class="min-h-screen bg-base-100 font-sans transition-colors duration-300">
+  <!-- Botón de Tema (Esquina superior derecha) -->
+  <div class="fixed top-6 right-6 z-50">
+    <button 
+      (click)="themeService.toggleDarkMode()" 
+      class="btn btn-ghost btn-circle bg-base-200/50 backdrop-blur-md hover:bg-base-200 transition-all border border-base-content/10"
+      [title]="themeService.darkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+    >
+      <lucide-icon [name]="themeService.darkMode() ? 'sun' : 'moon'" size="20" class="text-base-content"></lucide-icon>
+    </button>
+  </div>
+
+  <main class="flex h-screen overflow-hidden">
+    <!-- Sección Izquierda: Branding e Ilustración (Solo Desktop) -->
+    <section class="hidden w-1/2 flex-col bg-primary p-8 xl:p-12 lg:flex transition-all duration-300 overflow-hidden relative">
+      <!-- Branding Vertical -->
+      <div class="flex flex-col items-center gap-3 lg:gap-4">
+        <img
+          src="logo/logo-white.svg"
+          alt="InfinyCapital"
+          class="h-10 xl:h-14 w-auto object-contain"
+        />
+        <div class="flex flex-col items-center text-center">
+          <h2 class="text-xl xl:text-2xl font-black tracking-[0.1em] text-white uppercase leading-none transition-all">
+            InfinyCapital
+          </h2>
+          <div class="mt-2 bg-white px-2 py-0.5 rounded-sm">
+            <span class="text-[11px] xl:text-xs font-bold tracking-[0.2em] text-primary uppercase">
+              Servicios financieros
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carrusel de Ilustraciones -->
+      <div class="relative flex flex-1 w-full flex-col items-center justify-start overflow-visible pt-10 pb-4">
+        <!-- Slides -->
+        <div class="relative w-full max-w-[280px] xl:max-w-md aspect-square">
+          @for (slide of slides; track $index) {
+            <div 
+              class="absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ease-in-out"
+              [class.opacity-100]="currentSlide() === $index"
+              [class.opacity-0]="currentSlide() !== $index"
+              [class.translate-x-0]="currentSlide() === $index"
+              [class.translate-x-full]="currentSlide() < $index"
+              [class.-translate-x-full]="currentSlide() > $index"
+            >
+              <!-- Nube de Comentario (Speech Bubble) -->
+              <div 
+                class="absolute z-10 animate-bounce duration-[3000ms]"
+                [class.top-4]="slide.position.includes('top-4')"
+                [class.top-12]="slide.position.includes('top-12')"
+                [class.top-2]="slide.position.includes('top-2')"
+                [class.right-4]="slide.position.includes('right-4')"
+                [class.left-4]="slide.position.includes('left-4')"
+                [class.left-1/2]="slide.position.includes('center-x')"
+                [class.-translate-x-1/2]="slide.position.includes('center-x')"
+                *ngIf="currentSlide() === $index"
+              >
+                <div class="relative bg-white text-primary px-6 py-3 rounded-2xl shadow-xl border-2 border-primary/10">
+                  <span class="text-sm font-black tracking-tight whitespace-nowrap">
+                    {{ slide.phrase }}
+                  </span>
+                  <!-- Triángulo de la nube -->
+                  <div 
+                    class="absolute w-4 h-4 bg-white border-r-2 border-b-2 border-primary/10 rotate-45"
+                    [class]="slide.tailPosition"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Imagen del Banner -->
+              <img
+                [src]="slide.image"
+                [alt]="'Banner ' + ($index + 1)"
+                class="h-auto w-full max-h-[250px] xl:max-h-[350px] object-contain"
+              />
+            </div>
+          }
+        </div>
+
+        <!-- Indicadores (Puntitos) -->
+        <div class="mt-4 flex gap-2.5">
+          @for (slide of slides; track $index) {
+            <button 
+              (click)="setSlide($index)"
+              class="h-2.5 rounded-full transition-all duration-300 border border-white/30"
+              [class.w-8]="currentSlide() === $index"
+              [class.bg-white]="currentSlide() === $index"
+              [class.w-2.5]="currentSlide() !== $index"
+              [class.bg-white/20]="currentSlide() !== $index"
+              [attr.aria-label]="'Ir al slide ' + ($index + 1)"
+            ></button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Derecha: Formulario -->
+    <section class="flex w-full flex-col items-center justify-center p-6 lg:w-1/2 lg:p-12 overflow-y-auto">
+      <!-- Branding Vertical para Móvil -->
+      <div class="mb-8 flex flex-col items-center gap-3 lg:hidden">
+        <img
+          [src]="themeService.logoUrl()"
+          alt="InfinyCapital"
+          class="h-12 w-auto object-contain"
+        />
+        <div class="flex flex-col items-center text-center">
+          <h2 class="text-2xl font-bold tracking-tight text-primary leading-none uppercase">
+            InfinyCapital
+          </h2>
+          <div class="mt-2 bg-primary text-primary-content font-bold tracking-widest uppercase px-1 rounded-sm">
+            <span class="text-[10px] uppercase">
+              Servicios financieros
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full max-w-[340px] space-y-6">
+        <div>
+          <h1 class="text-2xl text-center font-black tracking-tight text-base-content lg:text-3xl">
+            Crea tu cuenta
+          </h1>
+          <p class="mt-2 text-sm text-center text-base-content/75">
+            Únete a la mejor plataforma de gestión financiera.
+          </p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 flex flex-col gap-4">
+          <!-- Error Message -->
+          @if (errorMessage()) {
+            <div class="alert alert-error py-2 px-4 text-[13px] font-bold text-white rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
+              <lucide-icon name="alert-circle" size="16"></lucide-icon>
+              <span>{{ errorMessage() }}</span>
+            </div>
+          }
+
+          <!-- Nombre Completo -->
+          <div class="flex flex-col gap-1.5">
+            <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+              Nombre completo
+            </label>
+            <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+              <lucide-icon name="user" size="16" class="text-base-content/30"></lucide-icon>
+              <input 
+                type="text" 
+                formControlName="nombreCompleto"
+                class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                placeholder="Ej. Juan Pérez" 
+              />
+            </label>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col gap-1.5">
+            <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+              Correo electrónico
+            </label>
+            <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+              <lucide-icon name="mail" size="16" class="text-base-content/30"></lucide-icon>
+              <input 
+                type="email" 
+                formControlName="email"
+                class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                placeholder="correo@ejemplo.com" 
+              />
+            </label>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="flex flex-col gap-1.5">
+            <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+              Teléfono
+            </label>
+            <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+              <lucide-icon name="phone" size="16" class="text-base-content/30"></lucide-icon>
+              <input 
+                type="tel" 
+                formControlName="telefono"
+                class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                placeholder="+51 987 654 321" 
+              />
+            </label>
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col gap-1.5">
+            <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+              Contraseña
+            </label>
+            <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+              <lucide-icon name="lock" size="16" class="text-base-content/30"></lucide-icon>
+              <input 
+                [type]="showPassword() ? 'text' : 'password'" 
+                formControlName="contrasena"
+                class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                placeholder="••••••••" 
+              />
+              <button 
+                type="button" 
+                (click)="togglePassword()" 
+                class="btn btn-ghost btn-xs btn-circle text-base-content/30 hover:text-primary transition-colors"
+              >
+                <lucide-icon [name]="showPassword() ? 'eye-off' : 'eye'" size="16"></lucide-icon>
+              </button>
+            </label>
+          </div>
+
+          <!-- Términos y Condiciones -->
+          <div class="mt-2 flex items-center gap-2 px-1">
+            <input type="checkbox" required class="checkbox checkbox-primary checkbox-xs rounded-sm border-base-content/20" />
+            <span class="text-[11px] font-bold text-base-content/50 tracking-tight">
+              Acepto los <a href="#" class="text-primary hover:underline">términos y condiciones</a>
+            </span>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-4 flex flex-col gap-4">
+            <button 
+              type="submit" 
+              [disabled]="registerForm.invalid || isLoading()"
+              class="btn btn-primary h-11 w-full min-h-[2.75rem] text-[13px] font-black tracking-widest shadow-md transition-all active:scale-[0.98] disabled:bg-base-200 disabled:text-base-content/20 disabled:shadow-none"
+            >
+              @if (isLoading()) {
+                <span class="loading loading-spinner loading-sm"></span>
+                Registrando...
+              } @else {
+                Crear cuenta
+              }
+            </button>
+          </div>
+        </form>
+
+        <!-- Footer -->
+        <p class="mt-6 text-center text-[13px] font-bold text-base-content/55">
+          ¿Ya tienes una cuenta? 
+          <a routerLink="/login" class="text-primary hover:underline transition-all font-black">Iniciar sesión</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</div>

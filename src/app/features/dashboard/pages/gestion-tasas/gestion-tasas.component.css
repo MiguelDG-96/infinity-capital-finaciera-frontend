@@ -1,0 +1,13 @@
+/* src/app/features/dashboard/pages/gestion-tasas/gestion-tasas.component.css */
+:host {
+  display: block;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme="infinity-dark"] .glass {
+  background: rgba(30, 41, 59, 0.7);
+}

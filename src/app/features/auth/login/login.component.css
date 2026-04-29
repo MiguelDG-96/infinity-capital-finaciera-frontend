@@ -1,0 +1,30 @@
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+/* Reset de estilos de Autofill (Chrome/Safari/Edge) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: hsl(var(--bc)) !important; /* Forzar el color del texto al del tema actual */
+    caret-color: hsl(var(--bc));
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+}

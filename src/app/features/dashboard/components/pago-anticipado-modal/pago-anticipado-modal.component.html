@@ -1,0 +1,124 @@
+<!-- src/app/features/dashboard/components/pago-anticipado-modal/pago-anticipado-modal.component.html -->
+<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-md animate-fade-in p-4">
+    <div class="relative w-full max-w-lg rounded-[2.5rem] bg-base-100/90 shadow-[0_32px_64px_rgba(0,0,0,0.2)] p-0 overflow-hidden transform transition-all border border-white/10">
+      
+      <!-- Fondo Decorativo Glass -->
+      <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/10 -z-10 blur-3xl opacity-50"></div>
+  
+      <!-- Botón Cerrar -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
+  
+      @if (exito()) {
+        <div class="p-12 text-center animate-scale-in">
+          <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-success/20 text-success mb-8 shadow-lg shadow-success/10 border border-success/20">
+            <lucide-icon name="check-circle" class="h-12 w-12"></lucide-icon>
+          </div>
+          <h3 class="text-3xl font-black mb-3">Pago Exitoso</h3>
+          <p class="text-base-content/60 font-medium">Hemos recibido tu pago anticipado. El cronograma se está recalculando.</p>
+        </div>
+      } @else {
+        <!-- Encabezado -->
+        <div class="p-8 pb-4">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                <lucide-icon name="zap" class="h-6 w-6"></lucide-icon>
+            </div>
+            <div>
+                <h3 class="font-black text-2xl tracking-tight">Pago Anticipado</h3>
+                <p class="text-xs font-bold opacity-40 uppercase tracking-widest">Crédito #{{ credito.id }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="divider m-0 px-8 opacity-10"></div>
+  
+        <!-- Formulario -->
+        <form [formGroup]="pagoForm" (ngSubmit)="confirmarPago()" class="p-8 pt-6 space-y-6">
+          
+          @if (error()) {
+            <div class="alert alert-error bg-error/10 border-error/20 text-error text-sm rounded-2xl animate-shake">
+              <lucide-icon name="alert-triangle" class="h-4 w-4"></lucide-icon>
+              <span>{{ error() }}</span>
+            </div>
+          }
+  
+          <!-- Resumen de Deuda -->
+          <div class="bg-base-200/50 p-6 rounded-3xl border border-base-content/5 space-y-4">
+            <div class="flex justify-between items-end">
+                <div>
+                    <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Total a Liquidar</p>
+                    <p class="text-3xl font-black text-primary">{{ credito.debeActualidad | currency:'S/ ' }}</p>
+                </div>
+                <!-- Toggle Selector -->
+                <div class="join bg-base-100 p-1 border border-base-content/10 rounded-2xl">
+                    <button type="button" 
+                            class="join-item btn btn-xs border-none" 
+                            [class.btn-primary]="tipoPago() === 'PARCIAL'"
+                            [class.btn-ghost]="tipoPago() !== 'PARCIAL'"
+                            (click)="pagoForm.get('monto')?.setValue(credito.debeActualidad / 2)">
+                        Parcial
+                    </button>
+                    <button type="button" 
+                            class="join-item btn btn-xs border-none" 
+                            [class.btn-primary]="tipoPago() === 'TOTAL'"
+                            [class.btn-ghost]="tipoPago() !== 'TOTAL'"
+                            (click)="seleccionarPagoTotal()">
+                        Total
+                    </button>
+                </div>
+            </div>
+          </div>
+  
+          <!-- Input de Monto -->
+          <div class="form-control">
+            <label class="label pt-0">
+                <span class="label-text-alt font-black uppercase opacity-40 tracking-wider">Monto a Pagar</span>
+            </label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-6 pointer-events-none text-primary/40 font-bold group-focus-within:text-primary transition-colors">S/</div>
+                <input type="number" 
+                       formControlName="monto" 
+                       class="input input-lg input-bordered w-full pl-12 rounded-3xl font-black text-2xl transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+                       [class.input-error]="isFieldInvalid('monto')">
+            </div>
+            @if (isFieldInvalid('monto')) {
+                <label class="label pb-0">
+                    <span class="text-xs text-error font-bold italic">Ingresa un monto válido (máx. {{ credito.debeActualidad }})</span>
+                </label>
+            }
+          </div>
+  
+          <!-- Método de Pago (Readonly por ahora) -->
+          <div class="flex items-center gap-3 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+            <lucide-icon name="wallet" class="h-5 w-5 text-primary"></lucide-icon>
+            <div class="flex-1">
+                <p class="text-[10px] font-bold uppercase opacity-40 uppercase tracking-widest">Origen de Fondos</p>
+                <p class="text-sm font-bold">Saldo de Billetera Virtual</p>
+            </div>
+            <lucide-icon name="check" class="h-4 w-4 text-primary"></lucide-icon>
+          </div>
+  
+          <!-- Acciones -->
+          <div class="pt-4 space-y-3">
+            <button type="submit" 
+                    class="btn btn-primary btn-lg w-full rounded-3xl shadow-xl shadow-primary/20 gap-3 border-none hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    [disabled]="pagoForm.invalid || enviando()">
+                @if (enviando()) {
+                    <span class="loading loading-spinner"></span>
+                } @else {
+                    <lucide-icon name="zap" class="h-5 w-5"></lucide-icon>
+                }
+                Confirmar Pago de {{ (pagoForm.get('monto')?.value || 0) | currency:'S/ ' }}
+            </button>
+            <button type="button" 
+                    class="btn btn-ghost w-full rounded-3xl opacity-50 font-bold hover:opacity-100" 
+                    (click)="cerrar.emit()"
+                    [disabled]="enviando()">
+                Cancelar
+            </button>
+          </div>
+  
+        </form>
+      }
+    </div>
+  </div>

@@ -1,0 +1,194 @@
+<!-- src/app/features/dashboard/pages/solicitar-credito/solicitar-credito.component.html -->
+<div class="space-y-6 max-w-6xl mx-auto p-4 md:p-6 animate-fade-in">
+  <div class="flex items-center gap-4 border-b border-base-200 pb-4">
+    <a routerLink="/dashboard/creditos/mis-creditos" class="btn btn-circle btn-ghost btn-sm">
+      <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
+    </a>
+    <div>
+      <h1 class="text-2xl font-bold text-base-content">Solicitar Nuevo Crédito</h1>
+      <p class="text-sm opacity-60">Completa tus datos para iniciar el proceso de evaluación.</p>
+    </div>
+  </div>
+
+  @if (exito) {
+    <div class="alert alert-success shadow-lg text-success-content py-8 flex flex-col md:flex-row items-center gap-6">
+      <lucide-icon name="check-circle" class="w-16 h-16"></lucide-icon>
+      <div class="text-center md:text-left">
+        <h3 class="font-bold text-2xl mb-2">¡Solicitud Enviada con Éxito!</h3>
+        <p class="opacity-90">Tu solicitud ha sido registrada correctamente. Un analista revisará tu perfil y te notificaremos pronto.</p>
+        <div class="mt-4 flex items-center justify-center md:justify-start gap-2 text-sm font-medium">
+          <span class="loading loading-dots loading-sm"></span>
+          Redirigiendo a tus créditos...
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Form -->
+      <div class="lg:col-span-2 card bg-base-100 shadow-xl border border-base-200 overflow-hidden">
+        <div class="card-body p-6 md:p-10">
+          
+          @if (error) {
+            <div class="alert alert-error shadow-sm mb-6 text-sm flex items-center gap-2">
+              <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
+              <span>{{ error }}</span>
+            </div>
+          }
+
+          <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="space-y-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- Identity Section -->
+              <div class="space-y-5">
+                <h3 class="text-lg font-bold border-b border-base-200 pb-2 flex items-center gap-2 text-primary">
+                    <lucide-icon name="id-card" class="w-5 h-5"></lucide-icon>
+                    Información Personal
+                </h3>
+                
+                <div class="form-control w-full">
+                  <label class="label"><span class="label-text font-semibold opacity-70">Documento de Identidad</span></label>
+                  <div class="join w-full">
+                    <select formControlName="tipoDocumento" class="select select-bordered join-item w-1/3 focus:select-primary">
+                      <option *ngFor="let tipo of tiposDocumento" [value]="tipo">{{ tipo }}</option>
+                    </select>
+                    <input type="text" formControlName="numeroDocumento" placeholder="Número" 
+                           class="input input-bordered join-item w-2/3 focus:input-primary" 
+                           [class.input-error]="isFieldInvalid('numeroDocumento')">
+                  </div>
+                  @if (isFieldInvalid('numeroDocumento')) {
+                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Requerido (min 8 dígitos)</span></label>
+                  }
+                </div>
+
+                <div class="form-control w-full">
+                  <label class="label"><span class="label-text font-semibold opacity-70">Domicilio Actual</span></label>
+                  <div class="relative">
+                    <lucide-icon name="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-primary"></lucide-icon>
+                    <input type="text" formControlName="domicilio" placeholder="Av / Calle / Nro" 
+                           class="input input-bordered w-full pl-10 focus:input-primary" 
+                           [class.input-error]="isFieldInvalid('domicilio')">
+                  </div>
+                  @if (isFieldInvalid('domicilio')) {
+                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Ingresa un domicilio válido</span></label>
+                  }
+                </div>
+              </div>
+
+              <!-- Loan Details Section -->
+              <div class="space-y-5">
+                <h3 class="text-lg font-bold border-b border-base-200 pb-2 flex items-center gap-2 text-primary">
+                    <lucide-icon name="banknote" class="w-5 h-5"></lucide-icon>
+                    Detalles del Préstamo
+                </h3>
+
+                <div class="form-control w-full">
+                  <label class="label"><span class="label-text font-semibold opacity-70">Producto</span></label>
+                  <select formControlName="tipoCreditoId" class="select select-bordered w-full focus:select-primary" [class.select-error]="isFieldInvalid('tipoCreditoId')">
+                    <option *ngFor="let tc of tiposCredito" [value]="tc.id">{{ tc.nombre }}</option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="form-control">
+                    <label class="label"><span class="label-text font-semibold opacity-70">Moneda</span></label>
+                    <select formControlName="monedaId" class="select select-bordered w-full focus:select-primary">
+                      <option *ngFor="let m of monedas" [value]="m.id">{{ m.nombre }}</option>
+                    </select>
+                  </div>
+                  <div class="form-control">
+                    <label class="label"><span class="label-text font-semibold opacity-70">Plazo (Meses)</span></label>
+                    <input type="number" formControlName="plazoMeses" class="input input-bordered w-full focus:input-primary font-bold">
+                  </div>
+                </div>
+
+                <div class="form-control w-full">
+                  <label class="label"><span class="label-text font-semibold opacity-70">Monto a Solicitar</span></label>
+                  <div class="relative">
+                    <lucide-icon name="banknote" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-primary"></lucide-icon>
+                    <input type="number" formControlName="montoSolicitado" 
+                           class="input input-bordered w-full pl-10 focus:input-primary text-xl font-black" 
+                           [class.input-error]="isFieldInvalid('montoSolicitado')">
+                  </div>
+                  @if (isFieldInvalid('montoSolicitado')) {
+                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Monto inválido (Min 100)</span></label>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="bg-primary/5 rounded-2xl p-5 border border-primary/10 flex items-start gap-4">
+              <lucide-icon name="shield-check" class="w-6 h-6 text-primary shrink-0"></lucide-icon>
+              <div class="text-sm">
+                <p class="font-bold text-primary mb-1">Solicitud Segura</p>
+                <p class="opacity-70 leading-relaxed">Toda tu información está cifrada. Nuestros analistas revisarán tu historial crediticio para brindarte la mejor tasa disponible.</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-end items-center gap-4 pt-4">
+              <a routerLink="/dashboard/creditos/mis-creditos" class="btn btn-ghost">Cancelar</a>
+              <button type="submit" 
+                      class="btn btn-primary w-full md:w-auto md:min-w-[240px] shadow-lg shadow-primary/30 h-14 text-lg font-bold" 
+                      [disabled]="solicitudForm.invalid || enviando">
+                @if (enviando) {
+                  <span class="loading loading-spinner"></span> Procesando...
+                } @else {
+                  Solicitar Crédito Ahora
+                  <lucide-icon name="arrow-right" class="w-5 h-5 ml-2"></lucide-icon>
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Simulator Summary Sidebar -->
+      <div class="space-y-6">
+        <div class="card bg-gradient-to-br from-base-300 to-base-200 shadow-2xl border border-base-content/5 sticky top-6 overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+              <lucide-icon name="trending-up" class="w-32 h-32"></lucide-icon>
+            </div>
+            <div class="card-body">
+                <h2 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    Simulador Referencial
+                </h2>
+                
+                <div class="space-y-8">
+                    <div class="text-center py-8 bg-base-100 rounded-3xl shadow-inner border border-base-content/5 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <span class="text-xs opacity-50 block mb-2 font-medium">CUOTA MENSUAL ESTIMADA</span>
+                        <div class="flex items-baseline justify-center gap-1">
+                          <span class="text-4xl font-black text-primary">{{ cuotaEstimada | currency:'S/ ' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-sm opacity-60">Tasa Efectiva Mensual</span>
+                            <span class="badge badge-success font-bold text-white px-3">{{ temSeleccionada }}%</span>
+                        </div>
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-sm opacity-60">Total de Intereses</span>
+                            <span class="text-sm font-bold">{{ (cuotaEstimada * (solicitudForm.get('plazoMeses')?.value || 0) - (solicitudForm.get('montoSolicitado')?.value || 0)) | currency:'S/ ' }}</span>
+                        </div>
+                        <div class="divider my-0 opacity-10"></div>
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-sm opacity-60">Total a Devolver</span>
+                            <span class="text-sm font-black text-base-content">{{ (cuotaEstimada * (solicitudForm.get('plazoMeses')?.value || 0)) | currency:'S/ ' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="alert bg-base-100/50 border-none p-4 rounded-2xl flex gap-3">
+                        <lucide-icon name="info" class="w-5 h-5 text-primary shrink-0"></lucide-icon>
+                        <p class="text-[10.5px] opacity-60 leading-relaxed font-medium mt-0.5">
+                            Este cálculo utiliza el sistema francés. El monto final puede variar según la evaluación de riesgos y seguros aplicables.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

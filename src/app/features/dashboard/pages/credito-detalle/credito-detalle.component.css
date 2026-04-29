@@ -1,0 +1,45 @@
+/* src/app/features/dashboard/pages/credito-detalle/credito-detalle.component.css */
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table th {
+    text-transform: uppercase;
+    font-size: 10px;
+    opacity: 0.5;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.badge {
+    font-weight: 700;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: rgba(var(--p), 0.2);
+    box-shadow: 0 10px 15px -3px rgba(var(--p), 0.05);
+}
+
+.btn-xs {
+    border-radius: 6px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}

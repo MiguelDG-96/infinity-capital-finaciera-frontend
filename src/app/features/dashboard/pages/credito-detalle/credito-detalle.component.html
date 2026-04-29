@@ -1,0 +1,303 @@
+<!-- src/app/features/dashboard/pages/credito-detalle/credito-detalle.component.html -->
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-7xl mx-auto">
+    
+    <!-- Barra Superior / Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-bold text-base-content flex items-center gap-3">
+                <lucide-icon name="landmark" class="w-7 h-7 text-primary"></lucide-icon>
+                Detalle del Crédito #{{ credito()?.id }}
+            </h1>
+            <div class="badge badge-lg font-bold" [ngClass]="getEstadoClase(credito()?.estado || '')">
+                {{ credito()?.estado }}
+            </div>
+        </div>
+        <div class="flex gap-2" *ngIf="credito()?.estado === 'ACTIVO'">
+            <button class="btn btn-outline btn-sm" (click)="descargarContrato()">
+                <lucide-icon name="file-text" class="w-4 h-4 mr-1"></lucide-icon>
+                Descargar Contrato
+            </button>
+            <button class="btn btn-warning btn-sm" (click)="abrirEditarCredito()" *ngIf="isAdminMode()">
+                <lucide-icon name="edit-2" class="w-4 h-4 mr-1"></lucide-icon>
+                Editar Crédito
+            </button>
+            <button class="btn btn-primary btn-sm shadow-lg shadow-primary/20" 
+                    (click)="pagoAnticipado()" 
+                    [disabled]="procesando()"
+                    *ngIf="!isAdminMode()">
+                <lucide-icon name="zap" class="w-4 h-4 mr-1"></lucide-icon>
+                Pago Anticipado
+            </button>
+            <button class="btn btn-ghost btn-sm" [routerLink]="isAdminMode() ? '/dashboard/admin/cartera' : '/dashboard/creditos/mis-creditos'">
+                <lucide-icon name="arrow-left" class="w-4 h-4 mr-1"></lucide-icon>
+                Volver
+            </button>
+        </div>
+        <div class="flex gap-2" *ngIf="credito()?.estado !== 'ACTIVO'">
+            <button class="btn btn-success btn-sm text-white shadow-lg shadow-success/20" 
+                    (click)="desembolsar()" 
+                    *ngIf="isAdminMode() && credito()?.estado === 'APROBADO'"
+                    [disabled]="procesando()">
+                <lucide-icon name="play" class="w-4 h-4 mr-1"></lucide-icon>
+                Desembolsar Ahora
+            </button>
+            <button class="btn btn-warning btn-sm" (click)="abrirEditarCredito()" *ngIf="isAdminMode()">
+                <lucide-icon name="edit-2" class="w-4 h-4 mr-1"></lucide-icon>
+                Editar Crédito
+            </button>
+            <button class="btn btn-ghost btn-sm" [routerLink]="isAdminMode() ? '/dashboard/admin/cartera' : '/dashboard/creditos/mis-creditos'">
+                <lucide-icon name="arrow-left" class="w-4 h-4 mr-1"></lucide-icon>
+                Volver
+            </button>
+        </div>
+    </div>
+
+    @if (cargando()) {
+        <div class="flex flex-col items-center justify-center py-20 gap-4">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+            <p class="text-sm opacity-50 font-medium">Cargando detalles financieros...</p>
+        </div>
+    } @else if (error()) {
+        <div class="alert alert-error shadow-lg">
+            <lucide-icon name="alert-circle"></lucide-icon>
+            <span>{{ error() }}</span>
+        </div>
+    } @else if (credito()) {
+        <!-- Resumen de Deuda -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm hover:shadow-md transition-shadow">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Saldo Pendiente</p>
+                <p class="text-3xl font-black text-primary">{{ credito()?.debeActualidad | currency:'S/ ' }}</p>
+            </div>
+            <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Monto Original</p>
+                <p class="text-2xl font-bold">{{ (credito()?.montoAprobado || credito()?.montoCredito) | currency:'S/ ' }}</p>
+            </div>
+            <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Tasa Mensual (TEM)</p>
+                <p class="text-2xl font-bold text-success">{{ (credito()?.tasaAprobada || 0) }}%</p>
+            </div>
+            <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Cuota Mensual</p>
+                <p class="text-2xl font-bold text-secondary">{{ credito()?.cuotaMensual | currency:'S/ ' }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cronograma de Pagos -->
+            <div class="lg:col-span-2 space-y-4">
+                <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-base-content/5 flex justify-between items-center bg-base-200/20">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            <lucide-icon name="calendar" class="w-5 h-5 text-primary"></lucide-icon>
+                            Cronograma de Amortización
+                        </h3>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr class="bg-base-200/50 text-[10px] uppercase tracking-wider opacity-60">
+                                    <th class="py-4">#</th>
+                                    <th>Vencimiento</th>
+                                    <th>Capital</th>
+                                    <th>Interés</th>
+                                    <th>Mora / Pen.</th>
+                                    <th>Cuota Total</th>
+                                    <th>Estado</th>
+                                    <th class="text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (cuota of paginatedCuotas(); track cuota.id) {
+                                    <tr class="hover:bg-base-200/40 transition-colors">
+                                        <td class="font-bold text-xs opacity-40">{{ cuota.numeroCuota }}</td>
+                                        <td class="text-xs">{{ cuota.fechaVencimiento | date:'dd MMM, yyyy' }}</td>
+                                        <td class="text-xs font-medium">{{ cuota.capital | currency:'S/ ' }}</td>
+                                        <td class="text-xs font-medium">{{ cuota.interes | currency:'S/ ' }}</td>
+                                        <td class="text-xs">
+                                            <div class="flex flex-col gap-0.5">
+                                                @if (cuota.interesMora && cuota.interesMora > 0) {
+                                                    <span class="text-error font-bold">+{{ cuota.interesMora | currency:'S/ ' }} <span class="text-[9px] opacity-70">MORA</span></span>
+                                                }
+                                                @if (cuota.penalidad && cuota.penalidad > 0) {
+                                                    <span class="text-error font-bold">+{{ cuota.penalidad | currency:'S/ ' }} <span class="text-[9px] opacity-70">PEN.</span></span>
+                                                }
+                                                @if (!cuota.interesMora && !cuota.penalidad) {
+                                                    <span class="opacity-20">-</span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td class="font-black text-sm text-base-content">{{ cuota.totalCuota | currency:'S/ ' }}</td>
+                                        <td>
+                                            <div class="badge badge-sm font-bold" [ngClass]="getEstadoClase(cuota.estadoCuota)">
+                                                {{ cuota.estadoCuota }}
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            @if (cuota.estadoCuota !== 'PAGADO' && credito()?.estado === 'ACTIVO' && !isAdminMode()) {
+                                                <button class="btn btn-primary btn-xs btn-outline hover:btn-primary"
+                                                        (click)="pagarCuota(cuota)"
+                                                        [disabled]="procesando()">
+                                                    Pagar
+                                                </button>
+                                            }
+                                            @if (isAdminMode()) {
+                                                <div class="flex justify-end gap-1">
+                                                    <button class="btn btn-ghost btn-xs text-info"
+                                                            (click)="abrirEditarCuota(cuota)"
+                                                            title="Editar Cuota">
+                                                        <lucide-icon name="edit-3" class="w-3.5 h-3.5"></lucide-icon>
+                                                    </button>
+                                                    @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'POSTERGADA') {
+                                                        <button class="btn btn-ghost btn-xs text-warning"
+                                                                (click)="postergarCuota(cuota)"
+                                                                [disabled]="procesando()"
+                                                                title="Postergar al final">
+                                                            <lucide-icon name="clock" class="w-3.5 h-3.5"></lucide-icon>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div class="p-4 border-t border-base-content/5 flex justify-center bg-base-200/10">
+                        <div class="join">
+                            <button *ngFor="let page of pagesArray()" 
+                                    class="join-item btn btn-xs md:btn-sm" 
+                                    [class.btn-active]="currentPage() === page"
+                                    (click)="setPage(page)">
+                                {{ page }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalles Adicionales / Sidebar -->
+            <div class="space-y-6">
+                <!-- Información Relevante -->
+                <div class="card bg-base-100 shadow-xl border border-base-content/5">
+                    <div class="card-body p-6">
+                        <h4 class="font-bold text-sm uppercase tracking-widest opacity-40 mb-4">Información del Crédito</h4>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="opacity-60">Tipo de Crédito</span>
+                                <span class="font-bold">{{ credito()?.tipoCredito }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="opacity-60">Moneda</span>
+                                <span class="font-bold">{{ credito()?.moneda }} ({{ credito()?.simboloMoneda }})</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="opacity-60">Plazo Aprobado</span>
+                                <span class="font-bold">{{ credito()?.plazoMeses }} meses</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="opacity-60">Fecha Inicio</span>
+                                <span class="font-bold">{{ credito()?.fechaInicio | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="opacity-60">Próximo Venc.</span>
+                                <span class="font-bold text-primary">{{ credito()?.fechaVencimiento | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="divider opacity-50"></div>
+
+                        <div *ngIf="credito()?.cuentaDesembolso" class="space-y-1">
+                            <p class="text-[10px] font-bold opacity-40 uppercase">Cuenta de Desembolso</p>
+                            <p class="text-sm font-medium">{{ credito()?.cuentaDesembolso }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Garantes -->
+                <div class="card bg-base-100 shadow-xl border border-base-content/5">
+                    <div class="card-body p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-sm uppercase tracking-widest opacity-40">Garantes / Avales</h4>
+                            <button class="btn btn-circle btn-ghost btn-xs text-primary" 
+                                    (click)="mostrarModalGarante.set(true)"
+                                    title="Añadir Garante">
+                                <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                            </button>
+                        </div>
+
+                        @if (credito()?.garantes?.length === 0) {
+                            <div class="bg-base-200/50 rounded-2xl p-4 text-center border border-dashed border-base-content/10">
+                                <p class="text-[10px] opacity-50 italic">No hay garantes registrados para este crédito.</p>
+                            </div>
+                        } @else {
+                            <div class="space-y-3">
+                                @for (garante of credito()?.garantes; track garante.id) {
+                                    <div class="p-3 bg-base-200/30 rounded-2xl border border-base-content/5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-primary/10 text-primary rounded-full w-8">
+                                                    <span class="text-xs font-bold">{{ garante.nombreCompleto.substring(0, 1) }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs font-bold truncate">{{ garante.nombreCompleto }}</p>
+                                                <p class="text-[9px] opacity-50">{{ garante.relacion }} • {{ garante.telefono }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Alerta Notificación -->
+                <div class="alert bg-primary/10 border-primary/20 text-primary shadow-sm">
+                    <lucide-icon name="info" class="w-5 h-5"></lucide-icon>
+                    <div class="text-xs">
+                        <p class="font-bold">Recordatorio</p>
+                        <p>Los pagos realizados después de la fecha de vencimiento generarán moras automáticas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (mostrarModalPago() && credito()) {
+    <app-pago-anticipado-modal 
+        [credito]="credito()!" 
+        (cerrar)="mostrarModalPago.set(false)" 
+        (pagoExitoso)="handlePagoExitoso()">
+    </app-pago-anticipado-modal>
+}
+
+@if (mostrarModalGarante() && credito()) {
+    <app-garante-modal
+        [creditoId]="credito()!.id"
+        (cerrar)="mostrarModalGarante.set(false)"
+        (guardadoExitoso)="handleGaranteGuardado()">
+    </app-garante-modal>
+}
+
+@if (mostrarModalEditarCuota() && cuotaSeleccionada()) {
+    <app-edit-cuota-modal
+        [cuota]="cuotaSeleccionada()!"
+        (cerrar)="mostrarModalEditarCuota.set(false)"
+        (guardadoExitoso)="mostrarModalEditarCuota.set(false); cargarDetalle(credito()!.id)">
+    </app-edit-cuota-modal>
+}
+
+@if (mostrarModalEditarCredito() && credito()) {
+    <app-edit-credito-modal
+        [credito]="credito()!"
+        (cerrar)="mostrarModalEditarCredito.set(false)"
+        (guardadoExitoso)="mostrarModalEditarCredito.set(false); cargarDetalle(credito()!.id)">
+    </app-edit-credito-modal>
+}

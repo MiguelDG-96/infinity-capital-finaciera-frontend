@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { PRODUCTS_DATA, DIGITAL_CHANNELS_DATA, BENEFITS_DATA } from '../../../core/constants/menu-data';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,7 @@ import { PRODUCTS_DATA, DIGITAL_CHANNELS_DATA, BENEFITS_DATA } from '../../../co
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
+  constructor(public themeService: ThemeService) {}
   // Mobile Menu State
   isMobileMenuOpen = signal(false);
   

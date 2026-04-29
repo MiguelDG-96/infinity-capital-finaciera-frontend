@@ -1,0 +1,183 @@
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center hidden md:flex">
+        <lucide-icon name="users" [size]="24"></lucide-icon>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Gestión de Personal</h1>
+        <p class="text-sm opacity-50 font-medium">Administra el equipo de asesores y personal administrativo.</p>
+      </div>
+    </div>
+    
+    <button (click)="abrirModal()" class="btn btn-primary shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+      <lucide-icon name="user-plus" [size]="18"></lucide-icon> Registrar Trabajador
+    </button>
+  </div>
+
+  <!-- Stats Grid (Simple) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="stats shadow-sm border border-base-content/5 bg-base-100 overflow-hidden rounded-2xl">
+      <div class="stat">
+        <div class="stat-title text-[10px] font-black uppercase opacity-40">Total Equipo</div>
+        <div class="stat-value text-2xl">{{ trabajadores().length }}</div>
+        <div class="stat-desc font-medium opacity-50">Colaboradores activos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- List Table -->
+  <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+    <div class="overflow-x-auto">
+      <table class="table table-zebra table-md w-full">
+        <thead>
+          <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+            <th class="py-4 pl-6 text-center">Estado</th>
+            <th>Nombre y Email</th>
+            <th>DNI / Cargo</th>
+            <th>Laboral</th>
+            <th class="text-right pr-6">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (isLoading()) {
+            <tr>
+              <td colspan="5" class="py-20 text-center opacity-50 animate-pulse italic">
+                Sincronizando nómina...
+              </td>
+            </tr>
+          } @else if (trabajadores().length === 0) {
+            <tr>
+              <td colspan="5" class="py-20 text-center font-bold opacity-50 uppercase tracking-widest">
+                No hay personal registrado en el sistema.
+              </td>
+            </tr>
+          } @else {
+            @for (t of trabajadores(); track t.trabajadorId) {
+              <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5 text-base-content">
+                <td class="pl-6 text-center">
+                  <div class="tooltip" [attr.data-tip]="t.habilitado ? 'Cuenta Activa' : 'Cuenta Suspendida'">
+                    <button (click)="toggleEstado(t)" 
+                            [class]="t.habilitado ? 'text-success' : 'text-error'"
+                            class="btn btn-ghost btn-circle btn-xs hover:scale-110 transition-transform">
+                      <lucide-icon [name]="t.habilitado ? 'user-check' : 'user-x'" [size]="18"></lucide-icon>
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-sm tracking-tight">{{ t.nombreCompleto }}</span>
+                    <span class="text-[10px] opacity-40 font-mono italic">{{ t.email }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-mono opacity-60">{{ t.dni }}</span>
+                    <span class="badge badge-outline badge-xs font-bold text-primary opacity-80">{{ t.cargo }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-bold text-success">{{ t.salario | currency:'USD' }}</span>
+                    <span class="text-[10px] opacity-50">{{ t.tipoContrato }}</span>
+                  </div>
+                </td>
+                <td class="text-right pr-6">
+                  <div class="flex justify-end gap-2">
+                    <button (click)="abrirModal(t)" class="btn btn-outline btn-primary btn-xs hover:scale-105 transition-all">
+                      Detalles
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Form -->
+@if (mostrarModal()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-base-content">
+    <div class="bg-base-100 border border-base-content/10 w-full max-w-2xl rounded-3xl shadow-2xl p-8 space-y-6 transform transition-transform duration-300 scale-100 overflow-y-auto max-h-[90vh]">
+      
+      <div class="flex justify-between items-center">
+        <h3 class="text-2xl font-bold">
+          {{ editandoId() ? 'Actualizar Ficha Técnica' : 'Nuevo Registro de Personal' }}
+        </h3>
+        <button (click)="cerrarModal()" class="btn btn-ghost btn-sm btn-circle">✕</button>
+      </div>
+      
+      <form (ngSubmit)="guardar()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Identidad -->
+        <div class="space-y-1 md:col-span-2">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Nombre Completo</label>
+          <input type="text" [(ngModel)]="form.nombreCompleto" name="nombreCompleto" class="input input-bordered w-full bg-base-200" required>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Email Corporativo</label>
+          <input type="email" [(ngModel)]="form.email" name="email" class="input input-bordered w-full bg-base-200" required>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">DNI</label>
+          <input type="text" [(ngModel)]="form.dni" name="dni" class="input input-bordered w-full bg-base-200" required>
+        </div>
+
+        @if (!editandoId()) {
+          <div class="space-y-1 md:col-span-2">
+            <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Contraseña Inicial</label>
+            <input type="password" [(ngModel)]="form.contrasena" name="contrasena" class="input input-bordered w-full bg-base-200" placeholder="••••••••" required>
+          </div>
+        }
+
+        <!-- Roles y Laboral -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Rol del Sistema</label>
+          <select [(ngModel)]="form.rolId" name="rolId" class="select select-bordered w-full bg-base-200" required>
+            <option value="0" disabled>Seleccionar Rol</option>
+            @for (r of roles(); track r.id) {
+              <option [value]="r.id">{{ r.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Cargo / Función</label>
+          <input type="text" [(ngModel)]="form.cargo" name="cargo" class="input input-bordered w-full bg-base-200" placeholder="Ej. Analista de Crédito" required>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Salario Mensual ($)</label>
+          <input type="number" [(ngModel)]="form.salario" name="salario" class="input input-bordered w-full bg-base-200" step="0.01" required>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Fecha Contratación</label>
+          <input type="date" [(ngModel)]="form.fechaContratacion" name="fechaContratacion" class="input input-bordered w-full bg-base-200" required>
+        </div>
+
+        <div class="space-y-1 md:col-span-2">
+          <label class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Tipo de Contrato</label>
+          <select [(ngModel)]="form.tipoContrato" name="tipoContrato" class="select select-bordered w-full bg-base-200">
+            <option value="PLAZO_FIJO">PLAZO FIJO</option>
+            <option value="INDEFINIDO">INDEFINIDO</option>
+            <option value="POR_PROYECTO">POR PROYECTO / HONORARIOS</option>
+          </select>
+        </div>
+
+        <div class="flex gap-4 pt-4 md:col-span-2">
+          <button type="button" (click)="cerrarModal()" class="btn btn-ghost flex-1">Cerrar</button>
+          <button type="submit" class="btn btn-primary flex-1 shadow-lg shadow-primary/30">
+            {{ editandoId() ? 'Actualizar Datos' : 'Registrar Colaborador' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

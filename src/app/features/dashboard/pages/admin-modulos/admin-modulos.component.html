@@ -1,0 +1,86 @@
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center hidden md:flex">
+        <lucide-icon name="layers" [size]="24"></lucide-icon>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Gestión de Módulos</h1>
+        <p class="text-sm opacity-50 font-medium">Administra las aplicaciones instaladas en la plataforma.</p>
+      </div>
+    </div>
+    
+    <button (click)="abrirModal()" class="btn btn-primary shadow-sm hover:scale-105 active:scale-95 transition-all">
+      <lucide-icon name="plus" [size]="18"></lucide-icon> Registrar Módulo
+    </button>
+  </div>
+
+  <!-- Main Display Table -->
+  <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+    <div class="overflow-x-auto">
+      <table class="table table-zebra table-md w-full">
+        <thead>
+          <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+            <th class="py-4 pl-6">ID</th>
+            <th>Ícono</th>
+            <th>Nombre del Módulo</th>
+            <th>Identificador (Slug)</th>
+            <th>Descripción</th>
+            <th class="text-right pr-6">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (isLoading()) {
+            <tr>
+              <td colspan="6" class="py-20 text-center opacity-50 animate-pulse italic">
+                Cargando módulos de la plataforma...
+              </td>
+            </tr>
+          } @else if (modulos().length === 0) {
+            <tr>
+              <td colspan="6" class="py-20 text-center font-bold opacity-50">
+                Base de datos vacía. Agrega tu primer módulo.
+              </td>
+            </tr>
+          } @else {
+            @for (m of modulos(); track m.id) {
+              <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5 text-base-content">
+                <td class="pl-6 font-mono text-xs opacity-40">#{{ m.id }}</td>
+                <td>
+                  <div class="w-8 h-8 flex items-center justify-center bg-base-200 rounded-lg text-primary">
+                    <lucide-icon [name]="getSafeIcon(m.icono)" [size]="16" class="mt-1"></lucide-icon>
+                  </div>
+                </td>
+                <td class="font-bold text-sm tracking-wide">{{ m.nombre }}</td>
+                <td>
+                  <span class="badge badge-primary badge-outline badge-sm font-mono">{{ m.ruta }}</span>
+                </td>
+                <td class="text-xs opacity-60 truncate max-w-xs">{{ m.descripcion }}</td>
+                <td class="text-right pr-6 whitespace-nowrap">
+                  <div class="flex justify-end gap-2">
+                    <button (click)="abrirModal(m)" class="btn btn-outline btn-primary btn-xs hover:scale-105 transition-all">
+                      Editar
+                    </button>
+                    <button (click)="eliminarModulo(m.id)" class="btn btn-outline btn-error btn-xs hover:scale-105 transition-all w-8 px-0 flex justify-center">
+                      <lucide-icon name="trash-2" [size]="14"></lucide-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Component -->
+@if (isModalOpen()) {
+  <app-modulo-form-modal 
+    [modulo]="selectedModulo()" 
+    (close)="cerrarModal()" 
+    (save)="onModuloGuardado()">
+  </app-modulo-form-modal>
+}

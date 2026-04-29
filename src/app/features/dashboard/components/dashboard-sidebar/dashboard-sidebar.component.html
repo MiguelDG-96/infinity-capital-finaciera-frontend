@@ -1,0 +1,83 @@
+<!-- Overlay para móvil -->
+<div
+  class="fixed inset-0 z-20 bg-black/50 lg:hidden"
+  (click)="closeSidebar.emit()"
+></div>
+
+<!-- Sidebar -->
+<aside
+  class="fixed left-0 top-0 z-30 flex h-full w-64 flex-col bg-base-100 shadow-xl transition-transform duration-300 lg:relative lg:translate-x-0 lg:shadow-none"
+>
+  <!-- Logo -->
+  <div class="flex items-center gap-3 px-2 py-6 overflow-hidden">
+    <img
+      [src]="themeService.logoUrl()"
+      alt="InfinyCapital"
+      class="h-10 w-auto object-contain transition-all duration-300"
+    />
+    <div class="flex flex-col">
+      <span class="text-xl font-bold tracking-tight text-primary leading-none uppercase">
+        InfinyCapital
+      </span>
+      <span class="text-[10px] bg-primary text-primary-content font-bold tracking-widest uppercase mt-0.5 px-0.5 rounded-sm">
+        Servicios financieros
+      </span>
+    </div>
+  </div>
+
+  <!-- Navegación -->
+  <nav class="flex-1 overflow-y-auto px-3 py-4">
+    <ul class="space-y-1">
+      @if (isLoading()) {
+        <li class="px-4 py-10 text-center opacity-30 animate-pulse text-xs italic">
+          Configurando accesos...
+        </li>
+      } @else {
+        @for (item of dynamicMenuItems(); track item.label) {
+          <li>
+            <a
+              [routerLink]="item.isReady ? item.route : null"
+              routerLinkActive="bg-primary text-primary-content font-semibold shadow-sm"
+              [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+              class="group flex items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-all duration-200"
+              [ngClass]="{
+                'text-base-content/80 hover:bg-base-300 hover:text-base-content': item.isReady,
+                'opacity-50 grayscale cursor-not-allowed': !item.isReady
+              }"
+            >
+              <div class="flex items-center gap-3">
+                <lucide-icon
+                  [name]="item.icon"
+                  size="20"
+                  strokeWidth="1.8"
+                  class="h-5 w-5 shrink-0"
+                ></lucide-icon>
+                <span>{{ item.label }}</span>
+              </div>
+              
+              <!-- Badge de En Desarrollo -->
+              @if (!item.isReady) {
+                <span class="badge badge-ghost badge-xs text-[8px] font-bold uppercase opacity-70">Pronto</span>
+              }
+            </a>
+          </li>
+        }
+      }
+    </ul>
+  </nav>
+
+  <!-- Footer del sidebar -->
+  <div class="border-t border-base-300 px-5 py-4">
+    <div class="flex items-center gap-3">
+      <div class="avatar placeholder">
+        <div class="bg-primary text-primary-content w-9 rounded-full shadow-lg shadow-primary/20">
+          <span class="text-xs font-bold">{{ getInitials() }}</span>
+        </div>
+      </div>
+      <div class="flex flex-col leading-tight overflow-hidden">
+        <span class="text-sm font-bold text-base-content truncate">{{ userData()?.nombreCompleto || 'Cargando...' }}</span>
+        <span class="text-[10px] uppercase font-black tracking-tighter opacity-40">{{ userData()?.rol || 'Visitante' }}</span>
+      </div>
+    </div>
+  </div>
+</aside>

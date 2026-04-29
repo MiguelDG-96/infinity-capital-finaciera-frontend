@@ -1,0 +1,14 @@
+:host {
+  display: contents;
+}
+
+/* Transición suave en todos los elementos del dashboard al cambiar el data-theme */
+.dashboard-wrapper,
+.dashboard-wrapper * {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease !important;
+}

@@ -1,4 +1,4 @@
-<div class="bg-gray-50 border-b border-gray-200 relative hidden lg:block">
+<div class="bg-base-200 border-b border-base-content/10 relative hidden lg:block transition-colors duration-300">
   <div class="container mx-auto px-4 flex items-center h-12 gap-2">
     <!-- Products Dropdown Trigger -->
     <div
@@ -7,7 +7,7 @@
       (mouseleave)="toggleMenu('products', false)"
     >
       <button
-        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        class="flex items-center gap-2 text-base-content/80 hover:text-primary font-medium py-3 px-2 border-b-2 border-transparent hover:border-primary transition-all"
         [class.text-red-600]="activeMenu() === 'products'"
         [class.border-red-600]="activeMenu() === 'products'"
       >
@@ -18,16 +18,16 @@
       <!-- Mega Menu Panel -->
       <div
         *ngIf="activeMenu() === 'products'"
-        class="absolute top-full left-0 w-[900px] bg-white shadow-xl rounded-b-xl z-50 flex overflow-hidden border border-gray-100 mt-[1px]"
+        class="absolute top-full left-0 w-[900px] bg-base-100 shadow-xl rounded-b-xl z-50 flex overflow-hidden border border-base-content/10 mt-[1px]"
       >
         <!-- Column 1: Categories -->
-        <div class="w-1/4 bg-gray-50 py-2">
+        <div class="w-1/4 bg-base-200 py-2">
           <button
             *ngFor="let item of products"
             (mouseenter)="activeCategory.set(item)"
-            [class.bg-white]="activeCategory() === item"
-            [class.text-red-600]="activeCategory() === item"
-            class="w-full text-left px-4 py-3 flex items-center gap-3 text-gray-600 hover:bg-white hover:text-red-600 transition-colors"
+            [class.bg-base-100]="activeCategory() === item"
+            [class.text-primary]="activeCategory() === item"
+            class="w-full text-left px-4 py-3 flex items-center gap-3 text-base-content/70 hover:bg-base-100 hover:text-primary transition-colors"
           >
             <lucide-icon [name]="item.icon" size="20"></lucide-icon>
             <span class="font-medium text-sm">{{ item.category }}</span>
@@ -41,7 +41,7 @@
         </div>
 
         <!-- Column 2: Sub Items -->
-        <div class="w-1/2 p-6 bg-white min-h-[400px]">
+        <div class="w-1/2 p-6 bg-base-100 min-h-[400px]">
           <h3 class="text-red-600 font-bold mb-4 flex items-center gap-2">
             <lucide-icon [name]="activeCategory().icon" size="20"></lucide-icon>
             {{ activeCategory().category }}

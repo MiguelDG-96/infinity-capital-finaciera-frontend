@@ -1,0 +1,65 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-base-content">
+  <div class="bg-base-100 border border-base-content/10 w-full max-w-lg rounded-3xl shadow-2xl p-8 space-y-6 transform transition-transform duration-300 scale-100 relative">
+    
+    <h3 class="text-2xl font-bold text-base-content">
+      {{ modulo() ? 'Editar Módulo #' + modulo()?.id : 'Registrar Nuevo Módulo' }}
+    </h3>
+    
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      
+      <div class="flex gap-4 relative">
+        <div class="space-y-1 w-1/4 group cursor-pointer" (click)="togglePicker()">
+          <label class="text-[10px] font-bold opacity-50 uppercase tracking-widest pointer-events-none">Ícono</label>
+          <div class="w-full bg-base-200 border border-base-300 hover:border-primary border-dashed rounded-xl p-3 flex items-center justify-center min-h-[50px] transition-all text-primary">
+            <lucide-icon [name]="form().icono || 'layers'" [size]="24" class="pointer-events-none"></lucide-icon>
+          </div>
+          
+          <!-- Icon Picker Popover -->
+          @if (isPickerOpen()) {
+            <div class="absolute top-full left-0 mt-2 w-72 bg-base-100 border border-base-content/10 rounded-2xl shadow-2xl z-50 p-4 animate-fade-in" (click)="$event.stopPropagation()">
+              <div class="flex items-center justify-between mb-3 px-1">
+                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Seleccionar Icono</span>
+              </div>
+              <div class="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto pr-1">
+                @for (icon of LUCIDE_CATALOG; track icon) {
+                  <button type="button" 
+                          (click)="selectIcon(icon)" 
+                          class="w-10 h-10 flex items-center justify-center rounded-xl transition-all active:scale-90 opacity-70 hover:opacity-100 hover:bg-base-200"
+                          [class.bg-primary]="form().icono === icon"
+                          [class.text-primary-content]="form().icono === icon">
+                    <lucide-icon [name]="icon" [size]="18"></lucide-icon>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+        
+        <div class="space-y-1 flex-1">
+          <label class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Nombre Principal</label>
+          <input type="text" [(ngModel)]="form().nombre" name="nombre" class="input input-bordered w-full bg-base-200 focus:bg-base-100 outline-none focus:border-primary transition-all placeholder:opacity-40" placeholder="Ej. CAJA_CHICA" required autocomplete="off">
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Identificador de Ruta (Slug)</label>
+        <input type="text" [(ngModel)]="form().ruta" name="ruta" class="input input-bordered w-full bg-base-200 focus:bg-base-100 outline-none focus:border-primary transition-all placeholder:opacity-40 font-mono text-sm" placeholder="ej. caja_chica" required autocomplete="off">
+      </div>
+
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Descripción Interna</label>
+        <textarea [(ngModel)]="form().descripcion" name="descripcion" class="textarea textarea-bordered w-full bg-base-200 focus:bg-base-100 outline-none focus:border-primary transition-all placeholder:opacity-40 min-h-[100px]" placeholder="Panel interactivo para el control general..."></textarea>
+      </div>
+
+      <div class="flex gap-4 pt-4 mt-6">
+        <button type="button" (click)="closeModal()" [disabled]="isSubmitting()" class="btn btn-ghost flex-1">Cancelar</button>
+        <button type="submit" [disabled]="isSubmitting()" class="btn btn-primary flex-1 shadow-lg shadow-primary/30 flex items-center justify-center gap-2">
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-xs"></span>
+          }
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

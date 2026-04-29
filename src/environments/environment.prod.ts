@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.capitalfinance.com'
+  apiUrl: 'https://infiny.arqui-design.com/api/v1'
 };

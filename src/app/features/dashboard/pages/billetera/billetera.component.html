@@ -1,0 +1,410 @@
+<!-- src/app/features/dashboard/pages/billetera/billetera.component.html -->
+
+<div class="p-6 space-y-6 animate-fade-in">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-base-content tracking-tight">Mi Billetera Virtual</h1>
+            <p class="text-base-content/60">Gestiona tus fondos y retiros de préstamos.</p>
+        </div>
+        <div class="flex gap-2">
+            <button (click)="mostrarModalNuevaCuenta.set(true)"
+                class="btn btn-outline btn-primary gap-2">
+                <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                Nueva Cuenta Bancaria
+            </button>
+            <button (click)="mostrarModalRetiro.set(true)"
+                class="btn btn-primary gap-2 shadow-lg shadow-primary/20">
+                <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+                Solicitar Retiro
+            </button>
+        </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-1 card bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-xl overflow-hidden relative group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                <lucide-icon name="wallet" class="w-32 h-32"></lucide-icon>
+            </div>
+            <div class="card-body">
+                <div class="flex justify-between items-start">
+                    <span class="text-lg opacity-80">Saldo Disponible</span>
+                    <lucide-icon name="info" class="w-5 h-5 opacity-50 cursor-help"></lucide-icon>
+                </div>
+                <div class="my-4">
+                    <span class="text-4xl font-black">{{ (saldo()?.saldo || 0) | currency:'S/ ' }}</span>
+                    <span class="text-sm ml-2 opacity-70">{{ saldo()?.moneda || 'PEN' }}</span>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                    <p class="text-xs opacity-60">Última actualización: {{ (saldo()?.ultimaActualizacion | date:'short') || 'Cargando...' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Stats -->
+        <div class="card bg-base-200 shadow-sm border border-base-content/5">
+            <div class="card-body p-4 flex flex-row items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center text-success">
+                    <lucide-icon name="trending-up" class="w-6 h-6"></lucide-icon>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium opacity-60">Total Abonos</h3>
+                    <p class="text-xl font-bold">---</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-200 shadow-sm border border-base-content/5 text-error">
+            <div class="card-body p-4 flex flex-row items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-error/10 flex items-center justify-center">
+                    <lucide-icon name="trending-down" class="w-6 h-6"></lucide-icon>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium opacity-60">Total Retiros</h3>
+                    <p class="text-xl font-bold">---</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Movements Table -->
+        <div class="lg:col-span-2 card bg-base-100 shadow-xl border border-base-content/5">
+            <div class="card-body p-0">
+                <div class="px-6 py-4 border-b border-base-content/5 flex items-center justify-between">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <lucide-icon name="list" class="w-5 h-5 text-primary"></lucide-icon>
+                        Últimos Movimientos
+                    </h2>
+                    <button class="btn btn-ghost btn-sm text-primary">Ver todos</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="table table-zebra w-full">
+                        <thead class="bg-base-200/50">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let m of transacciones()" class="hover:bg-base-200/30 transition-colors">
+                                <td class="text-xs opacity-60">{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>
+                                    <span [ngClass]="getTipoClase(m.tipo)" class="font-bold text-xs px-2 py-1 rounded-full bg-base-200">
+                                        {{ m.tipo }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="text-sm font-medium">{{ m.descripcion }}</div>
+                                    <div class="text-xs opacity-40 font-mono" *ngIf="m.referencia">Ref: {{ m.referencia }}</div>
+                                </td>
+                                <td class="text-right font-bold" [ngClass]="getTipoClase(m.tipo)">
+                                    {{ m.tipo === 'RETIRO' ? '-' : '+' }} {{ m.monto | currency:'S/ ' }}
+                                </td>
+                            </tr>
+                            <tr *ngIf="transacciones().length === 0">
+                                <td colspan="4" class="text-center py-12 opacity-40 italic">No hay movimientos registrados.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank Accounts -->
+        <div class="card bg-base-100 shadow-xl border border-base-content/5">
+            <div class="card-body">
+                <h2 class="text-lg font-bold flex items-center gap-2 mb-4">
+                    <lucide-icon name="landmark" class="w-5 h-5 text-primary"></lucide-icon>
+                    Cuentas Bancarias
+                </h2>
+                
+                <div class="space-y-3">
+                    <div *ngFor="let c of cuentasBancarias()" 
+                        class="p-4 rounded-xl border border-base-content/10 bg-base-200/20 hover:border-primary/30 transition-all group relative">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-bold text-sm">{{ c.banco }}</p>
+                                <p class="text-xs opacity-60">{{ c.tipoCuenta }}</p>
+                                <p class="text-sm font-mono mt-1">{{ c.numeroCuenta }}</p>
+                            </div>
+                            <button (click)="prepararEliminacion(c.id)" 
+                                class="btn btn-ghost btn-xs text-error opacity-0 group-hover:opacity-100 transition-opacity">
+                                <lucide-icon name="trash" class="w-3 h-3"></lucide-icon>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div *ngIf="cuentasBancarias().length === 0" class="text-center py-8 bg-base-200/10 rounded-xl border border-dashed border-base-content/20">
+                        <p class="text-xs opacity-40">No tienes cuentas registradas.</p>
+                        <button (click)="mostrarModalNuevaCuenta.set(true)" class="btn btn-link btn-xs text-primary">Agregar una</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Cuenta -->
+<div class="modal" [ngClass]="{'modal-open': mostrarModalNuevaCuenta()}">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Registrar Nueva Cuenta Bancaria</h3>
+        <form [formGroup]="cuentaForm" (ngSubmit)="agregarCuenta()" class="space-y-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Banco</span></label>
+                <select formControlName="banco" class="select select-bordered w-full">
+                    <option value="">Selecciona un banco</option>
+                    <option value="BCP">BCP</option>
+                    <option value="Interbank">Interbank</option>
+                    <option value="BBVA">BBVA</option>
+                    <option value="Scotiabank">Scotiabank</option>
+                    <option value="BanBif">BanBif</option>
+                </select>
+            </div>
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text">Número de Cuenta</span></label>
+                <input type="text" formControlName="numeroCuenta" class="input input-bordered w-full" placeholder="Ej: 191-1234567-0-12">
+            </div>
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text">CCI (Opcional)</span></label>
+                <input type="text" formControlName="cci" class="input input-bordered w-full" placeholder="Código Interbancario">
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Tipo de Cuenta</span></label>
+                <div class="flex gap-4">
+                    <label class="label cursor-pointer gap-2">
+                        <input type="radio" formControlName="tipoCuenta" value="AHORROS" class="radio radio-primary">
+                        <span class="label-text">Ahorros</span>
+                    </label>
+                    <label class="label cursor-pointer gap-2">
+                        <input type="radio" formControlName="tipoCuenta" value="CORRIENTE" class="radio radio-primary">
+                        <span class="label-text">Corriente</span>
+                    </label>
+                </div>
+            </div>
+            <div class="divider text-xs opacity-50 uppercase tracking-widest">Seguridad</div>
+            
+            <div class="form-control">
+                <label class="label"><span class="label-text font-bold">Código de Verificación</span></label>
+                <div class="flex gap-2">
+                    <input type="text" formControlName="codigoVerificacion" 
+                        class="input input-bordered w-full font-mono text-center tracking-[0.5em]" 
+                        placeholder="000000" maxlength="6">
+                    <button type="button" 
+                        (click)="solicitarOtp('WALLET_ADD_ACCOUNT')"
+                        [disabled]="cooldown()['WALLET_ADD_ACCOUNT'] > 0"
+                        class="btn btn-outline btn-primary no-animation whitespace-nowrap min-w-[120px]">
+                        {{ cooldown()['WALLET_ADD_ACCOUNT'] > 0 ? (cooldown()['WALLET_ADD_ACCOUNT'] + 's') : 'Enviar OTP' }}
+                    </button>
+                </div>
+                <label class="label">
+                    <span class="label-text-alt text-base-content/50" *ngIf="otpEnviado()['WALLET_ADD_ACCOUNT']">
+                        Código enviado a tu correo electrónico.
+                    </span>
+                    <span class="label-text-alt text-error" *ngIf="errorOtp()">{{ errorOtp() }}</span>
+                </label>
+            </div>
+
+            <div class="modal-action">
+                <button type="button" (click)="mostrarModalNuevaCuenta.set(false)" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" [disabled]="cuentaForm.invalid" class="btn btn-primary px-8">Confirmar y Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Retiro -->
+<div class="modal" [ngClass]="{'modal-open': mostrarModalRetiro()}">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Solicitar Retiro de Efectivo</h3>
+        
+        <!-- Vista de Datos de Retiro -->
+        <form [formGroup]="retiroForm" (ngSubmit)="solicitarRetiro()" class="space-y-4" *ngIf="!mostrarFormNuevaCuentaEnRetiro()">
+            <p class="text-sm opacity-60 mb-4">Los fondos se enviarán a tu cuenta bancaria seleccionada en un plazo de 24 horas hábiles.</p>
+            
+            <div class="form-control">
+                <label class="label"><span class="label-text">Monto a Retirar (MAX: {{ saldo()?.saldo | currency:'S/ ' }})</span></label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold opacity-50">S/</span>
+                    <input type="number" formControlName="monto" class="input input-bordered w-full pl-10 text-xl font-bold" 
+                           [max]="saldo()?.saldo || 0">
+                </div>
+                <label class="label" *ngIf="retiroForm.get('monto')?.value! > (saldo()?.saldo || 0)">
+                    <span class="label-text-alt text-error font-bold">Saldo insuficiente</span>
+                </label>
+            </div>
+            
+            <div class="form-control">
+                <label class="label flex justify-between">
+                    <span class="label-text">Destino</span>
+                    <button type="button" (click)="mostrarFormNuevaCuentaEnRetiro.set(true)" 
+                        class="text-primary text-xs font-bold hover:underline flex items-center gap-1">
+                        <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
+                        añadir
+                    </button>
+                </label>
+                <select formControlName="cuentaBancariaId" class="select select-bordered w-full">
+                    <option [value]="null">Selecciona una cuenta guardada</option>
+                    <option *ngFor="let c of cuentasBancarias()" [value]="c.id">
+                        {{ c.banco }} - {{ c.numeroCuenta }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="alert alert-info shadow-none bg-info/10 text-xs py-2">
+                <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
+                <span>Asegúrate de que la cuenta bancaria esté a tu nombre.</span>
+            </div>
+
+            <div class="divider text-xs opacity-50 uppercase tracking-widest">Seguridad</div>
+
+            <div class="form-control">
+                <label class="label"><span class="label-text font-bold">Autorizar Operación</span></label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button type="button" 
+                        (click)="solicitarOtp('WALLET_WITHDRAW')"
+                        [disabled]="cooldown()['WALLET_WITHDRAW'] > 0"
+                        class="btn btn-outline btn-primary w-full">
+                        <lucide-icon name="mail" class="w-4 h-4 mr-2"></lucide-icon>
+                        {{ cooldown()['WALLET_WITHDRAW'] > 0 ? ('Reenviar en ' + cooldown()['WALLET_WITHDRAW'] + 's') : 'Enviar Código' }}
+                    </button>
+                    <input type="text" formControlName="codigoVerificacion" 
+                        class="input input-bordered w-full font-mono text-center text-lg tracking-[0.5em]" 
+                        placeholder="000000" maxlength="6">
+                </div>
+                <label class="label">
+                    <span class="label-text-alt text-base-content/50">Recibirás el código en tu correo registrado.</span>
+                </label>
+            </div>
+
+            <div class="modal-action">
+                <button type="button" (click)="mostrarModalRetiro.set(false)" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" [disabled]="retiroForm.invalid" 
+                    class="btn btn-primary px-8 shadow-lg shadow-primary/20">Confirmar Retiro</button>
+            </div>
+        </form>
+
+        <!-- Vista de Registro Rápido de Cuenta (Dentro de Retiro) -->
+        <form [formGroup]="cuentaForm" (ngSubmit)="agregarCuenta()" class="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300" *ngIf="mostrarFormNuevaCuentaEnRetiro()">
+            <div class="flex items-center gap-2 text-primary mb-2">
+                <button type="button" (click)="mostrarFormNuevaCuentaEnRetiro.set(false)" class="btn btn-ghost btn-xs btn-circle">
+                    <lucide-icon name="arrow-left" class="w-4 h-4"></lucide-icon>
+                </button>
+                <span class="font-bold">Nueva Cuenta de Destino</span>
+            </div>
+
+            <div class="form-control">
+                <label class="label sm:hidden"><span class="label-text">Banco</span></label>
+                <select formControlName="banco" class="select select-bordered w-full select-sm">
+                    <option value="">Banco</option>
+                    <option value="BCP">BCP</option>
+                    <option value="Interbank">Interbank</option>
+                    <option value="BBVA">BBVA</option>
+                    <option value="Scotiabank">Scotiabank</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <input type="text" formControlName="numeroCuenta" class="input input-bordered input-sm w-full" placeholder="Número de Cuenta">
+                <input type="text" formControlName="cci" class="input input-bordered input-sm w-full" placeholder="CCI (Opcional)">
+            </div>
+
+            <div class="divider text-xs opacity-50 uppercase tracking-widest my-1">Seguridad MFA</div>
+            
+            <div class="form-control">
+                <div class="flex gap-2">
+                    <input type="text" formControlName="codigoVerificacion" 
+                        class="input input-bordered w-full input-sm font-mono text-center tracking-widest" 
+                        placeholder="Código de 6 dígitos" maxlength="6">
+                    <button type="button" 
+                        (click)="solicitarOtp('WALLET_ADD_ACCOUNT')"
+                        [disabled]="cooldown()['WALLET_ADD_ACCOUNT'] > 0"
+                        class="btn btn-outline btn-primary btn-sm min-w-[120px]">
+                        <lucide-icon name="send" class="w-3 h-3 mr-1"></lucide-icon>
+                        {{ cooldown()['WALLET_ADD_ACCOUNT'] > 0 ? (cooldown()['WALLET_ADD_ACCOUNT'] + 's') : 'Pedir Código' }}
+                    </button>
+                </div>
+                <label class="label py-1">
+                    <span class="label-text-alt text-base-content/60">El código llegará a tu bandeja de entrada.</span>
+                </label>
+            </div>
+
+            <div class="modal-action">
+                <button type="button" (click)="mostrarFormNuevaCuentaEnRetiro.set(false)" class="btn btn-ghost">Atrás</button>
+                <button type="submit" [disabled]="cuentaForm.invalid" class="btn btn-primary px-8">Verificar y Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Eliminar Cuenta (MFA) -->
+<div class="modal" [ngClass]="{'modal-open': mostrarModalEliminar()}">
+    <div class="modal-box max-w-sm">
+        <div class="flex items-center gap-3 text-error mb-4">
+            <lucide-icon name="alert-triangle" class="w-8 h-8"></lucide-icon>
+            <h3 class="font-bold text-lg">Eliminar Cuenta Bancaria</h3>
+        </div>
+        <p class="text-sm opacity-70 mb-6 font-medium">Por seguridad, confirma esta acción con el código enviado a tu correo.</p>
+        
+        <div class="space-y-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-bold">Código de Seguridad</span></label>
+                <div class="flex flex-col gap-2">
+                    <input type="text" [(ngModel)]="otpEliminar" 
+                        class="input input-bordered w-full font-mono text-center text-2xl tracking-[0.5em]" 
+                        placeholder="000000" maxlength="6">
+                    <button type="button" 
+                        (click)="solicitarOtp('WALLET_DELETE_ACCOUNT')"
+                        [disabled]="cooldown()['WALLET_DELETE_ACCOUNT'] > 0"
+                        class="btn btn-outline btn-error btn-sm w-full no-animation">
+                        <lucide-icon name="mail" class="w-3 h-3 mr-2" *ngIf="!cooldown()['WALLET_DELETE_ACCOUNT']"></lucide-icon>
+                        {{ cooldown()['WALLET_DELETE_ACCOUNT'] > 0 ? ('Reenviar en ' + cooldown()['WALLET_DELETE_ACCOUNT'] + 's') : 'Enviar Código' }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-action flex-col gap-2">
+                <button (click)="confirmarEliminacion()" 
+                    [disabled]="otpEliminar().length !== 6"
+                    class="btn btn-error w-full shadow-lg shadow-error/20">Eliminar Cuenta Permanentemente</button>
+                <button (click)="mostrarModalEliminar.set(false)" class="btn btn-ghost w-full">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notificación Liquid Glass (Éxito / Error) -->
+<div class="fixed inset-0 z-[200] pointer-events-none flex items-center justify-center p-4" *ngIf="notificacion() as n">
+    <div class="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-auto" (click)="cerrarNotificacion()"></div>
+    
+    <div class="relative w-full max-w-sm p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] bg-base-100/70 backdrop-blur-2xl border border-white/20 dark:border-white/5 animate-fade-in text-center pointer-events-auto">
+        <!-- Fondo Decorativo Líquido -->
+        <div class="absolute -top-12 -left-12 w-40 h-40 rounded-full blur-3xl pointer-events-none transition-colors duration-1000"
+            [ngClass]="n.tipo === 'success' ? 'bg-success/20' : 'bg-error/20'"></div>
+        
+        <div class="relative z-10">
+            <!-- Icono con Pulso -->
+            <div class="mb-6 flex justify-center">
+                <div class="w-20 h-20 rounded-2xl flex items-center justify-center shadow-inner"
+                    [ngClass]="n.tipo === 'success' ? 'bg-success/10 text-success' : 'bg-error/10 text-error'">
+                    <lucide-icon [name]="n.tipo === 'success' ? 'check-circle' : 'alert-circle'" class="w-10 h-10"></lucide-icon>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-black mb-2 tracking-tight" [ngClass]="n.tipo === 'success' ? 'text-success' : 'text-error'">
+                {{ n.titulo }}
+            </h3>
+            <p class="text-base-content/70 font-medium leading-relaxed mb-8">
+                {{ n.mensaje }}
+            </p>
+
+            <button (click)="cerrarNotificacion()" 
+                class="btn btn-block py-4 rounded-2xl font-bold uppercase tracking-widest border-none text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+                [ngClass]="n.tipo === 'success' ? 'bg-success hover:bg-success-focus shadow-success/30' : 'bg-error hover:bg-error-focus shadow-error/30'">
+                Entendido
+            </button>
+        </div>
+    </div>
+</div>

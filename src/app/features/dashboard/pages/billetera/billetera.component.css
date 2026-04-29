@@ -1,0 +1,52 @@
+/* src/app/features/dashboard/pages/billetera/billetera.component.css */
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table th {
+    text-transform: uppercase;
+    font-size: 10px;
+    opacity: 0.5;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.modal-box {
+    border: 1px solid currentColor;
+    border-color: rgba(var(--bc), 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary {
+    transition-property: transform;
+    transition-duration: 300ms;
+}
+
+.btn-primary:hover {
+    transform: scale(1.02);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: rgba(var(--p), 0.2);
+    box-shadow: 0 10px 15px -3px rgba(var(--p), 0.05);
+}

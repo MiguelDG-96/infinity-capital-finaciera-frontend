@@ -1,0 +1,82 @@
+<!-- Navbar Superior del Dashboard -->
+<header class="flex h-16 items-center justify-between border-b border-base-300 bg-base-100 px-4 lg:px-6">
+
+  <!-- Izquierda: Botón hamburguesa (móvil) + Título de página -->
+  <div class="flex items-center gap-3">
+    <button
+      class="btn btn-ghost btn-sm lg:hidden"
+      (click)="onToggleSidebar()"
+      aria-label="Abrir menú"
+    >
+      <lucide-icon name="menu" size="20" strokeWidth="1.8"></lucide-icon>
+    </button>
+  </div>
+
+  <!-- Centro: Buscador -->
+  <div class="hidden max-w-xs flex-1 px-6 md:flex">
+    <label class="input input-bordered input-sm flex w-full items-center gap-2">
+      <lucide-icon name="search" size="16" strokeWidth="2" class="text-base-content/40"></lucide-icon>
+      <input type="text" class="grow bg-transparent text-sm outline-none" placeholder="Buscar algo..." />
+    </label>
+  </div>
+
+  <!-- Derecha: Acciones -->
+  <div class="flex items-center gap-2">
+
+    <!-- Toggle Modo Oscuro -->
+    <div class="tooltip tooltip-bottom" data-tip="Cambiar tema">
+      <button
+        class="btn btn-ghost btn-sm btn-circle"
+        (click)="onToggleDarkMode()"
+        aria-label="Cambiar tema"
+      >
+        @if (themeService.darkMode()) {
+          <!-- Sol -->
+          <lucide-icon name="sun" size="20" strokeWidth="1.8" class="text-yellow-400"></lucide-icon>
+        } @else {
+          <!-- Luna -->
+          <lucide-icon name="moon" size="20" strokeWidth="1.8"></lucide-icon>
+        }
+      </button>
+    </div>
+
+    <!-- Notificaciones -->
+    <div class="tooltip tooltip-bottom" data-tip="Notificaciones">
+      <button 
+        class="btn btn-ghost btn-sm btn-circle indicator" 
+        aria-label="Notificaciones"
+        (click)="onToggleNotifications()"
+      >
+        <span class="badge badge-primary badge-xs indicator-item"></span>
+        <lucide-icon name="bell" size="20" strokeWidth="1.8"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Configuración -->
+    <div class="tooltip tooltip-bottom" data-tip="Configuración">
+      <button class="btn btn-ghost btn-sm btn-circle" aria-label="Configuración">
+        <lucide-icon name="settings" size="20" strokeWidth="1.8"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Avatar / Perfil -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="avatar cursor-pointer" [class.placeholder]="!userPhotoUrl">
+        <div class="w-9 rounded-full ring-2 ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden" [class.bg-primary]="!userPhotoUrl" [class.text-primary-content]="!userPhotoUrl">
+          @if (userPhotoUrl) {
+            <img [src]="userPhotoUrl" [alt]="userFullName" class="w-full h-full object-cover" />
+          } @else {
+            <span class="text-sm font-bold flex items-center justify-center w-full h-full">{{ userInitials }}</span>
+          }
+        </div>
+      </div>
+      <ul tabindex="0" class="dropdown-content menu menu-sm z-[50] mt-3 w-52 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
+        <li class="menu-title px-2 py-1 text-xs text-base-content/50">{{ userFullName }}</li>
+        <li><a>Mi perfil</a></li>
+        <li><a>Preferencias</a></li>
+        <li class="divider my-1"></li>
+        <li><button type="button" class="text-error w-full text-left" (mousedown)="logoutRequested.emit(); $event.preventDefault()">Cerrar sesión</button></li>
+      </ul>
+    </div>
+  </div>
+</header>
