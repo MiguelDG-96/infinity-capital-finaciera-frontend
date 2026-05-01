@@ -1,194 +1,1095 @@
-<!-- src/app/features/dashboard/pages/solicitar-credito/solicitar-credito.component.html -->
-<div class="space-y-6 max-w-6xl mx-auto p-4 md:p-6 animate-fade-in">
-  <div class="flex items-center gap-4 border-b border-base-200 pb-4">
-    <a routerLink="/dashboard/creditos/mis-creditos" class="btn btn-circle btn-ghost btn-sm">
-      <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
-    </a>
-    <div>
-      <h1 class="text-2xl font-bold text-base-content">Solicitar Nuevo Crédito</h1>
-      <p class="text-sm opacity-60">Completa tus datos para iniciar el proceso de evaluación.</p>
+<div class="min-h-screen pb-12 animate-fade-in text-base-content">
+  <!-- Header -->
+  <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <a
+        routerLink="/dashboard/creditos/mis-creditos"
+        class="w-10 h-10 bg-base-content/5 hover:bg-base-content/10 rounded-xl flex items-center justify-center text-base-content/60 hover:text-base-content transition-all"
+      >
+        <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
+      </a>
+      <div>
+        <h1 class="text-3xl font-black tracking-tight">Solicitar Crédito</h1>
+        <p class="text-base-content/60 text-sm">
+          Completa los pasos para enviar tu solicitud de financiamiento.
+        </p>
+      </div>
     </div>
+
+    <!-- Step Progress Desktop -->
+    <div class="hidden md:flex items-center gap-2">
+      <div *ngFor="let step of [1, 2, 3, 4, 5]" class="flex items-center gap-2">
+        <div
+          class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all duration-500"
+          [class.bg-primary]="currentStep >= step"
+          [class.text-primary-content]="currentStep >= step"
+          [class.bg-base-content/5]="currentStep < step"
+          [class.text-base-content/30]="currentStep < step"
+          [class.ring-4]="currentStep === step"
+          [class.ring-primary/20]="currentStep === step"
+        >
+          {{ step }}
+        </div>
+        <div
+          *ngIf="step < 5"
+          class="w-4 h-0.5 rounded-full"
+          [class.bg-primary]="currentStep > step"
+          [class.bg-base-content/5]="currentStep <= step"
+        ></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Wizard Sidebar (Steps) -->
+    <aside class="lg:col-span-3 self-start sticky top-24">
+      <div class="bg-base-100/50 backdrop-blur-xl border border-base-content/10 rounded-3xl p-6">
+        <div class="space-y-6">
+          <div
+            *ngFor="let step of [1, 2, 3, 4, 5]; let i = index"
+            class="flex items-center gap-4 transition-all duration-300 cursor-pointer"
+            (click)="currentStep = step"
+            [class.opacity-40]="currentStep < step"
+          >
+            <div
+              class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm transition-all shadow-lg"
+              [class.bg-primary]="currentStep >= step"
+              [class.text-primary-content]="currentStep >= step"
+              [class.bg-base-content/5]="currentStep < step"
+              [class.text-base-content/40]="currentStep < step"
+              [class.ring-4]="currentStep === step"
+              [class.ring-primary/20]="currentStep === step"
+            >
+              <lucide-icon *ngIf="currentStep > step" name="check" class="w-5 h-5"></lucide-icon>
+              <span *ngIf="currentStep <= step">{{ step }}</span>
+            </div>
+            <div>
+              <p
+                class="text-[10px] font-bold uppercase tracking-widest text-base-content/40 mb-0.5"
+              >
+                Paso {{ step }}
+              </p>
+              <p
+                class="text-xs font-black transition-colors"
+                [class.text-base-content]="currentStep === step"
+                [class.text-base-content/40]="currentStep !== step"
+              >
+                {{ ['Configuración', 'Identidad', 'Ubicación', 'Laboral', 'Finalizar'][i] }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulator Summary Mini -->
+        <div
+          *ngIf="cuotaEstimada > 0"
+          class="mt-12 pt-8 border-t border-base-content/5 animate-in fade-in slide-in-from-bottom-4 duration-500"
+        >
+          <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-4">
+            Resumen Estimado
+          </p>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-base-content/60">Cuota Mensual</span>
+              <span class="text-lg font-black text-accent"
+                >{{ getSimboloMoneda() }} {{ cuotaEstimada }}</span
+              >
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-base-content/60">Total a Pagar</span>
+              <span class="text-xs font-bold text-base-content"
+                >{{ getSimboloMoneda() }} {{ totalPagar }}</span
+              >
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-base-content/60">Tasa (TEM)</span>
+              <span class="text-xs font-bold text-primary">{{ temSeleccionada }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Form Area -->
+    <div class="lg:col-span-6">
+      <div
+        class="bg-base-100/40 backdrop-blur-xl border border-base-content/10 rounded-3xl shadow-2xl"
+      >
+        <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="p-6 md:p-10">
+          <!-- STEP 1: CONFIGURACIÓN -->
+          <div
+            *ngIf="currentStep === 1"
+            class="animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <div class="mb-8">
+              <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
+                <lucide-icon name="settings" class="w-7 h-7 text-primary"></lucide-icon>
+                Configuración del Crédito
+              </h2>
+              <p class="text-base-content/60 text-sm">
+                Define el monto y las condiciones de tu préstamo.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Tipo de Persona</label
+                >
+                <select
+                  formControlName="tipoPersona"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option value="NATURAL">Persona Natural</option>
+                  <option value="JURIDICA">Empresa (RUC 20)</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Producto</label
+                >
+                <select
+                  formControlName="tipoCreditoId"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option *ngFor="let t of tiposCredito" [value]="t.id">{{ t.nombre }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Moneda</label
+                >
+                <select
+                  formControlName="monedaId"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option *ngFor="let m of monedas" [value]="m.id">{{ m.simbolo }}</option>
+                </select>
+              </div>
+              <div class="form-control col-span-1">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Monto</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none"
+                    >{{ getSimboloMoneda() }}</span
+                  >
+                  <input
+                    type="number"
+                    formControlName="montoSolicitado"
+                    class="input input-bordered w-full bg-base-100 rounded-xl pl-8 pr-2 transition-all font-bold"
+                  />
+                </div>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Plazo</label
+                >
+                <input
+                  type="number"
+                  formControlName="plazoMeses"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                  placeholder="Meses"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Gracia</label
+                >
+                <input
+                  type="number"
+                  formControlName="periodoGracia"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                />
+              </div>
+            </div>
+
+            <div class="form-control">
+              <label
+                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                >Cuenta / CCI para Desembolso</label
+              >
+              <div class="relative">
+                <lucide-icon
+                  name="wallet"
+                  class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"
+                ></lucide-icon>
+                <input
+                  type="text"
+                  formControlName="cuentaDesembolso"
+                  class="input input-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all"
+                  placeholder="Ingresa tu número de cuenta bancaria"
+                />
+              </div>
+              <p
+                *ngIf="isFieldInvalid('cuentaDesembolso')"
+                class="text-[10px] text-error mt-2 font-medium"
+              >
+                Este campo es obligatorio (mín. 10 caract.)
+              </p>
+            </div>
+          </div>
+
+          <!-- STEP 2: IDENTIDAD -->
+          <div
+            *ngIf="currentStep === 2"
+            class="animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <div class="mb-8">
+              <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
+                <lucide-icon name="id-card" class="w-7 h-7 text-primary"></lucide-icon>
+                Información de Identidad
+              </h2>
+              <p class="text-base-content/60 text-sm">
+                Necesitamos validar quién eres para procesar la solicitud.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Tipo Documento</label
+                >
+                <select
+                  formControlName="tipoDocumento"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option value="DNI">DNI</option>
+                  <option value="CARNET_EXTRANJERIA">Carnet Extranjería</option>
+                  <option value="PASAPORTE">Pasaporte</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Nro. Documento</label
+                >
+                <input
+                  type="text"
+                  formControlName="numeroDocumento"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Nacionalidad</label
+                >
+                <input
+                  type="text"
+                  formControlName="nacionalidad"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Fecha Nacimiento</label
+                >
+                <div class="dropdown dropdown-bottom w-full">
+                  <div
+                    tabindex="0"
+                    role="button"
+                    class="input input-bordered w-full bg-base-100 rounded-xl flex items-center justify-between group"
+                  >
+                    <span class="font-bold">{{
+                      solicitudForm.get('fechaNacimiento')?.value || 'Seleccionar...'
+                    }}</span>
+                    <lucide-icon
+                      name="calendar-days"
+                      class="w-4 h-4 text-base-content/30 group-hover:text-primary transition-colors"
+                    ></lucide-icon>
+                  </div>
+                  <div tabindex="0" class="dropdown-content z-[100] mt-2 left-0 min-w-[280px]">
+                    <calendar-date
+                      (change)="onDateChange($event, 'fechaNacimiento')"
+                      class="cally bg-base-100 border border-base-content/10 shadow-2xl rounded-3xl p-2 w-full block scale-90 origin-top-left"
+                    >
+                      <svg
+                        aria-label="Previous"
+                        class="fill-current size-4"
+                        slot="previous"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+                      </svg>
+                      <svg
+                        aria-label="Next"
+                        class="fill-current size-4"
+                        slot="next"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+                      </svg>
+                      <calendar-month></calendar-month>
+                    </calendar-date>
+                  </div>
+                </div>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Estado Civil</label
+                >
+                <select
+                  formControlName="estadoCivil"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option *ngFor="let ec of estadosCiviles" [value]="ec">{{ ec }}</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Grado Instrucción</label
+                >
+                <select
+                  formControlName="gradoInstruccion"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option *ngFor="let gi of gradosInstruccion" [value]="gi">{{ gi }}</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Celular</label
+                >
+                <div class="relative">
+                  <lucide-icon
+                    name="phone"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/30 z-10 pointer-events-none"
+                  ></lucide-icon>
+                  <input
+                    type="text"
+                    formControlName="celular"
+                    class="input input-bordered w-full bg-base-100 rounded-xl pl-10 pr-4 transition-all font-bold"
+                    placeholder="987654321"
+                  />
+                </div>
+                <p
+                  *ngIf="isFieldInvalid('celular')"
+                  class="text-[10px] text-error mt-2 font-medium"
+                >
+                  9 dígitos requeridos
+                </p>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Teléfono (Opcional)</label
+                >
+                <input
+                  type="text"
+                  formControlName="telefono"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: UBICACIÓN -->
+          <div
+            *ngIf="currentStep === 3"
+            class="animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <div class="mb-8">
+              <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
+                <lucide-icon name="home" class="w-7 h-7 text-primary"></lucide-icon>
+                Domicilio Actual
+              </h2>
+              <p class="text-base-content/60 text-sm">¿Dónde resides actualmente?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Departamento</label
+                >
+                <input
+                  type="text"
+                  formControlName="departamento"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Provincia</label
+                >
+                <input
+                  type="text"
+                  formControlName="provincia"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Distrito</label
+                >
+                <input
+                  type="text"
+                  formControlName="distrito"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+            </div>
+            <div class="form-control mb-6">
+              <label
+                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                >Dirección Completa *</label
+              >
+              <input
+                type="text"
+                formControlName="direccion"
+                class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                placeholder="Calle, Av., Jr., Nro."
+              />
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="form-control">
+                <label
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Urb/Sector</label
+                >
+                <input
+                  type="text"
+                  formControlName="urbanizacion"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Mz.</label
+                >
+                <input
+                  type="text"
+                  formControlName="manzana"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Lote</label
+                >
+                <input
+                  type="text"
+                  formControlName="lote"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Cód. Postal</label
+                >
+                <input
+                  type="text"
+                  formControlName="codigoPostal"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+            </div>
+            <div class="form-control mt-6">
+              <label
+                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                >Referencia de Domicilio *</label
+              >
+              <input
+                type="text"
+                formControlName="referencia"
+                class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                placeholder="Ej: Frente a la comisaría, portón rojo"
+              />
+              <p
+                *ngIf="isFieldInvalid('referencia')"
+                class="text-[10px] text-error mt-2 font-medium"
+              >
+                Este campo es obligatorio
+              </p>
+            </div>
+          </div>
+
+          <!-- STEP 4: LABORAL -->
+          <div
+            *ngIf="currentStep === 4"
+            class="animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <div class="mb-8">
+              <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
+                <lucide-icon name="briefcase" class="w-7 h-7 text-primary"></lucide-icon>
+                Situación Laboral
+              </h2>
+              <p class="text-base-content/60 text-sm">
+                Información sobre tus ingresos y ocupación.
+              </p>
+            </div>
+
+            <!-- JURIDICA SECTION -->
+            <div
+              *ngIf="solicitudForm.get('tipoPersona')?.value === 'JURIDICA'"
+              class="bg-accent/10 border border-accent/20 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center"
+                >
+                  <lucide-icon name="building-2" class="w-4 h-4"></lucide-icon>
+                </div>
+                <h3 class="text-sm font-black uppercase tracking-widest">Datos de la Empresa</h3>
+              </div>
+              <div class="space-y-6">
+                <div class="form-control">
+                  <label
+                    class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                    >Razón Social</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="razonSocialJuridica"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                  />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >RUC Empresa</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="rucJuridico"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                    />
+                  </div>
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >Representante Legal</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="representanteLegal"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Condición Laboral</label
+                >
+                <select
+                  formControlName="situacionLaboral"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                >
+                  <option *ngFor="let sl of situacionesLaborales" [value]="sl">{{ sl }}</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Cargo / Ocupación</label
+                >
+                <input
+                  type="text"
+                  formControlName="cargoOcupacion"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Ingreso Bruto Mensual</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none"
+                    >{{ getSimboloMoneda() }}</span
+                  >
+                  <input
+                    type="number"
+                    formControlName="ingresoBrutoMensual"
+                    class="input input-bordered w-full bg-base-100 rounded-xl pl-12 pr-4 transition-all font-bold"
+                  />
+                </div>
+              </div>
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Fecha Ingreso</label
+                >
+                <div class="dropdown dropdown-bottom w-full">
+                  <div
+                    tabindex="0"
+                    role="button"
+                    class="input input-bordered w-full bg-base-100 rounded-xl flex items-center justify-between group"
+                  >
+                    <span class="font-bold">{{
+                      solicitudForm.get('fechaIngresoLaboral')?.value || 'Seleccionar...'
+                    }}</span>
+                    <lucide-icon
+                      name="calendar-days"
+                      class="w-4 h-4 text-base-content/30 group-hover:text-primary transition-colors"
+                    ></lucide-icon>
+                  </div>
+                  <div tabindex="0" class="dropdown-content z-[100] mt-2 left-0 min-w-[280px]">
+                    <calendar-date
+                      (change)="onDateChange($event, 'fechaIngresoLaboral')"
+                      class="cally bg-base-100 border border-base-content/10 shadow-2xl rounded-3xl p-2 w-full block scale-90 origin-top-left"
+                    >
+                      <svg
+                        aria-label="Previous"
+                        class="fill-current size-4"
+                        slot="previous"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+                      </svg>
+                      <svg
+                        aria-label="Next"
+                        class="fill-current size-4"
+                        slot="next"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+                      </svg>
+                      <calendar-month></calendar-month>
+                    </calendar-date>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="solicitudForm.get('situacionLaboral')?.value === 'DEPENDIENTE'"
+                class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-primary/5 rounded-3xl border border-primary/10 animate-in slide-in-from-top-2 duration-300"
+              >
+                <div class="md:col-span-2">
+                  <h3
+                    class="text-sm font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2"
+                  >
+                    <lucide-icon name="building-2" class="w-4 h-4"></lucide-icon>
+                    Detalles del Empleador
+                  </h3>
+                </div>
+                <div class="form-control">
+                  <label
+                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                    >Nombre de Empresa *</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="empresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                  />
+                </div>
+                <div class="form-control">
+                  <label
+                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                    >RUC Empresa *</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="rucEmpresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                  />
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label
+                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                    >Dirección de Empresa</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="direccionEmpresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="form-control">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Carga Familiar (Dependientes)</label
+                >
+                <div class="flex items-center gap-4">
+                  <button
+                    type="button"
+                    class="btn btn-circle btn-sm btn-outline border-base-content/20"
+                    (click)="
+                      solicitudForm.patchValue({
+                        numeroDependientes: solicitudForm.get('numeroDependientes')?.value - 1,
+                      })
+                    "
+                    [disabled]="solicitudForm.get('numeroDependientes')?.value <= 0"
+                  >
+                    -
+                  </button>
+                  <span class="text-lg font-black w-8 text-center">{{
+                    solicitudForm.get('numeroDependientes')?.value
+                  }}</span>
+                  <button
+                    type="button"
+                    class="btn btn-circle btn-sm btn-outline border-base-content/20"
+                    (click)="
+                      solicitudForm.patchValue({
+                        numeroDependientes: solicitudForm.get('numeroDependientes')?.value + 1,
+                      })
+                    "
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div
+                *ngIf="solicitudForm.get('situacionLaboral')?.value === 'INDEPENDIENTE'"
+                class="md:col-span-2 animate-in slide-in-from-top-2 duration-300"
+              >
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >RUC Propio / Negocio</label
+                >
+                <input
+                  type="text"
+                  formControlName="rucPropio"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: FINALIZAR -->
+          <div
+            *ngIf="currentStep === 5"
+            class="animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <div class="mb-8">
+              <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
+                <lucide-icon name="sparkles" class="w-7 h-7 text-primary"></lucide-icon>
+                Finalizar Solicitud
+              </h2>
+              <p class="text-base-content/60 text-sm">
+                Revisa los últimos detalles antes de enviar.
+              </p>
+            </div>
+
+            <!-- Garante (Opcional) -->
+            <div
+              class="collapse collapse-plus bg-base-content/5 border border-base-content/10 rounded-3xl mb-6"
+            >
+              <input type="checkbox" />
+              <div
+                class="collapse-title text-sm font-black uppercase tracking-widest flex items-center gap-3"
+              >
+                <lucide-icon name="user-check" class="w-4 h-4"></lucide-icon>
+                ¿Deseas agregar un Garante? (Opcional)
+              </div>
+              <div class="collapse-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 pb-2 px-1">
+                  <div class="form-control md:col-span-2">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >Nombre Completo del Garante</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="garanteNombre"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                    />
+                  </div>
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >DNI del Garante</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="garanteDni"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                    />
+                  </div>
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >Celular del Garante</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="garanteTelefono"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONYUGE SECTION -->
+            <div
+              *ngIf="['CASADO', 'CONVIVIENTE'].includes(solicitudForm.get('estadoCivil')?.value)"
+              class="bg-accent/5 border border-accent/10 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center"
+                >
+                  <lucide-icon name="heart" class="w-4 h-4"></lucide-icon>
+                </div>
+                <h3 class="text-sm font-black uppercase tracking-widest text-accent">
+                  Información del Cónyuge
+                </h3>
+              </div>
+              <div class="space-y-6">
+                <div class="form-control">
+                  <label
+                    class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                    >Nombre Completo *</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="conyugeNombre"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                  />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >DNI Cónyuge *</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="conyugeDni"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                    />
+                  </div>
+                  <div class="form-control">
+                    <label
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                      >Ocupación</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="conyugeOcupacion"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREFERENCIAS Y LEGAL -->
+            <div class="bg-base-content/5 rounded-3xl p-6 mb-8">
+              <h3
+                class="text-[10px] font-black uppercase tracking-widest text-base-content/40 mb-4"
+              >
+                Preferencias y Legal
+              </h3>
+
+              <div class="form-control mb-8">
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-3 block"
+                  >¿Cómo deseas recibir tu Estado de Cuenta?</label
+                >
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label
+                    class="flex items-center gap-3 cursor-pointer p-3 rounded-2xl border border-base-content/10 bg-base-100 hover:bg-base-200 transition-all"
+                    [class.ring-2]="solicitudForm.get('canalEstadoCuenta')?.value === 'EMAIL'"
+                    [class.ring-primary]="solicitudForm.get('canalEstadoCuenta')?.value === 'EMAIL'"
+                  >
+                    <input
+                      type="radio"
+                      formControlName="canalEstadoCuenta"
+                      value="EMAIL"
+                      class="radio radio-primary radio-sm"
+                    />
+                    <span class="text-xs font-bold">Correo Electrónico</span>
+                  </label>
+                  <label
+                    class="flex items-center gap-3 cursor-pointer p-3 rounded-2xl border border-base-content/10 bg-base-100 hover:bg-base-200 transition-all"
+                    [class.ring-2]="solicitudForm.get('canalEstadoCuenta')?.value === 'FISICO'"
+                    [class.ring-primary]="
+                      solicitudForm.get('canalEstadoCuenta')?.value === 'FISICO'
+                    "
+                  >
+                    <input
+                      type="radio"
+                      formControlName="canalEstadoCuenta"
+                      value="FISICO"
+                      class="radio radio-primary radio-sm"
+                    />
+                    <span class="text-xs font-bold">Dirección Física</span>
+                  </label>
+                </div>
+              </div>
+
+              <label
+                class="flex items-start gap-4 cursor-pointer group p-4 rounded-2xl hover:bg-base-content/5 transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="terminosAceptados"
+                  class="checkbox checkbox-primary checkbox-sm mt-1"
+                />
+                <span
+                  class="text-[11px] text-base-content/60 leading-relaxed group-hover:text-base-content transition-colors"
+                >
+                  Acepto los
+                  <span class="text-primary font-bold underline">Términos y Condiciones</span> y
+                  autorizo el tratamiento de mis datos personales según la ley vigente para la
+                  evaluación de mi solicitud de crédito.
+                </span>
+              </label>
+            </div>
+
+            <!-- Global Error -->
+            <div
+              *ngIf="error"
+              class="mb-6 p-4 bg-error/10 border border-error/20 rounded-xl text-error text-sm flex items-center gap-3 animate-in fade-in zoom-in-95"
+            >
+              <lucide-icon name="alert-circle" class="w-5 h-5 shrink-0"></lucide-icon>
+              {{ error }}
+            </div>
+
+            <!-- Success State -->
+            <div
+              *ngIf="exito"
+              class="mb-6 p-8 bg-success/10 border border-success/20 rounded-3xl text-success text-center animate-bounce-subtle"
+            >
+              <lucide-icon name="check-circle" class="w-16 h-16 mx-auto mb-4"></lucide-icon>
+              <h3 class="text-2xl font-black mb-2">¡Solicitud Enviada!</h3>
+              <p class="text-sm opacity-80">Estamos procesando tu requerimiento. Redirigiendo...</p>
+            </div>
+          </div>
+
+          <!-- Navigation Footer -->
+          <footer class="mt-12 flex items-center gap-4 pt-8 border-t border-base-content/5">
+            <button
+              type="button"
+              (click)="prevStep()"
+              *ngIf="currentStep > 1 && !exito"
+              class="px-6 py-3 rounded-xl font-bold text-base-content/50 hover:text-base-content transition-all flex items-center gap-2"
+            >
+              <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
+              Anterior
+            </button>
+            <div class="flex-1"></div>
+            <button
+              type="button"
+              (click)="nextStep()"
+              *ngIf="currentStep < totalSteps"
+              class="bg-base-content text-base-100 px-8 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-xl flex items-center gap-2"
+            >
+              Siguiente
+              <lucide-icon name="chevron-right" class="w-4 h-4"></lucide-icon>
+            </button>
+            <button
+              type="submit"
+              *ngIf="currentStep === totalSteps && !exito"
+              [disabled]="enviando"
+              class="btn btn-primary px-10 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+            >
+              <span *ngIf="!enviando" class="flex items-center gap-2"> 🚀 Enviar Solicitud </span>
+              <span *ngIf="enviando" class="flex items-center gap-2">
+                <span class="loading loading-spinner h-5 w-5"></span>
+                Procesando...
+              </span>
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <!-- Simulator Detail Panel (Right) -->
+    <aside class="lg:col-span-3 self-start sticky top-24">
+      <div
+        class="bg-base-100/50 backdrop-blur-xl border border-base-content/10 rounded-3xl p-6 max-h-[calc(100vh-8rem)] flex flex-col"
+      >
+        <h3 class="text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
+            <lucide-icon name="calculator" class="w-4 h-4"></lucide-icon>
+          </div>
+          Cronograma Proyectado
+        </h3>
+
+        <div *ngIf="cronogramaSimulado.length === 0" class="text-center py-20">
+          <div
+            class="w-12 h-12 bg-base-content/5 rounded-full flex items-center justify-center mx-auto mb-4 opacity-20"
+          >
+            <lucide-icon name="calendar-days" class="w-6 h-6"></lucide-icon>
+          </div>
+          <p class="text-xs text-base-content/40 italic px-4">
+            Ingresa monto y plazo para proyectar tus pagos.
+          </p>
+        </div>
+
+        <div
+          *ngIf="cronogramaSimulado.length > 0"
+          class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3 mb-6"
+        >
+          <div
+            *ngFor="let cuota of cronogramaSimulado"
+            class="bg-base-content/5 border border-base-content/5 rounded-2xl p-4 flex items-center justify-between group hover:bg-base-content/10 transition-all duration-300"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-base-200 flex items-center justify-center text-[10px] font-bold text-base-content/40 group-hover:bg-primary/20 group-hover:text-primary transition-colors"
+              >
+                {{ cuota.numero }}
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-tight">
+                  Cuota {{ cuota.esGracia ? ' (Gracia)' : '' }}
+                </p>
+                <p class="text-xs font-black">{{ getSimboloMoneda() }} {{ cuota.total }}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-[8px] text-base-content/40 uppercase font-bold mb-0.5">Interés</p>
+              <p class="text-[10px] font-bold text-primary">
+                {{ getSimboloMoneda() }} {{ cuota.interes }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="cronogramaSimulado.length > 0"
+          class="mt-auto p-5 bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-2xl relative overflow-hidden"
+        >
+          <div
+            class="absolute -right-4 -bottom-4 w-16 h-16 bg-accent/10 blur-xl rounded-full"
+          ></div>
+          <div class="flex justify-between items-center relative z-10">
+            <span class="text-[10px] font-black text-accent uppercase tracking-widest"
+              >Interés Total</span
+            >
+            <span class="text-sm font-black">{{ getSimboloMoneda() }} {{ totalInteres }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
   </div>
-
-  @if (exito) {
-    <div class="alert alert-success shadow-lg text-success-content py-8 flex flex-col md:flex-row items-center gap-6">
-      <lucide-icon name="check-circle" class="w-16 h-16"></lucide-icon>
-      <div class="text-center md:text-left">
-        <h3 class="font-bold text-2xl mb-2">¡Solicitud Enviada con Éxito!</h3>
-        <p class="opacity-90">Tu solicitud ha sido registrada correctamente. Un analista revisará tu perfil y te notificaremos pronto.</p>
-        <div class="mt-4 flex items-center justify-center md:justify-start gap-2 text-sm font-medium">
-          <span class="loading loading-dots loading-sm"></span>
-          Redirigiendo a tus créditos...
-        </div>
-      </div>
-    </div>
-  } @else {
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Main Form -->
-      <div class="lg:col-span-2 card bg-base-100 shadow-xl border border-base-200 overflow-hidden">
-        <div class="card-body p-6 md:p-10">
-          
-          @if (error) {
-            <div class="alert alert-error shadow-sm mb-6 text-sm flex items-center gap-2">
-              <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
-              <span>{{ error }}</span>
-            </div>
-          }
-
-          <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="space-y-8">
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <!-- Identity Section -->
-              <div class="space-y-5">
-                <h3 class="text-lg font-bold border-b border-base-200 pb-2 flex items-center gap-2 text-primary">
-                    <lucide-icon name="id-card" class="w-5 h-5"></lucide-icon>
-                    Información Personal
-                </h3>
-                
-                <div class="form-control w-full">
-                  <label class="label"><span class="label-text font-semibold opacity-70">Documento de Identidad</span></label>
-                  <div class="join w-full">
-                    <select formControlName="tipoDocumento" class="select select-bordered join-item w-1/3 focus:select-primary">
-                      <option *ngFor="let tipo of tiposDocumento" [value]="tipo">{{ tipo }}</option>
-                    </select>
-                    <input type="text" formControlName="numeroDocumento" placeholder="Número" 
-                           class="input input-bordered join-item w-2/3 focus:input-primary" 
-                           [class.input-error]="isFieldInvalid('numeroDocumento')">
-                  </div>
-                  @if (isFieldInvalid('numeroDocumento')) {
-                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Requerido (min 8 dígitos)</span></label>
-                  }
-                </div>
-
-                <div class="form-control w-full">
-                  <label class="label"><span class="label-text font-semibold opacity-70">Domicilio Actual</span></label>
-                  <div class="relative">
-                    <lucide-icon name="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-primary"></lucide-icon>
-                    <input type="text" formControlName="domicilio" placeholder="Av / Calle / Nro" 
-                           class="input input-bordered w-full pl-10 focus:input-primary" 
-                           [class.input-error]="isFieldInvalid('domicilio')">
-                  </div>
-                  @if (isFieldInvalid('domicilio')) {
-                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Ingresa un domicilio válido</span></label>
-                  }
-                </div>
-              </div>
-
-              <!-- Loan Details Section -->
-              <div class="space-y-5">
-                <h3 class="text-lg font-bold border-b border-base-200 pb-2 flex items-center gap-2 text-primary">
-                    <lucide-icon name="banknote" class="w-5 h-5"></lucide-icon>
-                    Detalles del Préstamo
-                </h3>
-
-                <div class="form-control w-full">
-                  <label class="label"><span class="label-text font-semibold opacity-70">Producto</span></label>
-                  <select formControlName="tipoCreditoId" class="select select-bordered w-full focus:select-primary" [class.select-error]="isFieldInvalid('tipoCreditoId')">
-                    <option *ngFor="let tc of tiposCredito" [value]="tc.id">{{ tc.nombre }}</option>
-                  </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-semibold opacity-70">Moneda</span></label>
-                    <select formControlName="monedaId" class="select select-bordered w-full focus:select-primary">
-                      <option *ngFor="let m of monedas" [value]="m.id">{{ m.nombre }}</option>
-                    </select>
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-semibold opacity-70">Plazo (Meses)</span></label>
-                    <input type="number" formControlName="plazoMeses" class="input input-bordered w-full focus:input-primary font-bold">
-                  </div>
-                </div>
-
-                <div class="form-control w-full">
-                  <label class="label"><span class="label-text font-semibold opacity-70">Monto a Solicitar</span></label>
-                  <div class="relative">
-                    <lucide-icon name="banknote" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-primary"></lucide-icon>
-                    <input type="number" formControlName="montoSolicitado" 
-                           class="input input-bordered w-full pl-10 focus:input-primary text-xl font-black" 
-                           [class.input-error]="isFieldInvalid('montoSolicitado')">
-                  </div>
-                  @if (isFieldInvalid('montoSolicitado')) {
-                    <label class="label py-1"><span class="label-text-alt text-error font-medium">Monto inválido (Min 100)</span></label>
-                  }
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer Info -->
-            <div class="bg-primary/5 rounded-2xl p-5 border border-primary/10 flex items-start gap-4">
-              <lucide-icon name="shield-check" class="w-6 h-6 text-primary shrink-0"></lucide-icon>
-              <div class="text-sm">
-                <p class="font-bold text-primary mb-1">Solicitud Segura</p>
-                <p class="opacity-70 leading-relaxed">Toda tu información está cifrada. Nuestros analistas revisarán tu historial crediticio para brindarte la mejor tasa disponible.</p>
-              </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-end items-center gap-4 pt-4">
-              <a routerLink="/dashboard/creditos/mis-creditos" class="btn btn-ghost">Cancelar</a>
-              <button type="submit" 
-                      class="btn btn-primary w-full md:w-auto md:min-w-[240px] shadow-lg shadow-primary/30 h-14 text-lg font-bold" 
-                      [disabled]="solicitudForm.invalid || enviando">
-                @if (enviando) {
-                  <span class="loading loading-spinner"></span> Procesando...
-                } @else {
-                  Solicitar Crédito Ahora
-                  <lucide-icon name="arrow-right" class="w-5 h-5 ml-2"></lucide-icon>
-                }
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Simulator Summary Sidebar -->
-      <div class="space-y-6">
-        <div class="card bg-gradient-to-br from-base-300 to-base-200 shadow-2xl border border-base-content/5 sticky top-6 overflow-hidden">
-            <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <lucide-icon name="trending-up" class="w-32 h-32"></lucide-icon>
-            </div>
-            <div class="card-body">
-                <h2 class="text-xs font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    Simulador Referencial
-                </h2>
-                
-                <div class="space-y-8">
-                    <div class="text-center py-8 bg-base-100 rounded-3xl shadow-inner border border-base-content/5 relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <span class="text-xs opacity-50 block mb-2 font-medium">CUOTA MENSUAL ESTIMADA</span>
-                        <div class="flex items-baseline justify-center gap-1">
-                          <span class="text-4xl font-black text-primary">{{ cuotaEstimada | currency:'S/ ' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center px-2">
-                            <span class="text-sm opacity-60">Tasa Efectiva Mensual</span>
-                            <span class="badge badge-success font-bold text-white px-3">{{ temSeleccionada }}%</span>
-                        </div>
-                        <div class="flex justify-between items-center px-2">
-                            <span class="text-sm opacity-60">Total de Intereses</span>
-                            <span class="text-sm font-bold">{{ (cuotaEstimada * (solicitudForm.get('plazoMeses')?.value || 0) - (solicitudForm.get('montoSolicitado')?.value || 0)) | currency:'S/ ' }}</span>
-                        </div>
-                        <div class="divider my-0 opacity-10"></div>
-                        <div class="flex justify-between items-center px-2">
-                            <span class="text-sm opacity-60">Total a Devolver</span>
-                            <span class="text-sm font-black text-base-content">{{ (cuotaEstimada * (solicitudForm.get('plazoMeses')?.value || 0)) | currency:'S/ ' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="alert bg-base-100/50 border-none p-4 rounded-2xl flex gap-3">
-                        <lucide-icon name="info" class="w-5 h-5 text-primary shrink-0"></lucide-icon>
-                        <p class="text-[10.5px] opacity-60 leading-relaxed font-medium mt-0.5">
-                            Este cálculo utiliza el sistema francés. El monto final puede variar según la evaluación de riesgos y seguros aplicables.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-    </div>
-  }
 </div>

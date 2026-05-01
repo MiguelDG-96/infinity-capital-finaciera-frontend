@@ -14,12 +14,73 @@ export type EstadoCredito =
   | 'RESUELTO';
 
 export interface SolicitudCredito {
+  // Datos del documento de identidad del cliente
   tipoDocumento: string;
   numeroDocumento: string;
-  domicilio: string;
+  domicilio?: string; // Mantenido por retrocompatibilidad
+
+  // Perfil y Datos Personales Adicionales
+  tipoPersona?: string; // NATURAL, JURIDICA
+  nacionalidad?: string;
+  fechaNacimiento?: string;
+  estadoCivil?: string;
+  gradoInstruccion?: string;
+
+  // Ubicación Detallada
+  departamento?: string;
+  provincia?: string;
+  distrito?: string;
+  direccion?: string;
+  urbanizacion?: string;
+  manzana?: string;
+  lote?: string;
+  codigoPostal?: string;
+  referencia?: string;
+
+  // Situación Laboral
+  situacionLaboral?: string;
+  empresa?: string;
+  cargoOcupacion?: string;
+  ingresoMensual?: number;
+  ingresoBrutoMensual?: number;
+  fechaIngresoLaboral?: string;
+  rucEmpresa?: string;
+  telefonoEmpresa?: string;
+  direccionEmpresa?: string;
+  rucPropio?: string;
+  otrosIngresos?: number;
+  tipoRenta?: string;
+  nombrePropioNegocio?: string;
+  numeroDependientes?: number;
+
+  // Contacto
+  telefono?: string;
+  celular?: string;
+
+  // Datos Persona Jurídica
+  razonSocialJuridica?: string;
+  rucJuridico?: string;
+  representanteLegal?: string;
+
+  // Datos del crédito
   tipoCreditoId: number;
   monedaId: number;
-  montoSolicitado?: number;
+  montoSolicitado: number;
+  plazoMeses: number;
+  periodoGracia?: number;
+  cuentaDesembolso?: string;
+  canalEstadoCuenta?: string;
+
+  // Datos del cónyuge
+  conyugeNombre?: string;
+  conyugeDni?: string;
+  conyugeIngresos?: number;
+  conyugeOcupacion?: string;
+
+  // Datos del garante
+  garanteNombre?: string;
+  garanteDni?: string;
+  garanteTelefono?: string;
 }
 
 export interface SolicitudPendiente {

@@ -25,9 +25,61 @@ export class CreditoMapper {
       tipoDocumento: domain.tipoDocumento,
       numeroDocumento: domain.numeroDocumento,
       domicilio: domain.domicilio,
+      
+      tipoPersona: domain.tipoPersona,
+      nacionalidad: domain.nacionalidad,
+      fechaNacimiento: domain.fechaNacimiento,
+      estadoCivil: domain.estadoCivil,
+      gradoInstruccion: domain.gradoInstruccion,
+
+      departamento: domain.departamento,
+      provincia: domain.provincia,
+      distrito: domain.distrito,
+      direccion: domain.direccion,
+      urbanizacion: domain.urbanizacion,
+      manzana: domain.manzana,
+      lote: domain.lote,
+      codigoPostal: domain.codigoPostal,
+      referencia: domain.referencia,
+
+      situacionLaboral: domain.situacionLaboral,
+      empresa: domain.empresa,
+      cargoOcupacion: domain.cargoOcupacion,
+      ingresoMensual: domain.ingresoMensual,
+      ingresoBrutoMensual: domain.ingresoBrutoMensual,
+      fechaIngresoLaboral: domain.fechaIngresoLaboral,
+      rucEmpresa: domain.rucEmpresa,
+      telefonoEmpresa: domain.telefonoEmpresa,
+      direccionEmpresa: domain.direccionEmpresa,
+      rucPropio: domain.rucPropio,
+      otrosIngresos: domain.otrosIngresos,
+      tipoRenta: domain.tipoRenta,
+      nombrePropioNegocio: domain.nombrePropioNegocio,
+      numeroDependientes: domain.numeroDependientes,
+
+      telefono: domain.telefono,
+      celular: domain.celular,
+
+      razonSocialJuridica: domain.razonSocialJuridica,
+      rucJuridico: domain.rucJuridico,
+      representanteLegal: domain.representanteLegal,
+
       tipoCreditoId: domain.tipoCreditoId,
       monedaId: domain.monedaId,
-      montoSolicitado: domain.montoSolicitado
+      montoSolicitado: domain.montoSolicitado,
+      plazoMeses: domain.plazoMeses,
+      periodoGracia: domain.periodoGracia,
+      cuentaDesembolso: domain.cuentaDesembolso,
+      canalEstadoCuenta: domain.canalEstadoCuenta,
+
+      conyugeNombre: domain.conyugeNombre,
+      conyugeDni: domain.conyugeDni,
+      conyugeIngresos: domain.conyugeIngresos,
+      conyugeOcupacion: domain.conyugeOcupacion,
+
+      garanteNombre: domain.garanteNombre,
+      garanteDni: domain.garanteDni,
+      garanteTelefono: domain.garanteTelefono
     };
   }
 
