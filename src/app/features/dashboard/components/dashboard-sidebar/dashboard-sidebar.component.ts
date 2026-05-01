@@ -44,6 +44,7 @@ export class DashboardSidebarComponent implements OnInit {
     'modulos': '/dashboard/admin/modulos',
     'seguridad': '/dashboard/admin/seguridad',
     'personal': '/dashboard/admin/personal',
+    'admin/personal': '/dashboard/admin/personal',
   };
 
   ngOnInit() {
