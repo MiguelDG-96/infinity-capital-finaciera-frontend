@@ -31,7 +31,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.SSH_PASS_PHRASE }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
           script: |
             rm -rf /home/arquidesign/produccion.arqui-design.com/*
@@ -42,7 +42,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.SSH_PASS_PHRASE }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
           source: "dist/capital-finance-frontend/browser/*"
           target: "/home/arquidesign/produccion.arqui-design.com"
