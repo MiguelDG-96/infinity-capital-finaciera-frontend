@@ -1,8 +1,15 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Desactivar el listado de directorios
+  Options -Indexes
+
+  # Si el archivo existe, se sirve directamente (imágenes, js, css, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # Si NO es un archivo real, enviar todo a index.html
+  # Esto permite que rutas como /login funcionen aunque exista una carpeta llamada login
   RewriteRule . /index.html [L]
 </IfModule>
