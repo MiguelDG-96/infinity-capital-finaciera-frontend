@@ -34,7 +34,7 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
           script: |
-            rm -rf /home/arquidesign/produccion.arqui-design.com/*
+            rm -rf /home/arquidesign/whatsapp.arqui-design.com/*
 
       - name: Deploy to Server
         uses: appleboy/scp-action@v0.1.7
@@ -45,5 +45,5 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
           source: "dist/capital-finance-frontend/browser/*"
-          target: "/home/arquidesign/produccion.arqui-design.com"
+          target: "/home/arquidesign/whatsapp.arqui-design.com"
           strip_components: 3
