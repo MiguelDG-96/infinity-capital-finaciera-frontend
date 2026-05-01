@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
@@ -18,6 +18,7 @@ export class AdminPersonalComponent implements OnInit {
   private trabajadorService = inject(TrabajadorService);
   private rolService = inject(RolService);
   private toastService = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   trabajadores = signal<Trabajador[]>([]);
   roles = signal<Rol[]>([]);
@@ -35,20 +36,24 @@ export class AdminPersonalComponent implements OnInit {
 
   cargarDatos() {
     this.isLoading.set(true);
+
     this.trabajadorService.listar().subscribe({
       next: (data) => {
         this.trabajadores.set(data);
         this.isLoading.set(false);
+        this.cdr.detectChanges();
       },
       error: () => {
         this.toastService.show('Error al cargar personal', 'error');
         this.isLoading.set(false);
+        this.cdr.detectChanges();
       }
     });
 
     this.rolService.listar().subscribe(data => {
       // Solo roles administrativos para el personal
       this.roles.set(data.filter(r => r.nombre !== 'ROLE_CLIENTE'));
+      this.cdr.detectChanges();
     });
   }
 

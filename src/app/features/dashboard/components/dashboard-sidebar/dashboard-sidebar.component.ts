@@ -55,12 +55,28 @@ export class DashboardSidebarComponent implements OnInit {
     this.isLoading.set(true);
     this.authService.getMisModulos().subscribe({
       next: (modulos) => {
-        const items = modulos.map(m => ({
-          label: m.nombre,
-          icon: this.mapIcon(m.icono),
-          route: this.ROUTE_MAP[m.ruta] || '/dashboard',
-          isReady: !!this.ROUTE_MAP[m.ruta]
-        }));
+        const items = modulos.map(m => {
+          let route = this.ROUTE_MAP[m.ruta];
+          
+          // Coincidencia de respaldo por texto
+          const lowerRuta = (m.ruta || '').toLowerCase();
+          const lowerNombre = (m.nombre || '').toLowerCase();
+          
+          if (!route) {
+            if (lowerRuta.includes('personal') || lowerNombre.includes('personal')) {
+              route = '/dashboard/admin/personal';
+            } else if (lowerRuta.includes('cartera') || lowerNombre.includes('cartera')) {
+              route = '/dashboard/admin/cartera';
+            }
+          }
+          
+          return {
+            label: m.nombre,
+            icon: this.mapIcon(m.icono),
+            route: route || '/dashboard',
+            isReady: !!route
+          };
+        });
         this.dynamicMenuItems.set(items);
         this.isLoading.set(false);
       },

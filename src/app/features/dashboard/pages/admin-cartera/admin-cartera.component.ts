@@ -8,10 +8,12 @@ import { LucideAngularModule } from 'lucide-angular';
 import { RouterLink } from '@angular/router';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
 
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-admin-cartera',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent, FormsModule],
   templateUrl: './admin-cartera.component.html',
   styleUrl: './admin-cartera.component.css'
 })
@@ -19,7 +21,39 @@ export class AdminCarteraComponent implements OnInit {
   creditos: Credito[] = [];
   cargando = true;
   error = '';
-  
+
+  searchTerm = '';
+  paginaActual = 1;
+  registrosPorPagina = 10;
+
+  get totalPaginas(): number {
+    return Math.ceil(this.creditosFiltrados.length / this.registrosPorPagina) || 1;
+  }
+
+  get creditosFiltrados(): Credito[] {
+    if (!this.searchTerm.trim()) {
+      return this.creditos;
+    }
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.creditos.filter(c => {
+      const nombre = (c.nombreCliente || '').toLowerCase();
+      const documento = (c.documento || '').toLowerCase();
+      const monto = (c.montoAprobado || c.montoCredito || 0).toString();
+      return nombre.includes(term) || documento.includes(term) || monto.includes(term);
+    });
+  }
+
+  get creditosPaginados(): Credito[] {
+    const inicio = (this.paginaActual - 1) * this.registrosPorPagina;
+    return this.creditosFiltrados.slice(inicio, inicio + this.registrosPorPagina);
+  }
+
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+    }
+  }
+
   // Metricas
   totalCartera = 0;
   totalActivos = 0;
@@ -48,6 +82,7 @@ export class AdminCarteraComponent implements OnInit {
     this.creditoService.obtenerCarteraGeneral().subscribe({
       next: (data) => {
         this.creditos = data;
+        this.paginaActual = 1;
         this.calcularMetricas(data);
         this.cargando = false;
         this.cdr.detectChanges();
