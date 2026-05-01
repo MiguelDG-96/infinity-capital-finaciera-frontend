@@ -100,12 +100,26 @@ export class AdminPersonalComponent implements OnInit {
   }
 
   toggleEstado(t: Trabajador) {
-    this.trabajadorService.cambiarEstado(t.usuarioId, !t.habilitado).subscribe({
+    this.trabajadorService.cambiarEstado(t.trabajadorId, !t.habilitado).subscribe({
       next: () => {
         this.toastService.show('Estado de cuenta actualizado', 'info');
         this.cargarDatos();
       }
     });
+  }
+
+  eliminar(t: Trabajador) {
+    if (confirm(`¿Estás seguro de que deseas eliminar al colaborador ${t.nombreCompleto}? Esta acción es irreversible.`)) {
+      this.trabajadorService.eliminar(t.trabajadorId).subscribe({
+        next: () => {
+          this.toastService.show('Trabajador eliminado correctamente', 'success');
+          this.cargarDatos();
+        },
+        error: (err) => {
+          this.toastService.show(err.error?.mensaje || 'Error al eliminar trabajador', 'error');
+        }
+      });
+    }
   }
 
   private resetForm(): TrabajadorRequest {

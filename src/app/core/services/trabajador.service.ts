@@ -32,6 +32,8 @@ export class TrabajadorService {
   }
 
   cambiarEstado(id: number, habilitado: boolean): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${id}/estado`, { habilitado });
+    return this.http.patch<void>(`${this.apiUrl}/${id}/estado`, null, {
+      params: { habilitado: String(habilitado) }
+    });
   }
 }
