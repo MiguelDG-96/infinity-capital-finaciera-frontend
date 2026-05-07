@@ -38,7 +38,7 @@
         <!-- Columna Izquierda: Foto -->
         <div class="col-span-1 flex flex-col items-center gap-4">
           <div class="avatar">
-            <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+            <div class="w-32 border-2 border-dashed border-base-content/20 p-1 ring-offset-base-100 ring-offset-2">
               @if (cliente.fotoUrl) {
                 <img [src]="'https://infiny.arqui-design.com' + cliente.fotoUrl" alt="Foto de Perfil" class="object-cover" />
               } @else {
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <button class="btn btn-primary btn-sm w-full rounded-2xl gap-2 shadow-xl shadow-primary/20 border-none"
+          <button class="btn btn-primary btn-sm w-full rounded-2xl gap-2 shadow-sm shadow-primary/20 border-none"
                   [disabled]="!archivoSeleccionado() || subiendo()"
                   (click)="subirFoto()">
             @if (subiendo()) {

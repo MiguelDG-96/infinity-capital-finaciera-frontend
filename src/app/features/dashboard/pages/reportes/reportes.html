@@ -9,7 +9,7 @@
         <p class="text-base-content/70 mt-2">Visión general del estado de la cartera y flujos de capital</p>
       </div>
       
-      <!-- Botón de Exportar (Opcional visual) -->
+      <!-- Botón de Exportar -->
       <button class="btn btn-outline btn-sm shadow-sm gap-2" (click)="exportarPdf()">
         <lucide-icon name="download" size="16"></lucide-icon>
         Exportar PDF
@@ -85,65 +85,75 @@
   </div>
 
   <div id="pdf-content">
-    <!-- Dashboard Grid -->
+    
+    <!-- Row 1: Ganancias (Mensual y Anual) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <!-- Bar Chart -->
       <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
         <div class="h-80 w-full">
           <canvas baseChart 
-                  [data]="barChartData" 
-                  [options]="barChartOptions()" 
-                  [type]="barChartType">
+                  [data]="gananciaMensualData" 
+                  [options]="gananciaMensualOptions()" 
+                  type="bar">
           </canvas>
         </div>
       </div>
 
-      <!-- Line Chart -->
       <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
         <div class="h-80 w-full">
           <canvas baseChart 
-                  [data]="lineChartData" 
-                  [options]="lineChartOptions()" 
-                  [type]="lineChartType">
+                  [data]="gananciaAnualData" 
+                  [options]="gananciaAnualOptions()" 
+                  type="bar">
           </canvas>
         </div>
       </div>
     </div>
 
-    <!-- Multi-Axis Line Chart (Full Width) -->
+    <!-- Row 2: Capital e Intereses Cancelados Mensual -->
     <div class="mb-6 bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
       <div class="h-96 w-full">
         <canvas baseChart 
-                [data]="multiAxisLineChartData" 
-                [options]="multiAxisLineChartOptions()" 
-                [type]="multiAxisLineChartType">
+                [data]="capIntData" 
+                [options]="capIntOptions()" 
+                type="bar">
         </canvas>
       </div>
     </div>
 
-    <!-- Pie and Doughnut Charts Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Pie Chart -->
+    <!-- Row 3: Clasificacion Clientes (Semaforo) y Ganancias vs Perdidas -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      
       <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300 flex flex-col items-center justify-center">
-        <div class="h-72 w-full">
+        <div class="h-80 w-full">
           <canvas baseChart 
-                  [data]="pieChartData" 
-                  [options]="pieChartOptions()" 
-                  [type]="pieChartType">
+                  [data]="semaforoData" 
+                  [options]="semaforoOptions()" 
+                  type="doughnut">
           </canvas>
         </div>
       </div>
 
-      <!-- Doughnut Chart -->
-      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300 flex flex-col items-center justify-center">
-        <div class="h-72 w-full">
+      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
+        <div class="h-80 w-full">
           <canvas baseChart 
-                  [data]="doughnutChartData" 
-                  [options]="doughnutChartOptions()" 
-                  [type]="doughnutChartType">
+                  [data]="gananciaPerdidaData" 
+                  [options]="gananciaPerdidaOptions()" 
+                  type="line">
           </canvas>
         </div>
       </div>
     </div>
+
+    <!-- Row 4: Monto a Recibir vs Monto Recibido -->
+    <div class="mb-6 bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
+      <div class="h-96 w-full">
+        <canvas baseChart 
+                [data]="recibirVsRecibidoData" 
+                [options]="recibirVsRecibidoOptions()" 
+                type="line">
+        </canvas>
+      </div>
+    </div>
+
   </div>
 </div>
