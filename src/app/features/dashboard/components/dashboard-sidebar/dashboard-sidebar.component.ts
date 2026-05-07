@@ -80,15 +80,7 @@ export class DashboardSidebarComponent implements OnInit {
           };
         });
         
-        // Agregar Reportes estáticamente al sidebar
-        if (!items.find(i => i.route === '/dashboard/reportes')) {
-          items.push({
-            label: 'Reportes Financieros',
-            icon: 'pie-chart',
-            route: '/dashboard/reportes',
-            isReady: true
-          });
-        }
+
         
         this.dynamicMenuItems.set(items);
         this.isLoading.set(false);

@@ -42,7 +42,7 @@ export class ModuloFormModalComponent {
   isPickerOpen = signal<boolean>(false);
 
   readonly LUCIDE_CATALOG = [
-    'briefcase', 'wallet', 'credit-card', 'bar-chart', 'trending-up', 'trending-down', 
+    'briefcase', 'wallet', 'credit-card', 'bar-chart', 'pie-chart', 'activity', 'trending-up', 'trending-down', 
     'home', 'landmark', 'search', 'shield', 'lock', 'key', 'settings', 'wrench', 
     'package', 'truck', 'users', 'user', 'building', 'layers', 'globe', 'zap', 
     'lightbulb', 'clock', 'file-text', 'calendar', 'message-square', 'bell', 
