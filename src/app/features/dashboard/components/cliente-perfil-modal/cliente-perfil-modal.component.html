@@ -1,0 +1,124 @@
+<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-md animate-fade-in p-4"> <!-- trigger -->
+  <div class="relative w-full max-w-2xl rounded-[2.5rem] bg-base-100/90 shadow-[0_32px_64px_rgba(0,0,0,0.2)] p-0 overflow-hidden transform transition-all border border-white/10">
+    
+    <!-- Fondo Decorativo Glass -->
+    <div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-br from-primary/20 to-secondary/10 -z-10 blur-3xl opacity-50"></div>
+
+    <!-- Botón Cerrar -->
+    <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
+
+    <!-- Encabezado -->
+    <div class="p-8 pb-4">
+      <div class="flex items-center gap-4 mb-2">
+        <div class="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+            <lucide-icon name="user" class="h-6 w-6"></lucide-icon>
+        </div>
+        <div>
+            <h3 class="font-black text-2xl tracking-tight">Perfil del Cliente</h3>
+            <p class="text-xs font-bold opacity-40 uppercase tracking-widest">{{ cliente.tipoDocumento }} {{ cliente.numeroDocumento }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider m-0 px-8 opacity-10"></div>
+
+    <!-- Contenido Principal -->
+    <div class="p-8 pt-6 space-y-6">
+
+      @if (error()) {
+        <div class="alert alert-error bg-error/10 border-error/20 text-error text-sm rounded-2xl">
+          <lucide-icon name="alert-triangle" class="h-4 w-4"></lucide-icon>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <!-- Grid de Perfil -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Columna Izquierda: Foto -->
+        <div class="col-span-1 flex flex-col items-center gap-4">
+          <div class="avatar">
+            <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              @if (cliente.fotoUrl) {
+                <img [src]="'https://infiny.arqui-design.com' + cliente.fotoUrl" alt="Foto de Perfil" class="object-cover" />
+              } @else {
+                <div class="w-full h-full bg-base-300 flex items-center justify-center text-base-content/30">
+                  <lucide-icon name="user" class="w-16 h-16"></lucide-icon>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="w-full relative group cursor-pointer mt-2">
+            <input type="file" 
+                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                   accept="image/*"
+                   (change)="onFileSelected($event)" />
+            <div class="flex items-center gap-3 p-3 rounded-2xl border-2 border-dashed border-base-content/20 group-hover:border-primary/50 group-hover:bg-primary/5 transition-all w-full bg-base-100/50">
+              <div class="bg-primary/10 text-primary p-2 rounded-xl shrink-0">
+                <lucide-icon name="upload" class="w-5 h-5"></lucide-icon>
+              </div>
+              <div class="flex flex-col flex-1 overflow-hidden">
+                <span class="text-xs font-bold truncate w-full" [class.text-primary]="archivoSeleccionado()">
+                  {{ archivoSeleccionado()?.name || 'Seleccionar archivo' }}
+                </span>
+                <span class="text-[10px] opacity-50">Haz clic para buscar fotos</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-sm w-full rounded-2xl gap-2 shadow-xl shadow-primary/20 border-none"
+                  [disabled]="!archivoSeleccionado() || subiendo()"
+                  (click)="subirFoto()">
+            @if (subiendo()) {
+              <span class="loading loading-spinner loading-sm"></span>
+            } @else {
+              <lucide-icon name="upload" class="h-4 w-4"></lucide-icon>
+            }
+            Subir Foto
+          </button>
+        </div>
+
+        <!-- Columna Derecha: Datos -->
+        <div class="col-span-1 md:col-span-2 space-y-4">
+          <div class="bg-base-200/50 p-4 rounded-3xl border border-base-content/5 space-y-4">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Nombre Completo</p>
+                <p class="font-bold text-sm">{{ cliente.nombre }}</p>
+              </div>
+              
+              <div>
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Documento</p>
+                <p class="font-bold text-sm">{{ cliente.numeroDocumento }}</p>
+              </div>
+
+              <div class="sm:col-span-2">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Domicilio</p>
+                <p class="font-bold text-sm truncate" [title]="cliente.domicilio">{{ cliente.domicilio || 'No registrado' }}</p>
+              </div>
+
+              <div>
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Teléfono</p>
+                <p class="font-bold text-sm">{{ cliente.celular || cliente.telefono || 'No registrado' }}</p>
+              </div>
+
+              <div>
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Estado Civil</p>
+                <p class="font-bold text-sm">{{ cliente.estadoCivil || 'No registrado' }}</p>
+              </div>
+
+              <div class="sm:col-span-2">
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1">Situación Laboral</p>
+                <p class="font-bold text-sm">{{ cliente.situacionLaboral || 'No registrado' }} - {{ cliente.cargoOcupacion }}</p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

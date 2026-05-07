@@ -1,0 +1,149 @@
+<div class="p-4 w-full">
+  <!-- Header -->
+  <div class="mb-6 relative">
+    <div class="relative p-2  flex flex-col md:flex-row md:items-center justify-between gap-2">
+      <div>
+        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-red-700">
+          Reportes Financieros y Analíticas
+        </h1>
+        <p class="text-base-content/70 mt-2">Visión general del estado de la cartera y flujos de capital</p>
+      </div>
+      
+      <!-- Botón de Exportar (Opcional visual) -->
+      <button class="btn btn-outline btn-sm shadow-sm gap-2" (click)="exportarPdf()">
+        <lucide-icon name="download" size="16"></lucide-icon>
+        Exportar PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="mb-8 relative z-10">
+    <div class="bg-base-100/60 backdrop-blur-md border border-base-content/10 rounded-xl p-4 shadow-lg flex flex-col md:flex-row gap-4 items-end">
+      
+      <div class="w-full md:w-auto flex-1 max-w-xs">
+        <label class="label text-xs font-semibold text-base-content/70 uppercase pt-0">Año Fiscal</label>
+        <div class="relative">
+          <lucide-icon name="calendar" size="16" class="absolute left-1.5 top-1/2 -translate-y-1/2 text-base-content/50 z-10 pointer-events-none"></lucide-icon>
+          <select [(ngModel)]="selectedYear" class="select select-bordered select-sm w-full pl-9 bg-base-100 backdrop-blur-sm focus:outline-none focus:ring-0 focus:border-primary">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w-full md:w-auto flex-1 max-w-xs">
+        <label class="label text-xs font-semibold text-base-content/70 uppercase pt-0">Mes</label>
+        <div class="relative">
+          <lucide-icon name="calendar-days" size="16" class="absolute left-1.5 top-1/2 -translate-y-1/2 text-base-content/50 z-10 pointer-events-none"></lucide-icon>
+          <select [(ngModel)]="selectedMonth" class="select select-bordered select-sm w-full pl-9 bg-base-100 backdrop-blur-sm focus:outline-none focus:ring-0 focus:border-primary">
+            <option value="todos">Todo el año</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w-full md:w-auto flex-1 max-w-xs">
+        <label class="label text-xs font-semibold text-base-content/70 uppercase pt-0">Sucursal</label>
+        <div class="relative">
+          <lucide-icon name="building-2" size="16" class="absolute left-1.5 top-1/2 -translate-y-1/2 text-base-content/50 z-10 pointer-events-none"></lucide-icon>
+          <select [(ngModel)]="selectedBranch" class="select select-bordered select-sm w-full pl-9 bg-base-100 backdrop-blur-sm focus:outline-none focus:ring-0 focus:border-primary">
+            <option value="todas">Todas las sucursales</option>
+            <option value="matriz">Matriz Principal</option>
+            <option value="norte">Sucursal Norte</option>
+            <option value="sur">Sucursal Sur</option>
+          </select>
+        </div>
+      </div>
+
+      <button 
+        class="btn btn-primary btn-sm px-6 shadow-md shadow-primary/20 hover:shadow-primary/40 w-full md:w-auto gap-2"
+        (click)="aplicarFiltros()"
+        [disabled]="isApplyingFilters()">
+        @if (isApplyingFilters()) {
+          <span class="loading loading-spinner loading-xs"></span>
+          Actualizando...
+        } @else {
+          <lucide-icon name="filter" size="16"></lucide-icon>
+          Aplicar Filtros
+        }
+      </button>
+
+    </div>
+  </div>
+
+  <div id="pdf-content">
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Bar Chart -->
+      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
+        <div class="h-80 w-full">
+          <canvas baseChart 
+                  [data]="barChartData" 
+                  [options]="barChartOptions()" 
+                  [type]="barChartType">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Line Chart -->
+      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
+        <div class="h-80 w-full">
+          <canvas baseChart 
+                  [data]="lineChartData" 
+                  [options]="lineChartOptions()" 
+                  [type]="lineChartType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-Axis Line Chart (Full Width) -->
+    <div class="mb-6 bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300">
+      <div class="h-96 w-full">
+        <canvas baseChart 
+                [data]="multiAxisLineChartData" 
+                [options]="multiAxisLineChartOptions()" 
+                [type]="multiAxisLineChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Pie and Doughnut Charts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Pie Chart -->
+      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300 flex flex-col items-center justify-center">
+        <div class="h-72 w-full">
+          <canvas baseChart 
+                  [data]="pieChartData" 
+                  [options]="pieChartOptions()" 
+                  [type]="pieChartType">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Doughnut Chart -->
+      <div class="bg-base-100/80 backdrop-blur-xl border border-base-content/10 rounded-2xl p-4 shadow-xl hover:border-primary/50 transition-colors duration-300 flex flex-col items-center justify-center">
+        <div class="h-72 w-full">
+          <canvas baseChart 
+                  [data]="doughnutChartData" 
+                  [options]="doughnutChartOptions()" 
+                  [type]="doughnutChartType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

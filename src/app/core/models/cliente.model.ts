@@ -19,6 +19,8 @@ export interface Cliente {
   fechaIngresoLaboral?: Date;
   direccionEmpresa?: string;
   canalEstadoCuenta?: string;
+  telefono?: string;
+  celular?: string;
   
   // Ubicación desglosada
   departamento?: string;
@@ -32,5 +34,23 @@ export interface Cliente {
   gradoInstruccion?: string;
   
   datosSolicitud?: string; // JSON string
+  fotoUrl?: string;
+  tipoPersona?: string;
+  conyuge?: Conyuge;
   estado: string; // ACTIVO, MOROSO, BLOQUEADO
+}
+
+export interface Conyuge {
+  id?: number;
+  nombreCompleto: string;
+  dni: string;
+  ocupacion?: string;
+  ingresosMensuales?: number;
+  telefono?: string;
+  nacionalidad?: string;
+  fechaNacimiento?: Date;
+  situacionLaboral?: string;
+  empresa?: string;
+  profesion?: string;
+  direccion?: string;
 }

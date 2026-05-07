@@ -45,6 +45,8 @@ export class DashboardSidebarComponent implements OnInit {
     'seguridad': '/dashboard/admin/seguridad',
     'personal': '/dashboard/admin/personal',
     'admin/personal': '/dashboard/admin/personal',
+    'reportes': '/dashboard/reportes',
+    'estadisticas': '/dashboard/reportes',
   };
 
   ngOnInit() {
@@ -77,6 +79,17 @@ export class DashboardSidebarComponent implements OnInit {
             isReady: !!route
           };
         });
+        
+        // Agregar Reportes estáticamente al sidebar
+        if (!items.find(i => i.route === '/dashboard/reportes')) {
+          items.push({
+            label: 'Reportes Financieros',
+            icon: 'pie-chart',
+            route: '/dashboard/reportes',
+            isReady: true
+          });
+        }
+        
         this.dynamicMenuItems.set(items);
         this.isLoading.set(false);
       },
@@ -95,7 +108,10 @@ export class DashboardSidebarComponent implements OnInit {
       'shield-halved': 'file-text',
       'gears': 'settings',
       'lock': 'shield',
-      'box': 'layers'
+      'box': 'layers',
+      'chart-pie': 'pie-chart',
+      'chart-bar': 'bar-chart',
+      'chart-line': 'activity'
     };
     return iconMap[icon] || icon;
   }

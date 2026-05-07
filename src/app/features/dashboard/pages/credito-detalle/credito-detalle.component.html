@@ -185,7 +185,12 @@
                 <!-- Información Relevante -->
                 <div class="card bg-base-100 shadow-xl border border-base-content/5">
                     <div class="card-body p-6">
-                        <h4 class="font-bold text-sm uppercase tracking-widest opacity-40 mb-4">Información del Crédito</h4>
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-sm uppercase tracking-widest opacity-40 m-0">Información del Crédito</h4>
+                            <button class="btn btn-xs btn-outline btn-primary" (click)="abrirPerfilCliente()" *ngIf="credito()?.cliente">
+                                <lucide-icon name="user" class="w-3 h-3 mr-1"></lucide-icon> Ver Cliente
+                            </button>
+                        </div>
                         
                         <div class="space-y-4">
                             <div class="flex justify-between items-center text-sm">
@@ -300,4 +305,12 @@
         (cerrar)="mostrarModalEditarCredito.set(false)"
         (guardadoExitoso)="mostrarModalEditarCredito.set(false); cargarDetalle(credito()!.id)">
     </app-edit-credito-modal>
+}
+
+@if (mostrarModalClientePerfil() && credito()?.cliente) {
+    <app-cliente-perfil-modal
+        [cliente]="credito()!.cliente!"
+        (cerrar)="mostrarModalClientePerfil.set(false)"
+        (fotoActualizada)="handleFotoActualizada()">
+    </app-cliente-perfil-modal>
 }

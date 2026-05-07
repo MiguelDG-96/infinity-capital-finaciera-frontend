@@ -155,12 +155,18 @@ export class CreditoMapper {
       tem: dto.tasaAprobada,
       fechaSolicitud: dto.fechaSolicitud ? new Date(dto.fechaSolicitud) : (dto.fechaInicio ? new Date(dto.fechaInicio) : new Date()),
       cliente: dto.cliente ? {
-          id: 0, // Fallback as ID isn't in this DTO level
-          nombre: dto.cliente.usuario.nombreCompleto,
+          id: (dto.cliente as any).id || 0,
+          nombre: dto.cliente.usuario?.nombreCompleto || 'Cliente Desconocido',
           tipoDocumento: dto.cliente.tipoDocumento,
           numeroDocumento: dto.cliente.numeroDocumento,
-          domicilio: dto.cliente.numeroDocumento, // Fallback
+          domicilio: (dto.cliente as any).domicilio || dto.cliente.numeroDocumento,
           usuario: dto.cliente.usuario,
+          fotoUrl: (dto.cliente as any).fotoUrl,
+          telefono: (dto.cliente as any).telefono,
+          celular: (dto.cliente as any).celular,
+          estadoCivil: (dto.cliente as any).estadoCivil,
+          situacionLaboral: (dto.cliente as any).situacionLaboral,
+          cargoOcupacion: (dto.cliente as any).cargoOcupacion,
           estado: 'ACTIVO'
       } as any : undefined,
       garantes: dto.garantes || []

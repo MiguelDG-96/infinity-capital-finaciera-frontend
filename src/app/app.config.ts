@@ -14,13 +14,16 @@ import {
   History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2,
   MapPinHouse, Percent, Layers, Edit2, Edit3, PlusCircle, Settings2, Download,
   Key, Package, Truck, Users, Building, ShoppingCart, Folder, Box, Building2, Calculator, CalendarDays, IdCard,
-  UserPlus, UserCheck, UserX,
+  UserPlus, UserCheck, UserX, Upload, Filter
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideCharts(withDefaultRegisterables()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(
@@ -40,7 +43,7 @@ export const appConfig: ApplicationConfig = {
         History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2, MapPinHouse,
         Percent, Layers, Edit2, Edit3, Settings2, Download,
         Key, Package, Truck, Users, Building, Building2, ShoppingCart, Folder, Box, Calculator, CalendarDays, Wallet, CreditCard, IdCard,
-        UserPlus, UserCheck, UserX
+        UserPlus, UserCheck, UserX, Upload, Filter
       })
     )
   ]

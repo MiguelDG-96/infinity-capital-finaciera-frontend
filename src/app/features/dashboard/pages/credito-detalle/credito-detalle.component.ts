@@ -11,11 +11,12 @@ import { PagoAnticipadoModalComponent } from '../../components/pago-anticipado-m
 import { GaranteModalComponent } from '../../components/garante-modal/garante-modal.component';
 import { EditCuotaModalComponent } from '../../components/edit-cuota-modal/edit-cuota-modal.component';
 import { EditCreditoModalComponent } from '../../components/edit-credito-modal/edit-credito-modal.component';
+import { ClientePerfilModalComponent } from '../../components/cliente-perfil-modal/cliente-perfil-modal.component';
 
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
@@ -34,6 +35,7 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalGarante = signal<boolean>(false);
   mostrarModalEditarCuota = signal<boolean>(false);
   mostrarModalEditarCredito = signal<boolean>(false);
+  mostrarModalClientePerfil = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
 
   // Paginación
@@ -109,6 +111,15 @@ export class CreditoDetalleComponent implements OnInit {
 
   handleGaranteGuardado() {
     this.mostrarModalGarante.set(false);
+    this.cargarDetalle(this.credito()!.id);
+  }
+
+  abrirPerfilCliente() {
+    this.mostrarModalClientePerfil.set(true);
+  }
+
+  handleFotoActualizada() {
+    this.mostrarModalClientePerfil.set(false);
     this.cargarDetalle(this.credito()!.id);
   }
 
