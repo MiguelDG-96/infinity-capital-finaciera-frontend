@@ -151,4 +151,16 @@ export class CreditoService {
   postergarCuota(cuotaId: number): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/cuotas/${cuotaId}/postergar`, {});
   }
+
+  regenerarCronograma(creditoId: number): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/regenerar-cronograma/${creditoId}`, {});
+  }
+
+  formalizarRevisionOficina(id: number, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/creditos/solicitudes/${id}/revision-oficina`, payload);
+  }
+
+  renovarSoloInteres(cuotaId: number, data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/renovar-solo-interes`, data);
+  }
 }

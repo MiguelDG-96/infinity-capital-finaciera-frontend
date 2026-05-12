@@ -32,6 +32,7 @@ export class EvaluarSolicitudModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Inicializar con valores básicos de la solicitud
     this.evaluacionForm = this.fb.group({
       estadoAprobacion: [this.solicitud.estado || 'EN_EVALUACION', Validators.required],
       observaciones: ['', Validators.required],
@@ -39,6 +40,18 @@ export class EvaluarSolicitudModalComponent implements OnInit {
       plazoMeses: [12, [Validators.required, Validators.min(1), Validators.max(120)]],
       tasaAprobada: [5.0, [Validators.required, Validators.min(0.01)]],
       nuevoRequisito: ['']
+    });
+
+    // Cargar detalles reales del crédito para obtener la tasa y el plazo original solicitado
+    this.creditoService.obtenerCreditoPorIdAdmin(this.solicitud.creditoId).subscribe({
+      next: (credito) => {
+        if (credito) {
+          this.evaluacionForm.patchValue({
+            plazoMeses: credito.plazoMeses || 12,
+            tasaAprobada: credito.tem || credito.tasaAprobada || 5.0
+          });
+        }
+      }
     });
   }
 

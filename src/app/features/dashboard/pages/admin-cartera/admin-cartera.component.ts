@@ -1,6 +1,6 @@
 // src/app/features/dashboard/pages/admin-cartera/admin-cartera.component.ts
 
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito } from '../../../../core/models/credito.model';
@@ -9,11 +9,14 @@ import { RouterLink } from '@angular/router';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
 
 import { FormsModule } from '@angular/forms';
+import { ClientePerfilModalComponent } from '../../components/cliente-perfil-modal/cliente-perfil-modal.component';
+import { FormalizacionModalComponent } from '../../components/formalizacion-modal/formalizacion-modal.component';
+import { EditCreditoModalComponent } from '../../components/edit-credito-modal/edit-credito-modal.component';
 
 @Component({
   selector: 'app-admin-cartera',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent, FormsModule],
+  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent, FormsModule, ClientePerfilModalComponent, FormalizacionModalComponent, EditCreditoModalComponent],
   templateUrl: './admin-cartera.component.html',
   styleUrl: './admin-cartera.component.css'
 })
@@ -67,6 +70,15 @@ export class AdminCarteraComponent implements OnInit {
   showDesembolsoModal = false;
   creditoADesembolsar: number | null = null;
   desembolsoExitoso = false;
+
+  // Variables para el modal de edición de cliente
+  mostrarModalClientePerfil = false;
+  clienteSeleccionadoId = signal<number>(0);
+  clienteSeleccionado: any = null;
+
+  // Nuevos modales
+  mostrarModalFormalizacion = signal<boolean>(false);
+  mostrarModalEditCredito = signal<boolean>(false);
 
   constructor(
     private creditoService: CreditoService,
@@ -141,6 +153,40 @@ export class AdminCarteraComponent implements OnInit {
 
   handleResolucionConfirmada(): void {
     this.mostrarModalResolver = false;
+    this.cargarCartera();
+  }
+
+  abrirEditarCliente(clienteId: number): void {
+    if (!clienteId) return;
+    const credito = this.creditos.find(c => c.cliente?.id === clienteId);
+    if (credito && credito.cliente) {
+      this.clienteSeleccionado = credito.cliente;
+      this.mostrarModalClientePerfil = true;
+    }
+  }
+
+  handleClienteActualizado(): void {
+    this.mostrarModalClientePerfil = false;
+    this.cargarCartera();
+  }
+
+  abrirFormalizacion(c: Credito) {
+    this.creditoSeleccionado = c;
+    this.mostrarModalFormalizacion.set(true);
+  }
+
+  abrirMaestro(c: Credito) {
+    this.creditoSeleccionado = c;
+    this.mostrarModalEditCredito.set(true);
+  }
+
+  handleFormalizacionExito() {
+    this.mostrarModalFormalizacion.set(false);
+    this.cargarCartera();
+  }
+
+  handleEditCreditoExito() {
+    this.mostrarModalEditCredito.set(false);
     this.cargarCartera();
   }
 

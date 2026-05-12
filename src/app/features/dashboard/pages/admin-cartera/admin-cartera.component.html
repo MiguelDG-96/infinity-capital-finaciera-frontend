@@ -57,20 +57,18 @@
                 <table class="table table-zebra table-md w-full">
                     <thead>
                         <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
-                            <th class="py-4 pl-6">ID</th>
-                            <th>Cliente / Documento</th>
+                            <th class="py-4 pl-6">Cliente / Documento</th>
                             <th>Producto / Moneda</th>
                             <th>Monto Aprobado</th>
                             <th>Saldo Act.</th>
                             <th>Estado</th>
-                            <th class="text-right pr-6">Acciones</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (c of creditosPaginados; track c.id) {
                             <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
-                                <td class="pl-6 font-mono text-xs opacity-40">#{{ c.id }}</td>
-                                <td>
+                                <td class="pl-6">
                                     <div class="flex flex-col">
                                         <span class="font-bold text-sm text-base-content/80">{{ c.nombreCliente }}</span>
                                         <span class="text-[10px] opacity-40 font-mono tracking-tighter">{{ c.documento }}</span>
@@ -94,6 +92,14 @@
                                 <td class="text-right pr-6">
                                     <div class="flex justify-end gap-2">
                                         <!-- Botón Desembolsar -->
+                                        @if (c.estado === 'APROBADO' || c.estado === 'EN_EVALUACION' || c.estado === 'PENDIENTE_REQUISITOS') {
+                                            <button (click)="abrirFormalizacion(c)"
+                                                    class="btn btn-ghost btn-xs text-info hover:bg-info/10"
+                                                    title="Formalización en Oficina">
+                                               <lucide-icon name="building" class="w-4 h-4"></lucide-icon>
+                                            </button>
+                                        }
+
                                         @if (c.estado === 'APROBADO') {
                                             <button (click)="iniciarDesembolso(c.id)"
                                                     class="btn btn-success btn-xs text-white shadow-sm border-none px-4 hover:scale-105 active:scale-95 transition-all"
@@ -115,8 +121,21 @@
                                             <span class="text-[10px] italic opacity-20 font-medium">Finalizado</span>
                                         }
 
+                                        <button (click)="abrirMaestro(c)"
+                                                class="btn btn-ghost btn-xs text-slate-400 hover:bg-base-300"
+                                                title="Ver Maestro (Configuración del Crédito)">
+                                           <lucide-icon name="settings-2" class="w-4 h-4"></lucide-icon>
+                                        </button>
+
+                                        <button (click)="abrirEditarCliente(c.cliente?.id || 0)"
+                                                class="btn btn-ghost btn-xs text-info hover:bg-info/10"
+                                                title="Editar Datos del Cliente">
+                                           <lucide-icon name="user-cog" class="w-4 h-4"></lucide-icon>
+                                        </button>
+
                                         <a [routerLink]="['/dashboard/admin/cartera', c.id]"
-                                           class="btn btn-ghost btn-xs text-primary hover:bg-primary/10">
+                                           class="btn btn-ghost btn-xs text-primary hover:bg-primary/10"
+                                           title="Ver Detalle del Crédito">
                                            Detalle
                                         </a>
                                     </div>
@@ -200,4 +219,28 @@
             </div>
         </div>
     </div>
+}
+
+@if (mostrarModalClientePerfil && clienteSeleccionado) {
+    <app-cliente-perfil-modal
+        [cliente]="clienteSeleccionado"
+        (cerrar)="mostrarModalClientePerfil = false"
+        (fotoActualizada)="handleClienteActualizado()">
+    </app-cliente-perfil-modal>
+}
+
+@if (mostrarModalFormalizacion() && creditoSeleccionado) {
+    <app-formalizacion-modal
+        [credito]="creditoSeleccionado!"
+        (cerrar)="mostrarModalFormalizacion.set(false)"
+        (guardadoExitoso)="handleFormalizacionExito()">
+    </app-formalizacion-modal>
+}
+
+@if (mostrarModalEditCredito() && creditoSeleccionado) {
+    <app-edit-credito-modal
+        [credito]="creditoSeleccionado!"
+        (cerrar)="mostrarModalEditCredito.set(false)"
+        (guardadoExitoso)="handleEditCreditoExito()">
+    </app-edit-credito-modal>
 }

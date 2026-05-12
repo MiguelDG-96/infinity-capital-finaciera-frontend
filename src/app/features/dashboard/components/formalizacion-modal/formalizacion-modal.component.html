@@ -1,0 +1,158 @@
+<!-- src/app/features/dashboard/components/formalizacion-modal/formalizacion-modal.component.html -->
+<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4 overflow-y-auto">
+    <div class="relative w-full max-w-3xl rounded-[2.5rem] bg-base-100 shadow-[0_32px_64px_rgba(0,0,0,0.4)] p-0 m-auto overflow-hidden transform transition-all border border-primary/20">
+      
+      <!-- Fondo Decorativo -->
+      <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-primary/10 to-transparent -z-10 blur-3xl opacity-50"></div>
+  
+      <!-- Botón Cerrar -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
+  
+      @if (exito()) {
+        <div class="p-12 text-center animate-scale-in">
+          <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-success/20 text-success mb-8 shadow-lg shadow-success/10 border border-success/20">
+            <lucide-icon name="check-circle" class="h-12 w-12"></lucide-icon>
+          </div>
+          <h3 class="text-3xl font-black mb-3 text-success">¡Formalizado!</h3>
+          <p class="text-base-content/60 font-medium">La revisión en oficina ha sido registrada con éxito.</p>
+        </div>
+      } @else {
+        <!-- Encabezado -->
+        <div class="p-8 pb-4">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-inner">
+                <lucide-icon name="building" class="h-7 w-7"></lucide-icon>
+            </div>
+            <div>
+                <h3 class="font-black text-2xl tracking-tight">Formalización en Oficina</h3>
+                <p class="text-xs font-bold opacity-40 uppercase tracking-widest leading-none">ID DE CRÉDITO #{{ credito.id }} — REVISIÓN FINAL</p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="divider m-0 px-8 opacity-10"></div>
+  
+        <form [formGroup]="form" (ngSubmit)="guardar()" class="p-8 pt-6 space-y-6">
+          
+          @if (error()) {
+            <div class="alert alert-error bg-error/10 border-error/20 text-error text-sm rounded-2xl animate-shake mb-4">
+              <lucide-icon name="x-circle" class="h-4 w-4"></lucide-icon>
+              <span>{{ error() }}</span>
+            </div>
+          }
+  
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Columna 1: Condiciones y Cliente -->
+            <div class="space-y-6">
+                <section class="space-y-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-60">Condiciones del Crédito</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-control">
+                            <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Monto Aprobado</span></label>
+                            <input type="number" formControlName="montoAprobado" class="input input-bordered w-full rounded-2xl font-bold bg-base-200/30">
+                        </div>
+                        <div class="form-control">
+                            <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Tasa (TEM %)</span></label>
+                            <input type="number" formControlName="tasaAprobada" class="input input-bordered w-full rounded-2xl font-bold text-primary bg-base-200/30" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Plazo (Meses)</span></label>
+                        <input type="number" formControlName="plazoMeses" class="input input-bordered w-full rounded-2xl font-bold bg-base-200/30">
+                    </div>
+                </section>
+
+                <section class="space-y-4 pt-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-60">Datos del Cliente</h4>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">DNI / Documento</span></label>
+                        <input type="text" formControlName="numeroDocumento" class="input input-bordered w-full rounded-2xl font-medium">
+                    </div>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Dirección Actual Domicilio</span></label>
+                        <textarea formControlName="direccionActual" class="textarea textarea-bordered w-full rounded-2xl h-20" placeholder="Dirección exacta..."></textarea>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" formControlName="viveCasaPropia" class="checkbox checkbox-primary rounded-lg">
+                        <span class="text-sm font-medium opacity-70">Vive en casa propia</span>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Columna 2: Contacto y Trabajo -->
+            <div class="space-y-6">
+                <section class="space-y-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-60">Contacto Familiar</h4>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Nombre Familiar</span></label>
+                        <input type="text" formControlName="contactoFamiliarNombre" class="input input-bordered w-full rounded-2xl" placeholder="Nombre completo...">
+                    </div>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Celular Familiar</span></label>
+                        <input type="text" formControlName="contactoFamiliarCelular" class="input input-bordered w-full rounded-2xl" placeholder="999 999 999">
+                    </div>
+                </section>
+
+                <section class="space-y-4 pt-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-60">Información Laboral</h4>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Dirección de Trabajo</span></label>
+                        <input type="text" formControlName="direccionTrabajo" class="input input-bordered w-full rounded-2xl" placeholder="Av. Ejemplo 123...">
+                    </div>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Referencia de Trabajo</span></label>
+                        <input type="text" formControlName="referenciaTrabajo" class="input input-bordered w-full rounded-2xl" placeholder="Frente a..., altura de...">
+                    </div>
+                </section>
+
+                <section class="space-y-4 pt-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-60">Otros</h4>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Garantía (Opcional)</span></label>
+                        <input type="text" formControlName="garantia" class="input input-bordered w-full rounded-2xl" placeholder="Ej. Título de propiedad, Aval...">
+                    </div>
+                    <div class="form-control">
+                        <label class="label pt-0"><span class="label-text-alt font-bold opacity-50">Forma de Pago Acordada</span></label>
+                        <select formControlName="formaPago" class="select select-bordered w-full rounded-2xl font-bold">
+                            <option value="TRANSFERENCIA">TRANSFERENCIA BANCARIA</option>
+                            <option value="EFECTIVO">EFECTIVO / OFICINA</option>
+                            <option value="DEPOSITO">DEPÓSITO</option>
+                        </select>
+                    </div>
+                </section>
+            </div>
+          </div>
+
+          <div class="divider opacity-10"></div>
+
+          <div class="flex flex-wrap gap-6 items-center justify-between">
+            <div class="flex gap-6">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="aceptaTasa" class="checkbox checkbox-xs checkbox-primary rounded-md">
+                    <span class="text-[10px] font-black uppercase opacity-40">Acepta Tasa</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="aceptaContrato" class="checkbox checkbox-xs checkbox-primary rounded-md">
+                    <span class="text-[10px] font-black uppercase opacity-40">Acepta Contrato</span>
+                </div>
+            </div>
+
+            <div class="flex gap-4 flex-1 justify-end">
+                <button type="button" class="btn btn-ghost rounded-3xl px-8" (click)="cerrar.emit()">Cancelar</button>
+                <button type="submit" 
+                        class="btn btn-primary btn-lg rounded-3xl shadow-xl shadow-primary/30 px-12 border-none"
+                        [disabled]="form.invalid || enviando()">
+                    @if (enviando()) {
+                        <span class="loading loading-spinner"></span>
+                    } @else {
+                        <lucide-icon name="check-circle-2" class="h-5 w-5 mr-2"></lucide-icon>
+                    }
+                    Finalizar Formalización
+                </button>
+            </div>
+          </div>
+  
+        </form>
+      }
+    </div>
+  </div>

@@ -15,6 +15,10 @@ export class ClienteService {
     return this.http.get<Cliente>(`${this.apiUrl}/perfil`);
   }
 
+  obtenerPorId(id: number): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
+  }
+
   registrarConyuge(conyuge: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/conyuge`, conyuge);
   }
@@ -23,5 +27,9 @@ export class ClienteService {
     const formData = new FormData();
     formData.append('foto', foto);
     return this.http.post<{ mensaje: string, url: string }>(`${this.apiUrl}/${clienteId}/foto`, formData);
+  }
+
+  actualizarCliente(id: number, data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, data);
   }
 }

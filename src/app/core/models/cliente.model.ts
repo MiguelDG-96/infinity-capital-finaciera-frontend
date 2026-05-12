@@ -5,6 +5,8 @@ export interface Cliente {
   nombre: string;
   tipoDocumento: string;
   numeroDocumento: string;
+  direccion?: string;
+  referencia?: string;
   domicilio: string;
   fechaNacimiento: Date;
   estadoCivil: string;
@@ -36,6 +38,7 @@ export interface Cliente {
   datosSolicitud?: string; // JSON string
   fotoUrl?: string;
   tipoPersona?: string;
+  limiteCredito?: number;
   conyuge?: Conyuge;
   estado: string; // ACTIVO, MOROSO, BLOQUEADO
 }

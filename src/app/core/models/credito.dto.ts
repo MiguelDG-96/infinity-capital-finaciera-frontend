@@ -105,6 +105,7 @@ export interface CreditoDTOResponse {
   debeActualidad: number;
   plazoMeses: number;
   tasaAprobada?: number;
+  tem?: number;
   estado: string;
   fechaDesembolso?: string;
   fechaVencimiento?: string;

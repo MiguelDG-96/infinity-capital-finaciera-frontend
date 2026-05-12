@@ -75,7 +75,7 @@
             </div>
             <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
                 <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Tasa Mensual (TEM)</p>
-                <p class="text-2xl font-bold text-success">{{ (credito()?.tasaAprobada || 0) }}%</p>
+                <p class="text-2xl font-bold text-success">{{ (credito()?.tasaAprobada || credito()?.tem || 0) }}%</p>
             </div>
             <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
                 <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Cuota Mensual</p>
@@ -155,6 +155,12 @@
                                                                 [disabled]="procesando()"
                                                                 title="Postergar al final">
                                                             <lucide-icon name="clock" class="w-3.5 h-3.5"></lucide-icon>
+                                                        </button>
+                                                        <button class="btn btn-ghost btn-xs text-indigo-400"
+                                                                (click)="renovarSoloInteres(cuota)"
+                                                                [disabled]="procesando()"
+                                                                title="Renovar Solo Interés">
+                                                            <lucide-icon name="refresh-cw" class="w-3.5 h-3.5"></lucide-icon>
                                                         </button>
                                                     }
                                                 </div>
@@ -313,4 +319,18 @@
         (cerrar)="mostrarModalClientePerfil.set(false)"
         (fotoActualizada)="handleFotoActualizada()">
     </app-cliente-perfil-modal>
+}
+@if (mostrarModalPostergar() && cuotaSeleccionada()) {
+    <app-postergar-cuota-modal
+        [cuota]="cuotaSeleccionada()!"
+        (cerrar)="mostrarModalPostergar.set(false)"
+        (postergadoExitoso)="handlePostergadoExitoso()">
+    </app-postergar-cuota-modal>
+}
+@if (mostrarModalRenovar() && cuotaSeleccionada()) {
+    <app-renovar-solo-interes-modal
+        [cuota]="cuotaSeleccionada()!"
+        (cerrar)="mostrarModalRenovar.set(false)"
+        (exito)="handleRenovacionExito()">
+    </app-renovar-solo-interes-modal>
 }

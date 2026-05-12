@@ -61,12 +61,18 @@ import { UpdateCreditoRequestDTO } from '../../../../core/models/credito.dto';
             <textarea [(ngModel)]="editReq.observacionEvaluador" name="observacionEvaluador" class="textarea textarea-bordered w-full rounded-2xl" rows="3"></textarea>
           </div>
 
-          <div class="modal-action pt-4">
-            <button type="button" class="btn btn-ghost rounded-2xl" (click)="cerrar.emit()">Cancelar</button>
-            <button type="submit" class="btn btn-primary px-8 rounded-2xl shadow-lg shadow-primary/20" [disabled]="cargando">
-              <span *ngIf="cargando" class="loading loading-spinner loading-xs"></span>
-              Guardar Cambios
+          <div class="modal-action pt-4 flex flex-wrap gap-2">
+            <button type="button" class="btn btn-warning btn-outline rounded-2xl flex-1 gap-2" (click)="regenerar()" [disabled]="cargando">
+              <lucide-icon name="refresh-ccw" class="w-4 h-4"></lucide-icon>
+              Regenerar Cronograma
             </button>
+            <div class="flex gap-2 flex-1">
+              <button type="button" class="btn btn-ghost rounded-2xl flex-1" (click)="cerrar.emit()">Cancelar</button>
+              <button type="submit" class="btn btn-primary px-8 rounded-2xl shadow-lg shadow-primary/20 flex-1" [disabled]="cargando">
+                <span *ngIf="cargando" class="loading loading-spinner loading-xs"></span>
+                Guardar
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -105,6 +111,25 @@ export class EditCreditoModalComponent implements OnInit {
       error: (err) => {
         this.cargando = false;
         alert(err.error?.mensaje || 'Error al actualizar el crédito');
+      }
+    });
+  }
+
+  regenerar() {
+    if (!confirm('¿Estás seguro de REGENERAR el cronograma? Esto borrará todas las cuotas actuales y creará nuevas basadas en el monto, plazo y tasa actuales.')) {
+      return;
+    }
+
+    this.cargando = true;
+    this.creditoService.regenerarCronograma(this.credito.id).subscribe({
+      next: (resp) => {
+        this.cargando = false;
+        alert(resp.mensaje);
+        this.guardadoExitoso.emit();
+      },
+      error: (err) => {
+        this.cargando = false;
+        alert(err.error?.mensaje || 'Error al regenerar el cronograma');
       }
     });
   }

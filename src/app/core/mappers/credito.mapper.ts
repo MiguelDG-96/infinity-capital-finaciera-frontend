@@ -152,7 +152,7 @@ export class CreditoMapper {
       cuotaMensual: dto.cuotaMensual,
       periodoGracia: dto.periodoGracia,
       cuentaDesembolso: dto.cuentaDesembolso,
-      tem: dto.tasaAprobada,
+      tem: dto.tem || dto.tasaAprobada,
       fechaSolicitud: dto.fechaSolicitud ? new Date(dto.fechaSolicitud) : (dto.fechaInicio ? new Date(dto.fechaInicio) : new Date()),
       cliente: dto.cliente ? {
           id: (dto.cliente as any).id || 0,

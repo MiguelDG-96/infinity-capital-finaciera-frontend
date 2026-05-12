@@ -297,47 +297,11 @@
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
                   >Fecha Nacimiento</label
                 >
-                <div class="dropdown dropdown-bottom w-full">
-                  <div
-                    tabindex="0"
-                    role="button"
-                    class="input input-bordered w-full bg-base-100 rounded-xl flex items-center justify-between group"
-                  >
-                    <span class="font-bold">{{
-                      solicitudForm.get('fechaNacimiento')?.value || 'Seleccionar...'
-                    }}</span>
-                    <lucide-icon
-                      name="calendar-days"
-                      class="w-4 h-4 text-base-content/30 group-hover:text-primary transition-colors"
-                    ></lucide-icon>
-                  </div>
-                  <div tabindex="0" class="dropdown-content z-[100] mt-2 left-0 min-w-[280px]">
-                    <calendar-date
-                      (change)="onDateChange($event, 'fechaNacimiento')"
-                      class="cally bg-base-100 border border-base-content/10 shadow-2xl rounded-3xl p-2 w-full block scale-90 origin-top-left"
-                    >
-                      <svg
-                        aria-label="Previous"
-                        class="fill-current size-4"
-                        slot="previous"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
-                      </svg>
-                      <svg
-                        aria-label="Next"
-                        class="fill-current size-4"
-                        slot="next"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-                      </svg>
-                      <calendar-month></calendar-month>
-                    </calendar-date>
-                  </div>
-                </div>
+                <input
+                  type="date"
+                  formControlName="fechaNacimiento"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                />
               </div>
               <div class="form-control">
                 <label
@@ -640,47 +604,11 @@
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
                   >Fecha Ingreso</label
                 >
-                <div class="dropdown dropdown-bottom w-full">
-                  <div
-                    tabindex="0"
-                    role="button"
-                    class="input input-bordered w-full bg-base-100 rounded-xl flex items-center justify-between group"
-                  >
-                    <span class="font-bold">{{
-                      solicitudForm.get('fechaIngresoLaboral')?.value || 'Seleccionar...'
-                    }}</span>
-                    <lucide-icon
-                      name="calendar-days"
-                      class="w-4 h-4 text-base-content/30 group-hover:text-primary transition-colors"
-                    ></lucide-icon>
-                  </div>
-                  <div tabindex="0" class="dropdown-content z-[100] mt-2 left-0 min-w-[280px]">
-                    <calendar-date
-                      (change)="onDateChange($event, 'fechaIngresoLaboral')"
-                      class="cally bg-base-100 border border-base-content/10 shadow-2xl rounded-3xl p-2 w-full block scale-90 origin-top-left"
-                    >
-                      <svg
-                        aria-label="Previous"
-                        class="fill-current size-4"
-                        slot="previous"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
-                      </svg>
-                      <svg
-                        aria-label="Next"
-                        class="fill-current size-4"
-                        slot="next"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-                      </svg>
-                      <calendar-month></calendar-month>
-                    </calendar-date>
-                  </div>
-                </div>
+                <input
+                  type="date"
+                  formControlName="fechaIngresoLaboral"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                />
               </div>
               <div
                 *ngIf="solicitudForm.get('situacionLaboral')?.value === 'DEPENDIENTE'"

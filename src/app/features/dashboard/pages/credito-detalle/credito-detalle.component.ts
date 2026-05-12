@@ -12,11 +12,13 @@ import { GaranteModalComponent } from '../../components/garante-modal/garante-mo
 import { EditCuotaModalComponent } from '../../components/edit-cuota-modal/edit-cuota-modal.component';
 import { EditCreditoModalComponent } from '../../components/edit-credito-modal/edit-credito-modal.component';
 import { ClientePerfilModalComponent } from '../../components/cliente-perfil-modal/cliente-perfil-modal.component';
+import { PostergarCuotaModalComponent } from '../../components/postergar-cuota-modal/postergar-cuota-modal.component';
+import { RenovarSoloInteresModalComponent } from '../../components/renovar-solo-interes-modal/renovar-solo-interes-modal.component';
 
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
@@ -36,6 +38,8 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalEditarCuota = signal<boolean>(false);
   mostrarModalEditarCredito = signal<boolean>(false);
   mostrarModalClientePerfil = signal<boolean>(false);
+  mostrarModalPostergar = signal<boolean>(false);
+  mostrarModalRenovar = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
 
   // Paginación
@@ -139,21 +143,24 @@ export class CreditoDetalleComponent implements OnInit {
 
   postergarCuota(cuota: Cuota) {
     if (!this.isAdminMode() || this.procesando()) return;
-    
-    if (confirm(`¿Estás seguro de postergar la cuota #${cuota.numeroCuota}? Esto creará una nueva cuota al final del cronograma con los intereses correspondientes.`)) {
-      this.procesando.set(true);
-      this.creditoService.postergarCuota(cuota.id).subscribe({
-        next: (resp) => {
-          this.procesando.set(false);
-          alert(resp.mensaje);
-          this.cargarDetalle(this.credito()!.id);
-        },
-        error: (err) => {
-          this.procesando.set(false);
-          alert(err.error?.error || 'Error al postergar la cuota');
-        }
-      });
-    }
+    this.cuotaSeleccionada.set(cuota);
+    this.mostrarModalPostergar.set(true);
+  }
+
+  handlePostergadoExitoso() {
+    this.mostrarModalPostergar.set(false);
+    this.cargarDetalle(this.credito()!.id);
+  }
+
+  renovarSoloInteres(cuota: Cuota) {
+    if (!this.isAdminMode() || this.procesando()) return;
+    this.cuotaSeleccionada.set(cuota);
+    this.mostrarModalRenovar.set(true);
+  }
+
+  handleRenovacionExito() {
+    this.mostrarModalRenovar.set(false);
+    this.cargarDetalle(this.credito()!.id);
   }
 
   abrirEditarCuota(cuota: Cuota) {

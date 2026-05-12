@@ -1,0 +1,86 @@
+<!-- src/app/features/dashboard/components/renovar-solo-interes-modal/renovar-solo-interes-modal.component.html -->
+<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4">
+    <div class="relative w-full max-w-md rounded-[2.5rem] bg-base-100/90 shadow-[0_32px_64px_rgba(0,0,0,0.4)] p-0 overflow-hidden transform transition-all border border-indigo-500/20">
+      
+      <!-- Fondo Decorativo -->
+      <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-indigo-500/20 to-primary/5 -z-10 blur-3xl opacity-50"></div>
+  
+      <!-- Botón Cerrar -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
+  
+      @if (pasoExito()) {
+        <div class="p-12 text-center animate-scale-in">
+          <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-400 mb-8 shadow-lg shadow-indigo-500/10 border border-indigo-500/20">
+            <lucide-icon name="check-circle" class="h-12 w-12"></lucide-icon>
+          </div>
+          <h3 class="text-3xl font-black mb-3 text-indigo-400">¡Renovado!</h3>
+          <p class="text-base-content/60 font-medium">Interés cobrado y capital renovado para el próximo mes.</p>
+        </div>
+      } @else {
+        <!-- Encabezado -->
+        <div class="p-8 pb-4">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="h-14 w-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-inner">
+                <lucide-icon name="refresh-cw" class="h-7 w-7"></lucide-icon>
+            </div>
+            <div>
+                <h3 class="font-black text-2xl tracking-tight">Renovación de Interés</h3>
+                <p class="text-xs font-bold opacity-40 uppercase tracking-widest leading-none">CUOTA #{{ cuota.numeroCuota }} — SOLO INTERÉS</p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="divider m-0 px-8 opacity-10"></div>
+  
+        <div class="p-8 space-y-6">
+            <div class="bg-indigo-500/5 border border-indigo-500/10 p-6 rounded-3xl text-center">
+                <p class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1">Monto a Cobrar Hoy</p>
+                <p class="text-4xl font-black text-indigo-400">{{ cuota.interes | currency:'S/ ' }}</p>
+                <p class="text-[10px] font-bold opacity-40 mt-2 uppercase">(Solo intereses acumulados)</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="form-control">
+                    <label class="label pt-0"><span class="label-text-alt font-bold opacity-50 uppercase">Método de Pago</span></label>
+                    <select [(ngModel)]="metodoPago" class="select select-bordered w-full rounded-2xl font-bold bg-base-200/30">
+                        <option value="EFECTIVO">EFECTIVO / OFICINA</option>
+                        <option value="TRANSFERENCIA">TRANSFERENCIA BANCARIA</option>
+                        <option value="YAPE_PLIN">YAPE / PLIN</option>
+                        <option value="DEPOSITO">DEPÓSITO EN CUENTA</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label class="label pt-0"><span class="label-text-alt font-bold opacity-50 uppercase">Nº de Comprobante / Ref</span></label>
+                    <input type="text" [(ngModel)]="numeroComprobante" class="input input-bordered w-full rounded-2xl font-mono text-sm" placeholder="REF-000000">
+                </div>
+            </div>
+
+            <div class="bg-base-200/50 p-4 rounded-3xl border border-base-content/5 flex gap-3">
+                <lucide-icon name="info" class="w-5 h-5 text-indigo-400 shrink-0"></lucide-icon>
+                <p class="text-[10px] leading-relaxed opacity-60 font-medium">Al confirmar, el sistema registrará el pago de intereses y moverá la fecha de vencimiento del capital un mes hacia adelante.</p>
+            </div>
+
+            @if (error()) {
+                <div class="alert alert-error text-xs rounded-2xl py-3">
+                    <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
+                    {{ error() }}
+                </div>
+            }
+
+            <div class="pt-2 space-y-3">
+                <button (click)="confirmar()" 
+                        class="btn btn-indigo-500 btn-lg w-full rounded-3xl shadow-xl shadow-indigo-500/20 bg-indigo-500 hover:bg-indigo-600 text-white border-none"
+                        [disabled]="enviando()">
+                    @if (enviando()) {
+                        <span class="loading loading-spinner"></span>
+                    } @else {
+                        <lucide-icon name="check-circle-2" class="w-5 h-5 mr-2"></lucide-icon>
+                    }
+                    Cobrar y Renovar
+                </button>
+                <button (click)="cerrar.emit()" class="btn btn-ghost w-full rounded-3xl opacity-50" [disabled]="enviando()">Cancelar</button>
+            </div>
+        </div>
+      }
+    </div>
+  </div>
