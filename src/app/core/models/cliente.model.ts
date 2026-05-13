@@ -1,6 +1,7 @@
-// src/app/core/models/cliente.model.ts
+import { Usuario } from './usuario.model';
 
 export interface Cliente {
+  usuario?: Usuario;
   id: number;
   nombre: string;
   tipoDocumento: string;
@@ -39,6 +40,12 @@ export interface Cliente {
   fotoUrl?: string;
   tipoPersona?: string;
   limiteCredito?: number;
+  
+  // Datos de contacto familiar y vivienda
+  contactoFamiliarNombre?: string;
+  contactoFamiliarCelular?: string;
+  viveCasaPropia?: boolean;
+
   conyuge?: Conyuge;
   estado: string; // ACTIVO, MOROSO, BLOQUEADO
 }

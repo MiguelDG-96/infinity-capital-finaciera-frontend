@@ -23,6 +23,16 @@ export interface ProcesarRetiroRequest {
   motivoRechazo?: string;
 }
 
+export interface DesembolsoPendiente {
+  creditoId: number;
+  nombreCliente: string;
+  documentoCliente: string;
+  montoADesembolsar: number;
+  moneda: string;
+  tipoCredito: string;
+  fechaAprobacion: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +44,15 @@ export class TesoreriaService {
     return this.http.get<SolicitudRetiroTesoreria[]>(`${this.apiUrl}/retiros-pendientes`);
   }
 
+  obtenerDesembolsosPendientes(): Observable<DesembolsoPendiente[]> {
+    return this.http.get<DesembolsoPendiente[]>(`${this.apiUrl}/desembolsos-pendientes`);
+  }
+
   procesarRetiro(id: number, request: ProcesarRetiroRequest): Observable<any> {
     return this.http.put(`${this.apiUrl}/retiros/${id}/procesar`, request);
+  }
+
+  procesarDesembolso(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/desembolsos/${id}/procesar`, {});
   }
 }

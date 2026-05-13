@@ -82,13 +82,19 @@
         <!-- Columna Derecha: Datos -->
         <div class="col-span-1 md:col-span-2">
           
-          <div class="flex justify-between items-center mb-4">
-            <h4 class="text-xs font-black uppercase tracking-widest opacity-40">Información Detallada</h4>
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="text-xs font-black uppercase tracking-widest opacity-40">Gestión de Datos</h4>
             @if (!isEditMode()) {
-              <button class="btn btn-ghost btn-xs gap-2 text-primary" (click)="activarEdicion()">
-                <lucide-icon name="edit-3" class="w-3 h-3"></lucide-icon>
-                Editar Perfil
-              </button>
+              <div class="flex gap-2">
+                <button class="btn btn-ghost btn-xs gap-2 text-info" (click)="imprimirPerfil()">
+                  <lucide-icon name="printer" class="w-3 h-3"></lucide-icon>
+                  Imprimir
+                </button>
+                <button class="btn btn-ghost btn-xs gap-2 text-primary" (click)="activarEdicion()">
+                  <lucide-icon name="edit-3" class="w-3 h-3"></lucide-icon>
+                  Editar Perfil
+                </button>
+              </div>
             } @else {
               <div class="flex gap-2">
                 <button class="btn btn-ghost btn-xs text-error" (click)="cancelarEdicion()">Cancelar</button>
@@ -103,134 +109,333 @@
             }
           </div>
 
-          <div class="bg-base-200/50 p-6 rounded-[2rem] border border-base-content/5 max-h-[50vh] overflow-y-auto custom-scrollbar">
+          <!-- Tabs -->
+          <div class="tabs tabs-boxed bg-base-200/50 p-1 rounded-2xl mb-4 text-[10px] font-bold uppercase tracking-widest">
+            <button (click)="setTab('personal')" [class.tab-active]="tabActiva() === 'personal'" class="tab tab-sm transition-all">Personal</button>
+            <button (click)="setTab('laboral')" [class.tab-active]="tabActiva() === 'laboral'" class="tab tab-sm transition-all">Laboral</button>
+            <button (click)="setTab('ubicacion')" [class.tab-active]="tabActiva() === 'ubicacion'" class="tab tab-sm transition-all">Ubicación</button>
+            <button (click)="setTab('conyuge')" [class.tab-active]="tabActiva() === 'conyuge'" class="tab tab-sm transition-all">Cónyuge</button>
+          </div>
+
+          <div class="bg-base-200/50 p-6 rounded-[2rem] border border-base-content/5 max-h-[45vh] overflow-y-auto custom-scrollbar shadow-inner">
             
             @if (!isEditMode()) {
               <!-- MODO VISTA -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Nombre Completo</p>
-                  <p class="font-black text-sm">{{ cliente.nombre }}</p>
-                </div>
+              <div class="animate-fade-in">
                 
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Documento</p>
-                  <p class="font-black text-sm">{{ cliente.tipoDocumento }} {{ cliente.numeroDocumento }}</p>
-                </div>
+                <!-- Tab Personal -->
+                @if (tabActiva() === 'personal') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Nombre Completo</p>
+                      <p class="font-black text-sm">{{ cliente.nombre }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Identidad</p>
+                      <p class="font-black text-sm">{{ cliente.tipoDocumento }} {{ cliente.numeroDocumento }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Fecha Nacimiento</p>
+                      <p class="font-black text-sm">{{ cliente.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Estado Civil</p>
+                      <p class="font-black text-sm">{{ cliente.estadoCivil || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Celular / Teléfono</p>
+                      <p class="font-black text-sm">{{ cliente.celular || cliente.telefono || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Nacionalidad</p>
+                      <p class="font-black text-sm">{{ cliente.nacionalidad || 'Peruana' }}</p>
+                    </div>
+                    <div class="sm:col-span-2 divider opacity-10 my-0"></div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Contacto Familiar</p>
+                      <p class="font-black text-sm">{{ cliente.contactoFamiliarNombre || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Celular Familiar</p>
+                      <p class="font-black text-sm">{{ cliente.contactoFamiliarCelular || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Límite Crédito</p>
+                      <p class="font-black text-sm text-info">{{ (cliente.limiteCredito || 0) | currency:'S/ ' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Estado Sistema</p>
+                      <p class="font-black text-sm" [class.text-success]="cliente.estado === 'ACTIVO'" [class.text-error]="cliente.estado !== 'ACTIVO'">{{ cliente.estado }}</p>
+                    </div>
+                  </div>
+                }
 
-                <div class="sm:col-span-2">
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Domicilio / Dirección</p>
-                  <p class="font-black text-sm">{{ cliente.domicilio || cliente.direccion || 'No registrado' }}</p>
-                </div>
+                <!-- Tab Laboral -->
+                @if (tabActiva() === 'laboral') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="sm:col-span-2">
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Situación Laboral</p>
+                      <p class="font-black text-sm">{{ cliente.situacionLaboral || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Empresa</p>
+                      <p class="font-black text-sm">{{ cliente.empresa || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">RUC Empresa</p>
+                      <p class="font-black text-sm">{{ cliente.rucEmpresa || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Cargo / Ocupación</p>
+                      <p class="font-black text-sm">{{ cliente.cargoOcupacion || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Ingreso Mensual</p>
+                      <p class="font-black text-sm text-success">{{ (cliente.ingresoMensual || 0) | currency:'S/ ' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Dirección Trabajo</p>
+                      <p class="font-black text-sm">{{ cliente.direccionEmpresa || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Teléfono Empresa</p>
+                      <p class="font-black text-sm">{{ cliente.telefonoEmpresa || '--' }}</p>
+                    </div>
+                  </div>
+                }
 
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Teléfono / Celular</p>
-                  <p class="font-black text-sm">{{ cliente.celular || cliente.telefono || 'No registrado' }}</p>
-                </div>
+                <!-- Tab Ubicación -->
+                @if (tabActiva() === 'ubicacion') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="sm:col-span-2">
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Dirección / Domicilio</p>
+                      <p class="font-black text-sm">{{ cliente.domicilio || cliente.direccion || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Departamento</p>
+                      <p class="font-black text-sm">{{ cliente.departamento || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Provincia</p>
+                      <p class="font-black text-sm">{{ cliente.provincia || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Distrito</p>
+                      <p class="font-black text-sm">{{ cliente.distrito || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Urb. / Sector</p>
+                      <p class="font-black text-sm">{{ cliente.urbanizacion || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">MZ / Lote</p>
+                      <p class="font-black text-sm">MZ: {{ cliente.manzana || '--' }} - LT: {{ cliente.lote || '--' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Referencia</p>
+                      <p class="font-black text-sm">{{ cliente.referencia || '--' }}</p>
+                    </div>
+                  </div>
+                }
 
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Estado Civil</p>
-                  <p class="font-black text-sm">{{ cliente.estadoCivil || 'No registrado' }}</p>
-                </div>
+                <!-- Tab Cónyuge -->
+                @if (tabActiva() === 'conyuge') {
+                  @if (cliente.conyuge) {
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div class="sm:col-span-2">
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Nombre Cónyuge</p>
+                        <p class="font-black text-sm">{{ cliente.conyuge.nombreCompleto }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">DNI</p>
+                        <p class="font-black text-sm">{{ cliente.conyuge.dni }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Celular</p>
+                        <p class="font-black text-sm">{{ cliente.conyuge.telefono || '--' }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Ocupación / Profesión</p>
+                        <p class="font-black text-sm">{{ cliente.conyuge.ocupacion || cliente.conyuge.profesion || '--' }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Ingresos Mensuales</p>
+                        <p class="font-black text-sm text-success">{{ (cliente.conyuge.ingresosMensuales || 0) | currency:'S/ ' }}</p>
+                      </div>
+                      <div class="sm:col-span-2">
+                        <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Dirección / Empresa</p>
+                        <p class="font-black text-sm">{{ cliente.conyuge.direccion || cliente.conyuge.empresa || '--' }}</p>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="flex flex-col items-center justify-center py-12 text-center opacity-30">
+                      <lucide-icon name="users" class="w-12 h-12 mb-4"></lucide-icon>
+                      <p class="text-xs font-bold uppercase tracking-widest">Sin información de cónyuge</p>
+                    </div>
+                  }
+                }
 
-                <div class="sm:col-span-2">
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Situación Laboral</p>
-                  <p class="font-black text-sm">{{ cliente.situacionLaboral || 'No registrado' }} - {{ cliente.cargoOcupacion }}</p>
-                </div>
-
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Ingreso Mensual</p>
-                  <p class="font-black text-sm text-success">{{ (cliente.ingresoMensual || 0) | currency:'S/ ' }}</p>
-                </div>
-
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Límite Crédito</p>
-                  <p class="font-black text-sm text-info">{{ (cliente.limiteCredito || 0) | currency:'S/ ' }}</p>
-                </div>
-
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Nacionalidad</p>
-                  <p class="font-black text-sm">{{ cliente.nacionalidad || 'Peruana' }}</p>
-                </div>
-
-                <div>
-                  <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-1 text-primary">Instrucción</p>
-                  <p class="font-black text-sm">{{ cliente.gradoInstruccion || 'Superior' }}</p>
-                </div>
               </div>
             } @else {
               <!-- MODO EDICIÓN -->
-              <div class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre Completo</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().nombre" class="input input-bordered input-sm rounded-xl focus:border-primary" />
+              <div class="space-y-6 animate-fade-in">
+                
+                @if (tabActiva() === 'personal') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre Completo</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().nombre" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">DNI / Documento</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().numeroDocumento" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Fecha Nacimiento</span></label>
+                      <input type="date" [(ngModel)]="clienteEdit().fechaNacimiento" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Estado Civil</span></label>
+                      <select [(ngModel)]="clienteEdit().estadoCivil" class="select select-bordered select-sm rounded-xl">
+                        <option value="SOLTERO">SOLTERO</option>
+                        <option value="CASADO">CASADO</option>
+                        <option value="VIUDO">VIUDO</option>
+                        <option value="DIVORCIADO">DIVORCIADO</option>
+                        <option value="CONVIVIENTE">CONVIVIENTE</option>
+                      </select>
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().celular" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Límite Crédito (S/)</span></label>
+                      <input type="number" [(ngModel)]="clienteEdit().limiteCredito" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Estado</span></label>
+                      <select [(ngModel)]="clienteEdit().estado" class="select select-bordered select-sm rounded-xl">
+                        <option value="ACTIVO">ACTIVO</option>
+                        <option value="MOROSO">MOROSO</option>
+                        <option value="BLOQUEADO">BLOQUEADO</option>
+                      </select>
+                    </div>
+                    <div class="sm:col-span-2 divider opacity-10 my-0"></div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Contacto Familiar</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().contactoFamiliarNombre" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular Familiar</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().contactoFamiliarCelular" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control flex flex-row items-center gap-2 pt-2">
+                      <input type="checkbox" [(ngModel)]="clienteEdit().viveCasaPropia" class="checkbox checkbox-primary checkbox-sm rounded-lg" />
+                      <span class="text-[10px] font-bold uppercase opacity-50">Vive en casa propia</span>
+                    </div>
                   </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Estado del Cliente</span></label>
-                    <select [(ngModel)]="clienteEdit().estado" class="select select-bordered select-sm rounded-xl focus:border-primary">
-                      <option value="ACTIVO">ACTIVO</option>
-                      <option value="MOROSO">MOROSO</option>
-                      <option value="BLOQUEADO">BLOQUEADO</option>
-                    </select>
+                }
+
+                @if (tabActiva() === 'laboral') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Situación Laboral</span></label>
+                      <select [(ngModel)]="clienteEdit().situacionLaboral" class="select select-bordered select-sm rounded-xl">
+                        <option value="DEPENDIENTE">DEPENDIENTE</option>
+                        <option value="INDEPENDIENTE">INDEPENDIENTE</option>
+                        <option value="DESEMPLEADO">DESEMPLEADO</option>
+                        <option value="JUBILADO">JUBILADO</option>
+                      </select>
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Empresa</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().empresa" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Empresa</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().rucEmpresa" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Cargo</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().cargoOcupacion" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ingreso Mensual (S/)</span></label>
+                      <input type="number" [(ngModel)]="clienteEdit().ingresoMensual" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Empresa</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().direccionEmpresa" class="input input-bordered input-sm rounded-xl" />
+                    </div>
                   </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Tipo Documento</span></label>
-                    <select [(ngModel)]="clienteEdit().tipoDocumento" class="select select-bordered select-sm rounded-xl focus:border-primary">
-                      <option value="DNI">DNI</option>
-                      <option value="CE">CE</option>
-                      <option value="RUC">RUC</option>
-                      <option value="PASAPORTE">PASAPORTE</option>
-                    </select>
+                }
+
+                @if (tabActiva() === 'ubicacion') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Exacta</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().domicilio" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Departamento</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().departamento" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Provincia</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().provincia" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Distrito</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().distrito" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Urb. / Sector</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().urbanizacion" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">MZ</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().manzana" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">LT</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().lote" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Referencia</span></label>
+                      <textarea [(ngModel)]="clienteEdit().referencia" class="textarea textarea-bordered rounded-xl h-20"></textarea>
+                    </div>
                   </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Número Documento</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().numeroDocumento" class="input input-bordered input-sm rounded-xl focus:border-primary" />
+                }
+
+                @if (tabActiva() === 'conyuge') {
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre del Cónyuge</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.nombreCompleto" class="input input-bordered input-sm rounded-xl" placeholder="Nombre completo..." />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">DNI</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.dni" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.telefono" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ocupación / Profesión</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.ocupacion" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ingresos Mensuales (S/)</span></label>
+                      <input type="number" [(ngModel)]="clienteEdit().conyuge.ingresosMensuales" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control sm:col-span-2">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Cónyuge</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.direccion" class="input input-bordered input-sm rounded-xl" />
+                    </div>
                   </div>
-                  <div class="form-control sm:col-span-2">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Domicilio</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().domicilio" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().celular" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Estado Civil</span></label>
-                    <select [(ngModel)]="clienteEdit().estadoCivil" class="select select-bordered select-sm rounded-xl focus:border-primary">
-                      <option value="SOLTERO">SOLTERO</option>
-                      <option value="CASADO">CASADO</option>
-                      <option value="VIUDO">VIUDO</option>
-                      <option value="DIVORCIADO">DIVORCIADO</option>
-                      <option value="CONVIVIENTE">CONVIVIENTE</option>
-                    </select>
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Situación Laboral</span></label>
-                    <select [(ngModel)]="clienteEdit().situacionLaboral" class="select select-bordered select-sm rounded-xl focus:border-primary">
-                      <option value="DEPENDIENTE">DEPENDIENTE</option>
-                      <option value="INDEPENDIENTE">INDEPENDIENTE</option>
-                      <option value="DESEMPLEADO">DESEMPLEADO</option>
-                      <option value="JUBILADO">JUBILADO</option>
-                    </select>
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Empresa</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().empresa" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Cargo / Ocupación</span></label>
-                    <input type="text" [(ngModel)]="clienteEdit().cargoOcupacion" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ingreso Mensual (S/)</span></label>
-                    <input type="number" [(ngModel)]="clienteEdit().ingresoMensual" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Límite de Crédito (S/)</span></label>
-                    <input type="number" [(ngModel)]="clienteEdit().limiteCredito" class="input input-bordered input-sm rounded-xl focus:border-primary" />
-                  </div>
-                </div>
+                }
+
               </div>
             }
             

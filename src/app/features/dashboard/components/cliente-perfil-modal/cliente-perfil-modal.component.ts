@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { Cliente } from '../../../../core/models/cliente.model';
 import { ClienteService } from '../../../../core/services/cliente.service';
-
+import { ReportePerfilPdfService } from '../../../../core/services/reporte-perfil-pdf.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -24,8 +24,20 @@ export class ClientePerfilModalComponent {
   isEditMode = signal(false);
   guardando = signal(false);
   clienteEdit = signal<any>({});
+  tabActiva = signal<'personal' | 'laboral' | 'ubicacion' | 'conyuge'>('personal');
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(
+    private clienteService: ClienteService,
+    private reportePdfService: ReportePerfilPdfService
+  ) {}
+
+  imprimirPerfil() {
+    this.reportePdfService.generarReporte(this.cliente);
+  }
+
+  setTab(tab: 'personal' | 'laboral' | 'ubicacion' | 'conyuge') {
+    this.tabActiva.set(tab);
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -58,7 +70,30 @@ export class ClientePerfilModalComponent {
   }
 
   activarEdicion() {
-    this.clienteEdit.set({ ...this.cliente });
+    const data = { ...this.cliente };
+    
+    // Parsear datosSolicitud si existe para facilitar la edición de campos de ubicación
+    if (data.datosSolicitud) {
+      try {
+        const extra = JSON.parse(data.datosSolicitud);
+        data.departamento = data.departamento || extra.departamento;
+        data.provincia = data.provincia || extra.provincia;
+        data.distrito = data.distrito || extra.distrito;
+        data.urbanizacion = data.urbanizacion || extra.urbanizacion;
+        data.manzana = data.manzana || extra.manzana;
+        data.lote = data.lote || extra.lote;
+        data.codigoPostal = data.codigoPostal || extra.codigoPostal;
+        data.referencia = data.referencia || extra.referencia;
+        data.nacionalidad = data.nacionalidad || extra.nacionalidad;
+        data.gradoInstruccion = data.gradoInstruccion || extra.gradoInstruccion;
+      } catch (e) {}
+    }
+
+    if (!data.conyuge) {
+      data.conyuge = { nombreCompleto: '', dni: '' };
+    }
+
+    this.clienteEdit.set(data);
     this.isEditMode.set(true);
   }
 
@@ -72,6 +107,21 @@ export class ClientePerfilModalComponent {
     this.error.set(null);
 
     const data = this.clienteEdit();
+    
+    // Actualizar datosSolicitud con los cambios en ubicación para mantener consistencia
+    const datosSolicitudObj = {
+      departamento: data.departamento,
+      provincia: data.provincia,
+      distrito: data.distrito,
+      urbanizacion: data.urbanizacion,
+      manzana: data.manzana,
+      lote: data.lote,
+      codigoPostal: data.codigoPostal,
+      referencia: data.referencia,
+      nacionalidad: data.nacionalidad,
+      gradoInstruccion: data.gradoInstruccion
+    };
+
     // Preparar el DTO de actualización
     const updateData = {
       nombreCompleto: data.nombre,
@@ -94,14 +144,24 @@ export class ClientePerfilModalComponent {
       canalEstadoCuenta: data.canalEstadoCuenta,
       tipoPersona: data.tipoPersona,
       limiteCredito: data.limiteCredito,
-      estado: data.estado
+      estado: data.estado,
+      contactoFamiliarNombre: data.contactoFamiliarNombre,
+      contactoFamiliarCelular: data.contactoFamiliarCelular,
+      viveCasaPropia: data.viveCasaPropia,
+      conyugeNombre: data.conyuge?.nombreCompleto,
+      conyugeDni: data.conyuge?.dni,
+      conyugeOcupacion: data.conyuge?.ocupacion,
+      conyugeIngresos: data.conyuge?.ingresosMensuales,
+      conyugeTelefono: data.conyuge?.telefono,
+      conyugeDireccion: data.conyuge?.direccion,
+      datosSolicitud: JSON.stringify(datosSolicitudObj)
     };
 
     this.clienteService.actualizarCliente(this.cliente.id, updateData).subscribe({
       next: () => {
         this.guardando.set(false);
         this.isEditMode.set(false);
-        this.fotoActualizada.emit(); // Reutilizamos el evento para recargar datos
+        this.fotoActualizada.emit();
       },
       error: (err) => {
         this.guardando.set(false);

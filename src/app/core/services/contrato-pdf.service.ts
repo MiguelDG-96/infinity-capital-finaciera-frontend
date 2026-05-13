@@ -34,6 +34,7 @@ export class ContratoPdfService {
     "mz": { "x": 287, "y": 563, "page": 0 },
     "lt": { "x": 309, "y": 563, "page": 0 },
     "monto_solicitado": { "x": 103, "y": 490, "page": 1 },
+    "tasa": { "x": 250, "y": 490, "page": 1 },
     "plazo_meses": { "x": 76, "y": 579, "page": 1 },
     "dia_pago": { "x": 528, "y": 545, "page": 1 },
     "correo_envio": { "x": 139, "y": 360, "page": 1 },
@@ -122,6 +123,7 @@ export class ContratoPdfService {
 
     // 3. Crédito
     drawText(`S/ ${credito.montoAprobado || credito.montoCredito}`, 'monto_solicitado', true);
+    drawText(`${credito.tasaAprobada || credito.tem || 0}%`, 'tasa', true);
     drawText(`${credito.plazoMeses} meses`, 'plazo_meses');
     drawText(cliente.usuario?.email || '--', 'correo_envio');
 

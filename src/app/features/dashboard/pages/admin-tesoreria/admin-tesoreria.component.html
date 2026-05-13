@@ -11,74 +11,142 @@
         </button>
     </div>
 
+    <div class="tabs tabs-boxed bg-base-200/50 p-1 rounded-2xl w-fit mx-auto mb-6">
+        <button (click)="setTab('retiros')" [class.tab-active]="tabActiva === 'retiros'" class="tab tab-lg font-bold transition-all duration-300 gap-2">
+            <lucide-icon name="banknote" class="w-4 h-4"></lucide-icon>
+            Retiros Bancarios
+            <div class="badge badge-sm badge-primary opacity-60 ml-1">{{ retiros.length }}</div>
+        </button>
+        <button (click)="setTab('desembolsos')" [class.tab-active]="tabActiva === 'desembolsos'" class="tab tab-lg font-bold transition-all duration-300 gap-2">
+            <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+            Desembolsos
+            <div class="badge badge-sm badge-secondary opacity-60 ml-1">{{ desembolsos.length }}</div>
+        </button>
+    </div>
+
     @if (cargando) {
         <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
             <span class="loading loading-spinner loading-lg text-primary"></span>
-            <p class="text-xs font-bold uppercase tracking-widest">Consultando Billeteras...</p>
+            <p class="text-xs font-bold uppercase tracking-widest">Consultando...</p>
         </div>
     } @else if (error) {
         <div class="alert alert-error shadow-xl rounded-2xl">
             <lucide-icon name="alert-triangle" class="w-6 h-6"></lucide-icon>
             <span class="font-bold underline">{{ error }}</span>
         </div>
-    } @else if (retiros.length === 0) {
-        <div class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-base-content/10 rounded-3xl bg-base-200/20">
-            <div class="w-20 h-20 bg-base-content/5 rounded-full flex items-center justify-center mb-6">
-                <lucide-icon name="check-circle-2" class="w-10 h-10 text-success opacity-80"></lucide-icon>
-            </div>
-            <h2 class="text-2xl font-bold">Todo al día</h2>
-            <p class="opacity-60 max-w-md mt-2">No hay solicitudes de retiros pendientes en este momento. Los clientes no han solicitado transferencias.</p>
-        </div>
     } @else {
-        <!-- Tabla de Tesorería -->
-        <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
-            <div class="overflow-x-auto">
-                <table class="table table-zebra table-md w-full">
-                    <thead>
-                        <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
-                            <th class="py-4 pl-6">ID / Fecha</th>
-                            <th>Cliente</th>
-                            <th>Entidad Bancaria</th>
-                            <th>Monto a Transferir</th>
-                            <th class="text-right pr-6">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (r of retiros; track r.id) {
-                            <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
-                                <td class="pl-6">
-                                    <div class="flex flex-col">
-                                        <span class="font-mono text-xs opacity-60 font-bold">#{{ r.id }}</span>
-                                        <span class="text-[10px] opacity-40">{{ r.fechaSolicitud | date:'dd MMM yyyy, HH:mm' }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-sm text-base-content/80">{{ r.nombreCliente }}</span>
-                                        <span class="text-[10px] opacity-40 font-mono tracking-tighter">DNI: {{ r.documentoCliente }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="flex flex-col">
-                                        <span class="text-xs font-bold text-primary">{{ r.banco }}</span>
-                                        <span class="text-[10px] font-mono opacity-60">CTA: {{ r.numeroCuenta }}</span>
-                                        @if (r.cci) {
-                                            <span class="text-[9px] font-mono opacity-40">CCI: {{ r.cci }}</span>
-                                        }
-                                    </div>
-                                </td>
-                                <td class="font-black text-sm text-secondary">{{ r.monto | currency:'S/ ' }}</td>
-                                <td class="text-right pr-6">
-                                    <button (click)="iniciarProcesamiento(r)" class="btn btn-outline border-base-content/20 btn-sm text-xs px-4 rounded-full shadow-sm hover:bg-base-content hover:text-base-100 transition-all">
-                                        Procesar
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <!-- Sección de Retiros -->
+        @if (tabActiva === 'retiros') {
+            @if (retiros.length === 0) {
+                <div class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-base-content/10 rounded-3xl bg-base-200/20 animate-fade-in">
+                    <div class="w-20 h-20 bg-base-content/5 rounded-full flex items-center justify-center mb-6">
+                        <lucide-icon name="check-circle-2" class="w-10 h-10 text-success opacity-80"></lucide-icon>
+                    </div>
+                    <h2 class="text-2xl font-bold">Todo al día</h2>
+                    <p class="opacity-60 max-w-md mt-2">No hay solicitudes de retiros pendientes en este momento.</p>
+                </div>
+            } @else {
+                <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl animate-fade-in">
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra table-md w-full">
+                            <thead>
+                                <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+                                    <th class="py-4 pl-6">ID / Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Entidad Bancaria</th>
+                                    <th>Monto a Transferir</th>
+                                    <th class="text-right pr-6">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (r of retiros; track r.id) {
+                                    <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                                        <td class="pl-6">
+                                            <div class="flex flex-col">
+                                                <span class="font-mono text-xs opacity-60 font-bold">#{{ r.id }}</span>
+                                                <span class="text-[10px] opacity-40">{{ r.fechaSolicitud | date:'dd MMM yyyy, HH:mm' }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex flex-col">
+                                                <span class="font-bold text-sm text-base-content/80">{{ r.nombreCliente }}</span>
+                                                <span class="text-[10px] opacity-40 font-mono tracking-tighter">DNI: {{ r.documentoCliente }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex flex-col">
+                                                <span class="text-xs font-bold text-primary">{{ r.banco }}</span>
+                                                <span class="text-[10px] font-mono opacity-60">CTA: {{ r.numeroCuenta }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="font-black text-sm text-secondary">{{ r.monto | currency:'S/ ' }}</td>
+                                        <td class="text-right pr-6">
+                                            <button (click)="iniciarProcesamiento(r)" class="btn btn-outline border-base-content/20 btn-sm text-xs px-4 rounded-full shadow-sm hover:bg-base-content hover:text-base-100 transition-all">
+                                                Procesar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+
+        <!-- Sección de Desembolsos -->
+        @if (tabActiva === 'desembolsos') {
+            @if (desembolsos.length === 0) {
+                <div class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-base-content/10 rounded-3xl bg-base-200/20 animate-fade-in">
+                    <div class="w-20 h-20 bg-base-content/5 rounded-full flex items-center justify-center mb-6">
+                        <lucide-icon name="check-circle-2" class="w-10 h-10 text-secondary opacity-80"></lucide-icon>
+                    </div>
+                    <h2 class="text-2xl font-bold">Sin desembolsos</h2>
+                    <p class="opacity-60 max-w-md mt-2">No hay créditos aprobados esperando desembolso.</p>
+                </div>
+            } @else {
+                <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl animate-fade-in">
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra table-md w-full">
+                            <thead>
+                                <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+                                    <th class="py-4 pl-6">ID Crédito</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo / Moneda</th>
+                                    <th>Monto Desembolso</th>
+                                    <th class="text-right pr-6">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (d of desembolsos; track d.creditoId) {
+                                    <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                                        <td class="pl-6 font-mono text-xs font-bold">#{{ d.creditoId }}</td>
+                                        <td>
+                                            <div class="flex flex-col">
+                                                <span class="font-bold text-sm">{{ d.nombreCliente }}</span>
+                                                <span class="text-[10px] opacity-40 font-mono">DNI: {{ d.documentoCliente }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex flex-col">
+                                                <span class="text-xs font-bold text-primary">{{ d.tipoCredito }}</span>
+                                                <span class="text-[10px] opacity-60">{{ d.moneda }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="font-black text-sm text-secondary">{{ d.montoADesembolsar | currency:'S/ ' }}</td>
+                                        <td class="text-right pr-6">
+                                            <button (click)="iniciarDesembolso(d)" class="btn btn-secondary btn-sm text-xs px-4 rounded-full shadow-sm hover:scale-105 transition-all">
+                                                Desembolsar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
     }
 </div>
 
@@ -155,6 +223,59 @@
                         <span class="loading loading-spinner loading-xs"></span>
                     }
                     Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Confirmar Desembolso -->
+@if (showDesembolsoModal && desembolsoSeleccionado) {
+    <div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm pr-0">
+        <div class="relative w-full max-w-lg m-4 p-0 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100 backdrop-blur-xl border border-base-content/10 animate-fade-in overflow-hidden">
+            
+            <div class="bg-secondary/10 p-6 border-b border-secondary/20 flex justify-between items-center">
+                <h3 class="font-bold text-xl flex items-center gap-2 text-secondary">
+                    <lucide-icon name="send" class="w-6 h-6"></lucide-icon>
+                    Confirmar Desembolso
+                </h3>
+                <button (click)="cerrarModal()" class="btn btn-sm btn-circle btn-ghost">✕</button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="flex flex-col items-center text-center space-y-2 py-4">
+                    <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mb-2">
+                        <lucide-icon name="user" class="w-8 h-8 text-secondary"></lucide-icon>
+                    </div>
+                    <h4 class="text-xl font-bold">{{ desembolsoSeleccionado.nombreCliente }}</h4>
+                    <p class="text-xs opacity-50 font-mono uppercase tracking-tighter">Crédito #{{ desembolsoSeleccionado.creditoId }}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+                        <p class="text-[10px] font-bold uppercase opacity-50 tracking-widest mb-1">Monto a Abonar</p>
+                        <p class="text-xl font-black text-secondary">{{ desembolsoSeleccionado.montoADesembolsar | currency:'S/ ' }}</p>
+                    </div>
+                    <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+                        <p class="text-[10px] font-bold uppercase opacity-50 tracking-widest mb-1">Tipo de Crédito</p>
+                        <p class="text-sm font-bold opacity-80">{{ desembolsoSeleccionado.tipoCredito }}</p>
+                        <p class="text-[10px] opacity-50">{{ desembolsoSeleccionado.moneda }}</p>
+                    </div>
+                </div>
+
+                <div class="alert alert-info bg-info/5 border-info/20 text-xs py-3 rounded-2xl flex items-start gap-3">
+                    <lucide-icon name="info" class="w-5 h-5 mt-0.5 text-info"></lucide-icon>
+                    <span>Al confirmar, el crédito pasará a estado <b>ACTIVO</b> y el dinero se abonará instantáneamente en la <b>Billetera Virtual</b> del cliente.</span>
+                </div>
+            </div>
+
+            <div class="flex p-4 bg-base-200/30 gap-2 justify-end">
+                <button class="btn btn-ghost" (click)="cerrarModal()" [disabled]="procesando">Cancelar</button>
+                <button (click)="confirmarDesembolso()" class="btn btn-secondary px-8" [disabled]="procesando">
+                    @if (procesando) {
+                        <span class="loading loading-spinner loading-xs"></span>
+                    }
+                    Confirmar y Abonar
                 </button>
             </div>
         </div>

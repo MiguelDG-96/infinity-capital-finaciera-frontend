@@ -13,13 +13,17 @@ import { TesoreriaService, SolicitudRetiroTesoreria } from '../../../../core/ser
 })
 export class AdminTesoreriaComponent implements OnInit {
   retiros: SolicitudRetiroTesoreria[] = [];
+  desembolsos: any[] = [];
+  tabActiva: 'retiros' | 'desembolsos' = 'retiros';
   cargando = true;
   error = '';
   procesando = false;
 
   // Modales
   showProcesarModal = false;
+  showDesembolsoModal = false;
   retiroSeleccionado: SolicitudRetiroTesoreria | null = null;
+  desembolsoSeleccionado: any | null = null;
   
   // Formulario del modal
   numeroOperacion = '';
@@ -32,7 +36,16 @@ export class AdminTesoreriaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.cargarDatos();
+  }
+
+  cargarDatos(): void {
     this.cargarRetiros();
+    this.cargarDesembolsos();
+  }
+
+  setTab(tab: 'retiros' | 'desembolsos'): void {
+    this.tabActiva = tab;
   }
 
   cargarRetiros(): void {
@@ -41,11 +54,29 @@ export class AdminTesoreriaComponent implements OnInit {
     this.tesoreriaService.obtenerRetirosPendientes().subscribe({
       next: (data) => {
         this.retiros = data;
+        if (this.tabActiva === 'retiros') this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (this.tabActiva === 'retiros') {
+          this.error = 'Error al cargar los retiros de tesorería.';
+          this.cargando = false;
+        }
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  cargarDesembolsos(): void {
+    this.cargando = true;
+    this.tesoreriaService.obtenerDesembolsosPendientes().subscribe({
+      next: (data) => {
+        this.desembolsos = data;
         this.cargando = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.error = 'Error al cargar los retiros de tesorería.';
+        this.error = 'Error al cargar los desembolsos pendientes.';
         this.cargando = false;
         this.cdr.detectChanges();
       }
@@ -63,7 +94,9 @@ export class AdminTesoreriaComponent implements OnInit {
 
   cerrarModal(): void {
     this.showProcesarModal = false;
+    this.showDesembolsoModal = false;
     this.retiroSeleccionado = null;
+    this.desembolsoSeleccionado = null;
   }
 
   confirmarProcesamiento(): void {
@@ -95,6 +128,30 @@ export class AdminTesoreriaComponent implements OnInit {
       error: (err) => {
         this.procesando = false;
         alert(err.error?.error || 'Ocurrió un error al procesar el retiro.');
+      }
+    });
+  }
+
+  iniciarDesembolso(desembolso: any): void {
+    if (this.procesando) return;
+    this.desembolsoSeleccionado = desembolso;
+    this.showDesembolsoModal = true;
+  }
+
+  confirmarDesembolso(): void {
+    if (!this.desembolsoSeleccionado || this.procesando) return;
+    
+    this.procesando = true;
+    this.tesoreriaService.procesarDesembolso(this.desembolsoSeleccionado.creditoId).subscribe({
+      next: () => {
+        this.procesando = false;
+        this.cerrarModal();
+        this.cargarDesembolsos();
+        // Opcional: mostrar notificación de éxito
+      },
+      error: (err) => {
+        this.procesando = false;
+        alert(err.error?.error || 'Error al procesar el desembolso.');
       }
     });
   }
