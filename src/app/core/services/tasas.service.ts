@@ -14,6 +14,10 @@ export class TasasService {
   constructor(private http: HttpClient) {}
 
   // Tipos de Crédito
+  getTiposPublicos(): Observable<TipoCredito[]> {
+    return this.http.get<TipoCredito[]>(this.tiposUrl);
+  }
+
   getTiposCredito(): Observable<TipoCredito[]> {
     return this.http.get<TipoCredito[]>(`${this.tiposUrl}/todos`);
   }

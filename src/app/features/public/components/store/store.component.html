@@ -63,9 +63,11 @@
           <!-- Button -->
           <button
             (click)="onSubmit()"
-            class="bg-[#FF7A00] hover:bg-[#ff6a00] text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 h-12 w-full sm:w-auto min-w-[120px] text-lg"
+            [disabled]="isChecking"
+            class="bg-[#FF7A00] hover:bg-[#ff6a00] text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 h-12 w-full sm:w-auto min-w-[120px] text-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Conocer
+            <span *ngIf="isChecking" class="loading loading-spinner loading-sm"></span>
+            {{ isChecking ? 'Consultando...' : 'Conocer' }}
           </button>
         </div>
 
