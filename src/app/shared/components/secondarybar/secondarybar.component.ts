@@ -21,6 +21,10 @@ export class SecondarybarComponent {
   toggleMenu(menuName: string, state: boolean) {
     if (state) {
       this.activeMenu.set(menuName);
+      // Reset active category to the first one when opening products menu
+      if (menuName === 'products' && this.products.length > 0) {
+        this.activeCategory.set(this.products[0]);
+      }
     } else {
       this.activeMenu.set(null);
     }

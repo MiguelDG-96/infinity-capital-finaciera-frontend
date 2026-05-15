@@ -2,12 +2,12 @@
   <div class="container mx-auto px-4 flex items-center h-12 gap-2">
     <!-- Products Dropdown Trigger -->
     <div
-      class="relative group"
+      class="relative group h-full"
       (mouseenter)="toggleMenu('products', true)"
       (mouseleave)="toggleMenu('products', false)"
     >
       <button
-        class="flex items-center gap-2 text-base-content/80 hover:text-primary font-medium py-3 px-2 border-b-2 border-transparent hover:border-primary transition-all"
+        class="flex items-center gap-2 text-base-content/80 hover:text-primary font-medium h-full px-4 border-b-2 border-transparent hover:border-primary transition-all"
         [class.text-red-600]="activeMenu() === 'products'"
         [class.border-red-600]="activeMenu() === 'products'"
       >
@@ -18,7 +18,7 @@
       <!-- Mega Menu Panel -->
       <div
         *ngIf="activeMenu() === 'products'"
-        class="absolute top-full left-0 w-[900px] bg-base-100 shadow-xl rounded-b-xl z-50 flex overflow-hidden border border-base-content/10 mt-[1px]"
+        class="absolute top-full left-0 w-[900px] bg-base-100 shadow-xl rounded-b-xl z-50 flex overflow-hidden border border-base-content/10"
       >
         <!-- Column 1: Categories -->
         <div class="w-1/4 bg-base-200 py-2">
@@ -87,12 +87,12 @@
 
     <!-- Digital Channels Dropdown Trigger -->
     <div
-      class="relative group"
+      class="relative group h-full"
       (mouseenter)="toggleMenu('channels', true)"
       (mouseleave)="toggleMenu('channels', false)"
     >
       <button
-        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium h-full px-4 border-b-2 border-transparent hover:border-red-600 transition-all"
         [class.text-red-600]="activeMenu() === 'channels'"
         [class.border-red-600]="activeMenu() === 'channels'"
       >
@@ -100,10 +100,10 @@
         <lucide-icon name="chevron-down" size="16"></lucide-icon>
       </button>
 
-      <!-- Digital Channels Menu Panel -->
+      <!-- Channels Menu Panel -->
       <div
         *ngIf="activeMenu() === 'channels'"
-        class="absolute top-full left-0 w-[280px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 mt-[1px] py-2"
+        class="absolute top-full left-0 w-[300px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 py-2"
       >
         <a
           *ngFor="let channel of digitalChannels"
@@ -122,12 +122,12 @@
 
     <!-- Benefits Dropdown Trigger -->
     <div
-      class="relative group"
+      class="relative group h-full"
       (mouseenter)="toggleMenu('benefits', true)"
       (mouseleave)="toggleMenu('benefits', false)"
     >
       <button
-        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium py-3 px-2 border-b-2 border-transparent hover:border-red-600 transition-all"
+        class="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium h-full px-4 border-b-2 border-transparent hover:border-red-600 transition-all"
         [class.text-red-600]="activeMenu() === 'benefits'"
         [class.border-red-600]="activeMenu() === 'benefits'"
       >
@@ -138,7 +138,7 @@
       <!-- Benefits Menu Panel -->
       <div
         *ngIf="activeMenu() === 'benefits'"
-        class="absolute top-full left-0 w-[320px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 mt-[1px] py-2"
+        class="absolute top-full left-0 w-[320px] bg-white shadow-xl rounded-b-xl z-50 overflow-hidden border border-gray-100 py-2"
       >
         <a
           *ngFor="let benefit of benefits"

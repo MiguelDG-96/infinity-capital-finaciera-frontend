@@ -27,48 +27,39 @@
       </div>
     </div>
 
-    <!-- Search Bar (Desktop Only) -->
-    <div class="hidden lg:block w-1/4 relative mx-4">
-      <div class="relative">
-        <input
-          type="text"
-          placeholder="¿Qué estás buscando?"
-          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-sm"
-        />
-        <div
-          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
-        >
-          <lucide-icon name="search" size="18"></lucide-icon>
-        </div>
-      </div>
-    </div>
 
-    <!-- Right Side Actions (Desktop) -->
+
+    <!-- Right Side Buttons (Desktop) -->
     <div class="hidden lg:flex items-center gap-6">
       <!-- Agencia -->
       <a
-        href="#"
-        class="flex flex-col items-center text-gray-600 hover:text-red-600 transition group"
+        routerLink="/"
+        fragment="location"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-full hover:bg-red-50 hover:text-red-600 transition-all duration-300 border border-gray-100 group shadow-sm"
       >
-        <lucide-icon
-          name="map-pin"
-          class="mb-1 group-hover:scale-110 transition-transform"
-          size="20"
-        ></lucide-icon>
-        <span class="text-xs font-medium">Agencia</span>
+        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
+          <lucide-icon
+            name="map-pin"
+            class="text-gray-400 group-hover:text-red-600 transition-colors"
+            size="14"
+          ></lucide-icon>
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Agencia</span>
       </a>
 
       <!-- Hazte Cliente -->
       <a
         routerLink="/register"
-        class="flex flex-col items-center text-gray-600 hover:text-red-600 transition group mr-4"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 border border-gray-100 group shadow-sm mr-2"
       >
-        <lucide-icon
-          name="user"
-          class="mb-1 group-hover:scale-110 transition-transform"
-          size="20"
-        ></lucide-icon>
-        <span class="text-xs font-medium">Hazte Cliente</span>
+        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
+          <lucide-icon
+            name="user-plus"
+            class="text-gray-400 group-hover:text-blue-600 transition-colors"
+            size="14"
+          ></lucide-icon>
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-widest">Hazte Cliente</span>
       </a>
 
       <!-- Buttons -->
@@ -87,23 +78,6 @@
           Banca por Internet
         </a>
       </div>
-    </div>
-
-    <!-- Right Side Buttons (Mobile Only - Simplified) -->
-    <div class="flex lg:hidden gap-2">
-      <a
-        routerLink="/simulator"
-        class="px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-lg hover:bg-red-700 transition"
-      >
-        Préstamo
-      </a>
-      <a
-        routerLink="/login"
-        class="px-3 py-2 bg-blue-900 text-white text-xs font-bold rounded-lg hover:bg-blue-800 transition flex items-center gap-1"
-      >
-        <lucide-icon name="lock" size="14"></lucide-icon>
-        Banca
-      </a>
     </div>
   </div>
 
@@ -128,20 +102,30 @@
       </button>
     </div>
 
-    <!-- Search Mobile -->
-    <div class="p-4 bg-gray-50">
-      <div class="relative">
-        <input
-          type="text"
-          placeholder="¿Qué deseas encontrar?"
-          class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
-        />
-        <div
-          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
-        >
-          <lucide-icon name="search" size="18"></lucide-icon>
+
+
+    <!-- Primary Actions Mobile (Moved from Navbar) -->
+    <div class="p-4 grid grid-cols-2 gap-3 border-b border-gray-100">
+      <a
+        routerLink="/simulator"
+        (click)="toggleMobileMenu()"
+        class="flex flex-col items-center justify-center p-4 bg-red-50 rounded-2xl border border-red-100 active:bg-red-100 transition-colors"
+      >
+        <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center mb-2 shadow-lg shadow-red-200">
+          <lucide-icon name="calculator" class="text-white" size="18"></lucide-icon>
         </div>
-      </div>
+        <span class="text-[11px] font-bold text-red-600 uppercase tracking-tighter">Préstamo</span>
+      </a>
+      <a
+        routerLink="/login"
+        (click)="toggleMobileMenu()"
+        class="flex flex-col items-center justify-center p-4 bg-blue-50 rounded-2xl border border-blue-100 active:bg-blue-100 transition-colors"
+      >
+        <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center mb-2 shadow-lg shadow-blue-200">
+          <lucide-icon name="lock" class="text-white" size="18"></lucide-icon>
+        </div>
+        <span class="text-[11px] font-bold text-blue-900 uppercase tracking-tighter">Mi Banca</span>
+      </a>
     </div>
 
     <!-- Segments -->

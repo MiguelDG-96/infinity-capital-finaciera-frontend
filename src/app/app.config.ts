@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { 
   LucideAngularModule, Search, MapPin, User, Lock, PiggyBank, CreditCard, Banknote, 
   Shield, BarChart3, BarChart, RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, 
@@ -14,7 +14,8 @@ import {
   History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2,
   MapPinHouse, Percent, Layers, Edit2, Edit3, PlusCircle, Settings2, Download,
   Key, Package, Truck, Users, Building, ShoppingCart, Folder, Box, Building2, Calculator, CalendarDays, IdCard,
-  UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw
+  UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw,
+  CircleDollarSign
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -25,7 +26,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideCharts(withDefaultRegisterables()),
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(routes, withInMemoryScrolling({ 
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled'
+    })),
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
@@ -43,7 +47,7 @@ export const appConfig: ApplicationConfig = {
         History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2, MapPinHouse,
         Percent, Layers, Edit2, Edit3, Settings2, Download,
         Key, Package, Truck, Users, Building, Building2, ShoppingCart, Folder, Box, Calculator, CalendarDays, Wallet, CreditCard, IdCard,
-        UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw
+        UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign
       })
     )
   ]
