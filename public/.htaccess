@@ -5,11 +5,13 @@
   # Desactivar el listado de directorios
   Options -Indexes
 
-  # Si el archivo existe, se sirve directamente (imágenes, js, css, etc.)
+  # Evitar que Apache redirija automáticamente añadiendo una barra inclinada a carpetas reales (ej. /login -> /login/)
+  DirectorySlash Off
+
+  # Si la petición es un archivo físico real, se sirve directamente (imágenes, js, css, etc.)
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # Si NO es un archivo real, enviar todo a index.html
-  # Esto permite que rutas como /login funcionen aunque exista una carpeta llamada login
+  # Si NO es un archivo real (aunque exista una carpeta física con ese nombre, como /login), enviar a index.html
   RewriteRule . /index.html [L]
 </IfModule>
