@@ -15,7 +15,7 @@ import {
   MapPinHouse, Percent, Layers, Edit2, Edit3, PlusCircle, Settings2, Download,
   Key, Package, Truck, Users, Building, ShoppingCart, Folder, Box, Building2, Calculator, CalendarDays, IdCard,
   UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw,
-  CircleDollarSign
+  CircleDollarSign, Printer
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
         History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2, MapPinHouse,
         Percent, Layers, Edit2, Edit3, Settings2, Download,
         Key, Package, Truck, Users, Building, Building2, ShoppingCart, Folder, Box, Calculator, CalendarDays, Wallet, CreditCard, IdCard,
-        UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign
+        UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign, Printer
       })
     )
   ]

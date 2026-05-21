@@ -41,6 +41,8 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalPostergar = signal<boolean>(false);
   mostrarModalRenovar = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
+  pagosRestringidos = signal<boolean>(true);
+  mostrarModalRestriccion = signal<boolean>(false);
 
   // Paginación
   currentPage = signal<number>(1);
@@ -87,6 +89,10 @@ export class CreditoDetalleComponent implements OnInit {
   }
 
   pagarCuota(cuota: Cuota) {
+    if (this.pagosRestringidos() && !this.isAdminMode()) {
+      this.mostrarModalRestriccion.set(true);
+      return;
+    }
     if (cuota.estadoCuota === 'PAGADO' || this.procesando()) return;
     
     if (confirm(`¿Deseas pagar la cuota #${cuota.numeroCuota} por un total de S/ ${cuota.totalCuota}?`)) {
@@ -105,6 +111,10 @@ export class CreditoDetalleComponent implements OnInit {
   }
 
   pagoAnticipado() {
+    if (this.pagosRestringidos() && !this.isAdminMode()) {
+      this.mostrarModalRestriccion.set(true);
+      return;
+    }
     this.mostrarModalPago.set(true);
   }
 
@@ -195,6 +205,14 @@ export class CreditoDetalleComponent implements OnInit {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
     }
+  }
+
+  abrirModalRestriccion() {
+    this.mostrarModalRestriccion.set(true);
+  }
+
+  cerrarModalRestriccion() {
+    this.mostrarModalRestriccion.set(false);
   }
 
   getEstadoClase(estado: string): string {

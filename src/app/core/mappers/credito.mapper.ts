@@ -20,6 +20,32 @@ import {
 
 export class CreditoMapper {
 
+  static parseLocalDate(dateInput: any): Date {
+    if (!dateInput) return new Date();
+    if (dateInput instanceof Date) return dateInput;
+    
+    const dateStr = String(dateInput).trim();
+    
+    // Si contiene la fecha en formato YYYY-MM-DD
+    const match = dateStr.match(/^(\d{4})[-/](\d{2})[-/](\d{2})/);
+    if (match) {
+      const year = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10) - 1; // 0-indexed
+      const day = parseInt(match[3], 10);
+      
+      const timeMatch = dateStr.match(/(?:T|\s)(\d{2}):(\d{2}):(\d{2})/);
+      if (timeMatch) {
+        const hours = parseInt(timeMatch[1], 10);
+        const minutes = parseInt(timeMatch[2], 10);
+        const seconds = parseInt(timeMatch[3], 10);
+        return new Date(year, month, day, hours, minutes, seconds);
+      }
+      return new Date(year, month, day, 0, 0, 0, 0);
+    }
+    
+    return new Date(dateStr);
+  }
+
   static toSolicitudCreditoDTO(domain: SolicitudCredito): SolicitudCreditoRequestDTO {
     return {
       tipoDocumento: domain.tipoDocumento,
@@ -102,7 +128,7 @@ export class CreditoMapper {
       domicilio: dto.domicilio,
       montoSolicitado: dto.montoSolicitado,
       prestamo: `${dto.tipoCreditoNombre} (${dto.monedaNombre})`,
-      fechaSolicitud: new Date(dto.fechaSolicitud),
+      fechaSolicitud: this.parseLocalDate(dto.fechaSolicitud),
       estado: dto.estado as EstadoCredito
     };
   }
@@ -111,7 +137,7 @@ export class CreditoMapper {
     return {
       id: dto.id,
       numeroCuota: dto.numeroCuota,
-      fechaVencimiento: new Date(dto.fechaVencimiento),
+      fechaVencimiento: this.parseLocalDate(dto.fechaVencimiento),
       totalCuota: dto.totalCuota,
       capital: dto.capital,
       interes: dto.interes,
@@ -120,7 +146,7 @@ export class CreditoMapper {
       comision: dto.comision,
       seguro: dto.seguro,
       estadoCuota: dto.estadoCuota as Cuota['estadoCuota'],
-      fechaPago: dto.fechaPago ? new Date(dto.fechaPago) : undefined,
+      fechaPago: dto.fechaPago ? this.parseLocalDate(dto.fechaPago) : undefined,
       esGracia: dto.esGracia,
       metodoPago: dto.metodoPago,
       numeroComprobante: dto.numeroComprobante,
@@ -139,9 +165,9 @@ export class CreditoMapper {
       plazoMeses: dto.plazoMeses,
       tasaAprobada: dto.tasaAprobada,
       estado: dto.estado as EstadoCredito,
-      fechaDesembolso: dto.fechaDesembolso ? new Date(dto.fechaDesembolso) : undefined,
-      fechaVencimiento: dto.fechaVencimiento ? new Date(dto.fechaVencimiento) : undefined,
-      fechaInicio: dto.fechaInicio ? new Date(dto.fechaInicio) : undefined,
+      fechaDesembolso: dto.fechaDesembolso ? this.parseLocalDate(dto.fechaDesembolso) : undefined,
+      fechaVencimiento: dto.fechaVencimiento ? this.parseLocalDate(dto.fechaVencimiento) : undefined,
+      fechaInicio: dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : undefined,
       tipoCredito: dto.tipoCredito?.nombre || 'General',
       moneda: dto.moneda?.nombre || 'Moneda Local',
       simboloMoneda: dto.moneda?.simbolo || '$',
@@ -153,7 +179,7 @@ export class CreditoMapper {
       periodoGracia: dto.periodoGracia,
       cuentaDesembolso: dto.cuentaDesembolso,
       tem: dto.tem || dto.tasaAprobada,
-      fechaSolicitud: dto.fechaSolicitud ? new Date(dto.fechaSolicitud) : (dto.fechaInicio ? new Date(dto.fechaInicio) : new Date()),
+      fechaSolicitud: dto.fechaSolicitud ? this.parseLocalDate(dto.fechaSolicitud) : (dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : new Date()),
       cliente: dto.cliente ? {
           id: (dto.cliente as any).id || 0,
           nombre: dto.cliente.usuario?.nombreCompleto || 'Cliente Desconocido',
@@ -177,7 +203,7 @@ export class CreditoMapper {
   static toMovimientoDomain(dto: MovimientoDTO): Movimiento {
     return {
       id: dto.id,
-      fecha: new Date(dto.fechaHora),
+      fecha: this.parseLocalDate(dto.fechaHora),
       tipo: dto.tipo,
       monto: dto.monto,
       descripcion: dto.descripcion
