@@ -21,10 +21,10 @@
                 <lucide-icon name="edit-2" class="w-4 h-4 mr-1"></lucide-icon>
                 Editar Crédito
             </button>
-            <button class="btn btn-neutral btn-sm shadow-sm opacity-80" 
-                    (click)="abrirModalRestriccion()" 
-                    *ngIf="!isAdminMode()">
-                <lucide-icon name="lock" class="w-4 h-4 mr-1"></lucide-icon>
+            <button class="btn btn-primary btn-sm shadow-lg shadow-primary/20" 
+                    (click)="mostrarModalPago.set(true)"
+                    *ngIf="isAdminMode()">
+                <lucide-icon name="credit-card" class="w-4 h-4 mr-1"></lucide-icon>
                 Pago Anticipado
             </button>
             <button class="btn btn-ghost btn-sm" [routerLink]="isAdminMode() ? '/dashboard/admin/cartera' : '/dashboard/creditos/mis-creditos'">
@@ -62,23 +62,6 @@
             <span>{{ error() }}</span>
         </div>
     } @else if (credito()) {
-        <!-- Alerta de Restricción de Pagos -->
-        <div class="alert bg-warning/10 border-warning/20 text-warning-content shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 rounded-3xl" *ngIf="!isAdminMode()">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-warning/20 rounded-2xl text-warning">
-                    <lucide-icon name="alert-triangle" class="w-6 h-6"></lucide-icon>
-                </div>
-                <div class="space-y-1">
-                    <h3 class="font-bold text-sm text-base-content">Pagos de Cuotas Restringidos Temporalmente</h3>
-                    <p class="text-xs opacity-75 text-base-content/85">
-                        Los pagos directos desde el portal se encuentran deshabilitados mientras implementamos el nuevo sistema de validación (voucher + código de verificación).
-                    </p>
-                </div>
-            </div>
-            <button class="btn btn-warning btn-xs font-bold" (click)="abrirModalRestriccion()">
-                Saber más
-            </button>
-        </div>
 
         <!-- Resumen de Deuda -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -127,6 +110,21 @@
                             </thead>
                             <tbody>
                                 @for (cuota of paginatedCuotas(); track cuota.id) {
+                                    <!-- Alerta de pago rechazado (solo cliente) -->
+                                    @if (!isAdminMode() && cuota.comentarioRechazo && cuota.estadoCuota !== 'REVISION' && cuota.estadoCuota !== 'PAGADO') {
+                                        <tr>
+                                            <td colspan="8" class="p-0">
+                                                <div class="flex items-start gap-3 px-4 py-3 bg-error/8 border-l-4 border-error/60 mx-2 my-1 rounded-xl">
+                                                    <lucide-icon name="alert-triangle" class="w-4 h-4 text-error shrink-0 mt-0.5"></lucide-icon>
+                                                    <div class="text-xs">
+                                                        <p class="font-bold text-error">Cuota #{{ cuota.numeroCuota }}: Comprobante rechazado</p>
+                                                        <p class="text-base-content/70 mt-0.5">Motivo: <span class="font-medium text-base-content/90">{{ cuota.comentarioRechazo }}</span></p>
+                                                        <p class="text-base-content/50 mt-0.5">Por favor, sube un nuevo comprobante válido.</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
                                     <tr class="hover:bg-base-200/40 transition-colors">
                                         <td class="font-bold text-xs opacity-40">{{ cuota.numeroCuota }}</td>
                                         <td class="text-xs">{{ cuota.fechaVencimiento | date:'dd MMM, yyyy' }}</td>
@@ -148,18 +146,36 @@
                                         <td class="font-black text-sm text-base-content">{{ cuota.totalCuota | currency:'S/ ' }}</td>
                                         <td>
                                             <div class="badge badge-sm font-bold" [ngClass]="getEstadoClase(cuota.estadoCuota)">
-                                                {{ cuota.estadoCuota }}
+                                                @if (cuota.estadoCuota === 'REVISION') { EN REVISIÓN }
+                                                @else { {{ cuota.estadoCuota }} }
                                             </div>
                                         </td>
                                         <td class="text-right">
-                                            @if (cuota.estadoCuota !== 'PAGADO' && credito()?.estado === 'ACTIVO' && !isAdminMode()) {
-                                                <button class="btn btn-neutral btn-xs btn-outline hover:btn-neutral"
-                                                        (click)="abrirModalRestriccion()"
-                                                        title="Pago restringido temporalmente">
-                                                    <lucide-icon name="lock" class="w-3 h-3 mr-1"></lucide-icon>
-                                                    Pagar
-                                                </button>
+                                            <!-- CLIENTE: botón subir comprobante -->
+                                            @if (!isAdminMode() && credito()?.estado === 'ACTIVO') {
+                                                @if (cuota.estadoCuota === 'PAGADO') {
+                                                    <div class="flex items-center justify-end gap-1 opacity-40">
+                                                        <lucide-icon name="check-circle-2" class="w-4 h-4 text-success"></lucide-icon>
+                                                    </div>
+                                                } @else if (cuota.estadoCuota === 'REVISION') {
+                                                    <div class="flex items-center justify-end gap-1.5">
+                                                        <span class="badge badge-info badge-xs font-bold gap-1">
+                                                            <lucide-icon name="clock" class="w-2.5 h-2.5"></lucide-icon>
+                                                            En revisión
+                                                        </span>
+                                                    </div>
+                                                } @else {
+                                                    <button class="btn btn-primary btn-xs shadow-sm shadow-primary/20"
+                                                            (click)="abrirSubirComprobante(cuota)"
+                                                            id="btn-subir-comprobante-{{ cuota.id }}"
+                                                            title="Subir comprobante de pago">
+                                                        <lucide-icon name="upload" class="w-3 h-3 mr-1"></lucide-icon>
+                                                        Pagar
+                                                    </button>
+                                                }
                                             }
+
+                                            <!-- ADMIN: botones de acción -->
                                             @if (isAdminMode()) {
                                                 <div class="flex justify-end gap-1">
                                                     <button class="btn btn-ghost btn-xs text-info"
@@ -167,7 +183,19 @@
                                                             title="Editar Cuota">
                                                         <lucide-icon name="edit-3" class="w-3.5 h-3.5"></lucide-icon>
                                                     </button>
-                                                    @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'POSTERGADA') {
+
+                                                    <!-- Revisar pago si está en revisión -->
+                                                    @if (cuota.estadoCuota === 'REVISION') {
+                                                        <button class="btn btn-sm btn-info text-white gap-1 shadow-sm shadow-info/30"
+                                                                (click)="abrirRevisarPago(cuota)"
+                                                                title="Revisar comprobante de pago"
+                                                                id="btn-revisar-pago-{{ cuota.id }}">
+                                                            <lucide-icon name="scan-eye" class="w-3.5 h-3.5"></lucide-icon>
+                                                            Revisar
+                                                        </button>
+                                                    }
+
+                                                    @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'POSTERGADA' && cuota.estadoCuota !== 'REVISION') {
                                                         <button class="btn btn-ghost btn-xs text-warning"
                                                                 (click)="postergarCuota(cuota)"
                                                                 [disabled]="procesando()"
@@ -299,6 +327,8 @@
     }
 </div>
 
+<!-- ========== MODALES DE COMPONENTES ========== -->
+
 @if (mostrarModalPago() && credito()) {
     <app-pago-anticipado-modal 
         [credito]="credito()!" 
@@ -353,84 +383,319 @@
     </app-renovar-solo-interes-modal>
 }
 
-@if (mostrarModalRestriccion()) {
-    <div class="modal modal-open">
-        <div class="modal-box rounded-3xl border border-base-content/10 shadow-2xl p-6 max-w-lg">
-            <div class="flex justify-between items-start mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="p-3 bg-primary/10 rounded-2xl text-primary">
-                        <lucide-icon name="lock" class="w-6 h-6"></lucide-icon>
-                    </div>
+
+<!-- ========== MODAL: SUBIR COMPROBANTE (CLIENTE) ========== -->
+@if (mostrarModalSubirComprobante() && cuotaSeleccionada()) {
+    <div class="modal modal-open" id="modal-subir-comprobante">
+        <div class="modal-box rounded-3xl border border-base-content/10 shadow-2xl p-0 max-w-lg overflow-hidden">
+            
+            <!-- Header con gradiente -->
+            <div class="bg-gradient-to-br from-primary to-primary/80 p-6 text-primary-content">
+                <div class="flex justify-between items-start">
                     <div>
-                        <h3 class="font-extrabold text-lg text-base-content">Actualización de Pagos</h3>
-                        <p class="text-xs opacity-60">InfinyCapital Financiera</p>
+                        <div class="flex items-center gap-2 mb-1">
+                            <lucide-icon name="receipt" class="w-5 h-5 opacity-80"></lucide-icon>
+                            <span class="text-xs font-bold uppercase tracking-widest opacity-70">Cuota #{{ cuotaSeleccionada()?.numeroCuota }}</span>
+                        </div>
+                        <h3 class="font-extrabold text-xl">Subir Comprobante de Pago</h3>
+                        <p class="text-sm opacity-70 mt-1">Adjunta tu voucher para enviar a revisión</p>
+                    </div>
+                    <button class="btn btn-ghost btn-circle btn-sm text-primary-content/70 hover:text-primary-content hover:bg-white/10"
+                            (click)="cerrarModalSubirComprobante()">
+                        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+                    </button>
+                </div>
+
+                <!-- Resumen de cuota -->
+                <div class="mt-4 grid grid-cols-3 gap-3">
+                    <div class="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-sm">
+                        <p class="text-[9px] uppercase font-bold opacity-60 mb-1">Capital</p>
+                        <p class="font-black text-sm">{{ cuotaSeleccionada()?.capital | currency:'S/ ' }}</p>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-sm">
+                        <p class="text-[9px] uppercase font-bold opacity-60 mb-1">Interés</p>
+                        <p class="font-black text-sm">{{ cuotaSeleccionada()?.interes | currency:'S/ ' }}</p>
+                    </div>
+                    <div class="bg-white/20 rounded-2xl p-3 text-center backdrop-blur-sm border border-white/30">
+                        <p class="text-[9px] uppercase font-bold opacity-60 mb-1">Total</p>
+                        <p class="font-black text-base">{{ comprobanteForm.monto | currency:'S/ ' }}</p>
                     </div>
                 </div>
-                <button class="btn btn-ghost btn-circle btn-sm" (click)="cerrarModalRestriccion()">
-                    <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
-                </button>
+
+                @if ((cuotaSeleccionada()?.interesMora || 0) > 0 || (cuotaSeleccionada()?.penalidad || 0) > 0) {
+                    <div class="mt-2 flex gap-2 text-xs">
+                        @if ((cuotaSeleccionada()?.interesMora || 0) > 0) {
+                            <span class="bg-error/30 text-white font-bold rounded-full px-2 py-0.5">
+                                +{{ cuotaSeleccionada()?.interesMora | currency:'S/ ' }} MORA
+                            </span>
+                        }
+                        @if ((cuotaSeleccionada()?.penalidad || 0) > 0) {
+                            <span class="bg-error/30 text-white font-bold rounded-full px-2 py-0.5">
+                                +{{ cuotaSeleccionada()?.penalidad | currency:'S/ ' }} PEN.
+                            </span>
+                        }
+                    </div>
+                }
             </div>
 
-            <div class="space-y-4">
-                <div class="p-4 bg-base-200/50 rounded-2xl border border-base-content/5 text-sm">
-                    <p class="leading-relaxed text-base-content/80">
-                        Para ofrecer una mayor seguridad y un control exacto de sus transacciones, los pagos directos de cuotas desde la plataforma han sido pausados temporalmente.
-                    </p>
-                </div>
-
-                <h4 class="font-bold text-xs uppercase tracking-wider opacity-60 mt-4 mb-2 flex items-center gap-1.5">
-                    <lucide-icon name="sparkles" class="w-3.5 h-3.5 text-primary"></lucide-icon>
-                    Plan de Nueva Implementación:
-                </h4>
-
-                <div class="space-y-3">
-                    <!-- Paso 1 -->
-                    <div class="flex gap-3 items-start p-3 bg-base-100 rounded-2xl border border-base-content/5 shadow-sm">
-                        <div class="w-8 h-8 rounded-full bg-primary/15 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                            1
-                        </div>
-                        <div class="text-xs space-y-1">
-                            <p class="font-bold text-base-content">Subir Comprobante y Código</p>
-                            <p class="opacity-70 leading-relaxed">
-                                Habilitaremos un formulario para subir la imagen de su depósito bancario o captura de Yape, junto con su respectivo código de verificación.
-                            </p>
-                        </div>
+            <!-- Formulario -->
+            <div class="p-6 space-y-5">
+                <!-- Método de pago -->
+                <div>
+                    <label class="label pb-1.5"><span class="label-text font-bold text-xs uppercase tracking-wider opacity-50">Método de Pago</span></label>
+                    <div class="grid grid-cols-3 gap-2">
+                        @for (metodo of ['YAPE', 'PLIN', 'TRANSFERENCIA']; track metodo) {
+                            <button type="button"
+                                    class="btn btn-sm rounded-2xl font-bold transition-all"
+                                    [ngClass]="comprobanteForm.metodoPago === metodo ? 'btn-primary shadow-md shadow-primary/20' : 'btn-ghost border border-base-content/10 hover:border-primary/40'"
+                                    (click)="comprobanteForm.metodoPago = metodo">
+                                {{ metodo }}
+                            </button>
+                        }
                     </div>
-
-                    <!-- Paso 2 -->
-                    <div class="flex gap-3 items-start p-3 bg-base-100 rounded-2xl border border-base-content/5 shadow-sm">
-                        <div class="w-8 h-8 rounded-full bg-primary/15 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                            2
-                        </div>
-                        <div class="text-xs space-y-1">
-                            <p class="font-bold text-base-content">Modo Revisión y Validación</p>
-                            <p class="opacity-70 leading-relaxed">
-                                El pago pasará a un estado de **Revisión**. Un trabajador validará la transacción en el sistema y procederá a aceptarlo o rechazarlo de manera segura.
-                            </p>
-                        </div>
+                    <!-- más opciones de método -->
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                        @for (metodo of ['DEPOSITO_BANCO', 'EFECTIVO']; track metodo) {
+                            <button type="button"
+                                    class="btn btn-sm rounded-2xl font-bold transition-all text-[11px]"
+                                    [ngClass]="comprobanteForm.metodoPago === metodo ? 'btn-primary shadow-md shadow-primary/20' : 'btn-ghost border border-base-content/10 hover:border-primary/40'"
+                                    (click)="comprobanteForm.metodoPago = metodo">
+                                {{ metodo === 'DEPOSITO_BANCO' ? 'Depósito Banco' : 'Efectivo' }}
+                            </button>
+                        }
                     </div>
                 </div>
 
-                <div class="p-4 bg-info/10 border border-info/20 text-info-content rounded-2xl mt-4 flex gap-3 items-start">
-                    <lucide-icon name="info" class="w-5 h-5 shrink-0 text-info mt-0.5"></lucide-icon>
-                    <div class="text-xs space-y-1">
-                        <p class="font-bold text-base-content">¿Cómo pago mi cuota actual?</p>
-                        <p class="opacity-85 leading-relaxed">
-                            Por favor, comuníquese directamente con su asesor de crédito o soporte para realizar su pago manualmente por transferencia/depósito.
-                        </p>
-                    </div>
+                <!-- Código de operación -->
+                <div>
+                    <label class="label pb-1.5"><span class="label-text font-bold text-xs uppercase tracking-wider opacity-50">Código / Nº de Operación</span></label>
+                    <input type="text"
+                           [(ngModel)]="comprobanteForm.numeroComprobante"
+                           name="numeroComprobante"
+                           placeholder="Ej: YPE-123456789"
+                           class="input input-bordered w-full rounded-2xl font-mono focus:input-primary transition-all"
+                           id="input-numero-comprobante">
                 </div>
-            </div>
 
-            <div class="modal-action mt-6 gap-2">
-                <button class="btn btn-ghost rounded-2xl" (click)="cerrarModalRestriccion()">Entendido</button>
-                <a href="https://wa.me/51999999999" target="_blank" class="btn btn-primary rounded-2xl gap-2 shadow-lg shadow-primary/20">
-                    <lucide-icon name="phone" class="w-4 h-4"></lucide-icon>
-                    Soporte WhatsApp
-                </a>
+                <!-- Monto declarado (editable) -->
+                <div>
+                    <label class="label pb-1.5">
+                        <span class="label-text font-bold text-xs uppercase tracking-wider opacity-50">Monto Pagado (S/)</span>
+                        <span class="label-text-alt text-xs opacity-40">Editable si hubo diferencia</span>
+                    </label>
+                    <input type="number"
+                           [(ngModel)]="comprobanteForm.monto"
+                           name="monto"
+                           step="0.01"
+                           class="input input-bordered w-full rounded-2xl font-mono focus:input-primary transition-all"
+                           id="input-monto-comprobante">
+                </div>
+
+                <!-- Zona de subida de imagen -->
+                <div>
+                    <label class="label pb-1.5"><span class="label-text font-bold text-xs uppercase tracking-wider opacity-50">Imagen del Voucher</span></label>
+                    
+                    <!-- Preview si hay imagen seleccionada -->
+                    @if (comprobantePreviewUrl()) {
+                        <div class="relative rounded-2xl overflow-hidden border-2 border-primary/30 shadow-md">
+                            <img [src]="comprobantePreviewUrl()" alt="Preview del comprobante" class="w-full max-h-48 object-contain bg-base-200">
+                            <button type="button"
+                                    class="absolute top-2 right-2 btn btn-circle btn-xs btn-error opacity-80"
+                                    (click)="comprobantePreviewUrl.set(null); comprobanteArchivo = null">
+                                <lucide-icon name="x" class="w-3 h-3"></lucide-icon>
+                            </button>
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                                <p class="text-white text-xs font-medium">✓ Imagen seleccionada</p>
+                            </div>
+                        </div>
+                    } @else {
+                        <!-- Zona de drop -->
+                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-content/20 rounded-2xl cursor-pointer bg-base-200/30 hover:bg-primary/5 hover:border-primary/40 transition-all group"
+                               (dragover)="onDragOver($event)"
+                               (drop)="onFileDrop($event)"
+                               for="file-comprobante-input">
+                            <div class="flex flex-col items-center justify-center gap-2 text-center px-4">
+                                <div class="p-3 bg-primary/10 rounded-2xl group-hover:bg-primary/20 transition-colors">
+                                    <lucide-icon name="image-plus" class="w-6 h-6 text-primary/60 group-hover:text-primary transition-colors"></lucide-icon>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-base-content/60 group-hover:text-primary transition-colors">Haz clic o arrastra aquí</p>
+                                    <p class="text-xs text-base-content/40">PNG, JPG, JPEG o PDF (máx. 5MB)</p>
+                                </div>
+                            </div>
+                            <input id="file-comprobante-input" type="file" class="hidden" accept="image/*,application/pdf" (change)="onFileSelected($event)">
+                        </label>
+                    }
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="flex gap-3 pt-2">
+                    <button type="button"
+                            class="btn btn-ghost rounded-2xl flex-1"
+                            (click)="cerrarModalSubirComprobante()"
+                            [disabled]="subiendoComprobante()">
+                        Cancelar
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary rounded-2xl flex-[2] shadow-lg shadow-primary/20 font-bold"
+                            (click)="enviarComprobante()"
+                            [disabled]="subiendoComprobante() || !comprobanteArchivo"
+                            id="btn-enviar-comprobante">
+                        @if (subiendoComprobante()) {
+                            <span class="loading loading-spinner loading-sm"></span>
+                            Enviando...
+                        } @else {
+                            <lucide-icon name="send" class="w-4 h-4 mr-1"></lucide-icon>
+                            Enviar a Revisión
+                        }
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="modal-backdrop bg-black/60 backdrop-blur-sm" (click)="cerrarModalRestriccion()"></div>
+        <div class="modal-backdrop bg-black/60 backdrop-blur-sm" (click)="cerrarModalSubirComprobante()"></div>
     </div>
 }
 
+
+<!-- ========== MODAL: REVISAR PAGO (ADMIN) ========== -->
+@if (mostrarModalRevisarPago() && cuotaSeleccionada()) {
+    <div class="modal modal-open" id="modal-revisar-pago">
+        <div class="modal-box rounded-3xl border border-base-content/10 shadow-2xl p-0 max-w-2xl overflow-hidden">
+            
+            <!-- Header -->
+            <div class="bg-gradient-to-br from-error to-error/80 p-6 text-error-content">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <lucide-icon name="scan-eye" class="w-5 h-5 opacity-80"></lucide-icon>
+                            <span class="text-xs font-bold uppercase tracking-widest opacity-70">Admin · Revisión de Pago</span>
+                        </div>
+                        <h3 class="font-extrabold text-xl">Comprobante Cuota #{{ cuotaSeleccionada()?.numeroCuota }}</h3>
+                        <p class="text-sm opacity-70 mt-1">Verifica el voucher y aprueba o rechaza el pago</p>
+                    </div>
+                    <button class="btn btn-ghost btn-circle btn-sm text-error-content/70 hover:text-error-content hover:bg-white/10"
+                            (click)="cerrarModalRevisarPago()">
+                        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Columna izquierda: datos del pago -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-xs uppercase tracking-widest opacity-40">Datos Declarados por el Cliente</h4>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">
+                            <span class="text-xs opacity-60">Monto Declarado</span>
+                            <span class="font-black text-primary text-lg">{{ cuotaSeleccionada()?.montoPagadoCliente | currency:'S/ ' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">
+                            <span class="text-xs opacity-60">Método de Pago</span>
+                            <span class="font-bold text-sm badge badge-outline">{{ cuotaSeleccionada()?.metodoPago }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">
+                            <span class="text-xs opacity-60">Nº Comprobante</span>
+                            <span class="font-mono font-bold text-sm">{{ cuotaSeleccionada()?.numeroComprobante || '—' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">
+                            <span class="text-xs opacity-60">Cuota Original</span>
+                            <span class="font-bold text-sm">{{ cuotaSeleccionada()?.totalCuota | currency:'S/ ' }}</span>
+                        </div>
+                        @if ((cuotaSeleccionada()?.interesMora || 0) > 0) {
+                            <div class="flex justify-between items-center p-3 bg-error/5 rounded-2xl border border-error/10">
+                                <span class="text-xs text-error/70">+ Mora</span>
+                                <span class="font-bold text-sm text-error">{{ cuotaSeleccionada()?.interesMora | currency:'S/ ' }}</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Botones de acción principales -->
+                    <div class="space-y-2 pt-2">
+                        <!-- Aprobar -->
+                        <button class="btn btn-success w-full rounded-2xl font-bold shadow-md shadow-success/20 gap-2"
+                                (click)="aprobarComprobante()"
+                                [disabled]="procesandoRevision()"
+                                id="btn-aprobar-comprobante">
+                            @if (procesandoRevision()) {
+                                <span class="loading loading-spinner loading-sm"></span>
+                            } @else {
+                                <lucide-icon name="check-circle-2" class="w-5 h-5"></lucide-icon>
+                            }
+                            Aprobar Pago
+                        </button>
+
+                        <!-- Toggle sección rechazo -->
+                        @if (!mostrarFormRechazo()) {
+                            <button class="btn btn-outline btn-error w-full rounded-2xl gap-2"
+                                    (click)="mostrarFormRechazo.set(true)"
+                                    [disabled]="procesandoRevision()">
+                                <lucide-icon name="x-circle" class="w-4 h-4"></lucide-icon>
+                                Rechazar Pago
+                            </button>
+                        }
+
+                        <!-- Formulario de rechazo -->
+                        @if (mostrarFormRechazo()) {
+                            <div class="space-y-2 p-4 bg-error/5 border border-error/20 rounded-2xl animate-fade-in">
+                                <label class="label py-0"><span class="label-text text-xs font-bold text-error">Motivo de rechazo</span></label>
+                                <textarea class="textarea textarea-bordered textarea-error w-full rounded-2xl text-sm resize-none"
+                                          rows="3"
+                                          placeholder="Ej: El monto del voucher no coincide con lo declarado..."
+                                          [ngModel]="comentarioRechazoInput()"
+                                          (ngModelChange)="comentarioRechazoInput.set($event)"
+                                          id="input-motivo-rechazo"></textarea>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-ghost btn-sm rounded-2xl flex-1"
+                                            (click)="mostrarFormRechazo.set(false); comentarioRechazoInput.set('')"
+                                            [disabled]="procesandoRevision()">
+                                        Cancelar
+                                    </button>
+                                    <button class="btn btn-error btn-sm rounded-2xl flex-[2] font-bold"
+                                            (click)="rechazarComprobante()"
+                                            [disabled]="procesandoRevision() || !comentarioRechazoInput().trim()"
+                                            id="btn-confirmar-rechazo">
+                                        @if (procesandoRevision()) {
+                                            <span class="loading loading-spinner loading-xs"></span>
+                                        } @else {
+                                            <lucide-icon name="x" class="w-3.5 h-3.5 mr-1"></lucide-icon>
+                                        }
+                                        Confirmar Rechazo
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Columna derecha: imagen del comprobante -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-xs uppercase tracking-widest opacity-40">Imagen del Comprobante</h4>
+                    @if (urlComprobanteRevision()) {
+                        <div class="rounded-2xl overflow-hidden border border-base-content/10 shadow-sm bg-base-200/50">
+                            <img [src]="urlComprobanteRevision()!"
+                                 alt="Comprobante de pago"
+                                 class="w-full max-h-80 object-contain bg-base-200"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="hidden flex-col items-center justify-center h-40 gap-3 text-base-content/40">
+                                <lucide-icon name="image-off" class="w-10 h-10"></lucide-icon>
+                                <p class="text-xs">No se pudo cargar la imagen</p>
+                            </div>
+                        </div>
+                        <a [href]="urlComprobanteRevision()!" target="_blank"
+                           class="btn btn-outline btn-sm w-full rounded-2xl gap-2">
+                            <lucide-icon name="external-link" class="w-4 h-4"></lucide-icon>
+                            Abrir en nueva pestaña
+                        </a>
+                    } @else {
+                        <div class="flex flex-col items-center justify-center h-48 bg-base-200/50 rounded-2xl border border-dashed border-base-content/20 gap-3">
+                            <lucide-icon name="image-off" class="w-10 h-10 text-base-content/20"></lucide-icon>
+                            <p class="text-xs opacity-40">No hay imagen adjunta</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop bg-black/70 backdrop-blur-sm" (click)="cerrarModalRevisarPago()"></div>
+    </div>
+}

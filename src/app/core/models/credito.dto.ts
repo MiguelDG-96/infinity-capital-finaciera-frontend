@@ -156,6 +156,9 @@ export interface CuotaDTO {
   metodoPago?: string;
   numeroComprobante?: string;
   observacion?: string;
+  imagenComprobante?: string;
+  montoPagadoCliente?: number;
+  comentarioRechazo?: string;
 }
 
 export interface MovimientoDTO {

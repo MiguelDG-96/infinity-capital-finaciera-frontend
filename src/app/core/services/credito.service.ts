@@ -77,6 +77,23 @@ export class CreditoService {
     return this.http.post(`${this.apiUrl}/creditos/${creditoId}/pago-anticipado`, { monto, metodoPago, numeroComprobante });
   }
 
+  registrarPagoRevision(cuotaId: number, monto: number, metodoPago: string, numeroComprobante: string, archivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('monto', monto.toString());
+    formData.append('metodoPago', metodoPago);
+    formData.append('numeroComprobante', numeroComprobante);
+    formData.append('archivo', archivo);
+    return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/registrar-pago-revision`, formData);
+  }
+
+  verificarPago(cuotaId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/verificar-pago`, {});
+  }
+
+  rechazarPago(cuotaId: number, comentarioRechazo: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/rechazar-pago`, { comentarioRechazo });
+  }
+
   obtenerCronograma(creditoId: number): Observable<Cuota[]> {
     return this.http.get<CuotaDTO[]>(`${this.apiUrl}/creditos/mis-creditos/${creditoId}/cronograma`).pipe(
       map(dtos => dtos.map(dto => CreditoMapper.toCuotaDomain(dto)))

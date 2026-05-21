@@ -40,7 +40,7 @@
           <div class="avatar">
             <div class="w-32 border-2 border-dashed border-base-content/20 p-1 ring-offset-base-100 ring-offset-2">
               @if (cliente.fotoUrl) {
-                <img [src]="'https://infiny.arqui-design.com' + cliente.fotoUrl" alt="Foto de Perfil" class="object-cover" />
+                <img [src]="baseUrl + cliente.fotoUrl" alt="Foto de Perfil" class="object-cover" />
               } @else {
                 <div class="w-full h-full bg-base-300 flex items-center justify-center text-base-content/30">
                   <lucide-icon name="user" class="w-16 h-16"></lucide-icon>

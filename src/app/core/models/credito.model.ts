@@ -114,12 +114,15 @@ export interface Cuota {
   penalidad?: number;
   comision?: number;
   seguro?: number;
-  estadoCuota: 'PENDIENTE' | 'PAGADO' | 'MORA' | 'PAGADO_PARCIAL' | 'POSTERGADA';
+  estadoCuota: 'PENDIENTE' | 'PAGADO' | 'MORA' | 'PAGADO_PARCIAL' | 'POSTERGADA' | 'REVISION';
   fechaPago?: Date;
   esGracia?: boolean;
   metodoPago?: string;
   numeroComprobante?: string;
   observacion?: string;
+  imagenComprobante?: string;
+  montoPagadoCliente?: number;
+  comentarioRechazo?: string;
 }
 
 export interface Movimiento {

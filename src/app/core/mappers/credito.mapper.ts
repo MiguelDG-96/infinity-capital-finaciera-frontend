@@ -150,7 +150,10 @@ export class CreditoMapper {
       esGracia: dto.esGracia,
       metodoPago: dto.metodoPago,
       numeroComprobante: dto.numeroComprobante,
-      observacion: dto.observacion
+      observacion: dto.observacion,
+      imagenComprobante: dto.imagenComprobante,
+      montoPagadoCliente: dto.montoPagadoCliente,
+      comentarioRechazo: dto.comentarioRechazo
     };
   }
 

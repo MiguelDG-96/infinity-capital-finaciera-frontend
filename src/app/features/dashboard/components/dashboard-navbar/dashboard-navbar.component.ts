@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { ThemeService } from '../../../../core/services/theme.service';
@@ -12,10 +12,10 @@ import { AuthService } from '../../../../core/services/auth.service';
   templateUrl: './dashboard-navbar.component.html',
   styleUrl: './dashboard-navbar.component.css',
 })
-export class DashboardNavbarComponent {
+export class DashboardNavbarComponent implements OnInit {
   constructor(
     public themeService: ThemeService,
-    private notificationService: NotificationService,
+    public notificationService: NotificationService,
     public authService: AuthService
   ) {}
 
@@ -49,5 +49,18 @@ export class DashboardNavbarComponent {
 
   onToggleNotifications() {
     this.notificationService.toggle();
+    // Recarga al abrir el panel
+    if (this.notificationService.isOpen()) {
+      this.notificationService.recargar();
+    }
+  }
+
+  ngOnInit() {
+    // Inicia el polling si es admin/trabajador
+    const rol = this.authService.currentUserData()?.rol || '';
+    const isAdmin = rol === 'ADMIN' || rol === 'TRABAJADOR';
+    if (isAdmin) {
+      this.notificationService.iniciarPolling();
+    }
   }
 }

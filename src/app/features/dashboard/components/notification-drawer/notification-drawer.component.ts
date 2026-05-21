@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+// src/app/features/dashboard/components/notification-drawer/notification-drawer.component.ts
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-notification-drawer',
@@ -10,37 +12,30 @@ import { NotificationService } from '../../../../core/services/notification.serv
   templateUrl: './notification-drawer.component.html',
   styleUrls: ['./notification-drawer.component.css']
 })
-export class NotificationDrawerComponent {
+export class NotificationDrawerComponent implements OnInit {
   notificationService = inject(NotificationService);
+  private authService = inject(AuthService);
 
-  notifications = [
-    {
-      id: 1,
-      title: 'Nuevo préstamo aprobado',
-      description: 'El préstamo para Juan Pérez ha sido aprobado exitosamente.',
-      time: 'Hace 5 min',
-      icon: 'check-circle2',
-      type: 'success'
-    },
-    {
-      id: 2,
-      title: 'Recordatorio de pago',
-      description: 'La cuota del cliente María García vence en 2 días.',
-      time: 'Hace 2 horas',
-      icon: 'calendar-clock',
-      type: 'warning'
-    },
-    {
-      id: 3,
-      title: 'Mensaje de sistema',
-      description: 'Mantenimiento programado para el domingo a las 2:00 AM.',
-      time: 'Hace 5 horas',
-      icon: 'alert-circle',
-      type: 'info'
+  get isAdmin(): boolean {
+    const rol = this.authService.currentUserData()?.rol || '';
+    return rol === 'ADMIN' || rol === 'TRABAJADOR';
+  }
+
+  ngOnInit() {
+    if (this.isAdmin) {
+      this.notificationService.iniciarPolling();
     }
-  ];
+  }
 
   close() {
     this.notificationService.close();
+  }
+
+  irAlCredito(creditoId: number) {
+    this.notificationService.irAlCredito(creditoId);
+  }
+
+  recargar() {
+    this.notificationService.recargar();
   }
 }

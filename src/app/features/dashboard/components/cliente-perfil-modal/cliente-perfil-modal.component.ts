@@ -5,6 +5,7 @@ import { Cliente } from '../../../../core/models/cliente.model';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { ReportePerfilPdfService } from '../../../../core/services/reporte-perfil-pdf.service';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-cliente-perfil-modal',
@@ -16,6 +17,8 @@ export class ClientePerfilModalComponent {
   @Input() cliente!: Cliente;
   @Output() cerrar = new EventEmitter<void>();
   @Output() fotoActualizada = new EventEmitter<void>();
+
+  baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   archivoSeleccionado = signal<File | null>(null);
   subiendo = signal(false);
