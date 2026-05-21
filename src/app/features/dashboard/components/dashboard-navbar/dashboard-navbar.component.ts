@@ -56,9 +56,9 @@ export class DashboardNavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Inicia el polling si es admin/trabajador
+    // Inicia el polling (la API ya restringe acceso a no-admins, pero evitamos llamadas innecesarias)
     const rol = this.authService.currentUserData()?.rol || '';
-    const isAdmin = rol === 'ADMIN' || rol === 'TRABAJADOR';
+    const isAdmin = rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR';
     if (isAdmin) {
       this.notificationService.iniciarPolling();
     }

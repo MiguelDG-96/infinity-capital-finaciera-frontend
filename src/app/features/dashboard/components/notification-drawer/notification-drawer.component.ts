@@ -18,7 +18,7 @@ export class NotificationDrawerComponent implements OnInit {
 
   get isAdmin(): boolean {
     const rol = this.authService.currentUserData()?.rol || '';
-    return rol === 'ADMIN' || rol === 'TRABAJADOR';
+    return rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR';
   }
 
   ngOnInit() {

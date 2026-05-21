@@ -6,6 +6,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
+import { ClienteService } from '../../../../core/services/cliente.service';
 import { SolicitudCredito } from '../../../../core/models/credito.model';
 
 @Component({
@@ -52,6 +53,7 @@ export class SolicitarCreditoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private creditoService: CreditoService,
+    private clienteService: ClienteService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -59,6 +61,7 @@ export class SolicitarCreditoComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.cargarCatalogos();
+    this.cargarPerfilCliente();
 
     // Recalcular cuota cuando cambien valores relevantes
     this.solicitudForm.valueChanges.subscribe(() => {
@@ -88,8 +91,6 @@ export class SolicitarCreditoComponent implements OnInit {
       telefono: [''],
 
       // Paso 3: Ubicación
-      departamento: ['LIMA', [Validators.required]],
-      provincia: ['LIMA', [Validators.required]],
       distrito: ['', [Validators.required]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       urbanizacion: [''],
@@ -179,6 +180,55 @@ export class SolicitarCreditoComponent implements OnInit {
     });
   }
 
+  cargarPerfilCliente(): void {
+    this.clienteService.obtenerPerfil().subscribe({
+      next: (cliente) => {
+        if (cliente) {
+          this.solicitudForm.patchValue({
+            tipoPersona: cliente.tipoPersona || 'NATURAL',
+            tipoDocumento: cliente.tipoDocumento || 'DNI',
+            numeroDocumento: cliente.numeroDocumento || '',
+            nacionalidad: cliente.nacionalidad || 'PERUANA',
+            fechaNacimiento: cliente.fechaNacimiento ? new Date(cliente.fechaNacimiento).toISOString().split('T')[0] : '',
+            estadoCivil: cliente.estadoCivil || 'SOLTERO',
+            gradoInstruccion: cliente.gradoInstruccion || 'SECUNDARIA',
+            celular: cliente.celular || '',
+            telefono: cliente.telefono || '',
+            distrito: cliente.distrito || '',
+            direccion: cliente.direccion || cliente.domicilio || '',
+            urbanizacion: cliente.urbanizacion || '',
+            manzana: cliente.manzana || '',
+            lote: cliente.lote || '',
+            codigoPostal: cliente.codigoPostal || '',
+            referencia: cliente.referencia || '',
+            situacionLaboral: cliente.situacionLaboral || 'DEPENDIENTE',
+            cargoOcupacion: cliente.cargoOcupacion || '',
+            ingresoBrutoMensual: cliente.ingresoBrutoMensual || cliente.ingresoMensual || 0,
+            fechaIngresoLaboral: cliente.fechaIngresoLaboral ? new Date(cliente.fechaIngresoLaboral).toISOString().split('T')[0] : '',
+            rucPropio: cliente.rucPropio || '',
+            empresa: cliente.empresa || '',
+            rucEmpresa: cliente.rucEmpresa || '',
+            direccionEmpresa: cliente.direccionEmpresa || '',
+            razonSocialJuridica: cliente.empresa || '',
+            rucJuridico: cliente.rucEmpresa || ''
+          });
+
+          if (cliente.conyuge) {
+            this.solicitudForm.patchValue({
+              conyugeNombre: cliente.conyuge.nombreCompleto || '',
+              conyugeDni: cliente.conyuge.dni || '',
+              conyugeOcupacion: cliente.conyuge.ocupacion || cliente.conyuge.profesion || ''
+            });
+          }
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudo cargar el perfil del cliente para autocompletar', err);
+      }
+    });
+  }
+
   cargarCatalogos(): void {
     this.creditoService.obtenerMonedasActivas().subscribe({
       next: (data) => {
@@ -234,7 +284,7 @@ export class SolicitarCreditoComponent implements OnInit {
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'cuentaDesembolso'],
       2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular'],
-      3: ['departamento', 'provincia', 'distrito', 'direccion', 'referencia'],
+      3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral'],
       5: ['terminosAceptados']
     };
@@ -272,7 +322,7 @@ export class SolicitarCreditoComponent implements OnInit {
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'cuentaDesembolso'],
       2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular', 'telefono'],
-      3: ['departamento', 'provincia', 'distrito', 'direccion', 'referencia'],
+      3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral', 'rucPropio', 'empresa', 'rucEmpresa', 'direccionEmpresa', 'razonSocialJuridica', 'rucJuridico', 'representanteLegal'],
       5: ['conyugeNombre', 'conyugeDni', 'garanteNombre', 'garanteDni', 'canalEstadoCuenta', 'terminosAceptados']
     };
