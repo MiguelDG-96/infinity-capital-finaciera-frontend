@@ -21,7 +21,7 @@ interface Slide {
 export class HeroComponent implements OnInit, OnDestroy {
   slides: Slide[] = [
     {
-      title: 'Impulsamos tu negocio hoy',
+      title: 'Impulsamos tu negocio hoy y mañana',
       subtitle: 'Créditos rápidos y asesoría personalizada para emprendedores como tú.',
       bgColor: 'bg-red-200',
       textTitleColor: 'text-red-600',
