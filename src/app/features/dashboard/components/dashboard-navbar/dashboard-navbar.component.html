@@ -13,11 +13,51 @@
   </div>
 
   <!-- Centro: Buscador -->
-  <div class="hidden max-w-xs flex-1 px-6 md:flex">
-    <label class="input input-bordered input-sm flex w-full items-center gap-2">
+  <div class="hidden max-w-md flex-1 px-6 md:flex relative">
+    <label class="input input-bordered input-sm flex w-full items-center gap-2 relative z-50">
       <lucide-icon name="search" size="16" strokeWidth="2" class="text-base-content/40"></lucide-icon>
-      <input type="text" class="grow bg-transparent text-sm outline-none" placeholder="Buscar algo..." />
+      <input 
+        type="text" 
+        [formControl]="searchControl"
+        (blur)="hideDropdown()"
+        (focus)="searchControl.value ? showDropdown.set(true) : null"
+        class="grow bg-transparent text-sm outline-none" 
+        placeholder="Buscar por cliente, DNI o ID crédito..." 
+      />
+      @if (isSearching()) {
+        <span class="loading loading-spinner loading-xs text-primary"></span>
+      }
     </label>
+
+    <!-- Dropdown de Resultados -->
+    @if (showDropdown() && searchControl.value && searchControl.value.length >= 2) {
+      <div class="absolute top-12 left-6 right-6 bg-base-100 border border-base-300 rounded-xl shadow-2xl z-40 overflow-hidden max-h-96 overflow-y-auto">
+        @if (searchResults().length > 0) {
+          <div class="p-2 text-xs font-bold text-base-content/50 uppercase tracking-wider bg-base-200/50">
+            Créditos Encontrados
+          </div>
+          <ul class="menu menu-sm bg-base-100 w-full p-2">
+            @for (credito of searchResults(); track credito.id) {
+              <li>
+                <a (click)="goToCredit(credito.id)" class="flex flex-col items-start py-2">
+                  <div class="flex justify-between w-full">
+                    <span class="font-bold text-primary">#{{ credito.id }} - {{ credito.nombreCliente }}</span>
+                    <span class="badge badge-sm badge-ghost">{{ credito.documento }}</span>
+                  </div>
+                  <div class="text-xs opacity-70 mt-1">
+                    {{ credito.tipoCredito }} • {{ credito.simboloMoneda }}{{ credito.montoCredito | number:'1.2-2' }} • <span class="font-semibold">{{ credito.estado }}</span>
+                  </div>
+                </a>
+              </li>
+            }
+          </ul>
+        } @else if (!isSearching()) {
+          <div class="p-6 text-center text-sm opacity-60">
+            No se encontraron créditos ni clientes.
+          </div>
+        }
+      </div>
+    }
   </div>
 
   <!-- Derecha: Acciones -->

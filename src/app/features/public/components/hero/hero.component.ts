@@ -27,30 +27,33 @@ export class HeroComponent implements OnInit, OnDestroy {
       textTitleColor: 'text-red-600',
       textSubtitleColor: 'text-red-900',
       image: '/hero/banner/banner-1.png'
-    },
+    }
+    /*
+    ,
     {
       title: 'Tu esfuerzo merece más capital',
       subtitle: 'Financiamiento flexible para hacer crecer tu negocio paso a paso.',
-      bgColor: 'bg-blue-200',
-      textTitleColor: 'text-blue-600',
-      textSubtitleColor: 'text-blue-900',
+      bgColor: 'bg-red-200',
+      textTitleColor: 'text-red-600',
+      textSubtitleColor: 'text-red-900',
       image: '/hero/banner/banner-2.png'
     },
     {
       title: 'Tu ahorro tiene recompensa',
       subtitle: 'Pide tu Préstamo Digital y participa por uno de nuestros ¡10 premios especiales!',
-      bgColor: 'bg-white',
-      textTitleColor: 'text-green-600',
-      textSubtitleColor: 'text-green-900',
+      bgColor: 'bg-red-200',
+      textTitleColor: 'text-red-600',
+      textSubtitleColor: 'text-red-900',
       image: '/hero/banner/banner-3.png'
     }
+    */
   ];
 
   currentSlide = signal(0);
   intervalId: any;
 
   ngOnInit() {
-    this.startAutoPlay();
+    // this.startAutoPlay(); // Comentado para que no se mueva solo
   }
 
   ngOnDestroy() {

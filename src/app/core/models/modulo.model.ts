@@ -4,4 +4,5 @@ export interface Modulo {
   nombre: string;
   ruta: string;
   descripcion: string;
+  orden?: number;
 }

@@ -422,6 +422,15 @@ export class SolicitarCreditoComponent implements OnInit {
   onSubmit(): void {
     if (this.solicitudForm.invalid) {
       this.solicitudForm.markAllAsTouched();
+      // Loggear qué campos son inválidos para saber por qué no guarda
+      const invalidControls = [];
+      const controls = this.solicitudForm.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalidControls.push(name);
+        }
+      }
+      console.warn('El formulario es inválido. Campos con errores:', invalidControls);
       return;
     }
 

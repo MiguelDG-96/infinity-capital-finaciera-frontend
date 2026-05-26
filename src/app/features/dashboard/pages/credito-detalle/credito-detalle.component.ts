@@ -47,6 +47,8 @@ export class CreditoDetalleComponent implements OnInit {
   cuotaSeleccionada = signal<Cuota | null>(null);
   pagosRestringidos = signal<boolean>(false);
   mostrarModalRestriccion = signal<boolean>(false);
+  isClienteRecurrente = signal<boolean>(false);
+  mostrarInfoCredito = signal<boolean>(false);
 
   // --- Subir Comprobante (Cliente) ---
   mostrarModalSubirComprobante = signal<boolean>(false);
@@ -61,6 +63,7 @@ export class CreditoDetalleComponent implements OnInit {
 
   // --- Revisar Comprobante (Admin) ---
   mostrarModalRevisarPago = signal<boolean>(false);
+  mostrarModalConfirmarAprobacion = signal<boolean>(false);
   procesandoRevision = signal<boolean>(false);
   comentarioRechazoInput = signal<string>('');
   mostrarFormRechazo = signal<boolean>(false);
@@ -102,6 +105,20 @@ export class CreditoDetalleComponent implements OnInit {
       next: (c) => {
         this.credito.set(c);
         this.cargando.set(false);
+        
+        // Verificar si es cliente recurrente (más de un crédito)
+        if (c.documento) {
+          const obsCartera = this.isAdminMode() 
+            ? this.creditoService.obtenerCarteraGeneral() 
+            : this.creditoService.obtenerMisCreditos();
+            
+          obsCartera.subscribe({
+            next: (cartera) => {
+              const creditosDelCliente = cartera.filter(cred => cred.documento === c.documento);
+              this.isClienteRecurrente.set(creditosDelCliente.length > 1);
+            }
+          });
+        }
       },
       error: (err) => {
         this.error.set('Error al cargar el detalle del crédito.');
@@ -224,14 +241,18 @@ export class CreditoDetalleComponent implements OnInit {
   }
 
   aprobarComprobante() {
+    this.mostrarModalConfirmarAprobacion.set(true);
+  }
+
+  ejecutarAprobacion() {
     const cuota = this.cuotaSeleccionada();
     if (!cuota) return;
-    if (!confirm(`¿Confirmas la aprobación del comprobante de la cuota #${cuota.numeroCuota}?`)) return;
 
     this.procesandoRevision.set(true);
     this.creditoService.verificarPago(cuota.id).subscribe({
       next: () => {
         this.procesandoRevision.set(false);
+        this.mostrarModalConfirmarAprobacion.set(false);
         this.mostrarModalRevisarPago.set(false);
         this.cargarDetalle(this.credito()!.id);
       },
@@ -386,5 +407,18 @@ export class CreditoDetalleComponent implements OnInit {
       case 'REVISION': return 'badge-info text-info-content';
       default: return 'badge-ghost opacity-60';
     }
+  }
+
+  getProximoVencimiento(): Date | null {
+    const c = this.credito();
+    if (!c || !c.cuotas || c.cuotas.length === 0) return null;
+    
+    // Ordenar cuotas por número para asegurar el orden cronológico
+    const cuotas = [...c.cuotas].sort((a, b) => a.numeroCuota - b.numeroCuota);
+    
+    // Encontrar la primera cuota que no esté completamente pagada
+    const proxima = cuotas.find(cuota => cuota.estadoCuota !== 'PAGADO');
+    
+    return proxima ? proxima.fechaVencimiento : null;
   }
 }

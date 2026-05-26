@@ -34,7 +34,8 @@ export class ModuloFormModalComponent {
       nombre: mod?.nombre || '',
       ruta: mod?.ruta || '',
       descripcion: mod?.descripcion || '',
-      icono: this.cleanIcon(mod?.icono)
+      icono: this.cleanIcon(mod?.icono),
+      orden: mod?.orden || null
     };
   });
 

@@ -57,6 +57,9 @@ export class DashboardSidebarComponent implements OnInit {
     this.isLoading.set(true);
     this.authService.getMisModulos().subscribe({
       next: (modulos) => {
+        // Ordenamos los módulos según el campo 'orden' (0 si no tiene)
+        modulos.sort((a, b) => (a.orden || 0) - (b.orden || 0));
+
         const items = modulos.map(m => {
           let route = this.ROUTE_MAP[m.ruta];
           

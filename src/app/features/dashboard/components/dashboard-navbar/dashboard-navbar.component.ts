@@ -1,18 +1,33 @@
-import { Component, OnInit, output } from '@angular/core';
+import { Component, OnInit, output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 import { ThemeService } from '../../../../core/services/theme.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { CreditoService } from '../../../../core/services/credito.service';
+import { Credito } from '../../../../core/models/credito.model';
 
 @Component({
   selector: 'app-dashboard-navbar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, ReactiveFormsModule],
   templateUrl: './dashboard-navbar.component.html',
   styleUrl: './dashboard-navbar.component.css',
 })
 export class DashboardNavbarComponent implements OnInit {
+  private router = inject(Router);
+  private creditoService = inject(CreditoService);
+
+  searchControl = new FormControl('');
+  searchResults = signal<Credito[]>([]);
+  isSearching = signal(false);
+  showDropdown = signal(false);
+
   constructor(
     public themeService: ThemeService,
     public notificationService: NotificationService,
@@ -49,18 +64,56 @@ export class DashboardNavbarComponent implements OnInit {
 
   onToggleNotifications() {
     this.notificationService.toggle();
-    // Recarga al abrir el panel
     if (this.notificationService.isOpen()) {
       this.notificationService.recargar();
     }
   }
 
   ngOnInit() {
-    // Inicia el polling (la API ya restringe acceso a no-admins, pero evitamos llamadas innecesarias)
     const rol = this.authService.currentUserData()?.rol || '';
     const isAdmin = rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR';
     if (isAdmin) {
       this.notificationService.iniciarPolling();
+
+      // Configurar buscador
+      this.searchControl.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+          if (!term || term.trim().length < 2) {
+            this.showDropdown.set(false);
+            this.searchResults.set([]);
+            return of([]);
+          }
+          this.isSearching.set(true);
+          this.showDropdown.set(true);
+          const searchTerm = term.toLowerCase().trim();
+          
+          return this.creditoService.obtenerCarteraGeneral().pipe(
+            map(creditos => {
+              return creditos.filter(c => 
+                c.id.toString() === searchTerm ||
+                (c.nombreCliente && c.nombreCliente.toLowerCase().includes(searchTerm)) ||
+                (c.documento && c.documento.includes(searchTerm))
+              ).slice(0, 6); // Limitar a 6 resultados
+            }),
+            catchError(() => of([]))
+          );
+        })
+      ).subscribe(results => {
+        this.searchResults.set(results);
+        this.isSearching.set(false);
+      });
     }
+  }
+
+  goToCredit(creditoId: number) {
+    this.showDropdown.set(false);
+    this.searchControl.setValue('', { emitEvent: false });
+    this.router.navigate(['/dashboard/admin/cartera', creditoId]);
+  }
+
+  hideDropdown() {
+    setTimeout(() => this.showDropdown.set(false), 200);
   }
 }

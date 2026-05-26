@@ -147,29 +147,31 @@
                 <h3 class="font-black text-lg">{{ editandoUsuario() ? 'Editar Trabajador' : 'Nuevo Trabajador' }}</h3>
             </div>
             <div class="p-6 space-y-4">
-                <div class="form-control w-full">
-                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Nombre Completo</span></label>
-                    <input type="text" [(ngModel)]="usuarioForm.nombreCompleto" class="input input-bordered rounded-xl bg-base-200/50" placeholder="Ej: Maria Lopez">
+                <div class="form-control w-full flex flex-col items-start">
+                    <label class="mb-2"><span class="label-text font-bold text-xs uppercase opacity-50">Nombre Completo</span></label>
+                    <input type="text" [(ngModel)]="usuarioForm.nombreCompleto" class="input input-bordered rounded-xl bg-base-200/50 w-full" placeholder="Ej: Maria Lopez">
                 </div>
-                <div class="form-control w-full">
-                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Email</span></label>
-                    <input type="email" [(ngModel)]="usuarioForm.email" class="input input-bordered rounded-xl bg-base-200/50" placeholder="usuario@empresa.com">
+                <div class="form-control w-full flex flex-col items-start">
+                    <label class="mb-2"><span class="label-text font-bold text-xs uppercase opacity-50">Email</span></label>
+                    <input type="email" [(ngModel)]="usuarioForm.email" class="input input-bordered rounded-xl bg-base-200/50 w-full" placeholder="usuario@empresa.com">
                 </div>
-                <div class="form-control w-full">
-                    <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Rol en la Empresa</span></label>
-                    <select [(ngModel)]="usuarioForm.rolId" class="select select-bordered rounded-xl bg-base-200/50">
+                <div class="form-control w-full flex flex-col items-start">
+                    <label class="mb-2"><span class="label-text font-bold text-xs uppercase opacity-50">Rol en la Empresa</span></label>
+                    <select [(ngModel)]="usuarioForm.rolId" class="select select-bordered rounded-xl w-full">
                         <option value="0" disabled>Seleccionar Rol</option>
                         @for (rol of rolesParaUsuarios(); track rol.id) {
                             <option [value]="rol.id">{{ rol.nombre }}</option>
                         }
                     </select>
                 </div>
-                @if (!editandoUsuario()) {
-                    <div class="form-control w-full">
-                        <label class="label"><span class="label-text font-bold text-xs uppercase opacity-50">Contraseña Temporal</span></label>
-                        <input type="password" [(ngModel)]="usuarioForm.contrasena" class="input input-bordered rounded-xl bg-base-200/50" placeholder="••••••••">
-                    </div>
-                }
+                <div class="form-control w-full flex flex-col items-start">
+                    <label class="mb-2">
+                        <span class="label-text font-bold text-xs uppercase opacity-50">
+                            {{ editandoUsuario() ? 'Nueva Contraseña (Opcional)' : 'Contraseña Temporal' }}
+                        </span>
+                    </label>
+                    <input type="password" [(ngModel)]="usuarioForm.contrasena" class="input input-bordered rounded-xl bg-base-200/50 w-full" [placeholder]="editandoUsuario() ? 'Dejar en blanco para no cambiar' : '••••••••'">
+                </div>
             </div>
             <div class="modal-action p-6 pt-0">
                 <button class="btn btn-ghost rounded-xl" (click)="mostrarModalUsuario.set(false)">Cancelar</button>

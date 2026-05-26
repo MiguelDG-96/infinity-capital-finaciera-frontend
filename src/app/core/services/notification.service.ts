@@ -53,7 +53,10 @@ export class NotificationService {
     // Luego cada 60 segundos
     this.pollingSubscription = interval(60_000).pipe(
       switchMap(() => this.fetchPagos())
-    ).subscribe(data => this._pagosEnRevision.set(data));
+    ).subscribe(data => {
+      this.verificarYNotificar(data);
+      this._pagosEnRevision.set(data);
+    });
   }
 
   detenerPolling() {
@@ -72,7 +75,46 @@ export class NotificationService {
   }
 
   private fetchAndUpdate() {
-    this.fetchPagos().subscribe(data => this._pagosEnRevision.set(data));
+    this.fetchPagos().subscribe(data => {
+      this.verificarYNotificar(data);
+      this._pagosEnRevision.set(data);
+    });
+  }
+
+  private verificarYNotificar(newData: PagoRevisionItem[]) {
+    const currentLength = this._pagosEnRevision().length;
+    // Reproducir sonido solo si hay nuevas notificaciones (más de las que ya teníamos)
+    if (newData.length > currentLength && currentLength >= 0) {
+      this.playNotificationSound();
+    }
+  }
+
+  private playNotificationSound() {
+    try {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      
+      const ctx = new AudioContextClass();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      // Sonido tipo "campanita" / "ding"
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // Nota A5
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // Sube rápido a A6
+      
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      console.warn('Audio play failed', e);
+    }
   }
 
   private fetchPagos() {

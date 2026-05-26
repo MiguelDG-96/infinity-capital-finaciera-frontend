@@ -1,6 +1,11 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom, LOCALE_ID } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import localeEsPE from '@angular/common/locales/es-PE';
+
+registerLocaleData(localeEsPE, 'es-PE');
+
 import { 
   LucideAngularModule, Search, MapPin, User, Lock, PiggyBank, CreditCard, Banknote, 
   Shield, BarChart3, BarChart, RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, 
@@ -24,6 +29,7 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: LOCALE_ID, useValue: 'es-PE' },
     provideCharts(withDefaultRegisterables()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withInMemoryScrolling({ 
