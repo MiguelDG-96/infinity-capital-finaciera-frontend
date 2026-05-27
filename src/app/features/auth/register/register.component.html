@@ -137,20 +137,52 @@
             </div>
           }
 
-          <!-- Nombre Completo -->
+          <!-- Nombres -->
           <div class="flex flex-col gap-1.5">
             <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
-              Nombre completo
+              Nombres *
             </label>
             <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
               <lucide-icon name="user" size="16" class="text-base-content/30"></lucide-icon>
               <input 
                 type="text" 
-                formControlName="nombreCompleto"
+                formControlName="nombres"
                 class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
-                placeholder="Ej. Juan Pérez" 
+                placeholder="Ej. Juan Pablo" 
               />
             </label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Apellido Paterno -->
+            <div class="flex flex-col gap-1.5">
+              <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+                Ape. Paterno *
+              </label>
+              <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+                <input 
+                  type="text" 
+                  formControlName="apellidoPaterno"
+                  class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                  placeholder="Ej. Pérez" 
+                />
+              </label>
+            </div>
+
+            <!-- Apellido Materno -->
+            <div class="flex flex-col gap-1.5">
+              <label class="px-1 text-sm font-black tracking-widest text-base-content/55">
+                Ape. Materno
+              </label>
+              <label class="input input-bordered flex h-11 w-full items-center gap-3 bg-base-200/20 px-4 transition-all duration-200 focus-within:border-primary focus-within:outline-none">
+                <input 
+                  type="text" 
+                  formControlName="apellidoMaterno"
+                  class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
+                  placeholder="Ej. Silva" 
+                />
+              </label>
+            </div>
           </div>
 
           <!-- Email -->

@@ -137,6 +137,10 @@ export class CreditoService {
     );
   }
 
+  crearCreditoDirecto(request: any): Observable<SolicitudCreditoResponseDTO> {
+    return this.http.post<SolicitudCreditoResponseDTO>(`${this.apiUrl}/creditos/admin/directo`, request);
+  }
+
   desembolsarCredito(creditoId: number): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/desembolsar/${creditoId}`, {});
   }

@@ -1,0 +1,471 @@
+<!-- src/app/features/dashboard/pages/admin-crear-credito/admin-crear-credito.component.html -->
+<div class="p-4 md:p-8 space-y-8 animate-fade-in max-w-5xl mx-auto relative">
+
+  <!-- Toast de Éxito -->
+  <div class="toast toast-top toast-center z-[100] animate-bounce-subtle" *ngIf="exito">
+    <div role="alert" class="alert alert-success shadow-2xl">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current text-success-content" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="font-bold text-success-content">{{ mensajeExito }}</span>
+    </div>
+  </div>
+  <!-- Header -->
+  <div class="flex items-center gap-4">
+    <button class="btn btn-circle btn-ghost" routerLink="/dashboard/admin/cartera">
+      <lucide-icon name="arrow-left" class="w-6 h-6"></lucide-icon>
+    </button>
+    <div>
+      <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Nuevo Crédito Directo</h1>
+      <p class="text-sm opacity-50 font-medium">Registro manual de clientes (desde Excel o ventanilla)</p>
+    </div>
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="space-y-8">
+
+    <!-- 1. Datos Personales -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+      <div class="bg-base-200/50 px-6 py-4 border-b border-base-content/5 flex items-center gap-3">
+        <lucide-icon name="user" class="w-5 h-5 text-primary"></lucide-icon>
+        <h2 class="font-bold uppercase tracking-widest text-sm">1. Datos Personales</h2>
+      </div>
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Tipo Persona *</span></label>
+          <select formControlName="tipoPersona" class="select select-bordered bg-base">
+            <option value="NATURAL">NATURAL</option>
+            <option value="JURIDICA">JURÍDICA</option>
+          </select>
+        </div>
+
+        <ng-container *ngIf="formulario.get('tipoPersona')?.value === 'JURIDICA'">
+          <div class="form-control md:col-span-2">
+            <label class="label"><span class="label-text font-bold">Razón Social Jurídica *</span></label>
+            <input type="text" formControlName="razonSocialJuridica" class="input input-bordered bg-base-200/30" />
+          </div>
+          <div class="form-control">
+            <label class="label"><span class="label-text font-bold">RUC Jurídico *</span></label>
+            <input type="text" formControlName="rucJuridico" class="input input-bordered bg-base-200/30" />
+          </div>
+          <div class="form-control md:col-span-2">
+            <label class="label"><span class="label-text font-bold">Representante Legal *</span></label>
+            <input type="text" formControlName="representanteLegal" class="input input-bordered bg-base-200/30" />
+          </div>
+        </ng-container>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Tipo Documento *</span></label>
+          <select formControlName="tipoDocumento" class="select select-bordered bg-base">
+            <option value="DNI">DNI</option>
+            <option value="CE">Carnet Extranjería</option>
+            <option value="PASAPORTE">Pasaporte</option>
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Número Documento *</span></label>
+          <input type="text" formControlName="numeroDocumento" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: 12345678" (input)="soloNumeros($event, 'numeroDocumento')" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Nombres *</span></label>
+          <input type="text" formControlName="nombres" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: Juan Pablo" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Apellido Paterno *</span></label>
+          <input type="text" formControlName="apellidoPaterno" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: Perez" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Apellido Materno</span></label>
+          <input type="text" formControlName="apellidoMaterno" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: Silva (Opcional)" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Correo Electrónico</span></label>
+          <input type="email" formControlName="email" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional (se autogenera)" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Fecha Nacimiento</span></label>
+          <input type="date" formControlName="fechaNacimiento" class="input input-bordered bg-base-200/30" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Celular</span></label>
+          <input type="text" formControlName="celular" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" (input)="soloNumeros($event, 'celular')" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Teléfono Fijo</span></label>
+          <input type="text" formControlName="telefono" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Nacionalidad</span></label>
+          <input type="text" formControlName="nacionalidad" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Estado Civil</span></label>
+          <select formControlName="estadoCivil" class="select select-bordered bg-base">
+            <option value="">Seleccione...</option>
+            <option value="SOLTERO">Soltero(a)</option>
+            <option value="CASADO">Casado(a)</option>
+            <option value="VIUDO">Viudo(a)</option>
+            <option value="DIVORCIADO">Divorciado(a)</option>
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">N° Dependientes</span></label>
+          <input type="number" formControlName="numeroDependientes" class="input input-bordered bg-base-200/30"
+            min="0" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Grado Instrucción</span></label>
+          <input type="text" formControlName="gradoInstruccion" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. Ubicación y Residencia -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+      <div class="bg-base-200/50 px-6 py-4 border-b border-base-content/5 flex items-center gap-3">
+        <lucide-icon name="map-pin" class="w-5 h-5 text-secondary"></lucide-icon>
+        <h2 class="font-bold uppercase tracking-widest text-sm">2. Ubicación y Domicilio</h2>
+      </div>
+      <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Departamento</span></label>
+          <input type="text" formControlName="departamento" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Provincia</span></label>
+          <input type="text" formControlName="provincia" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Distrito</span></label>
+          <input type="text" formControlName="distrito" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" />
+        </div>
+
+        <div class="form-control md:col-span-2 w-full">
+          <label class="label"><span class="label-text font-bold">Dirección Completa</span></label>
+          <input type="text" formControlName="direccion"
+            class="input input-bordered bg-base-200/30 w-full" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Urbanización</span></label>
+          <input type="text" formControlName="urbanizacion" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Manzana (Mz)</span></label>
+          <input type="text" formControlName="manzana" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Lote (Lt)</span></label>
+          <input type="text" formControlName="lote" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Código Postal</span></label>
+          <input type="text" formControlName="codigoPostal" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control md:col-span-2 w-full">
+          <label class="label"><span class="label-text font-bold">Referencia</span></label>
+          <input type="text" formControlName="referencia" class="input input-bordered bg-base-200/30 w-full" placeholder="Opcional" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. Situación Laboral -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+      <div class="bg-base-200/50 px-6 py-4 border-b border-base-content/5 flex items-center gap-3">
+        <lucide-icon name="briefcase" class="w-5 h-5 text-accent"></lucide-icon>
+        <h2 class="font-bold uppercase tracking-widest text-sm">3. Situación Laboral</h2>
+      </div>
+      <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Situación Laboral</span></label>
+          <select formControlName="situacionLaboral" class="select select-bordered bg-base">
+            <option value="DEPENDIENTE">DEPENDIENTE</option>
+            <option value="INDEPENDIENTE">INDEPENDIENTE</option>
+          </select>
+        </div>
+
+        <ng-container *ngIf="formulario.get('situacionLaboral')?.value === 'DEPENDIENTE'">
+          <div class="form-control">
+            <label class="label"><span class="label-text font-bold">Empresa</span></label>
+            <input type="text" formControlName="empresa" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          </div>
+          <div class="form-control">
+            <label class="label"><span class="label-text font-bold">RUC Empresa</span></label>
+            <input type="text" formControlName="rucEmpresa" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          </div>
+          <div class="form-control">
+            <label class="label"><span class="label-text font-bold">Dirección Empresa</span></label>
+            <input type="text" formControlName="direccionEmpresa" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="formulario.get('situacionLaboral')?.value === 'INDEPENDIENTE'">
+          <div class="form-control">
+            <label class="label"><span class="label-text font-bold">RUC Propio</span></label>
+            <input type="text" formControlName="rucPropio" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          </div>
+        </ng-container>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Cargo / Ocupación</span></label>
+          <input type="text" formControlName="cargoOcupacion" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Fecha Ingreso Laboral</span></label>
+          <input type="date" formControlName="fechaIngresoLaboral" class="input input-bordered bg-base-200/30" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Ingreso Mensual Fijo S/</span></label>
+          <input type="number" formControlName="ingresoMensual" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Ingreso Bruto Mensual S/</span></label>
+          <input type="number" formControlName="ingresoBrutoMensual" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 4. Cónyuge y Garante -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+      <div class="bg-base-200/50 px-6 py-4 border-b border-base-content/5 flex items-center gap-3">
+        <lucide-icon name="users" class="w-5 h-5 text-warning"></lucide-icon>
+        <h2 class="font-bold uppercase tracking-widest text-sm">4. Cónyuge y Garante</h2>
+      </div>
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="col-span-full">
+          <h3 class="font-bold text-base-content/60 border-b border-base-content/10 pb-2 mb-2">Datos del Cónyuge (Opcional)</h3>
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Nombre Completo</span></label>
+          <input type="text" formControlName="conyugeNombre" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">DNI</span></label>
+          <input type="text" formControlName="conyugeDni" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Ocupación</span></label>
+          <input type="text" formControlName="conyugeOcupacion" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+        <div class="col-span-full mt-4">
+          <h3 class="font-bold text-base-content/60 border-b border-base-content/10 pb-2 mb-2">Datos del Garante (Opcional)</h3>
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Nombre Completo</span></label>
+          <input type="text" formControlName="garanteNombre" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">DNI</span></label>
+          <input type="text" formControlName="garanteDni" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Teléfono</span></label>
+          <input type="text" formControlName="garanteTelefono" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 5. Condiciones del Crédito -->
+    <div class="card bg-base-100 shadow-xl border border-primary/20 overflow-hidden rounded-3xl">
+      <div class="bg-primary/5 px-6 py-4 border-b border-primary/10 flex items-center gap-3">
+        <lucide-icon name="wallet" class="w-5 h-5 text-primary"></lucide-icon>
+        <h2 class="font-bold uppercase tracking-widest text-sm text-primary">5. Datos del Crédito</h2>
+      </div>
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Monto *</span></label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-50 font-bold">S/</span>
+            <input type="number" formControlName="montoSolicitado"
+              class="input input-bordered bg-base-200/30 w-full pl-10" placeholder="Ej: 5000" />
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Plazo (Meses) *</span></label>
+          <input type="number" formControlName="plazoMeses" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: 12" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Tipo de Crédito *</span></label>
+          <select formControlName="tipoCreditoId" class="select select-bordered bg-base">
+            <option value="">Seleccione...</option>
+            @for (tc of tiposCredito; track tc.id) {
+            <option [value]="tc.id">{{ tc.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Periodo Gracia</span></label>
+          <input type="number" formControlName="periodoGracia" class="input input-bordered bg-base-200/30"
+            placeholder="Ej: 0" />
+        </div>
+
+        <div class="form-control md:col-span-2">
+          <label class="label"><span class="label-text font-bold">Cuenta de Desembolso (CCI)</span></label>
+          <input type="text" formControlName="cuentaDesembolso" class="input input-bordered bg-base-200/30 w-full"
+            placeholder="Opcional" (input)="soloNumeros($event, 'cuentaDesembolso')" />
+        </div>
+
+        <div class="form-control md:col-span-2">
+          <label class="label"><span class="label-text font-bold">Envío de Estado de Cuenta</span></label>
+          <select formControlName="canalEstadoCuenta" class="select select-bordered bg-base">
+            <option value="EMAIL">Correo Electrónico (Recomendado)</option>
+            <option value="WHATSAPP">WhatsApp</option>
+            <option value="FISICO">Físico a Domicilio</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Action Footer -->
+      <div
+        class="bg-base-200/30 p-6 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-base-content/5">
+
+        <div class="flex items-center gap-4 w-full md:w-auto overflow-x-auto">
+          <button type="button" class="btn btn-ghost text-error/70 hover:bg-error/10 hover:text-error" (click)="limpiarFormulario()" title="Limpiar Formulario">
+             <lucide-icon name="trash-2" class="w-5 h-5"></lucide-icon>
+             <span class="hidden sm:inline">Limpiar</span>
+          </button>
+
+          <div
+            class="form-control flex-row items-center gap-4 bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20 whitespace-nowrap">
+            <input type="checkbox" formControlName="desembolsarAutomaticamente" class="toggle toggle-primary toggle-lg shrink-0" />
+            <div>
+              <span class="label-text font-bold block text-primary">Desembolso Automático</span>
+              <span class="text-xs opacity-60">Genera el cronograma hoy.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <!-- Botón de Simulación -->
+          <button type="button" class="btn btn-outline btn-primary" (click)="abrirModalCronograma()">
+            <lucide-icon name="calculator" class="w-5 h-5"></lucide-icon>
+            Simular Cronograma
+          </button>
+
+          <button type="submit" class="btn btn-primary flex-1 md:flex-none md:w-48 shadow-xl shadow-primary/30"
+            [disabled]="formulario.invalid || cargando">
+            @if (cargando) {
+            <span class="loading loading-spinner"></span> Procesando...
+            } @else {
+            <lucide-icon name="check-circle" class="w-5 h-5"></lucide-icon>
+            Registrar Crédito
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Modal de Simulación de Cronograma -->
+<dialog id="modal_cronograma" class="modal">
+  <div class="modal-box w-11/12 max-w-4xl bg-base-100 rounded-3xl">
+    <div class="flex justify-between items-center mb-6 border-b border-base-content/10 pb-4">
+      <h3 class="font-bold text-xl flex items-center gap-2">
+        <lucide-icon name="calendar" class="w-6 h-6 text-primary"></lucide-icon>
+        Simulación de Cronograma
+      </h3>
+      <button class="btn btn-sm btn-circle btn-ghost" (click)="cerrarModal()">✕</button>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Monto A PAGAR</span>
+        <span class="text-lg font-black text-primary">S/ {{ montoTotalSimulado | number:'1.2-2' }}</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Interés Total</span>
+        <span class="text-lg font-black text-error">S/ {{ interesTotalSimulado | number:'1.2-2' }}</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Tasa Mensual (TEM)</span>
+        <span class="text-lg font-black">{{ tasaSimulada }}%</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Plazo</span>
+        <span class="text-lg font-black">{{ formulario.value.plazoMeses }} meses</span>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-base-content/10 max-h-[60vh]">
+      <table class="table table-zebra table-pin-rows table-sm w-full">
+        <thead>
+          <tr class="bg-base-200 text-base-content">
+            <th class="font-bold">N°</th>
+            <th class="font-bold">Fecha</th>
+            <th class="font-bold text-center">Capital</th>
+            <th class="font-bold text-center">Interés</th>
+            <th class="font-bold text-center text-primary">Cuota Mensual</th>
+            <th class="font-bold text-center">Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cuota of cuotasSimuladas; track cuota.numero) {
+          <tr class="hover:bg-base-200/50 transition-colors">
+            <td class="font-medium">{{ cuota.numero }}</td>
+            <td>{{ cuota.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center">S/ {{ cuota.capital | number:'1.2-2' }}</td>
+            <td class="text-center text-error/80">S/ {{ cuota.interes | number:'1.2-2' }}</td>
+            <td class="text-center font-bold text-primary">S/ {{ cuota.total | number:'1.2-2' }}</td>
+            <td class="text-center text-base-content/70">S/ {{ cuota.saldo | number:'1.2-2' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-action mt-6 pt-4 border-t border-base-content/10">
+      <button class="btn btn-primary" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="cerrarModal()">cerrar</button>
+  </form>
+</dialog>

@@ -39,6 +39,7 @@ export const routes: Routes = [
       // Rutas de Administrador
       { path: 'admin/solicitudes', loadComponent: () => import('./features/dashboard/pages/admin-solicitudes/admin-solicitudes.component').then(m => m.AdminSolicitudesComponent) },
       { path: 'admin/cartera', loadComponent: () => import('./features/dashboard/pages/admin-cartera/admin-cartera.component').then(m => m.AdminCarteraComponent) },
+      { path: 'admin/cartera/nuevo', loadComponent: () => import('./features/dashboard/pages/admin-crear-credito/admin-crear-credito.component').then(m => m.AdminCrearCreditoComponent) },
       { path: 'admin/cartera/:id', loadComponent: () => import('./features/dashboard/pages/credito-detalle/credito-detalle.component').then(m => m.CreditoDetalleComponent) },
       { path: 'admin/tasas', loadComponent: () => import('./features/dashboard/pages/gestion-tasas/gestion-tasas.component').then(m => m.GestionTasasComponent) },
       { path: 'admin/modulos', loadComponent: () => import('./features/dashboard/pages/admin-modulos/admin-modulos.component').then(m => m.AdminModulosComponent) },

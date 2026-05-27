@@ -46,7 +46,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ];
   
   registerForm = this.fb.group({
-    nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
+    nombres: ['', [Validators.required, Validators.minLength(2)]],
+    apellidoPaterno: ['', [Validators.required, Validators.minLength(2)]],
+    apellidoMaterno: [''],
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9+]{8,15}$/)]],
     contrasena: ['', [Validators.required, Validators.minLength(6)]],
@@ -94,7 +96,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.errorMessage.set(null);
 
       const request = {
-        nombreCompleto: this.registerForm.value.nombreCompleto!,
+        nombres: this.registerForm.value.nombres!,
+        apellidoPaterno: this.registerForm.value.apellidoPaterno!,
+        apellidoMaterno: this.registerForm.value.apellidoMaterno || '',
         email: this.registerForm.value.email!,
         telefono: this.registerForm.value.telefono!,
         contrasena: this.registerForm.value.contrasena!

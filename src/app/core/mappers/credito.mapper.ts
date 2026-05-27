@@ -184,19 +184,16 @@ export class CreditoMapper {
       tem: dto.tem || dto.tasaAprobada,
       fechaSolicitud: dto.fechaSolicitud ? this.parseLocalDate(dto.fechaSolicitud) : (dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : new Date()),
       cliente: dto.cliente ? {
+          // Spread ALL fields from the DTO client object so nothing is lost
+          ...(dto.cliente as any),
+          // Override / normalize key fields
           id: (dto.cliente as any).id || 0,
           nombre: dto.cliente.usuario?.nombreCompleto || 'Cliente Desconocido',
           tipoDocumento: dto.cliente.tipoDocumento,
           numeroDocumento: dto.cliente.numeroDocumento,
-          domicilio: (dto.cliente as any).domicilio || dto.cliente.numeroDocumento,
+          domicilio: (dto.cliente as any).domicilio || (dto.cliente as any).direccion || '',
           usuario: dto.cliente.usuario,
-          fotoUrl: (dto.cliente as any).fotoUrl,
-          telefono: (dto.cliente as any).telefono,
-          celular: (dto.cliente as any).celular,
-          estadoCivil: (dto.cliente as any).estadoCivil,
-          situacionLaboral: (dto.cliente as any).situacionLaboral,
-          cargoOcupacion: (dto.cliente as any).cargoOcupacion,
-          estado: 'ACTIVO'
+          estado: (dto.cliente as any).estado || 'ACTIVO',
       } as any : undefined,
       garantes: dto.garantes || []
     };

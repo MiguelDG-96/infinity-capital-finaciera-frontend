@@ -1,199 +1,295 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
-import { Cliente } from '../models/cliente.model';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportePerfilPdfService {
-  private datePipe = new DatePipe('en-US');
+  private datePipe = new DatePipe('es-PE');
 
   constructor() {}
 
-  async generarReporte(cliente: Cliente) {
+  /** Formatea fechaNacimiento que puede llegar como array, string o Date */
+  private formatDate(val: any): string {
+    if (!val) return '--';
+    if (Array.isArray(val)) {
+      const [y, m, d] = val;
+      return `${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}`;
+    }
+    const str = String(val).trim();
+    // YYYY-MM-DD
+    const m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+    return str;
+  }
+
+  private fmt(val: any, prefix = ''): string {
+    if (val === null || val === undefined || val === '') return '--';
+    return prefix + String(val);
+  }
+
+  private fmtMoney(val: any): string {
+    const n = parseFloat(val);
+    if (isNaN(n) || n === 0) return '--';
+    return `S/ ${n.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  async generarReporte(cliente: any) {
+    // Merge datosSolicitud into a flat object
+    let extra: any = {};
+    if (cliente.datosSolicitud && typeof cliente.datosSolicitud === 'string') {
+      try { extra = JSON.parse(cliente.datosSolicitud); } catch (e) {}
+    }
+    const c = { ...extra, ...cliente }; // real columns win over JSON
+
+    // Normalize date after merge
+    if (Array.isArray(c.fechaNacimiento)) {
+      const [y, mo, d] = c.fechaNacimiento;
+      c.fechaNacimiento = `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    // Pre-load client photo
+    const baseUrl = 'https://servicio.infiny-capital.com';
+    let fotoDataUrl = '';
+    if (c.fotoUrl) {
+      try { fotoDataUrl = await this.imageUrlToDataURL(baseUrl + c.fotoUrl); } catch (e) {}
+    }
+
     const doc = new jsPDF();
     const margin = 20;
+    const pageW = 190;
     let y = 20;
 
-    // Intentar convertir SVG a PNG para compatibilidad
+    // ── Logo + header ──────────────────────────────────────────
+    const primary: [number,number,number] = [185, 28, 28];
+
     let logoDataUrl = '';
-    try {
-      logoDataUrl = await this.svgToDataURL('/logo/logo-red.svg', 100, 100);
-    } catch (e) {}
-
-    // Colores corporativos (Rojo)
-    const primary = [185, 28, 28]; // #B91C1C
-    const textGray = [156, 163, 175]; // text-base-content/40
-
-    // Encabezado Limpio (estilo Sidebar)
-    // Logo y Nombre (Replicando Sidebar)
+    try { logoDataUrl = await this.svgToDataURL('/logo/logo-red.svg', 100, 100); } catch (e) {}
     if (logoDataUrl) {
       doc.addImage(logoDataUrl, 'PNG', margin, 10, 15, 15);
     } else {
-      // Fallback si falla el SVG
-      doc.setFillColor(primary[0], primary[1], primary[2]);
+      doc.setFillColor(...primary);
       doc.rect(margin, 10, 12, 12, 'F');
     }
 
-    doc.setTextColor(primary[0], primary[1], primary[2]);
+    doc.setTextColor(...primary);
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
     doc.text('InfinyCapital', margin + 18, 18);
-    
-    // Badge "Servicios financieros"
-    doc.setFillColor(primary[0], primary[1], primary[2]);
+
+    doc.setFillColor(...primary);
     doc.rect(margin + 18, 20.5, 38, 4, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(7);
-    doc.setFont('helvetica', 'bold');
     doc.text('SERVICIOS FINANCIEROS', margin + 19, 23.5);
 
-    // Fecha a la derecha
     doc.setTextColor(150, 150, 150);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Fecha: ${this.datePipe.transform(new Date(), 'dd/MM/yyyy HH:mm')}`, 145, 18);
+    doc.text(`Generado: ${this.datePipe.transform(new Date(), 'dd/MM/yyyy HH:mm')}`, 145, 18);
 
-    // Línea divisoria elegante
+    doc.setDrawColor(220, 220, 220);
+    doc.line(margin, 33, 190, 33);
+
+    y = 42;
+
+    // ── Foto del cliente (esquina derecha del encabezado) ───────
+    // Se dibuja un círculo/cuadro con la foto a la derecha
+    const photoSize = 28;
+    const photoX = 190 - photoSize; // alineado a la derecha
+    const photoY = 36;
+    if (fotoDataUrl) {
+      // Marco circular con borde rojo
+      doc.setDrawColor(...primary);
+      doc.setLineWidth(0.8);
+      doc.rect(photoX, photoY, photoSize, photoSize, 'S');
+      doc.addImage(fotoDataUrl, 'JPEG', photoX + 0.5, photoY + 0.5, photoSize - 1, photoSize - 1);
+    } else {
+      // Placeholder si no hay foto
+      doc.setFillColor(245, 245, 245);
+      doc.rect(photoX, photoY, photoSize, photoSize, 'F');
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(photoX, photoY, photoSize, photoSize, 'S');
+      doc.setTextColor(180, 180, 180);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.text('SIN FOTO', photoX + photoSize / 2, photoY + photoSize / 2 + 1, { align: 'center' });
+    }
+
+    // Nombre grande (deja margen a la derecha para la foto)
+    const nombreCompleto = (c.usuario?.nombreCompleto || c.nombre || `${c.nombres || ''} ${c.apellidoPaterno || ''} ${c.apellidoMaterno || ''}`.trim() || 'CLIENTE').toUpperCase();
+    doc.setTextColor(...primary);
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    // Limitar ancho del nombre para que no choque con la foto
+    const nombreLines = doc.splitTextToSize(nombreCompleto, 140);
+    doc.text(nombreLines, margin, y);
+    y += nombreLines.length * 6;
+
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${c.tipoDocumento || 'DNI'}: ${c.numeroDocumento || '--'}  |  Estado: ${c.estado || 'ACTIVO'}`, margin, y);
+    y += 4;
     doc.setDrawColor(230, 230, 230);
-    doc.line(margin, 35, 190, 35);
+    doc.line(margin, y, 190, y);
+    // Aseguramos que y no quede dentro del área de la foto
+    y = Math.max(y + 8, photoY + photoSize + 6);
 
-    y = 50;
+    // ── 1. DATOS PERSONALES ─────────────────────────────────────
+    this.seccion(doc, '1. DATOS PERSONALES', y, primary); y += 10;
+    y = this.grid(doc, [
+      ['Tipo de Persona',    this.fmt(c.tipoPersona)],
+      ['Nombres',           this.fmt(c.nombres)],
+      ['Apellido Paterno',  this.fmt(c.apellidoPaterno)],
+      ['Apellido Materno',  this.fmt(c.apellidoMaterno)],
+      ['Tipo Documento',    this.fmt(c.tipoDocumento)],
+      ['Nro. Documento',    this.fmt(c.numeroDocumento)],
+      ['Fecha Nacimiento',  this.formatDate(c.fechaNacimiento)],
+      ['Estado Civil',      this.fmt(c.estadoCivil)],
+      ['Grado Instrucción', this.fmt(c.gradoInstruccion)],
+      ['Nro. Dependientes', this.fmt(c.numeroDependientes)],
+      ['Nacionalidad',      this.fmt(c.nacionalidad)],
+      ['Celular',           this.fmt(c.celular)],
+      ['Teléfono',          this.fmt(c.telefono)],
+      ['Correo',            this.fmt(c.usuario?.email)],
+      ['Vive Casa Propia',  c.viveCasaPropia === true ? 'Sí' : (c.viveCasaPropia === false ? 'No' : '--')],
+      ['Canal Edo. Cuenta', this.fmt(c.canalEstadoCuenta)],
+      ['Contacto Familiar', this.fmt(c.contactoFamiliarNombre)],
+      ['Cel. Familiar',     this.fmt(c.contactoFamiliarCelular)],
+      ['Límite Crédito',    this.fmtMoney(c.limiteCredito)],
+    ], y, doc);
 
-    // 1. INFORMACIÓN PERSONAL
-    this.dibujarSeccion(doc, '1. INFORMACIÓN PERSONAL Y DE IDENTIDAD', y, primary);
-    y += 10;
-    
-    const datosPersonales = [
-      ['Nombre Completo:', cliente.nombre],
-      ['Documento:', `${cliente.tipoDocumento || 'DNI'} ${cliente.numeroDocumento}`],
-      ['Fecha de Nacimiento:', this.datePipe.transform(cliente.fechaNacimiento, 'dd/MM/yyyy') || '--'],
-      ['Estado Civil:', cliente.estadoCivil || '--'],
-      ['Nacionalidad:', cliente.nacionalidad || 'PERUANA'],
-      ['Grado Instrucción:', cliente.gradoInstruccion || '--'],
-      ['Celular:', cliente.celular || '--'],
-      ['Teléfono Fijo:', cliente.telefono || '--'],
-      ['Correo:', cliente.usuario?.email || '--']
-    ];
-    y = this.dibujarGrid(doc, datosPersonales, y);
-
-    // Contacto Familiar y Vivienda
-    y += 5;
-    const datosAdicionales = [
-      ['Contacto Familiar:', cliente.contactoFamiliarNombre || '--'],
-      ['Celular Familiar:', cliente.contactoFamiliarCelular || '--'],
-      ['Tipo de Vivienda:', cliente.viveCasaPropia ? 'CASA PROPIA' : 'ALQUILADA / OTRO'],
-      ['Estado en Sistema:', cliente.estado],
-      ['Límite de Crédito:', `S/ ${(cliente.limiteCredito || 0).toLocaleString('es-PE')}`]
-    ];
-    y = this.dibujarGrid(doc, datosAdicionales, y);
-
-    // 2. INFORMACIÓN LABORAL
-    y += 15;
-    this.dibujarSeccion(doc, '2. SITUACIÓN ECONÓMICA Y LABORAL', y, primary);
-    y += 10;
-    
-    const datosLaborales = [
-      ['Situación Laboral:', cliente.situacionLaboral || '--'],
-      ['Empresa:', cliente.empresa || '--'],
-      ['Cargo / Ocupación:', cliente.cargoOcupacion || '--'],
-      ['RUC Empresa:', cliente.rucEmpresa || '--'],
-      ['Ingreso Mensual:', `S/ ${(cliente.ingresoMensual || 0).toLocaleString('es-PE')}`],
-      ['Dirección Empresa:', cliente.direccionEmpresa || '--'],
-      ['Teléfono Empresa:', cliente.telefonoEmpresa || '--']
-    ];
-    y = this.dibujarGrid(doc, datosLaborales, y);
-
-    // 3. UBICACIÓN Y DOMICILIO
-    y += 15;
-    this.dibujarSeccion(doc, '3. UBICACIÓN Y DOMICILIO', y, primary);
-    y += 10;
-
-    let extra: any = {};
-    if (cliente.datosSolicitud) {
-        try { extra = JSON.parse(cliente.datosSolicitud); } catch (e) {}
+    // ── 2. PERSONA JURÍDICA (solo si aplica) ────────────────────
+    if (c.tipoPersona === 'JURIDICA') {
+      y += 8; this.seccion(doc, '2. DATOS JURÍDICOS', y, primary); y += 10;
+      y = this.grid(doc, [
+        ['Razón Social',       this.fmt(c.razonSocialJuridica)],
+        ['RUC Jurídico',       this.fmt(c.rucJuridico)],
+        ['Representante Legal',this.fmt(c.representanteLegal)],
+      ], y, doc);
     }
 
-    const datosUbicacion = [
-      ['Dirección / Domicilio:', cliente.domicilio || cliente.direccion || '--'],
-      ['Departamento:', cliente.departamento || extra.departamento || '--'],
-      ['Provincia:', cliente.provincia || extra.provincia || '--'],
-      ['Distrito:', cliente.distrito || extra.distrito || '--'],
-      ['Urbanización:', cliente.urbanizacion || extra.urbanizacion || '--'],
-      ['MZ / Lote:', `MZ: ${cliente.manzana || extra.manzana || '--'} - LT: ${cliente.lote || extra.lote || '--'}`],
-      ['Referencia:', cliente.referencia || extra.referencia || '--']
-    ];
-    y = this.dibujarGrid(doc, datosUbicacion, y);
+    // ── 3. SITUACIÓN LABORAL ────────────────────────────────────
+    y += 8; this.seccion(doc, '3. SITUACIÓN LABORAL', y, primary); y += 10;
+    y = this.grid(doc, [
+      ['Situación Laboral',   this.fmt(c.situacionLaboral)],
+      ['Empresa',             this.fmt(c.empresa)],
+      ['Cargo / Ocupación',   this.fmt(c.cargoOcupacion)],
+      ['RUC Empresa',         this.fmt(c.rucEmpresa)],
+      ['RUC Propio',          this.fmt(c.rucPropio)],
+      ['Fecha Ingreso Lab.',  this.fmt(c.fechaIngresoLaboral)],
+      ['Ingreso Mensual',     this.fmtMoney(c.ingresoMensual)],
+      ['Ingreso Bruto Mens.', this.fmtMoney(c.ingresoBrutoMensual)],
+      ['Otros Ingresos',      this.fmtMoney(c.otrosIngresos)],
+      ['Tipo de Renta',       this.fmt(c.tipoRenta)],
+      ['Nombre Negocio',      this.fmt(c.nombrePropioNegocio)],
+      ['Dir. Empresa',        this.fmt(c.direccionEmpresa)],
+      ['Telef. Empresa',      this.fmt(c.telefonoEmpresa)],
+    ], y, doc);
 
-    // 4. INFORMACIÓN DEL CÓNYUGE
-    if (cliente.conyuge) {
-        y += 15;
-        if (y > 250) { doc.addPage(); y = 20; }
-        this.dibujarSeccion(doc, '4. INFORMACIÓN DEL CÓNYUGE', y, primary);
-        y += 10;
-        
-        const datosConyuge = [
-          ['Nombre Completo:', cliente.conyuge.nombreCompleto],
-          ['DNI:', cliente.conyuge.dni],
-          ['Celular:', cliente.conyuge.telefono || '--'],
-          ['Ocupación:', cliente.conyuge.ocupacion || '--'],
-          ['Ingresos Mensuales:', `S/ ${(cliente.conyuge.ingresosMensuales || 0).toLocaleString('es-PE')}`],
-          ['Dirección:', cliente.conyuge.direccion || '--']
-        ];
-        y = this.dibujarGrid(doc, datosConyuge, y);
+    // ── 4. UBICACIÓN Y DOMICILIO ────────────────────────────────
+    y += 8; this.seccion(doc, '4. UBICACIÓN Y DOMICILIO', y, primary); y += 10;
+    y = this.grid(doc, [
+      ['Dirección / Domicilio', this.fmt(c.domicilio || c.direccion)],
+      ['Departamento',          this.fmt(c.departamento)],
+      ['Provincia',             this.fmt(c.provincia)],
+      ['Distrito',              this.fmt(c.distrito)],
+      ['Urbanización',          this.fmt(c.urbanizacion)],
+      ['Manzana',               this.fmt(c.manzana)],
+      ['Lote',                  this.fmt(c.lote)],
+      ['Código Postal',         this.fmt(c.codigoPostal)],
+      ['Referencia',            this.fmt(c.referencia)],
+    ], y, doc);
+
+    // ── 5. CÓNYUGE ──────────────────────────────────────────────
+    if (c.conyuge) {
+      y += 8; this.seccion(doc, '5. INFORMACIÓN DEL CÓNYUGE', y, primary); y += 10;
+      y = this.grid(doc, [
+        ['Nombre Completo',   this.fmt(c.conyuge.nombreCompleto)],
+        ['DNI',               this.fmt(c.conyuge.dni)],
+        ['Celular',           this.fmt(c.conyuge.telefono)],
+        ['Ocupación',         this.fmt(c.conyuge.ocupacion)],
+        ['Ingresos Mensuales',this.fmtMoney(c.conyuge.ingresosMensuales)],
+        ['Dirección',         this.fmt(c.conyuge.direccion)],
+      ], y, doc);
     }
 
-    // Pie de página
+    // ── Pie de página ───────────────────────────────────────────
     const pageCount = (doc as any).internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text(`InfinyCapital - Reporte Confidencial - Página ${i} de ${pageCount}`, 105, 285, { align: 'center' });
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`InfinyCapital - Reporte Confidencial - Página ${i} de ${pageCount}`, 105, 287, { align: 'center' });
     }
 
-    doc.save(`Perfil_Cliente_${cliente.numeroDocumento}.pdf`);
+    doc.save(`Perfil_${c.numeroDocumento || 'cliente'}.pdf`);
   }
 
-  private dibujarSeccion(doc: jsPDF, titulo: string, y: number, color: number[]) {
+  private seccion(doc: jsPDF, titulo: string, y: number, color: [number,number,number]) {
+    if (y > 265) { doc.addPage(); y = 20; }
     doc.setFillColor(245, 245, 245);
     doc.rect(20, y - 5, 170, 7, 'F');
-    doc.setTextColor(color[0], color[1], color[2]);
-    doc.setFontSize(10);
+    doc.setTextColor(...color);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.text(titulo, 25, y);
   }
 
-  private dibujarGrid(doc: jsPDF, data: string[][], startY: number): number {
-    let currentY = startY;
-    doc.setFontSize(9);
+  /** Two-column grid: left col 20–90, right col 100–190 */
+  private grid(doc: jsPDF, rows: [string, string][], startY: number, _doc: jsPDF): number {
+    let y = startY;
+    doc.setFontSize(8);
+
+    for (let i = 0; i < rows.length; i += 2) {
+      if (y > 272) { doc.addPage(); y = 20; }
+
+      // Left cell
+      this.cell(doc, rows[i][0], rows[i][1], 20, y);
+
+      // Right cell (if exists)
+      if (i + 1 < rows.length) {
+        this.cell(doc, rows[i + 1][0], rows[i + 1][1], 105, y);
+      }
+
+      y += 8;
+    }
+    return y;
+  }
+
+  private cell(doc: jsPDF, label: string, value: string, x: number, y: number) {
+    const colW = 80;
+    doc.setTextColor(120, 120, 120);
+    doc.setFont('helvetica', 'bold');
+    doc.text(label.toUpperCase(), x, y);
+
+    doc.setTextColor(30, 30, 30);
     doc.setFont('helvetica', 'normal');
-    
-    data.forEach((row, index) => {
-        if (currentY > 275) {
-            doc.addPage();
-            currentY = 20;
+    const split = doc.splitTextToSize(value, colW);
+    doc.text(split, x, y + 4);
+  }
+
+  private imageUrlToDataURL(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 200;
+        canvas.height = img.naturalHeight || 200;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL('image/jpeg', 0.9));
+        } else {
+          reject('Canvas context not available');
         }
-        
-        // Label
-        doc.setTextColor(100, 100, 100);
-        doc.setFont('helvetica', 'bold');
-        doc.text(row[0], 25, currentY);
-        
-        // Value
-        doc.setTextColor(0, 0, 0);
-        doc.setFont('helvetica', 'normal');
-        
-        // Manejar texto largo (wrapping)
-        const textValue = String(row[1]);
-        const splitValue = doc.splitTextToSize(textValue, 100);
-        doc.text(splitValue, 70, currentY);
-        
-        currentY += (splitValue.length * 5) + 1;
+      };
+      img.onerror = () => reject('Error loading image: ' + url);
+      img.src = url;
     });
-    
-    return currentY;
   }
 
   private svgToDataURL(url: string, width: number, height: number): Promise<string> {

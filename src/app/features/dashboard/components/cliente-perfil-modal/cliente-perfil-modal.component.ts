@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { Cliente } from '../../../../core/models/cliente.model';
@@ -13,10 +13,12 @@ import { environment } from '../../../../../environments/environment';
   imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './cliente-perfil-modal.component.html'
 })
-export class ClientePerfilModalComponent {
+export class ClientePerfilModalComponent implements OnChanges {
   @Input() cliente!: Cliente;
   @Output() cerrar = new EventEmitter<void>();
   @Output() fotoActualizada = new EventEmitter<void>();
+
+  clienteView: any = {};
 
   baseUrl = environment.apiUrl.replace('/api/v1', '');
 
@@ -34,8 +36,37 @@ export class ClientePerfilModalComponent {
     private reportePdfService: ReportePerfilPdfService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cliente'] && this.cliente) {
+      this.clienteView = { ...this.cliente };
+
+      // Merge extra fields from datosSolicitud JSON (these never overwrite real columns)
+      if (this.cliente.datosSolicitud && typeof this.cliente.datosSolicitud === 'string') {
+        try {
+          const extra = JSON.parse(this.cliente.datosSolicitud);
+          // Only copy keys that are not already set on clienteView (JSON is fallback)
+          Object.keys(extra).forEach(key => {
+            if (this.clienteView[key] === undefined || this.clienteView[key] === null || this.clienteView[key] === '') {
+              this.clienteView[key] = extra[key];
+            }
+          });
+        } catch (e) {
+          console.warn('Error parsing datosSolicitud', e);
+        }
+      }
+
+      // Normalize Java LocalDate array [YYYY, MM, DD] → "YYYY-MM-DD" string
+      // This must run AFTER the JSON merge because both sources can carry this field
+      const fn = this.clienteView.fechaNacimiento;
+      if (Array.isArray(fn)) {
+        const [year, month, day] = fn;
+        this.clienteView.fechaNacimiento = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+    }
+  }
+
   imprimirPerfil() {
-    this.reportePdfService.generarReporte(this.cliente);
+    this.reportePdfService.generarReporte(this.clienteView);
   }
 
   setTab(tab: 'personal' | 'laboral' | 'ubicacion' | 'conyuge') {
@@ -73,25 +104,8 @@ export class ClientePerfilModalComponent {
   }
 
   activarEdicion() {
-    const data = { ...this.cliente };
+    const data = { ...this.clienteView };
     
-    // Parsear datosSolicitud si existe para facilitar la edición de campos de ubicación
-    if (data.datosSolicitud) {
-      try {
-        const extra = JSON.parse(data.datosSolicitud);
-        data.departamento = data.departamento || extra.departamento;
-        data.provincia = data.provincia || extra.provincia;
-        data.distrito = data.distrito || extra.distrito;
-        data.urbanizacion = data.urbanizacion || extra.urbanizacion;
-        data.manzana = data.manzana || extra.manzana;
-        data.lote = data.lote || extra.lote;
-        data.codigoPostal = data.codigoPostal || extra.codigoPostal;
-        data.referencia = data.referencia || extra.referencia;
-        data.nacionalidad = data.nacionalidad || extra.nacionalidad;
-        data.gradoInstruccion = data.gradoInstruccion || extra.gradoInstruccion;
-      } catch (e) {}
-    }
-
     if (!data.conyuge) {
       data.conyuge = { nombreCompleto: '', dni: '' };
     }

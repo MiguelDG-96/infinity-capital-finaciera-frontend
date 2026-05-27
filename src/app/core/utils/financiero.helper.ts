@@ -27,6 +27,8 @@ export class FinancieroHelper {
     const nTotal = plazo;
     const nAmortizacion = nTotal - gracia;
     
+    const redondear = (val: number) => Math.round(val * 10) / 10;
+
     let cuotaAmortizacion = 0;
     if (nAmortizacion > 0) {
       if (i === 0) {
@@ -34,14 +36,15 @@ export class FinancieroHelper {
       } else {
         cuotaAmortizacion = monto * (i * Math.pow(1 + i, nAmortizacion)) / (Math.pow(1 + i, nAmortizacion) - 1);
       }
+      cuotaAmortizacion = redondear(cuotaAmortizacion);
     }
 
     const cuotas: CuotaSimulada[] = [];
-    let saldo = monto;
+    let saldo = redondear(monto);
     const fechaBase = new Date();
 
     for (let k = 1; k <= nTotal; k++) {
-      const interesMes = saldo * i;
+      const interesMes = redondear(saldo * i);
       let capitalMes = 0;
       let totalMes = 0;
 
@@ -49,13 +52,15 @@ export class FinancieroHelper {
         capitalMes = 0;
         totalMes = interesMes;
       } else {
-        capitalMes = cuotaAmortizacion - interesMes;
+        capitalMes = redondear(cuotaAmortizacion - interesMes);
         // Ajuste en la última cuota para evitar residuos de redondeo
         if (k === nTotal) {
           capitalMes = saldo;
+          totalMes = redondear(capitalMes + interesMes);
+        } else {
+          totalMes = cuotaAmortizacion;
         }
-        totalMes = cuotaAmortizacion;
-        saldo -= capitalMes;
+        saldo = redondear(saldo - capitalMes);
       }
 
       const fechaVencimiento = new Date(fechaBase);

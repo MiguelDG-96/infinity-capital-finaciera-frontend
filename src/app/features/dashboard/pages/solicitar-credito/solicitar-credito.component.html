@@ -92,13 +92,13 @@
             <div class="flex justify-between items-center">
               <span class="text-xs text-base-content/60">Cuota Mensual</span>
               <span class="text-lg font-black text-accent"
-                >{{ getSimboloMoneda() }} {{ cuotaEstimada }}</span
+                >{{ getSimboloMoneda() }} {{ cuotaEstimada | number:'1.2-2' }}</span
               >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-xs text-base-content/60">Total a Pagar</span>
               <span class="text-xs font-bold text-base-content"
-                >{{ getSimboloMoneda() }} {{ totalPagar }}</span
+                >{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span
               >
             </div>
             <div class="flex justify-between items-center">
@@ -923,7 +923,18 @@
               <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
               Anterior
             </button>
-            <div class="flex-1"></div>
+            <div class="flex-1">
+              <button
+                type="button"
+                (click)="limpiarFormulario()"
+                *ngIf="!exito"
+                class="px-4 py-2 text-xs rounded-lg font-bold text-error/60 hover:bg-error/10 hover:text-error transition-all flex items-center gap-2 ml-2"
+                title="Limpiar Formulario y Borrar Autoguardado"
+              >
+                <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+                <span class="hidden sm:inline">Limpiar Todo</span>
+              </button>
+            </div>
             <button
               type="button"
               (click)="nextStep()"
@@ -991,13 +1002,13 @@
                 <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-tight">
                   Cuota {{ cuota.esGracia ? ' (Gracia)' : '' }}
                 </p>
-                <p class="text-xs font-black">{{ getSimboloMoneda() }} {{ cuota.total }}</p>
+                <p class="text-xs font-black">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}</p>
               </div>
             </div>
             <div class="text-right">
               <p class="text-[8px] text-base-content/40 uppercase font-bold mb-0.5">Interés</p>
               <p class="text-[10px] font-bold text-primary">
-                {{ getSimboloMoneda() }} {{ cuota.interes }}
+                {{ getSimboloMoneda() }} {{ cuota.interes | number:'1.2-2' }}
               </p>
             </div>
           </div>
@@ -1014,10 +1025,82 @@
             <span class="text-[10px] font-black text-accent uppercase tracking-widest"
               >Interés Total</span
             >
-            <span class="text-sm font-black">{{ getSimboloMoneda() }} {{ totalInteres }}</span>
+            <span class="text-sm font-black">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
           </div>
         </div>
+
+        <button *ngIf="cronogramaSimulado.length > 0" type="button" class="btn btn-outline btn-primary w-full mt-4" (click)="abrirModalCronograma()">
+            <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+            Ver Tabla Completa
+        </button>
+
       </div>
     </aside>
   </div>
 </div>
+
+<!-- Modal de Simulación de Cronograma (Solicitante) -->
+<dialog id="modal_cronograma_solicitante" class="modal">
+  <div class="modal-box w-11/12 max-w-4xl bg-base-100 rounded-3xl text-base-content">
+    <div class="flex justify-between items-center mb-6 border-b border-base-content/10 pb-4">
+      <h3 class="font-bold text-xl flex items-center gap-2">
+        <lucide-icon name="calendar" class="w-6 h-6 text-primary"></lucide-icon>
+        Simulación de Cronograma
+      </h3>
+      <button class="btn btn-sm btn-circle btn-ghost" (click)="cerrarModalCronograma()">✕</button>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Monto a Pagar</span>
+        <span class="text-lg font-black text-primary">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Interés Total</span>
+        <span class="text-lg font-black text-error">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Tasa Mensual (TEM)</span>
+        <span class="text-lg font-black">{{ temSeleccionada }}%</span>
+      </div>
+      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Plazo</span>
+        <span class="text-lg font-black">{{ solicitudForm.get('plazoMeses')?.value }} meses</span>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-base-content/10 max-h-[60vh]">
+      <table class="table table-zebra table-pin-rows table-sm w-full">
+        <thead>
+          <tr class="bg-base-200 text-base-content">
+            <th class="font-bold">N°</th>
+            <th class="font-bold">Fecha</th>
+            <th class="font-bold text-right">Capital</th>
+            <th class="font-bold text-right">Interés</th>
+            <th class="font-bold text-right text-primary">Total Cuota</th>
+            <th class="font-bold text-right">Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cuota of cronogramaSimulado; track cuota.numero) {
+          <tr class="hover:bg-base-200/50 transition-colors" [class.bg-warning]="cuota.esGracia" [class.bg-opacity-10]="cuota.esGracia">
+            <td class="font-medium">{{ cuota.numero }} <span *ngIf="cuota.esGracia" class="text-[10px] uppercase text-warning ml-1">(Gracia)</span></td>
+            <td>{{ cuota.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="text-right">{{ getSimboloMoneda() }} {{ cuota.capital | number:'1.2-2' }}</td>
+            <td class="text-right text-error/80">{{ getSimboloMoneda() }} {{ cuota.interes | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-primary">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}</td>
+            <td class="text-right text-base-content/70">{{ getSimboloMoneda() }} {{ cuota.saldo | number:'1.2-2' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-action mt-6 pt-4 border-t border-base-content/10">
+      <button class="btn btn-primary" (click)="cerrarModalCronograma()">Entendido</button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="cerrarModalCronograma()">cerrar</button>
+  </form>
+</dialog>

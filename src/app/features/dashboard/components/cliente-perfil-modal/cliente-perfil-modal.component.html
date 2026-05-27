@@ -15,7 +15,7 @@
         </div>
         <div>
             <h3 class="font-black text-2xl tracking-tight">Perfil del Cliente</h3>
-            <p class="text-xs font-bold opacity-40 uppercase tracking-widest">{{ cliente.tipoDocumento }} {{ cliente.numeroDocumento }}</p>
+            <p class="text-xs font-bold opacity-40 uppercase tracking-widest">{{ clienteView.tipoDocumento }} {{ clienteView.numeroDocumento }}</p>
         </div>
       </div>
     </div>
@@ -39,8 +39,8 @@
         <div class="col-span-1 flex flex-col items-center gap-4">
           <div class="avatar">
             <div class="w-32 border-2 border-dashed border-base-content/20 p-1 ring-offset-base-100 ring-offset-2">
-              @if (cliente.fotoUrl) {
-                <img [src]="baseUrl + cliente.fotoUrl" alt="Foto de Perfil" class="object-cover" />
+              @if (clienteView.fotoUrl) {
+                <img [src]="baseUrl + clienteView.fotoUrl" alt="Foto de Perfil" class="object-cover" />
               } @else {
                 <div class="w-full h-full bg-base-300 flex items-center justify-center text-base-content/30">
                   <lucide-icon name="user" class="w-16 h-16"></lucide-icon>
@@ -128,44 +128,77 @@
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Nombre Completo</p>
-                      <p class="font-black text-sm">{{ cliente.nombre }}</p>
+                      <p class="font-black text-sm">{{ clienteView.nombre }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Identidad</p>
-                      <p class="font-black text-sm">{{ cliente.tipoDocumento }} {{ cliente.numeroDocumento }}</p>
+                      <p class="font-black text-sm">{{ clienteView.tipoDocumento }} {{ clienteView.numeroDocumento }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Fecha Nacimiento</p>
-                      <p class="font-black text-sm">{{ cliente.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Estado Civil</p>
-                      <p class="font-black text-sm">{{ cliente.estadoCivil || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.estadoCivil || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Grado Instrucción</p>
+                      <p class="font-black text-sm">{{ clienteView.gradoInstruccion || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">N° Dependientes</p>
+                      <p class="font-black text-sm">{{ clienteView.numeroDependientes !== undefined && clienteView.numeroDependientes !== null ? clienteView.numeroDependientes : '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Celular / Teléfono</p>
-                      <p class="font-black text-sm">{{ cliente.celular || cliente.telefono || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.celular || clienteView.telefono || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Nacionalidad</p>
-                      <p class="font-black text-sm">{{ cliente.nacionalidad || 'Peruana' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.nacionalidad || 'Peruana' }}</p>
                     </div>
+                    
+                    @if (clienteView.tipoPersona === 'JURIDICA') {
+                      <div class="sm:col-span-2 divider opacity-10 my-0"></div>
+                      <div class="sm:col-span-2">
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Razón Social</p>
+                        <p class="font-black text-sm">{{ clienteView.razonSocialJuridica || '--' }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">RUC Jurídico</p>
+                        <p class="font-black text-sm">{{ clienteView.rucJuridico || '--' }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Representante Legal</p>
+                        <p class="font-black text-sm">{{ clienteView.representanteLegal || '--' }}</p>
+                      </div>
+                    }
+
                     <div class="sm:col-span-2 divider opacity-10 my-0"></div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Contacto Familiar</p>
-                      <p class="font-black text-sm">{{ cliente.contactoFamiliarNombre || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.contactoFamiliarNombre || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Celular Familiar</p>
-                      <p class="font-black text-sm">{{ cliente.contactoFamiliarCelular || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.contactoFamiliarCelular || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Límite Crédito</p>
-                      <p class="font-black text-sm text-info">{{ (cliente.limiteCredito || 0) | currency:'S/ ' }}</p>
+                      <p class="font-black text-sm text-info">{{ (clienteView.limiteCredito || 0) | currency:'S/ ' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Estado Sistema</p>
-                      <p class="font-black text-sm" [class.text-success]="cliente.estado === 'ACTIVO'" [class.text-error]="cliente.estado !== 'ACTIVO'">{{ cliente.estado }}</p>
+                      <p class="font-black text-sm" [class.text-success]="clienteView.estado === 'ACTIVO'" [class.text-error]="clienteView.estado !== 'ACTIVO'">{{ clienteView.estado }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Vive Casa Propia</p>
+                      <p class="font-black text-sm">{{ clienteView.viveCasaPropia ? 'Sí' : (clienteView.viveCasaPropia === false ? 'No' : '--') }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Estado de Cuenta</p>
+                      <p class="font-black text-sm">{{ clienteView.canalEstadoCuenta || '--' }}</p>
                     </div>
                   </div>
                 }
@@ -175,31 +208,56 @@
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div class="sm:col-span-2">
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Situación Laboral</p>
-                      <p class="font-black text-sm">{{ cliente.situacionLaboral || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.situacionLaboral || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Empresa</p>
-                      <p class="font-black text-sm">{{ cliente.empresa || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.empresa || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">RUC Empresa</p>
-                      <p class="font-black text-sm">{{ cliente.rucEmpresa || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.rucEmpresa || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Cargo / Ocupación</p>
-                      <p class="font-black text-sm">{{ cliente.cargoOcupacion || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.cargoOcupacion || '--' }}</p>
                     </div>
                     <div>
-                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Ingreso Mensual</p>
-                      <p class="font-black text-sm text-success">{{ (cliente.ingresoMensual || 0) | currency:'S/ ' }}</p>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Ingreso Mensual Neto</p>
+                      <p class="font-black text-sm text-success">{{ (clienteView.ingresoMensual || 0) | currency:'S/ ' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Ingreso Bruto Mensual</p>
+                      <p class="font-black text-sm text-success">{{ (clienteView.ingresoBrutoMensual || 0) | currency:'S/ ' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">RUC Propio (Independiente)</p>
+                      <p class="font-black text-sm">{{ clienteView.rucPropio || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Fecha Ingreso Laboral</p>
+                      <p class="font-black text-sm">{{ (clienteView.fechaIngresoLaboral | date:'dd/MM/yyyy') || '--' }}</p>
                     </div>
                     <div class="sm:col-span-2">
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Dirección Trabajo</p>
-                      <p class="font-black text-sm">{{ cliente.direccionEmpresa || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.direccionEmpresa || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Teléfono Empresa</p>
-                      <p class="font-black text-sm">{{ cliente.telefonoEmpresa || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.telefonoEmpresa || '--' }}</p>
+                    </div>
+                    <div class="sm:col-span-2 divider opacity-10 my-0"></div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Nombre Propio Negocio</p>
+                      <p class="font-black text-sm">{{ clienteView.nombrePropioNegocio || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Tipo de Renta</p>
+                      <p class="font-black text-sm">{{ clienteView.tipoRenta || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Otros Ingresos</p>
+                      <p class="font-black text-sm text-success">{{ (clienteView.otrosIngresos || 0) | currency:'S/ ' }}</p>
                     </div>
                   </div>
                 }
@@ -209,62 +267,66 @@
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div class="sm:col-span-2">
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Dirección / Domicilio</p>
-                      <p class="font-black text-sm">{{ cliente.domicilio || cliente.direccion || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.domicilio || clienteView.direccion || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Departamento</p>
-                      <p class="font-black text-sm">{{ cliente.departamento || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.departamento || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Provincia</p>
-                      <p class="font-black text-sm">{{ cliente.provincia || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.provincia || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Distrito</p>
-                      <p class="font-black text-sm">{{ cliente.distrito || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.distrito || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Urb. / Sector</p>
-                      <p class="font-black text-sm">{{ cliente.urbanizacion || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.urbanizacion || '--' }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">MZ / Lote</p>
-                      <p class="font-black text-sm">MZ: {{ cliente.manzana || '--' }} - LT: {{ cliente.lote || '--' }}</p>
+                      <p class="font-black text-sm">MZ: {{ clienteView.manzana || '--' }} - LT: {{ clienteView.lote || '--' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Código Postal</p>
+                      <p class="font-black text-sm">{{ clienteView.codigoPostal || '--' }}</p>
                     </div>
                     <div class="sm:col-span-2">
                       <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Referencia</p>
-                      <p class="font-black text-sm">{{ cliente.referencia || '--' }}</p>
+                      <p class="font-black text-sm">{{ clienteView.referencia || '--' }}</p>
                     </div>
                   </div>
                 }
 
                 <!-- Tab Cónyuge -->
                 @if (tabActiva() === 'conyuge') {
-                  @if (cliente.conyuge) {
+                  @if (clienteView.conyuge) {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div class="sm:col-span-2">
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Nombre Cónyuge</p>
-                        <p class="font-black text-sm">{{ cliente.conyuge.nombreCompleto }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.nombreCompleto }}</p>
                       </div>
                       <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">DNI</p>
-                        <p class="font-black text-sm">{{ cliente.conyuge.dni }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.dni }}</p>
                       </div>
                       <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Celular</p>
-                        <p class="font-black text-sm">{{ cliente.conyuge.telefono || '--' }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.telefono || '--' }}</p>
                       </div>
                       <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Ocupación / Profesión</p>
-                        <p class="font-black text-sm">{{ cliente.conyuge.ocupacion || cliente.conyuge.profesion || '--' }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.ocupacion || clienteView.conyuge.profesion || '--' }}</p>
                       </div>
                       <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Ingresos Mensuales</p>
-                        <p class="font-black text-sm text-success">{{ (cliente.conyuge.ingresosMensuales || 0) | currency:'S/ ' }}</p>
+                        <p class="font-black text-sm text-success">{{ (clienteView.conyuge.ingresosMensuales || 0) | currency:'S/ ' }}</p>
                       </div>
                       <div class="sm:col-span-2">
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Dirección / Empresa</p>
-                        <p class="font-black text-sm">{{ cliente.conyuge.direccion || cliente.conyuge.empresa || '--' }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.direccion || clienteView.conyuge.empresa || '--' }}</p>
                       </div>
                     </div>
                   } @else {

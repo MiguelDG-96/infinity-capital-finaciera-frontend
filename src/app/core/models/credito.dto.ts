@@ -1,5 +1,13 @@
 // src/app/core/models/credito.dto.ts
 
+export interface CreditoDirectoRequestDTO extends SolicitudCreditoRequestDTO {
+  nombres?: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  email?: string;
+  desembolsarAutomaticamente?: boolean;
+}
+
 export interface SolicitudCreditoRequestDTO {
   // Datos del documento de identidad del cliente
   tipoDocumento: string;

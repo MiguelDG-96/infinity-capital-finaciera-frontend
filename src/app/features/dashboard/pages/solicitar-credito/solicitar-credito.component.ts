@@ -8,6 +8,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { SolicitudCredito } from '../../../../core/models/credito.model';
+import { FinancieroHelper } from '../../../../core/utils/financiero.helper';
 
 @Component({
   selector: 'app-solicitar-credito',
@@ -22,6 +23,7 @@ export class SolicitarCreditoComponent implements OnInit {
   enviando = false;
   error = '';
   exito = false;
+  private readonly DRAFT_KEY = 'draft_solicitar_credito';
 
   // Multi-step logic
   currentStep = 1;
@@ -61,12 +63,67 @@ export class SolicitarCreditoComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.cargarCatalogos();
+    // Primero cargamos perfil del cliente
     this.cargarPerfilCliente();
 
-    // Recalcular cuota cuando cambien valores relevantes
-    this.solicitudForm.valueChanges.subscribe(() => {
+    // Luego recuperamos el borrador (si existe) y lo sobreescribimos
+    this.cargarBorrador();
+
+    // Recalcular cuota cuando cambien valores relevantes y guardar borrador
+    this.solicitudForm.valueChanges.subscribe((val) => {
       this.calcularCuota();
+      this.guardarBorrador(val);
     });
+  }
+
+  private guardarBorrador(data: any): void {
+    try {
+      localStorage.setItem(this.DRAFT_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn('Error guardando borrador en localStorage', e);
+    }
+  }
+
+  private cargarBorrador(): void {
+    try {
+      const draft = localStorage.getItem(this.DRAFT_KEY);
+      if (draft) {
+        const parsedDraft = JSON.parse(draft);
+        // Usar patchValue para evitar sobreescribir valores fijos
+        this.solicitudForm.patchValue(parsedDraft, { emitEvent: false });
+      }
+    } catch (e) {
+      console.warn('Error leyendo borrador desde localStorage', e);
+    }
+  }
+
+  limpiarFormulario(): void {
+    if (confirm('¿Estás seguro de que deseas limpiar todo el formulario? Perderás todos los datos ingresados.')) {
+      this.solicitudForm.reset();
+      localStorage.removeItem(this.DRAFT_KEY);
+      
+      // Volvemos a cargar el perfil base y valores por defecto
+      this.solicitudForm.patchValue({
+        tipoPersona: 'NATURAL',
+        tipoDocumento: 'DNI',
+        nacionalidad: 'PERUANA',
+        estadoCivil: 'SOLTERO',
+        gradoInstruccion: 'SECUNDARIA',
+        situacionLaboral: 'DEPENDIENTE',
+        canalEstadoCuenta: 'EMAIL',
+        terminosAceptados: false,
+        montoSolicitado: 1000,
+        plazoMeses: 12,
+        periodoGracia: 0,
+        numeroDependientes: 0
+      });
+      this.cargarPerfilCliente();
+      this.calcularCuota();
+      
+      // Volver al paso 1
+      this.currentStep = 1;
+      this.cdr.detectChanges();
+    }
   }
 
   private initForm(): void {
@@ -352,48 +409,20 @@ export class SolicitarCreditoComponent implements OnInit {
       const G = periodoGracia || 0;
 
       // Amortización Francesa con periodo de gracia
-      const nEfectivo = n - G;
-      let cuotaExacta = 0;
-      if (nEfectivo > 0) {
-        cuotaExacta = montoSolicitado * (i * Math.pow(1 + i, nEfectivo)) / (Math.pow(1 + i, nEfectivo) - 1);
-      } else {
-        cuotaExacta = montoSolicitado * i;
-      }
+      // Simular cronograma usando FinancieroHelper
+      this.cronogramaSimulado = FinancieroHelper.calcularAmortizacionFrancesa(
+        montoSolicitado,
+        n,
+        this.temSeleccionada,
+        G
+      );
 
-      this.cuotaEstimada = Math.round(cuotaExacta);
+      this.totalInteres = this.cronogramaSimulado.reduce((acc, c) => acc + c.interes, 0);
+      this.totalPagar = this.cronogramaSimulado.reduce((acc, c) => acc + c.total, 0);
       
-      // Simular cronograma
-      let saldo = montoSolicitado;
-      let totalInteres = 0;
-      const cronograma = [];
-
-      for (let k = 1; k <= n; k++) {
-        let interes = Math.round(saldo * i * 100) / 100;
-        let pactual = (k <= G) ? 0 : Math.round((cuotaExacta - interes) * 100) / 100;
-        
-        if (k === n && k > G) {
-          pactual = Math.round(saldo * 100) / 100;
-        }
-
-        if (pactual < 0) pactual = 0;
-        let cuotaActual = Math.round((interes + pactual) * 100) / 100;
-        saldo = Math.round((saldo - pactual) * 100) / 100;
-        if (saldo < 0) saldo = 0;
-
-        totalInteres += interes;
-        cronograma.push({
-          numero: k,
-          capital: pactual,
-          interes: interes,
-          total: cuotaActual,
-          saldo: saldo,
-          esGracia: k <= G
-        });
-      }
-
-      this.totalInteres = Math.round(totalInteres);
-      this.totalPagar = Math.round(montoSolicitado + totalInteres);
-      this.cronogramaSimulado = cronograma;
+      // Cuota estimada (la primera que no sea gracia)
+      const primeraCuotaReal = this.cronogramaSimulado.find(c => c.capital > 0);
+      this.cuotaEstimada = primeraCuotaReal ? primeraCuotaReal.total : (this.cronogramaSimulado[0]?.total || 0);
     }
     this.cdr.detectChanges();
   }
@@ -401,6 +430,17 @@ export class SolicitarCreditoComponent implements OnInit {
   isFieldInvalid(field: string): boolean {
     const f = this.solicitudForm.get(field);
     return !!f && f.invalid && (f.dirty || f.touched);
+  }
+
+  abrirModalCronograma() {
+    this.calcularCuota(); // Asegurar cálculo fresco
+    const modal = document.getElementById('modal_cronograma_solicitante') as HTMLDialogElement;
+    if (modal) modal.showModal();
+  }
+
+  cerrarModalCronograma() {
+    const modal = document.getElementById('modal_cronograma_solicitante') as HTMLDialogElement;
+    if (modal) modal.close();
   }
 
   getSimboloMoneda(): string {
@@ -446,6 +486,10 @@ export class SolicitarCreditoComponent implements OnInit {
       next: (res) => {
         this.exito = true;
         this.enviando = false;
+        
+        // Limpiar el borrador exitosamente enviado
+        localStorage.removeItem(this.DRAFT_KEY);
+        
         this.cdr.detectChanges();
         setTimeout(() => {
           this.router.navigate(['/dashboard/creditos/mis-creditos']);

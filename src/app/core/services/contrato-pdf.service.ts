@@ -102,8 +102,15 @@ export class ContratoPdfService {
     // 1. Identidad
     drawCheck(cliente.tipoDocumento === 'DNI' || !cliente.tipoDocumento, 'dni_check');
     drawDigits(cliente.numeroDocumento, 'dni_digits');
-    drawText(cliente.nombre?.split(' ')[0] || '--', 'nombres');
-    drawText(cliente.nombre?.split(' ').slice(1).join(' ') || '--', 'apellido_paterno', true);
+    
+    // Nombres extraídos del JSON o fallback al nombreCompleto del usuario
+    const nombreFallback = cliente.usuario?.nombreCompleto || '';
+    drawText(extra.nombres || nombreFallback.split(' ')[0] || '--', 'nombres');
+    drawText(extra.apellidoPaterno || nombreFallback.split(' ').slice(1).join(' ') || '--', 'apellido_paterno', true);
+    if (extra.apellidoMaterno) {
+        drawText(extra.apellidoMaterno, 'apellido_materno', true);
+    }
+    
     drawText(extra.nacionalidad || 'PERUANA', 'nacionalidad');
     
     // Fechas
@@ -132,8 +139,90 @@ export class ContratoPdfService {
     const p9 = pdfDoc.addPage([595, 842]);
     this.drawFullCronograma(p9, credito, font, fontBold);
 
+    // 5. Anexo con Datos Completos del Formulario
+    const pAnexo = pdfDoc.addPage([595, 842]);
+    this.drawAnexoDatos(pAnexo, cliente, credito, extra, font, fontBold);
+
     const pdfBytes = await pdfDoc.save();
     return new Blob([pdfBytes as any], { type: 'application/pdf' });
+  }
+
+  private drawAnexoDatos(page: any, cliente: any, credito: any, extra: any, font: any, fontBold: any) {
+    const headT = 780;
+    const rowH = 20;
+    const marginL = 50;
+    
+    page.drawText("ANEXO: DECLARACIÓN JURADA DE DATOS DEL CLIENTE", { x: marginL, y: headT, size: 14, font: fontBold });
+    page.drawText(`Documento generado el: ${new Date().toLocaleDateString('es-PE')}`, { x: marginL, y: headT - 20, size: 10, font });
+    
+    let curY = headT - 50;
+
+    const drawSection = (title: string, data: Record<string, any>) => {
+        if (curY < 100) {
+            // No implementamos paginación compleja en este anexo, pero dejamos un margen.
+        }
+        page.drawRectangle({ x: marginL, y: curY - 12, width: 495, height: 16, color: rgb(0.9, 0.9, 0.9) });
+        page.drawText(title.toUpperCase(), { x: marginL + 5, y: curY - 8, size: 10, font: fontBold });
+        curY -= rowH;
+
+        Object.entries(data).forEach(([key, val]) => {
+            if (val === undefined || val === null || val === '') return;
+            const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+            page.drawText(`${label}:`, { x: marginL + 10, y: curY, size: 9, font: fontBold });
+            page.drawText(String(val).toUpperCase(), { x: marginL + 150, y: curY, size: 9, font });
+            page.drawLine({
+                start: { x: marginL, y: curY - 5 },
+                end: { x: marginL + 495, y: curY - 5 },
+                thickness: 0.5,
+                color: rgb(0.8, 0.8, 0.8)
+            });
+            curY -= rowH;
+        });
+        curY -= 10;
+    };
+
+    drawSection("1. Datos Personales", {
+        "Nombres": extra.nombres || cliente.usuario?.nombreCompleto?.split(' ')[0],
+        "Apellido Paterno": extra.apellidoPaterno || cliente.usuario?.nombreCompleto?.split(' ').slice(1).join(' '),
+        "Apellido Materno": extra.apellidoMaterno,
+        "Tipo Documento": cliente.tipoDocumento,
+        "Numero Documento": cliente.numeroDocumento,
+        "Nacionalidad": extra.nacionalidad,
+        "Estado Civil": cliente.estadoCivil || extra.estadoCivil,
+        "Grado Instruccion": extra.gradoInstruccion,
+        "Fecha Nacimiento": cliente.fechaNacimiento,
+        "Email": cliente.usuario?.email,
+        "Celular": cliente.celular || extra.celular
+    });
+
+    drawSection("2. Domicilio y Ubicación", {
+        "Departamento": cliente.departamento || extra.departamento,
+        "Provincia": cliente.provincia || extra.provincia,
+        "Distrito": cliente.distrito || extra.distrito,
+        "Dirección Completa": cliente.domicilio || extra.direccion,
+        "Referencia": cliente.referencia || extra.referencia
+    });
+
+    drawSection("3. Situación Laboral", {
+        "Empresa": cliente.empresa || extra.empresa,
+        "Cargo / Ocupacion": cliente.cargoOcupacion || extra.cargoOcupacion,
+        "Ingreso Mensual (S/)": cliente.ingresoMensual || extra.ingresoMensual,
+        "RUC Empresa": cliente.rucEmpresa || extra.rucEmpresa,
+        "Direccion Empresa": cliente.direccionEmpresa || extra.direccionEmpresa
+    });
+
+    drawSection("4. Condiciones del Crédito", {
+        "Monto Solicitado": `S/ ${credito.montoAprobado || credito.montoCredito}`,
+        "Plazo (Meses)": credito.plazoMeses,
+        "Tasa Efectiva Mensual": `${credito.tasaAprobada || credito.tem}%`,
+        "Periodo de Gracia (Meses)": credito.periodoGracia
+    });
+
+    // Firmas
+    curY -= 60;
+    page.drawLine({ start: { x: 100, y: curY }, end: { x: 250, y: curY }, thickness: 1, color: rgb(0,0,0) });
+    page.drawText("FIRMA DEL CLIENTE", { x: 130, y: curY - 15, size: 9, font: fontBold });
+    page.drawText(`DNI: ${cliente.numeroDocumento || ''}`, { x: 145, y: curY - 28, size: 9, font });
   }
 
   private drawFullCronograma(page: any, data: Credito, font: any, fontBold: any) {

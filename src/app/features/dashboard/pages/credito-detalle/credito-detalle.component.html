@@ -118,14 +118,14 @@
                     <table class="table table-zebra w-full">
                         <thead>
                             <tr class="bg-base-200/50 text-[10px] uppercase tracking-wider">
-                                <th class="py-4">#</th>
-                                <th>Vencimiento</th>
-                                <th>Capital</th>
-                                <th>Interés</th>
-                                <th>Mora / Pen.</th>
-                                <th>Cuota Total</th>
-                                <th>Estado</th>
-                                <th class="text-right">Acción</th>
+                                <th class="py-4 text-center">N°</th>
+                                <th class="text-center">Vencimiento</th>
+                                <th class="text-center">Capital</th>
+                                <th class="text-center">Interés</th>
+                                <th class="text-center">Mora / Pen.</th>
+                                <th class="text-center">Cuota Total</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -153,12 +153,12 @@
                             </tr>
                             }
                             <tr class="transition-colors">
-                                <td class="font-bold text-xs opacity-40">{{ cuota.numeroCuota }}</td>
-                                <td class="text-xs">{{ cuota.fechaVencimiento | date:'dd MMM, yyyy' }}</td>
-                                <td class="text-xs font-medium">{{ cuota.capital | currency:'S/ ' }}</td>
-                                <td class="text-xs font-medium">{{ cuota.interes | currency:'S/ ' }}</td>
-                                <td class="text-xs">
-                                    <div class="flex flex-col gap-0.5">
+                                <td class="font-bold text-xs opacity-40 text-center">{{ cuota.numeroCuota }}</td>
+                                <td class="text-xs text-center">{{ cuota.fechaVencimiento | date:'dd MMM, yyyy' }}</td>
+                                <td class="text-xs font-medium text-center">{{ cuota.capital | currency:'S/ ' }}</td>
+                                <td class="text-xs font-medium text-center">{{ cuota.interes | currency:'S/ ' }}</td>
+                                <td class="text-xs text-center">
+                                    <div class="flex flex-col gap-0.5 items-center">
                                         @if (cuota.interesMora && cuota.interesMora > 0) {
                                         <span class="text-error font-bold">+{{ cuota.interesMora | currency:'S/ ' }}
                                             <span class="text-[9px] opacity-70">MORA</span></span>
@@ -172,24 +172,24 @@
                                         }
                                     </div>
                                 </td>
-                                <td class="font-black text-sm text-base-content">{{ cuota.totalCuota | currency:'S/ ' }}
+                                <td class="font-black text-sm text-base-content text-center">{{ cuota.totalCuota | currency:'S/ ' }}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <div class="badge badge-sm font-bold text-[9px] tracking-wider px-2 py-3"
                                         [ngClass]="getEstadoClase(cuota.estadoCuota)">
                                         @if (cuota.estadoCuota === 'REVISION') { EN REVISIÓN }
                                         @else { {{ cuota.estadoCuota }} }
                                     </div>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <!-- CLIENTE: botón subir comprobante -->
                                     @if (!isAdminMode() && credito()?.estado === 'ACTIVO') {
                                     @if (cuota.estadoCuota === 'PAGADO') {
-                                    <div class="flex items-center justify-end gap-1 opacity-40">
+                                    <div class="flex items-center justify-center gap-1 opacity-40">
                                         <lucide-icon name="check-circle-2" class="w-4 h-4 text-success"></lucide-icon>
                                     </div>
                                     } @else if (cuota.estadoCuota === 'REVISION') {
-                                    <div class="flex items-center justify-end gap-1.5">
+                                    <div class="flex items-center justify-center gap-1.5">
                                         <span class="badge badge-info badge-xs font-bold gap-1">
                                             <lucide-icon name="clock" class="w-2.5 h-2.5"></lucide-icon>
                                             En revisión
@@ -207,7 +207,7 @@
 
                                     <!-- ADMIN: botones de acción -->
                                     @if (isAdminMode()) {
-                                    <div class="flex justify-end gap-1">
+                                    <div class="flex justify-center gap-1">
                                         <button class="btn btn-ghost btn-xs text-info" (click)="abrirEditarCuota(cuota)"
                                             title="Editar Cuota">
                                             <lucide-icon name="edit-3" class="w-3.5 h-3.5"></lucide-icon>
@@ -541,11 +541,11 @@
                 <div class="relative rounded-2xl overflow-hidden border-2 border-primary/30 shadow-md">
                     <img [src]="comprobantePreviewUrl()" alt="Preview del comprobante"
                         class="w-full max-h-48 object-contain bg-base-200">
-                    <button type="button" class="absolute top-2 right-2 btn btn-circle btn-xs btn-error opacity-80"
+                    <button type="button" class="absolute top-2 center-2 btn btn-circle btn-xs btn-error opacity-80"
                         (click)="comprobantePreviewUrl.set(null); comprobanteArchivo = null">
                         <lucide-icon name="x" class="w-3 h-3"></lucide-icon>
                     </button>
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                    <div class="absolute bottom-0 left-0 center-0 bg-gradient-to-t from-black/60 to-transparent p-2">
                         <p class="text-white text-xs font-medium">✓ Imagen seleccionada</p>
                     </div>
                 </div>
@@ -747,7 +747,7 @@
 <div class="modal modal-open z-[999]">
     <div
         class="modal-box rounded-3xl max-w-sm text-center p-8 bg-base-100 shadow-2xl relative overflow-hidden animate-fade-in-up">
-        <div class="absolute -top-16 -right-16 w-32 h-32 bg-success/10 rounded-full blur-2xl"></div>
+        <div class="absolute -top-16 -center-16 w-32 h-32 bg-success/10 rounded-full blur-2xl"></div>
 
         <div
             class="w-20 h-20 bg-primary/20 text-success rounded-full flex items-center justify-center mx-auto mb-6 relative z-10">
