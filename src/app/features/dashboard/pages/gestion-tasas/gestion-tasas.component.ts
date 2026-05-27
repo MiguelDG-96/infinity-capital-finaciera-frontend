@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { TasasService } from '../../../../core/services/tasas.service';
-import { TipoCredito, RangoInteres } from '../../../../core/models/tasas.model';
+import { TipoCredito, RangoInteres, TipoCreditoRequest } from '../../../../core/models/tasas.model';
+import { ToastService } from '../../../../core/services/toast.service';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -18,20 +19,39 @@ export class GestionTasasComponent implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
 
-  // Modal State
+  // Modal Rango State
   isModalOpen = false;
   modalMode: 'create' | 'edit' = 'create';
   selectedTipoId: number | null = null;
   editingRango: RangoInteres | null = null;
   
-  // Form State
+  // Modal TipoCredito State
+  isTipoModalOpen = false;
+  modalTipoMode: 'create' | 'edit' = 'create';
+  selectedTipoEditId: number | null = null;
+
+  // Delete Confirmation State
+  tipoToDelete = signal<number | null>(null);
+
+  // Form State Rango
   rangoForm: RangoInteres = {
     montoMinimo: 0,
     montoMaximo: 0,
     tasaMensual: 0
   };
 
-  constructor(private tasasService: TasasService) {}
+  // Form State TipoCredito
+  tipoForm: TipoCreditoRequest = {
+    nombre: '',
+    descripcion: '',
+    activo: true,
+    temDefecto: 0
+  };
+
+  constructor(
+    private tasasService: TasasService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.cargarTipos();
@@ -51,26 +71,94 @@ export class GestionTasasComponent implements OnInit {
       });
   }
 
-  actualizarTemDefecto(tipo: TipoCredito): void {
-    const nuevoTem = prompt('Ingrese la nueva TEM por defecto (%)', tipo.temDefecto.toString());
-    if (nuevoTem === null) return;
+  abrirModalNuevoTipo(): void {
+    this.modalTipoMode = 'create';
+    this.selectedTipoEditId = null;
+    this.tipoForm = {
+      nombre: '',
+      descripcion: '',
+      activo: true,
+      temDefecto: 0
+    };
+    this.isTipoModalOpen = true;
+  }
 
-    const temNum = parseFloat(nuevoTem);
-    if (isNaN(temNum)) {
-      alert('Por favor ingrese un número válido');
+  abrirModalEditarTipo(tipo: TipoCredito): void {
+    this.modalTipoMode = 'edit';
+    this.selectedTipoEditId = tipo.id;
+    this.tipoForm = {
+      nombre: tipo.nombre,
+      descripcion: tipo.descripcion,
+      activo: tipo.activo,
+      temDefecto: tipo.temDefecto
+    };
+    this.isTipoModalOpen = true;
+  }
+
+  cerrarTipoModal(): void {
+    this.isTipoModalOpen = false;
+    this.selectedTipoEditId = null;
+  }
+
+  guardarTipoCredito(): void {
+    if (!this.tipoForm.nombre || this.tipoForm.temDefecto <= 0) {
+      this.toastService.show('Complete los campos obligatorios y asegúrese de que la tasa sea mayor a 0', 'warning');
       return;
     }
 
     this.loading.set(true);
-    this.tasasService.updateTipoCredito(tipo.id, {
-      nombre: tipo.nombre,
-      descripcion: tipo.descripcion,
-      activo: tipo.activo,
-      temDefecto: temNum
-    }).pipe(finalize(() => this.loading.set(false)))
+
+    if (this.modalTipoMode === 'create') {
+      this.tasasService.crearTipoCredito(this.tipoForm)
+        .pipe(finalize(() => this.loading.set(false)))
+        .subscribe({
+          next: () => {
+            this.toastService.show('Tipo de crédito creado exitosamente', 'success');
+            this.cerrarTipoModal();
+            this.cargarTipos();
+          },
+          error: (err) => this.toastService.show(err.error?.error || 'Error al crear el tipo de crédito', 'error')
+        });
+    } else {
+      if (!this.selectedTipoEditId) return;
+      this.tasasService.updateTipoCredito(this.selectedTipoEditId, this.tipoForm)
+        .pipe(finalize(() => this.loading.set(false)))
+        .subscribe({
+          next: () => {
+            this.toastService.show('Tipo de crédito actualizado', 'success');
+            this.cerrarTipoModal();
+            this.cargarTipos();
+          },
+          error: (err) => this.toastService.show(err.error?.error || 'Error al actualizar el tipo de crédito', 'error')
+        });
+    }
+  }
+
+  abrirConfirmacionTipo(id: number): void {
+    this.tipoToDelete.set(id);
+  }
+
+  cerrarConfirmacionTipo(): void {
+    this.tipoToDelete.set(null);
+  }
+
+  confirmarEliminacionTipo(): void {
+    const id = this.tipoToDelete();
+    if (!id) return;
+
+    this.loading.set(true);
+    this.tasasService.eliminarTipoCredito(id)
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: () => this.cargarTipos(),
-        error: () => alert('Error al actualizar la tasa')
+        next: () => {
+          this.toastService.show('Tipo de crédito eliminado correctamente', 'success');
+          this.cargarTipos();
+          this.cerrarConfirmacionTipo();
+        },
+        error: () => {
+          this.toastService.show('Error al eliminar. Es posible que esté en uso.', 'error');
+          this.cerrarConfirmacionTipo();
+        }
       });
   }
 
@@ -101,7 +189,7 @@ export class GestionTasasComponent implements OnInit {
 
   guardarRango(): void {
     if (this.rangoForm.montoMinimo >= this.rangoForm.montoMaximo) {
-      alert('El monto mínimo debe ser menor al máximo');
+      this.toastService.show('El monto mínimo debe ser menor al máximo', 'warning');
       return;
     }
 
@@ -112,12 +200,13 @@ export class GestionTasasComponent implements OnInit {
         .pipe(finalize(() => this.loading.set(false)))
         .subscribe({
           next: () => {
+            this.toastService.show('Rango de interés creado', 'success');
             this.cerrarModal();
             this.cargarTipos();
           },
           error: (err) => {
             const msg = err.error?.error || 'Error al crear el rango';
-            alert(msg);
+            this.toastService.show(msg, 'error');
           }
         });
     } else {
@@ -132,15 +221,16 @@ export class GestionTasasComponent implements OnInit {
               .pipe(finalize(() => this.loading.set(false)))
               .subscribe({
                 next: () => {
+                  this.toastService.show('Rango de interés actualizado', 'success');
                   this.cerrarModal();
                   this.cargarTipos();
                 },
-                error: () => alert('Error al recrear el rango')
+                error: () => this.toastService.show('Error al recrear el rango', 'error')
               });
           },
           error: () => {
             this.loading.set(false);
-            alert('Error al actualizar el rango (fase eliminación)');
+            this.toastService.show('Error al actualizar el rango (fase eliminación)', 'error');
           }
         });
     }
@@ -154,8 +244,11 @@ export class GestionTasasComponent implements OnInit {
     this.tasasService.eliminarRango(id)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: () => this.cargarTipos(),
-        error: () => alert('Error al eliminar el rango')
+        next: () => {
+          this.toastService.show('Rango de interés eliminado', 'success');
+          this.cargarTipos();
+        },
+        error: () => this.toastService.show('Error al eliminar el rango', 'error')
       });
   }
 }

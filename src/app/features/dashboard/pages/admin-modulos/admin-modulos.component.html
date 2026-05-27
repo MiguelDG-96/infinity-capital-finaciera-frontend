@@ -22,7 +22,8 @@
       <table class="table table-zebra table-md w-full">
         <thead>
           <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
-            <th class="py-4 pl-6">ID</th>
+            <th class="py-4 pl-6 w-12"></th>
+            <th class="py-4 pl-2">N° ORDEN</th>
             <th>Ícono</th>
             <th>Nombre del Módulo</th>
             <th>Identificador (Slug)</th>
@@ -30,23 +31,28 @@
             <th class="text-right pr-6">Acciones</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
           @if (isLoading()) {
             <tr>
-              <td colspan="6" class="py-20 text-center opacity-50 animate-pulse italic">
+              <td colspan="7" class="py-20 text-center opacity-50 animate-pulse italic">
                 Cargando módulos de la plataforma...
               </td>
             </tr>
           } @else if (modulos().length === 0) {
             <tr>
-              <td colspan="6" class="py-20 text-center font-bold opacity-50">
+              <td colspan="7" class="py-20 text-center font-bold opacity-50">
                 Base de datos vacía. Agrega tu primer módulo.
               </td>
             </tr>
           } @else {
-            @for (m of modulos(); track m.id) {
-              <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5 text-base-content">
-                <td class="pl-6 font-mono text-xs opacity-40">#{{ m.id }}</td>
+            @for (m of modulos(); track m.id; let i = $index) {
+              <tr cdkDrag class="hover:bg-base-200/30 transition-colors border-b border-base-content/5 text-base-content bg-base-100 group">
+                <td class="pl-6 text-center">
+                  <div cdkDragHandle class="cursor-grab active:cursor-grabbing text-base-content/30 hover:text-base-content/80 transition-colors">
+                    <lucide-icon name="grip-vertical" [size]="18"></lucide-icon>
+                  </div>
+                </td>
+                <td class="pl-2 font-mono text-xs opacity-40">#{{ i + 1 }}</td>
                 <td>
                   <div class="w-8 h-8 flex items-center justify-center bg-base-200 rounded-lg text-primary">
                     <lucide-icon [name]="getSafeIcon(m.icono)" [size]="16" class="mt-1"></lucide-icon>
@@ -62,7 +68,7 @@
                     <button (click)="abrirModal(m)" class="btn btn-outline btn-primary btn-xs hover:scale-105 transition-all">
                       Editar
                     </button>
-                    <button (click)="eliminarModulo(m.id)" class="btn btn-outline btn-error btn-xs hover:scale-105 transition-all w-8 px-0 flex justify-center">
+                    <button (click)="abrirConfirmacion(m.id)" class="btn btn-outline btn-error btn-xs hover:scale-105 transition-all w-8 px-0 flex justify-center">
                       <lucide-icon name="trash-2" [size]="14"></lucide-icon>
                     </button>
                   </div>
@@ -83,4 +89,32 @@
     (close)="cerrarModal()" 
     (save)="onModuloGuardado()">
   </app-modulo-form-modal>
+}
+
+<!-- Modal de Confirmación de Eliminación -->
+@if (moduloToDelete() !== null) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-base-300/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div class="card bg-base-100 shadow-2xl w-full max-w-md border border-base-content/10 animate-in zoom-in-95 duration-200">
+      <div class="card-body items-center text-center p-8">
+        
+        <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mb-4">
+          <lucide-icon name="alert-triangle" [size]="32"></lucide-icon>
+        </div>
+        
+        <h2 class="card-title text-2xl font-bold text-base-content mb-2">¿Estás absolutamente seguro?</h2>
+        <p class="text-base-content/70 text-sm">
+          Se eliminará permanentemente el módulo <strong>#{{ moduloToDelete() }}</strong>. 
+          Esta acción ejecutará un borrado en cascada y destruirá todos los permisos RBAC asociados a los roles.
+        </p>
+
+        <div class="card-actions flex gap-3 w-full mt-8">
+          <button class="btn btn-ghost flex-1" (click)="cerrarConfirmacion()">Cancelar</button>
+          <button class="btn btn-error flex-1 text-white shadow-error/30 shadow-lg hover:shadow-error/50 transition-shadow" (click)="confirmarEliminacion()">
+            <lucide-icon name="trash-2" [size]="18" class="mr-1"></lucide-icon> Eliminar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 }

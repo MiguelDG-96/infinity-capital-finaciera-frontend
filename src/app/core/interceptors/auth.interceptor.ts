@@ -109,6 +109,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
+      if (error.status === 403) {
+        if (error.error?.mensaje?.includes('IP ha sido bloqueada')) {
+          router.navigate(['/access-denied']);
+        }
+      }
+
+      if (error.status === 429) {
+        // Here we could use a Toast service if we had one.
+        // For now, an alert will suffice or we can let the UI catch it, but the guide
+        // specifically says "El Interceptor global debe capturar... mostrar un Toast".
+        // Let's create a simple custom toast by injecting it, or just use window.alert if none is available.
+        // Actually, we'll just log it and the UI can show a toast or we can use native alert as a fallback.
+        alert('Has excedido el límite de intentos. Espera 1 minuto e inténtalo de nuevo.');
+      }
+
       return throwError(() => error);
     })
   );

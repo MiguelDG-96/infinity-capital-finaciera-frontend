@@ -48,7 +48,25 @@ export class AuthService {
       credentials
     ).pipe(
       map(response => AuthMapper.fromResponse(response)),
-      tap(auth => this.saveToStorage(auth))
+      tap(auth => {
+        if (auth.message !== 'REQUIRES_2FA' && auth.accessToken) {
+          this.saveToStorage(auth);
+        }
+      })
+    );
+  }
+
+  login2FA(email: string, codigo: string): Observable<AuthModel> {
+    return this.http.post<AutenticacionResponseDto>(
+      `${environment.apiUrl}/autenticacion/login/2fa`,
+      { email, codigo }
+    ).pipe(
+      map(response => AuthMapper.fromResponse(response)),
+      tap(auth => {
+        if (auth.accessToken) {
+          this.saveToStorage(auth);
+        }
+      })
     );
   }
 

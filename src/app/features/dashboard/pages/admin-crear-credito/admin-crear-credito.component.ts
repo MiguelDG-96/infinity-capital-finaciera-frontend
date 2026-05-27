@@ -28,6 +28,9 @@ export class AdminCrearCreditoComponent implements OnInit {
   exito = false;
   mensajeExito = '';
   
+  errorToast = false;
+  mensajeErrorToast = '';
+  
   private readonly DRAFT_KEY = 'draft_admin_crear_credito';
 
   constructor(
@@ -221,10 +224,13 @@ export class AdminCrearCreditoComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errorToast = false; // Reset error toast
+
     if (this.formulario.invalid) {
       Object.keys(this.formulario.controls).forEach(key => {
         this.formulario.get(key)?.markAsTouched();
       });
+      this.mostrarError('Por favor complete todos los campos obligatorios correctamente.');
       return;
     }
 
@@ -253,8 +259,16 @@ export class AdminCrearCreditoComponent implements OnInit {
       error: (err) => {
         this.cargando = false;
         console.error('Error al registrar', err);
-        alert('Hubo un error al registrar el crédito: ' + (err.error?.message || err.message));
+        this.mostrarError('Hubo un error al registrar el crédito: ' + (err.error?.message || err.error?.error || err.message));
       }
     });
+  }
+
+  private mostrarError(mensaje: string) {
+    this.mensajeErrorToast = mensaje;
+    this.errorToast = true;
+    setTimeout(() => {
+      this.errorToast = false;
+    }, 5000);
   }
 }

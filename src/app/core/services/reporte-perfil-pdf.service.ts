@@ -49,13 +49,6 @@ export class ReportePerfilPdfService {
       c.fechaNacimiento = `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     }
 
-    // Pre-load client photo
-    const baseUrl = 'https://servicio.infiny-capital.com';
-    let fotoDataUrl = '';
-    if (c.fotoUrl) {
-      try { fotoDataUrl = await this.imageUrlToDataURL(baseUrl + c.fotoUrl); } catch (e) {}
-    }
-
     const doc = new jsPDF();
     const margin = 20;
     const pageW = 190;
@@ -94,38 +87,13 @@ export class ReportePerfilPdfService {
 
     y = 42;
 
-    // ── Foto del cliente (esquina derecha del encabezado) ───────
-    // Se dibuja un círculo/cuadro con la foto a la derecha
-    const photoSize = 28;
-    const photoX = 190 - photoSize; // alineado a la derecha
-    const photoY = 36;
-    if (fotoDataUrl) {
-      // Marco circular con borde rojo
-      doc.setDrawColor(...primary);
-      doc.setLineWidth(0.8);
-      doc.rect(photoX, photoY, photoSize, photoSize, 'S');
-      doc.addImage(fotoDataUrl, 'JPEG', photoX + 0.5, photoY + 0.5, photoSize - 1, photoSize - 1);
-    } else {
-      // Placeholder si no hay foto
-      doc.setFillColor(245, 245, 245);
-      doc.rect(photoX, photoY, photoSize, photoSize, 'F');
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(photoX, photoY, photoSize, photoSize, 'S');
-      doc.setTextColor(180, 180, 180);
-      doc.setFontSize(7);
-      doc.setFont('helvetica', 'normal');
-      doc.text('SIN FOTO', photoX + photoSize / 2, photoY + photoSize / 2 + 1, { align: 'center' });
-    }
-
-    // Nombre grande (deja margen a la derecha para la foto)
+    // Nombre grande
     const nombreCompleto = (c.usuario?.nombreCompleto || c.nombre || `${c.nombres || ''} ${c.apellidoPaterno || ''} ${c.apellidoMaterno || ''}`.trim() || 'CLIENTE').toUpperCase();
     doc.setTextColor(...primary);
-    doc.setFontSize(13);
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    // Limitar ancho del nombre para que no choque con la foto
-    const nombreLines = doc.splitTextToSize(nombreCompleto, 140);
-    doc.text(nombreLines, margin, y);
-    y += nombreLines.length * 6;
+    doc.text(nombreCompleto, margin, y);
+    y += 6;
 
     doc.setTextColor(100, 100, 100);
     doc.setFontSize(9);
@@ -134,8 +102,7 @@ export class ReportePerfilPdfService {
     y += 4;
     doc.setDrawColor(230, 230, 230);
     doc.line(margin, y, 190, y);
-    // Aseguramos que y no quede dentro del área de la foto
-    y = Math.max(y + 8, photoY + photoSize + 6);
+    y += 8;
 
     // ── 1. DATOS PERSONALES ─────────────────────────────────────
     this.seccion(doc, '1. DATOS PERSONALES', y, primary); y += 10;

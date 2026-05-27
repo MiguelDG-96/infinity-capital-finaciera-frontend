@@ -405,29 +405,45 @@
                       <select [(ngModel)]="clienteEdit().situacionLaboral" class="select select-bordered select-sm rounded-xl">
                         <option value="DEPENDIENTE">DEPENDIENTE</option>
                         <option value="INDEPENDIENTE">INDEPENDIENTE</option>
-                        <option value="DESEMPLEADO">DESEMPLEADO</option>
-                        <option value="JUBILADO">JUBILADO</option>
                       </select>
                     </div>
+                    @if (clienteEdit().situacionLaboral === 'DEPENDIENTE') {
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Empresa</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().empresa" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Empresa</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().rucEmpresa" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control sm:col-span-2">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Empresa</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().direccionEmpresa" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                    }
+
+                    @if (clienteEdit().situacionLaboral === 'INDEPENDIENTE') {
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Propio</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().rucPropio" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                    }
+
                     <div class="form-control">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Empresa</span></label>
-                      <input type="text" [(ngModel)]="clienteEdit().empresa" class="input input-bordered input-sm rounded-xl" />
-                    </div>
-                    <div class="form-control">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Empresa</span></label>
-                      <input type="text" [(ngModel)]="clienteEdit().rucEmpresa" class="input input-bordered input-sm rounded-xl" />
-                    </div>
-                    <div class="form-control">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Cargo</span></label>
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Cargo / Ocupación</span></label>
                       <input type="text" [(ngModel)]="clienteEdit().cargoOcupacion" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Fecha Ingreso Laboral</span></label>
+                      <input type="date" [(ngModel)]="clienteEdit().fechaIngresoLaboral" class="input input-bordered input-sm rounded-xl" />
                     </div>
                     <div class="form-control">
                       <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ingreso Mensual (S/)</span></label>
                       <input type="number" [(ngModel)]="clienteEdit().ingresoMensual" class="input input-bordered input-sm rounded-xl" />
                     </div>
-                    <div class="form-control sm:col-span-2">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Empresa</span></label>
-                      <input type="text" [(ngModel)]="clienteEdit().direccionEmpresa" class="input input-bordered input-sm rounded-xl" />
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ingreso Bruto Mensual (S/)</span></label>
+                      <input type="number" [(ngModel)]="clienteEdit().ingresoBrutoMensual" class="input input-bordered input-sm rounded-xl" />
                     </div>
                   </div>
                 }

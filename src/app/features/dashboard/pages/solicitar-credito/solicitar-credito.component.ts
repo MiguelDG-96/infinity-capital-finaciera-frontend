@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { AuthService } from '../../../../core/services/auth.service';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { SolicitudCredito } from '../../../../core/models/credito.model';
@@ -33,8 +34,8 @@ export class SolicitarCreditoComponent implements OnInit {
   tiposDocumento = ['DNI', 'CARNET_EXTRANJERIA', 'PASAPORTE'];
   tiposPersona = ['NATURAL', 'JURIDICA'];
   estadosCiviles = ['SOLTERO', 'CASADO', 'CONVIVIENTE', 'DIVORCIADO', 'VIUDO'];
-  gradosInstruccion = ['SECUNDARIA', 'TECNICA', 'SUPERIOR_UNIV', 'POSTGRADO', 'PRIMARIA'];
-  situacionesLaborales = ['DEPENDIENTE', 'INDEPENDIENTE', 'JUBILADO'];
+  gradosInstruccion = ['SECUNDARIA', 'TECNICA', 'UNIVERSITARIO'];
+  situacionesLaborales = ['DEPENDIENTE', 'INDEPENDIENTE'];
 
   tiposCredito: { 
     id: number, 
@@ -56,6 +57,7 @@ export class SolicitarCreditoComponent implements OnInit {
     private fb: FormBuilder,
     private creditoService: CreditoService,
     private clienteService: ClienteService,
+    private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -63,11 +65,17 @@ export class SolicitarCreditoComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.cargarCatalogos();
-    // Primero cargamos perfil del cliente
-    this.cargarPerfilCliente();
 
-    // Luego recuperamos el borrador (si existe) y lo sobreescribimos
-    this.cargarBorrador();
+    // Solo cargamos el perfil del backend automáticamente si es ROLE_CLIENTE
+    // (los admins y trabajadores usarán este formulario para registrar a otras personas)
+    const rolUsuario = this.authService.currentUserData()?.rol;
+    if (rolUsuario === 'ROLE_CLIENTE') {
+      // El borrador se cargará DESPUÉS de que responda el servidor para evitar que se crucen
+      this.cargarPerfilCliente();
+    } else {
+      // Si no es cliente, simplemente cargamos el borrador (si existiera)
+      this.cargarBorrador();
+    }
 
     // Recalcular cuota cuando cambien valores relevantes y guardar borrador
     this.solicitudForm.valueChanges.subscribe((val) => {
@@ -148,6 +156,8 @@ export class SolicitarCreditoComponent implements OnInit {
       telefono: [''],
 
       // Paso 3: Ubicación
+      departamento: ['', [Validators.required]],
+      provincia: ['', [Validators.required]],
       distrito: ['', [Validators.required]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       urbanizacion: [''],
@@ -251,6 +261,8 @@ export class SolicitarCreditoComponent implements OnInit {
             gradoInstruccion: cliente.gradoInstruccion || 'SECUNDARIA',
             celular: cliente.celular || '',
             telefono: cliente.telefono || '',
+            departamento: cliente.departamento || '',
+            provincia: cliente.provincia || '',
             distrito: cliente.distrito || '',
             direccion: cliente.direccion || cliente.domicilio || '',
             urbanizacion: cliente.urbanizacion || '',
@@ -277,11 +289,16 @@ export class SolicitarCreditoComponent implements OnInit {
               conyugeOcupacion: cliente.conyuge.ocupacion || cliente.conyuge.profesion || ''
             });
           }
-          this.cdr.detectChanges();
         }
+        // Una vez cargados los datos de BD (si los hay), cargamos el borrador para que el usuario no pierda lo que estaba escribiendo
+        this.cargarBorrador();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.warn('No se pudo cargar el perfil del cliente para autocompletar', err);
+        // Si hay error, igual cargamos el borrador
+        this.cargarBorrador();
+        this.cdr.detectChanges();
       }
     });
   }

@@ -5,11 +5,12 @@ import { Modulo } from '../../../../core/models/modulo.model';
 import { LucideAngularModule } from 'lucide-angular';
 import { ModuloFormModalComponent } from './components/modulo-form-modal/modulo-form-modal.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-admin-modulos',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, ModuloFormModalComponent],
+  imports: [CommonModule, LucideAngularModule, ModuloFormModalComponent, DragDropModule],
   templateUrl: './admin-modulos.component.html'
 })
 export class AdminModulosComponent implements OnInit {
@@ -23,6 +24,12 @@ export class AdminModulosComponent implements OnInit {
   // Modal State
   selectedModulo = signal<Modulo | null>(null);
   isModalOpen = signal<boolean>(false);
+
+  // Delete Confirmation State
+  moduloToDelete = signal<number | null>(null);
+
+  // Debounce Timer
+  private saveTimer: any = null;
 
   // Fallback for legacy database emojis
   getSafeIcon(icono: string | undefined | null): string {
@@ -65,18 +72,59 @@ export class AdminModulosComponent implements OnInit {
     this.cargarModulos(true);
   }
 
-  eliminarModulo(id: number | undefined) {
-    if (!id) return;
-    if (confirm(`¿Ejecutar borrado en cascada del módulo #${id}?\nADVERTENCIA: Destruirá la tabla de permisos RBAC atados al rol.`)) {
-      this.moduloService.eliminar(id).subscribe({
+  drop(event: CdkDragDrop<Modulo[]>) {
+    const currentModulos = [...this.modulos()];
+    moveItemInArray(currentModulos, event.previousIndex, event.currentIndex);
+    
+    // Optimistic UI update
+    this.modulos.set(currentModulos);
+
+    // Prepare payload
+    const payload = currentModulos.map((m, index) => ({
+      id: m.id!,
+      orden: index + 1
+    }));
+
+    // Debounce the backend call to prevent spamming
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+    }
+
+    this.saveTimer = setTimeout(() => {
+      this.moduloService.reordenarModulos(payload).subscribe({
         next: () => {
-          this.toastService.show('Módulo Desintegrado Globalmente', 'success');
-          this.cargarModulos(true);
+          this.toastService.show('Orden guardado en la nube', 'success');
         },
         error: () => {
-          this.toastService.show('Falla al borrar: Verifique dependencias', 'error');
+          this.toastService.show('Error al guardar el nuevo orden', 'error');
+          this.cargarModulos(true); // Revert on actual error
         }
       });
-    }
+    }, 5000); // 5 seconds delay
+  }
+
+  abrirConfirmacion(id: number | undefined) {
+    if (id) this.moduloToDelete.set(id);
+  }
+
+  cerrarConfirmacion() {
+    this.moduloToDelete.set(null);
+  }
+
+  confirmarEliminacion() {
+    const id = this.moduloToDelete();
+    if (!id) return;
+    
+    this.moduloService.eliminar(id).subscribe({
+      next: () => {
+        this.toastService.show('Módulo Desintegrado Globalmente', 'success');
+        this.cargarModulos(true);
+        this.cerrarConfirmacion();
+      },
+      error: () => {
+        this.toastService.show('Falla al borrar: Verifique dependencias', 'error');
+        this.cerrarConfirmacion();
+      }
+    });
   }
 }

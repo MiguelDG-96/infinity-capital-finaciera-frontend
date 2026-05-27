@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   currentSlide = signal(0);
+  requires2FA = signal(false);
+  emailTemporal = signal('');
   private intervalId: any;
 
   slides = [
@@ -50,6 +52,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     remember: [false]
+  });
+
+  otpForm = this.fb.group({
+    codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
   });
 
   ngOnInit() {
@@ -108,7 +114,47 @@ export class LoginComponent implements OnInit, OnDestroy {
       };
 
       this.authService.login(credentials).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          if (response.message === 'REQUIRES_2FA') {
+            this.emailTemporal.set(credentials.email);
+            this.requires2FA.set(true);
+          } else {
+            // Guardar o eliminar el recordatorio de sesión
+            if (this.loginForm.value.remember) {
+              localStorage.setItem('infinity_remembered_email', this.loginForm.value.email!);
+              localStorage.setItem('infinity_remembered_password', this.loginForm.value.password!);
+            } else {
+              localStorage.removeItem('infinity_remembered_email');
+              localStorage.removeItem('infinity_remembered_password');
+            }
+            this.router.navigate(['/dashboard']);
+          }
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          let msg = err.error?.mensaje || err.error?.message || 'Error de autenticación. Por favor, intenta de nuevo.';
+          
+          if (msg.includes('Intentos restantes') || msg.includes('Cuenta bloqueada')) {
+            msg = msg; // Will be displayed in red
+          }
+          this.errorMessage.set(msg);
+          console.error('Login error:', err);
+        }
+      });
+    }
+  }
+
+  onSubmit2FA() {
+    if (this.otpForm.valid) {
+      this.isLoading.set(true);
+      this.errorMessage.set(null);
+
+      const codigo = this.otpForm.value.codigo!;
+
+      this.authService.login2FA(this.emailTemporal(), codigo).subscribe({
         next: () => {
+          this.isLoading.set(false);
           // Guardar o eliminar el recordatorio de sesión
           if (this.loginForm.value.remember) {
             localStorage.setItem('infinity_remembered_email', this.loginForm.value.email!);
@@ -121,9 +167,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isLoading.set(false);
-          const msg = err.error?.mensaje || err.error?.message || 'Error de autenticación. Por favor, intenta de nuevo.';
+          const msg = err.error?.mensaje || err.error?.message || 'Código OTP inválido.';
           this.errorMessage.set(msg);
-          console.error('Login error:', err);
+          console.error('OTP error:', err);
         }
       });
     }

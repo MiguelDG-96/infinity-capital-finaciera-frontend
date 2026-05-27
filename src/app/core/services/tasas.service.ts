@@ -26,6 +26,14 @@ export class TasasService {
     return this.http.put<TipoCredito>(`${this.tiposUrl}/${id}`, data);
   }
 
+  crearTipoCredito(data: TipoCreditoRequest): Observable<TipoCredito> {
+    return this.http.post<TipoCredito>(this.tiposUrl, data);
+  }
+
+  eliminarTipoCredito(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.tiposUrl}/${id}`);
+  }
+
   // Rangos de Interés
   getRangosPorTipo(tipoId: number): Observable<RangoInteres[]> {
     return this.http.get<RangoInteres[]>(`${this.rangosUrl}/tipo/${tipoId}`);

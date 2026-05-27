@@ -51,6 +51,10 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'access-denied',
+    loadComponent: () => import('./features/error/access-denied/access-denied.component').then(m => m.AccessDeniedComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
