@@ -22,6 +22,7 @@ export class ClientePerfilModalComponent implements OnChanges {
 
   baseUrl = environment.apiUrl.replace('/api/v1', '');
 
+
   archivoSeleccionado = signal<File | null>(null);
   subiendo = signal(false);
   error = signal<string | null>(null);
