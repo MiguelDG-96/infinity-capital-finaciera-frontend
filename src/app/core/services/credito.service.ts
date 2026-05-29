@@ -184,4 +184,8 @@ export class CreditoService {
   renovarSoloInteres(cuotaId: number, data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/renovar-solo-interes`, data);
   }
+
+  obtenerReporteCaja(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/creditos/admin/reporte-caja`);
+  }
 }

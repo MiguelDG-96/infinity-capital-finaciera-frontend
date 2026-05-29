@@ -286,12 +286,28 @@
           <h3 class="font-bold text-base-content/60 border-b border-base-content/10 pb-2 mb-2">Datos del Cónyuge (Opcional)</h3>
         </div>
         <div class="form-control">
-          <label class="label"><span class="label-text font-bold">Nombre Completo</span></label>
-          <input type="text" formControlName="conyugeNombre" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          <label class="label"><span class="label-text font-bold">Nombres</span></label>
+          <input type="text" formControlName="nombresConyuge" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
         </div>
         <div class="form-control">
-          <label class="label"><span class="label-text font-bold">DNI</span></label>
-          <input type="text" formControlName="conyugeDni" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          <label class="label"><span class="label-text font-bold">Apellido Paterno</span></label>
+          <input type="text" formControlName="apellidoPaConyuge" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Apellido Materno</span></label>
+          <input type="text" formControlName="apellidoMatConyuge" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Tipo Documento</span></label>
+          <select formControlName="conyugeTipoDocumento" class="select select-bordered bg-base">
+            <option value="DNI">DNI</option>
+            <option value="CE">Carnet Extranjería</option>
+            <option value="PASAPORTE">Pasaporte</option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Número Documento</span></label>
+          <input type="text" formControlName="conyugeNumeroDocumento" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
         </div>
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Ocupación</span></label>
@@ -356,7 +372,33 @@
             placeholder="Ej: 0" />
         </div>
 
-        <div class="form-control md:col-span-2">
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold text-error">Desc. Adelantado (S/)</span></label>
+          <input type="number" formControlName="descuentoRetencion" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional. Ej: 100" />
+        </div>
+
+        <div class="form-control md:col-span-1">
+          <label class="label"><span class="label-text font-bold">Banco Desembolso</span></label>
+          <select formControlName="bancoDesembolso" class="select select-bordered bg-base w-full">
+            <option value="">Seleccione Banco...</option>
+            <option value="BCP">BCP</option>
+            <option value="BBVA">BBVA</option>
+            <option value="INTERBANK">Interbank</option>
+            <option value="SCOTIABANK">Scotiabank</option>
+            <option value="BANBIF">BanBif</option>
+            <option value="PICHINCHA">Pichincha</option>
+            <option value="NACION">Nación</option>
+            <option value="CAJA_AREQUIPA">Caja Arequipa</option>
+            <option value="CAJA_HUANCAYO">Caja Huancayo</option>
+            <option value="CAJA_PIURA">Caja Piura</option>
+            <option value="YAPE">Yape</option>
+            <option value="PLIN">Plin</option>
+            <option value="OTROS">Otros</option>
+          </select>
+        </div>
+
+        <div class="form-control md:col-span-1">
           <label class="label"><span class="label-text font-bold">Cuenta de Desembolso (CCI)</span></label>
           <input type="text" formControlName="cuentaDesembolso" class="input input-bordered bg-base-200/30 w-full"
             placeholder="Opcional" (input)="soloNumeros($event, 'cuentaDesembolso')" />

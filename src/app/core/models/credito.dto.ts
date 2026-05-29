@@ -6,6 +6,7 @@ export interface CreditoDirectoRequestDTO extends SolicitudCreditoRequestDTO {
   apellidoMaterno?: string;
   email?: string;
   desembolsarAutomaticamente?: boolean;
+  descuentoRetencion?: number;
 }
 
 export interface SolicitudCreditoRequestDTO {
@@ -63,12 +64,17 @@ export interface SolicitudCreditoRequestDTO {
   montoSolicitado: number;
   plazoMeses: number;
   periodoGracia?: number;
+  bancoDesembolso?: string;
   cuentaDesembolso?: string;
   canalEstadoCuenta?: string;
+  descuentoRetencion?: number;
 
   // Datos del cónyuge
-  conyugeNombre?: string;
-  conyugeDni?: string;
+  nombresConyuge?: string;
+  apellidoPaConyuge?: string;
+  apellidoMatConyuge?: string;
+  conyugeTipoDocumento?: string;
+  conyugeNumeroDocumento?: string;
   conyugeIngresos?: number;
   conyugeOcupacion?: string;
 
@@ -90,6 +96,7 @@ export interface EvaluarSolicitudRequestDTO {
   montoAprobado?: number;
   plazoMeses?: number;
   tasaAprobada?: number;
+  descuentoRetencion?: number;
   requisitosASolicitar?: string[];
 }
 
@@ -131,9 +138,11 @@ export interface CreditoDTOResponse {
   montoTotal: number;
   cuotaMensual: number;
   periodoGracia?: number;
+  bancoDesembolso?: string;
   cuentaDesembolso?: string;
   fechaSolicitud?: string; 
   garantes?: GaranteDTO[];
+  descuentoRetencion?: number;
 }
 
 export interface GaranteDTO {

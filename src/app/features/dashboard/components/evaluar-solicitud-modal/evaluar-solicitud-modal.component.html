@@ -94,7 +94,7 @@
           </div>
 
           <!-- Campos de Ajuste (Monto, Plazo, Tasa) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-primary/5 p-5 rounded-2xl border border-primary/10">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-primary/5 p-5 rounded-2xl border border-primary/10">
               <div class="form-control">
                   <label class="label py-1">
                       <span class="label-text-alt font-bold opacity-60">Monto Aprobado</span>
@@ -126,6 +126,17 @@
                           [ngClass]="{'input-error': isFieldInvalid('tasaAprobada')}"
                           step="0.01">
                       <span class="join-item btn btn-sm btn-ghost bg-base-200 border-base-300 font-bold">%</span>
+                  </div>
+              </div>
+
+              <div class="form-control">
+                  <label class="label py-1">
+                      <span class="label-text-alt font-bold opacity-60 text-error">Desc. Adelantado</span>
+                  </label>
+                  <div class="join w-full">
+                      <span class="join-item btn btn-sm btn-ghost bg-base-200 border-base-300">S/</span>
+                      <input type="number" formControlName="descuentoRetencion" 
+                          class="input input-bordered input-sm join-item w-full font-bold">
                   </div>
               </div>
           </div>

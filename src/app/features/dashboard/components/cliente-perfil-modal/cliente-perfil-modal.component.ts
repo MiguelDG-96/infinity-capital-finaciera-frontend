@@ -108,7 +108,7 @@ export class ClientePerfilModalComponent implements OnChanges {
     const data = { ...this.clienteView };
     
     if (!data.conyuge) {
-      data.conyuge = { nombreCompleto: '', dni: '' };
+      data.conyuge = { nombresConyuge: '', apellidoPaConyuge: '', apellidoMatConyuge: '', tipoDocumento: 'DNI', numeroDocumento: '' };
     }
 
     this.clienteEdit.set(data);
@@ -166,8 +166,11 @@ export class ClientePerfilModalComponent implements OnChanges {
       contactoFamiliarNombre: data.contactoFamiliarNombre,
       contactoFamiliarCelular: data.contactoFamiliarCelular,
       viveCasaPropia: data.viveCasaPropia,
-      conyugeNombre: data.conyuge?.nombreCompleto,
-      conyugeDni: data.conyuge?.dni,
+      nombresConyuge: data.conyuge?.nombresConyuge,
+      apellidoPaConyuge: data.conyuge?.apellidoPaConyuge,
+      apellidoMatConyuge: data.conyuge?.apellidoMatConyuge,
+      conyugeTipoDocumento: data.conyuge?.tipoDocumento,
+      conyugeNumeroDocumento: data.conyuge?.numeroDocumento,
       conyugeOcupacion: data.conyuge?.ocupacion,
       conyugeIngresos: data.conyuge?.ingresosMensuales,
       conyugeTelefono: data.conyuge?.telefono,

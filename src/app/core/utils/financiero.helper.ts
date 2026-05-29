@@ -27,7 +27,7 @@ export class FinancieroHelper {
     const nTotal = plazo;
     const nAmortizacion = nTotal - gracia;
     
-    const redondear = (val: number) => Math.round(val * 10) / 10;
+    const redondear = (val: number) => Math.round(val * 100) / 100;
 
     let cuotaAmortizacion = 0;
     if (nAmortizacion > 0) {
@@ -56,10 +56,9 @@ export class FinancieroHelper {
         // Ajuste en la última cuota para evitar residuos de redondeo
         if (k === nTotal) {
           capitalMes = saldo;
-          totalMes = redondear(capitalMes + interesMes);
-        } else {
-          totalMes = cuotaAmortizacion;
         }
+        // El total mensual es ESTRICATMENTE la suma de los valores
+        totalMes = redondear(capitalMes + interesMes);
         saldo = redondear(saldo - capitalMes);
       }
 

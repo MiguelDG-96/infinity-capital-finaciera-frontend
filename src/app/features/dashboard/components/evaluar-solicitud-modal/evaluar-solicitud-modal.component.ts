@@ -39,6 +39,7 @@ export class EvaluarSolicitudModalComponent implements OnInit {
       montoAprobado: [this.solicitud.montoSolicitado, [Validators.required, Validators.min(1)]],
       plazoMeses: [12, [Validators.required, Validators.min(1), Validators.max(120)]],
       tasaAprobada: [5.0, [Validators.required, Validators.min(0.01)]],
+      descuentoRetencion: [0],
       nuevoRequisito: ['']
     });
 
@@ -91,6 +92,7 @@ export class EvaluarSolicitudModalComponent implements OnInit {
       montoAprobado: this.evaluacionForm.get('montoAprobado')?.value,
       plazoMeses: this.evaluacionForm.get('plazoMeses')?.value,
       tasaAprobada: this.evaluacionForm.get('tasaAprobada')?.value,
+      descuentoRetencion: this.evaluacionForm.get('descuentoRetencion')?.value,
       requisitos: this.requisitosActuales.length > 0 ? this.requisitosActuales : undefined
     };
 
@@ -125,7 +127,8 @@ export class EvaluarSolicitudModalComponent implements OnInit {
           ...creditoCompleto,
           montoAprobado: this.evaluacionForm.get('montoAprobado')?.value,
           plazoMeses: this.evaluacionForm.get('plazoMeses')?.value,
-          tem: this.evaluacionForm.get('tasaAprobada')?.value
+          tem: this.evaluacionForm.get('tasaAprobada')?.value,
+          descuentoRetencion: this.evaluacionForm.get('descuentoRetencion')?.value
         };
         
         this.pdfService.descargarPDF(previewData).then(() => {

@@ -306,11 +306,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div class="sm:col-span-2">
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Nombre Cónyuge</p>
-                        <p class="font-black text-sm">{{ clienteView.conyuge.nombreCompleto }}</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.nombresConyuge }} {{ clienteView.conyuge.apellidoPaConyuge }} {{ clienteView.conyuge.apellidoMatConyuge }}</p>
                       </div>
                       <div>
-                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">DNI</p>
-                        <p class="font-black text-sm">{{ clienteView.conyuge.dni }}</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Tipo Documento</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.tipoDocumento || 'DNI' }}</p>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Número Documento</p>
+                        <p class="font-black text-sm">{{ clienteView.conyuge.numeroDocumento }}</p>
                       </div>
                       <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Celular</p>
@@ -488,12 +492,28 @@
                 @if (tabActiva() === 'conyuge') {
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="form-control sm:col-span-2">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre del Cónyuge</span></label>
-                      <input type="text" [(ngModel)]="clienteEdit().conyuge.nombreCompleto" class="input input-bordered input-sm rounded-xl" placeholder="Nombre completo..." />
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombres del Cónyuge</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.nombresConyuge" class="input input-bordered input-sm rounded-xl" placeholder="Nombres..." />
                     </div>
                     <div class="form-control">
-                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">DNI</span></label>
-                      <input type="text" [(ngModel)]="clienteEdit().conyuge.dni" class="input input-bordered input-sm rounded-xl" />
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Apellido Paterno</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.apellidoPaConyuge" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Apellido Materno</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.apellidoMatConyuge" class="input input-bordered input-sm rounded-xl" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Tipo Documento</span></label>
+                      <select [(ngModel)]="clienteEdit().conyuge.tipoDocumento" class="select select-bordered select-sm rounded-xl">
+                        <option value="DNI">DNI</option>
+                        <option value="CE">Carnet Extranjería</option>
+                        <option value="PASAPORTE">Pasaporte</option>
+                      </select>
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Número Documento</span></label>
+                      <input type="text" [(ngModel)]="clienteEdit().conyuge.numeroDocumento" class="input input-bordered input-sm rounded-xl" />
                     </div>
                     <div class="form-control">
                       <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>

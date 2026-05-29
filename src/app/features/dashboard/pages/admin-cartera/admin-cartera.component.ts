@@ -62,6 +62,9 @@ export class AdminCarteraComponent implements OnInit {
   totalActivos = 0;
   totalAtrasados = 0;
 
+  // Reporte de Caja
+  reporteCaja: any = null;
+
   procesando = false;
   mostrarModalResolver = false;
   creditoSeleccionado: Credito | null = null;
@@ -96,6 +99,7 @@ export class AdminCarteraComponent implements OnInit {
         this.creditos = data;
         this.paginaActual = 1;
         this.calcularMetricas(data);
+        this.cargarReporteCaja();
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -112,6 +116,16 @@ export class AdminCarteraComponent implements OnInit {
     this.totalCartera = data.reduce((sum, c) => sum + (c.montoAprobado || c.montoCredito), 0);
     this.totalActivos = data.filter(c => c.estado === 'ACTIVO').length;
     this.totalAtrasados = data.filter(c => c.estado === 'ATRASADO' || c.estado === 'MORA').reduce((sum, c) => sum + c.debeActualidad, 0);
+  }
+
+  cargarReporteCaja(): void {
+    this.creditoService.obtenerReporteCaja().subscribe({
+      next: (res) => {
+        this.reporteCaja = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error cargando reporte de caja:', err)
+    });
   }
 
   iniciarDesembolso(id: number): void {

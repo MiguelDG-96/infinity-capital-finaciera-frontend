@@ -192,10 +192,18 @@ export class CreditoDetalleComponent implements OnInit {
 
   enviarComprobante() {
     const cuota = this.cuotaSeleccionada();
-    if (!cuota || !this.comprobanteArchivo) {
+    const esEfectivo = this.comprobanteForm.metodoPago === 'EFECTIVO';
+    if (!cuota) {
+      return;
+    }
+    if (!esEfectivo && !this.comprobanteArchivo) {
       alert('Por favor selecciona una imagen del comprobante.');
       return;
     }
+    if (esEfectivo) {
+      this.comprobanteForm.numeroComprobante = 'EFECTIVO-' + Date.now().toString().slice(-6);
+    }
+    
     if (!this.comprobanteForm.numeroComprobante.trim()) {
       alert('Por favor ingresa el número/código de operación.');
       return;
@@ -207,7 +215,7 @@ export class CreditoDetalleComponent implements OnInit {
       this.comprobanteForm.monto,
       this.comprobanteForm.metodoPago,
       this.comprobanteForm.numeroComprobante,
-      this.comprobanteArchivo
+      this.comprobanteArchivo || new File([''], 'empty.txt', { type: 'text/plain' }) // Dummy file for FormData if needed, but backend takes required=false
     ).subscribe({
       next: (resp) => {
         this.subiendoComprobante.set(false);
@@ -325,7 +333,7 @@ export class CreditoDetalleComponent implements OnInit {
     if (!c || this.descargando()) return;
 
     this.descargando.set(true);
-    this.pdfService.descargarPDF(c).then(() => {
+    this.pdfService.descargarPDF(c, this.isClienteRecurrente()).then(() => {
         this.descargando.set(false);
     }).catch(err => {
         this.descargando.set(false);

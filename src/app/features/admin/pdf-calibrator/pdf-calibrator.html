@@ -1,0 +1,91 @@
+<div class="h-screen flex flex-col overflow-hidden bg-slate-900 text-slate-100 font-sans" [class.cursor-move]="isDragging">
+  <header class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center z-50">
+      <div class="flex items-center gap-6">
+          <div class="bg-blue-600 p-2 rounded-xl">⚙️</div>
+          <div>
+              <h1 class="text-xl font-black text-white tracking-tight">Calibrador Estético <span class="text-blue-500">v5.6</span></h1>
+              <div class="flex gap-4">
+                  <div class="flex items-center gap-4 bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5">
+                      <button (click)="changePage(-1)" class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all">←</button>
+                      <div class="text-[10px] font-black text-slate-400 tracking-widest uppercase w-24 text-center">PÁGINA {{currentPage}} / {{totalPages}}</div>
+                      <button (click)="changePage(1)" class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all">→</button>
+                  </div>
+                  
+                  <div class="flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5 mr-4">
+                      <span class="text-[9px] font-black text-slate-500 uppercase">Zoom</span>
+                      <input type="range" min="0.5" max="3.0" step="0.1" [(ngModel)]="currentScale" (input)="updateZoom($event)" class="w-24 h-1 bg-slate-800 accent-blue-500">
+                      <span class="text-[9px] font-black text-blue-400 w-8">{{currentScale * 100 | number:'1.0-0'}}%</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <button (click)="copyConfig()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl text-xs font-bold transition-all shadow-lg active:scale-95">Copiar Coordenadas</button>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+      <aside class="w-[360px] border-r border-slate-800 flex flex-col bg-slate-900/50">
+          <div class="flex overflow-x-auto border-b border-slate-800 custom-scrollbar bg-slate-900">
+              <button *ngFor="let tab of tabs" (click)="switchTab(tab)" 
+                  [class.active]="currentTab === tab"
+                  class="tab-btn px-4 py-3 text-[9px] font-black uppercase tracking-wider text-slate-500 whitespace-nowrap">
+                  {{tab}}
+              </button>
+          </div>
+          
+          <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+              <div *ngFor="let key of categories[currentTab]" class="p-3 mb-2 rounded-xl bg-slate-800/50 border border-slate-800">
+                  <h4 class="text-[8px] font-black text-blue-400 uppercase mb-2">{{key}}</h4>
+                  
+                  <ng-container *ngFor="let prop of objectKeys(currentCoords[key])">
+                    <div class="flex justify-between text-[8px] mb-1">
+                      <span>{{prop}}</span>
+                      <span class="text-blue-300">{{currentCoords[key][prop]}}</span>
+                    </div>
+                    <input type="range" class="w-full h-0.5 bg-slate-700 accent-blue-500 mb-2" 
+                      [min]="0" 
+                      [max]="prop === 'page' ? 9 : 850" 
+                      [value]="currentCoords[key][prop]" 
+                      [step]="prop === 'spacing' ? 0.1 : 1" 
+                      (input)="updateValue(key, prop, $event)">
+                  </ng-container>
+              </div>
+          </div>
+          
+          <div class="p-4 bg-slate-900 border-t border-slate-800">
+              <textarea class="w-full h-40 bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-[9px] text-emerald-400 custom-scrollbar" 
+                [value]="coordsString" 
+                (input)="onCoordsEditorChange($event)"></textarea>
+          </div>
+      </aside>
+
+      <main class="flex-1 overflow-auto p-10 bg-slate-950 flex justify-center items-start custom-scrollbar">
+          <div #previewContainer class="relative bg-white shadow-[0_0_100px_rgba(0,0,0,0.8)] origin-top">
+              <canvas #pdfCanvas class="absolute top-0 left-0 w-full h-full z-10"></canvas>
+              
+              <!-- Draggable Overlay -->
+              <div class="absolute top-0 left-0 w-full h-full z-20 pointer-events-none">
+                <div *ngFor="let handle of activeHandles"
+                     (mousedown)="startDrag($event, handle.key)"
+                     class="drag-handle"
+                     [class.active]="activeHandle === handle.key"
+                     [class.check-handle]="handle.isCheck"
+                     [style.left.px]="handle.x"
+                     [style.top.px]="handle.y"
+                     [style.fontSize.px]="handle.fontSize"
+                     [style.letterSpacing]="handle.letterSpacing">
+                     <ng-container *ngIf="handle.isDigits; else regularText">
+                        <span [innerHTML]="handle.contentHtml"></span>
+                     </ng-container>
+                     <ng-template #regularText>
+                        {{handle.textContent}}
+                     </ng-template>
+                </div>
+              </div>
+
+              <div *ngIf="isLoading" class="absolute inset-0 z-30 bg-slate-950 flex flex-col items-center justify-center">
+                  <div class="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+          </div>
+      </main>
+  </div>
+</div>

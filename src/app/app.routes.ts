@@ -55,6 +55,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/error/access-denied/access-denied.component').then(m => m.AccessDeniedComponent)
   },
   {
+    path: 'admin/calibrador-pdf',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/admin/pdf-calibrator/pdf-calibrator').then(m => m.PdfCalibrator)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

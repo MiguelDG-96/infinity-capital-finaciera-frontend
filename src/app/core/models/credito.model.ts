@@ -68,12 +68,17 @@ export interface SolicitudCredito {
   montoSolicitado: number;
   plazoMeses: number;
   periodoGracia?: number;
+  bancoDesembolso?: string;
   cuentaDesembolso?: string;
   canalEstadoCuenta?: string;
+  descuentoRetencion?: number;
 
   // Datos del cónyuge
-  conyugeNombre?: string;
-  conyugeDni?: string;
+  nombresConyuge?: string;
+  apellidoPaConyuge?: string;
+  apellidoMatConyuge?: string;
+  conyugeTipoDocumento?: string;
+  conyugeNumeroDocumento?: string;
   conyugeIngresos?: number;
   conyugeOcupacion?: string;
 
@@ -100,6 +105,7 @@ export interface EvaluacionCredito {
   montoAprobado?: number;
   plazoMeses?: number;
   tasaAprobada?: number;
+  descuentoRetencion?: number;
   requisitos?: string[];
 }
 
@@ -137,6 +143,7 @@ export interface Credito {
   id: number;
   montoCredito: number;
   montoAprobado?: number;
+  descuentoRetencion?: number;
   debeActualidad: number;
   nombreCliente?: string;
   documento?: string;
@@ -157,6 +164,7 @@ export interface Credito {
   periodoGracia?: number;
   tem?: number;
   fechaSolicitud: Date;
+  bancoDesembolso?: string;
   cuentaDesembolso?: string;
   cliente?: Cliente;
   garantes?: Garante[];

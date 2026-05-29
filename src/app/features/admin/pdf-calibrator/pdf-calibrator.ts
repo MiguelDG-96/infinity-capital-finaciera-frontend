@@ -1,0 +1,641 @@
+import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Configurar el worker desde CDN para evitar problemas de webpack con Angular
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+@Component({
+  selector: 'app-pdf-calibrator',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './pdf-calibrator.html',
+  styleUrl: './pdf-calibrator.css',
+})
+export class PdfCalibrator implements OnInit, AfterViewInit {
+  @ViewChild('pdfCanvas') pdfCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('previewContainer') previewContainer!: ElementRef<HTMLDivElement>;
+
+  pdfDoc: any = null;
+  currentScale = 1.6;
+  currentTab = 'identidad';
+  currentPage = 1;
+  totalPages = 0;
+  
+  isDragging = false;
+  activeHandle: string | null = null;
+  isLoading = true;
+
+  // Coordenadas base
+  currentCoords: any = {
+    "dni_check": {
+        "x": 34,
+        "y": 686,
+        "page": 0
+    },
+    "dni_digits": {
+        "startX": 350,
+        "y": 691,
+        "spacing": 9.7,
+        "page": 0
+    },
+    "apellido_paterno": {
+        "x": 107,
+        "y": 665,
+        "page": 0
+    },
+    "apellido_materno": {
+        "x": 279,
+        "y": 665,
+        "page": 0
+    },
+    "nombres": {
+        "x": 463,
+        "y": 665,
+        "page": 0
+    },
+    "nacionalidad": {
+        "x": 476,
+        "y": 650,
+        "page": 0
+    },
+    "check_secundaria": {
+        "x": 90,
+        "y": 508,
+        "page": 0
+    },
+    "check_tecnica": {
+        "x": 153,
+        "y": 508,
+        "page": 0
+    },
+    "check_universitaria": {
+        "x": 208,
+        "y": 509,
+        "page": 0
+    },
+    "check_completa": {
+        "x": 263,
+        "y": 507,
+        "page": 0
+    },
+    "check_incompleta": {
+        "x": 318,
+        "y": 507,
+        "page": 0
+    },
+    "fecha_solicitud_digits": {
+        "startX": 380,
+        "y": 779,
+        "spacing": 5.99,
+        "page": 0
+    },
+    "fecha_nacimiento_digits": {
+        "startX": 131,
+        "y": 650,
+        "spacing": 5.99,
+        "page": 0
+    },
+    "check_soltero": {
+        "x": 83,
+        "y": 632,
+        "page": 0
+    },
+    "check_casado": {
+        "x": 129,
+        "y": 637,
+        "page": 0
+    },
+    "check_viudo": {
+        "x": 181,
+        "y": 637,
+        "page": 0
+    },
+    "check_divorciado": {
+        "x": 226,
+        "y": 637,
+        "page": 0
+    },
+    "telefono": {
+        "x": 104,
+        "y": 595,
+        "page": 0
+    },
+    "celular": {
+        "x": 528,
+        "y": 597,
+        "page": 0
+    },
+    "correo_electronico": {
+        "x": 379,
+        "y": 596,
+        "page": 0
+    },
+    "check_sexo_f": {
+        "x": 283,
+        "y": 649,
+        "page": 0
+    },
+    "check_sexo_m": {
+        "x": 302,
+        "y": 649,
+        "page": 0
+    },
+    "check_estudios": {
+        "x": 35,
+        "y": 741,
+        "page": 0
+    },
+    "check_negocio": {
+        "x": 83,
+        "y": 741,
+        "page": 0
+    },
+    "check_personal": {
+        "x": 129,
+        "y": 741,
+        "page": 0
+    },
+    "check_vehicular": {
+        "x": 177,
+        "y": 741,
+        "page": 0
+    },
+    "check_hipotecario": {
+        "x": 225,
+        "y": 741,
+        "page": 0
+    },
+    "check_empresarial": {
+        "x": 283,
+        "y": 741,
+        "page": 0
+    },
+    "check_exclusivo_si": {
+        "x": 113,
+        "y": 732,
+        "page": 0
+    },
+    "check_exclusivo_no": {
+        "x": 171,
+        "y": 731,
+        "page": 0
+    },
+    "check_moneda_soles": {
+        "x": 260,
+        "y": 732,
+        "page": 0
+    },
+    "check_moneda_dolares": {
+        "x": 294,
+        "y": 732,
+        "page": 0
+    },
+    "departamento": {
+        "x": 490,
+        "y": 538,
+        "page": 0
+    },
+    "provincia": {
+        "x": 375,
+        "y": 538,
+        "page": 0
+    },
+    "distrito": {
+        "x": 248,
+        "y": 538,
+        "page": 0
+    },
+    "direccion": {
+        "x": 134,
+        "y": 561,
+        "page": 0
+    },
+    "urbanizacion": {
+        "x": 432,
+        "y": 560,
+        "page": 0
+    },
+    "manzana": {
+        "x": 303,
+        "y": 560,
+        "page": 0
+    },
+    "lote": {
+        "x": 313,
+        "y": 560,
+        "page": 0
+    },
+    "codigo_postal": {
+        "x": 128,
+        "y": 538,
+        "page": 0
+    },
+    "check_dependiente": {
+        "x": 35,
+        "y": 463,
+        "page": 0
+    },
+    "check_independiente": {
+        "x": 88,
+        "y": 462,
+        "page": 0
+    },
+    "empresa": {
+        "x": 229,
+        "y": 398,
+        "page": 0
+    },
+    "cargo_ocupacion": {
+        "x": 274,
+        "y": 443,
+        "page": 0
+    },
+    "ingreso_mensual": {
+        "x": 66,
+        "y": 297,
+        "page": 0
+    },
+    "ingreso_bruto_mensual": {
+        "x": 155,
+        "y": 298,
+        "page": 0
+    },
+    "ruc_empresa_digits": {
+        "startX": 84,
+        "y": 398,
+        "spacing": 9.7,
+        "page": 0
+    },
+    "ruc_propio_digits": {
+        "startX": 84,
+        "y": 398,
+        "spacing": 9.7,
+        "page": 0
+    },
+    "telefono_empresa": {
+        "x": 439,
+        "y": 300,
+        "page": 0
+    },
+    "fecha_ingreso_laboral_digits": {
+        "startX": 181,
+        "y": 325,
+        "spacing": 5.7,
+        "page": 0
+    },
+    "direccion_empresa": {
+        "x": 76,
+        "y": 345,
+        "page": 0
+    },
+    "nombres_conyuge": {
+        "x": 411,
+        "y": 205,
+        "page": 0
+    },
+    "apellido_pa_conyuge": {
+        "x": 49,
+        "y": 205,
+        "page": 0
+    },
+    "apellido_mat_conyuge": {
+        "x": 229,
+        "y": 205,
+        "page": 0
+    },
+    "conyuge_dni_digits": {
+        "startX": 341,
+        "y": 227,
+        "spacing": 9.7,
+        "page": 0
+    },
+    "conyuge_ocupacion": {
+        "x": 509,
+        "y": 89,
+        "page": 0
+    },
+    "conyuge_ingreso_mensual": {
+        "x": 65,
+        "y": 61,
+        "page": 0
+    },
+    "conyuge_telefono": {
+        "x": 479,
+        "y": 152,
+        "page": 0
+    },
+    "conyuge_nacionalidad": {
+        "x": 278,
+        "y": 189,
+        "page": 0
+    },
+    "check_dni_conyuge": {
+        "x": 35,
+        "y": 225,
+        "page": 0
+    },
+    "check_carnet_conyuge": {
+        "x": 167,
+        "y": 225,
+        "page": 0
+    },
+    "activo_auto": {
+        "x": 156,
+        "y": 767,
+        "page": 1
+    },
+    "pasivo_tarjetas": {
+        "x": 337,
+        "y": 752,
+        "page": 1
+    },
+    "patrimonio_neto": {
+        "x": 206,
+        "y": 680,
+        "page": 1
+    },
+    "monto_solicitado": {
+        "x": 103,
+        "y": 490,
+        "page": 1
+    },
+    "tasa": {
+        "x": 250,
+        "y": 490,
+        "page": 1
+    },
+    "plazo_meses": {
+        "x": 76,
+        "y": 579,
+        "page": 1
+    },
+    "dia_pago": {
+        "x": 528,
+        "y": 545,
+        "page": 1
+    },
+    "correo_envio": {
+        "x": 139,
+        "y": 360,
+        "page": 1
+    },
+    "firma_titular_nombre": {
+        "x": 56,
+        "y": 621,
+        "page": 8
+    },
+    "firma_titular_doc": {
+        "x": 59,
+        "y": 579,
+        "page": 8
+    },
+    "firma_conyuge_nombre": {
+        "x": 252,
+        "y": 622,
+        "page": 8
+    },
+    "firma_conyuge_doc": {
+        "x": 252,
+        "y": 579,
+        "page": 8
+    },
+    "firma_infiny_representante": {
+        "x": 507,
+        "y": 717,
+        "page": 8
+    },
+    "cronograma_monto": {
+        "x": 160,
+        "y": 765,
+        "page": 8
+    },
+    "cronograma_cuotas": {
+        "x": 160,
+        "y": 750,
+        "page": 8
+    },
+    "cronograma_fecha": {
+        "x": 160,
+        "y": 735,
+        "page": 8
+    }
+  };
+
+  coordsString = '';
+
+  mockData: any = {
+    "dni": "75776105",
+    "fecha_solicitud_digits": "06042026",
+    "fecha_nacimiento_digits": "15081995",
+    "apellido_paterno": "DOLIC",
+    "apellido_materno": "GARCIA", 
+    "nombres": "RAUL CHRISTIAN", 
+    "direccion": "AV. JAVIER PRADO 1500", 
+    "fecha_proceso": "06/04/2026",
+    "monto_aprobado": "S/ 5,000.00",
+    "cuota_mensual": "S/ 450.00",
+    "correo_envio": "raul.mendoza@email.com",
+    "ruc_empresa_digits": "10757761055",
+    "ruc_propio_digits": "10757761055",
+    "fecha_ingreso_laboral_digits": "0426",
+    "ingreso_mensual": "S/ 1,500.00",
+    "ingreso_bruto_mensual": "S/ 2,000.00",
+    "nombres_conyuge": "MARIA",
+    "apellido_pa_conyuge": "LOPEZ",
+    "apellido_mat_conyuge": "PEREZ",
+    "conyuge_dni_digits": "45678912",
+    "conyuge_ocupacion": "DOCENTE",
+    "conyuge_ingreso_mensual": "S/ 1,200.00",
+    "conyuge_telefono": "987654321",
+    "conyuge_nacionalidad": "PERUANA",
+    "firma_titular_nombre": "JUAN PEREZ",
+    "firma_titular_doc": "DNI 12345678",
+    "firma_conyuge_nombre": "MARIA LOPEZ",
+    "firma_conyuge_doc": "DNI 45678912",
+    "firma_infiny_representante": "ROIDER MALUQUIS"
+  };
+
+  categories: any = {
+    identidad: ['dni_check', 'dni_digits', 'fecha_solicitud_digits', 'fecha_nacimiento_digits', 'check_sexo_f', 'check_sexo_m', 'check_soltero', 'check_casado', 'check_viudo', 'check_divorciado', 'telefono', 'celular', 'correo_electronico', 'apellido_paterno', 'apellido_materno', 'nombres', 'nacionalidad', 'check_secundaria', 'check_tecnica', 'check_universitaria', 'check_completa', 'check_incompleta', 'check_estudios', 'check_negocio', 'check_personal', 'check_vehicular', 'check_hipotecario', 'check_empresarial'],
+    ubicacion: ['departamento', 'provincia', 'distrito', 'direccion', 'urbanizacion', 'manzana', 'lote', 'codigo_postal'],
+    laboral: ['check_dependiente', 'check_independiente', 'empresa', 'cargo_ocupacion', 'ingreso_mensual', 'ingreso_bruto_mensual', 'ruc_empresa_digits', 'ruc_propio_digits', 'telefono_empresa', 'fecha_ingreso_laboral_digits', 'direccion_empresa'],
+    conyuge: ['nombres_conyuge', 'apellido_pa_conyuge', 'apellido_mat_conyuge', 'check_dni_conyuge', 'check_carnet_conyuge', 'conyuge_dni_digits', 'conyuge_ocupacion', 'conyuge_ingreso_mensual', 'conyuge_telefono', 'conyuge_nacionalidad'],
+    patrimonio: ['activo_auto', 'pasivo_tarjetas', 'patrimonio_neto'],
+    credito: ['check_estudios', 'check_negocio', 'check_personal', 'check_vehicular', 'check_hipotecario', 'check_empresarial', 'check_exclusivo_si', 'check_exclusivo_no', 'check_moneda_soles', 'check_moneda_dolares', 'monto_solicitado', 'plazo_meses', 'dia_pago', 'correo_envio'],
+    calificacion: ['fecha_proceso', 'monto_aprobado', 'cuota_mensual'],
+    firmas: ['firma_titular_nombre', 'firma_titular_doc', 'firma_conyuge_nombre', 'firma_conyuge_doc', 'firma_infiny_representante']
+  };
+
+  tabs = Object.keys(this.categories);
+  
+  // Expose Object.keys for the template
+  objectKeys = Object.keys;
+
+  constructor() {
+    this.updateCoordsString();
+  }
+
+  ngOnInit() {}
+
+  async ngAfterViewInit() {
+    try {
+      const loadingTask = pdfjsLib.getDocument('/pdf/contrato_template_v2.pdf');
+      this.pdfDoc = await loadingTask.promise;
+      this.totalPages = this.pdfDoc.numPages;
+      this.isLoading = false;
+      this.renderCurrentPage();
+    } catch (err) {
+      console.error('Error cargando PDF', err);
+      alert('Error cargando PDF. Asegúrese de que /pdf/contrato_template_v2.pdf existe.');
+    }
+  }
+
+  changePage(delta: number) {
+    const next = this.currentPage + delta;
+    if (this.pdfDoc && next >= 1 && next <= this.pdfDoc.numPages) {
+      this.currentPage = next;
+      this.renderCurrentPage();
+    }
+  }
+
+  switchTab(tabId: string) {
+    this.currentTab = tabId;
+    const firstField = this.categories[tabId][0];
+    if (this.currentCoords[firstField]) {
+      const targetPage = (this.currentCoords[firstField].page || 0) + 1;
+      if (targetPage !== this.currentPage) {
+        this.currentPage = targetPage;
+        this.renderCurrentPage();
+      }
+    }
+  }
+
+  updateZoom(event: any) {
+    this.currentScale = parseFloat(event.target.value);
+    this.renderCurrentPage();
+  }
+
+  async renderCurrentPage() {
+    if (!this.pdfDoc || !this.pdfCanvas) return;
+    try {
+      const page = await this.pdfDoc.getPage(this.currentPage);
+      const viewport = page.getViewport({ scale: this.currentScale });
+      const canvas = this.pdfCanvas.nativeElement;
+      const context = canvas.getContext('2d');
+      const container = this.previewContainer.nativeElement;
+      
+      container.style.width = `${595 * this.currentScale}px`;
+      container.style.height = `${842 * this.currentScale}px`;
+      canvas.width = 595 * this.currentScale;
+      canvas.height = 842 * this.currentScale;
+      
+      await page.render({ canvasContext: context as any, viewport: viewport }).promise;
+      
+      // Dibujar recuadro faltante "Negocio" en la página 1
+      // (Eliminado a petición del usuario: se integrará directamente en la plantilla Word/PDF)
+
+    } catch (err) {
+      console.error("Error renderizando página:", err);
+    }
+  }
+
+  get activeHandles() {
+    const fields = this.categories[this.currentTab];
+    return fields.filter((key: string) => {
+      const coord = this.currentCoords[key];
+      return coord && (coord.page + 1) === this.currentPage;
+    }).map((key: string) => {
+      const coord = this.currentCoords[key];
+      let contentHtml = '';
+      let isDigits = key.includes('_digits');
+      let isCheck = key.includes('check');
+      let textContent = this.mockData[key] || (isCheck ? 'X' : key.toUpperCase());
+      let letterSpacing = 'normal';
+
+      if (isDigits) {
+        const val = this.mockData[key] || '12345678';
+        const digits = val.split('');
+        contentHtml = digits.map((d: string) => `<span>${d}</span>`).join('');
+        letterSpacing = `${(coord.spacing * this.currentScale) - 7}px`;
+        textContent = '';
+      }
+
+      const x = (coord.x || coord.startX || 50) * this.currentScale;
+      const y = (842 - (coord.y || 100)) * this.currentScale;
+
+      return {
+        key,
+        x,
+        y,
+        fontSize: 8 * this.currentScale,
+        isCheck,
+        isDigits,
+        contentHtml,
+        textContent,
+        letterSpacing,
+        coord
+      };
+    });
+  }
+
+  startDrag(event: MouseEvent, key: string) {
+    this.isDragging = true;
+    this.activeHandle = key;
+    event.preventDefault();
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (!this.isDragging || !this.activeHandle || !this.previewContainer) return;
+    
+    const container = this.previewContainer.nativeElement;
+    const rect = container.getBoundingClientRect();
+    
+    const x = (event.clientX - rect.left) / this.currentScale;
+    const y = (event.clientY - rect.top) / this.currentScale;
+
+    const finalX = Math.round(Math.max(0, Math.min(595, x)));
+    const finalY = Math.round(Math.max(0, Math.min(842, 842 - y)));
+
+    const coord = this.currentCoords[this.activeHandle];
+    if (coord.startX !== undefined) coord.startX = finalX;
+    else coord.x = finalX;
+    coord.y = finalY;
+
+    this.updateCoordsString();
+  }
+
+  @HostListener('document:mouseup')
+  onMouseUp() {
+    this.isDragging = false;
+    this.activeHandle = null;
+  }
+
+  updateValue(key: string, prop: string, event: any) {
+    const value = parseFloat(event.target.value);
+    this.currentCoords[key][prop] = value;
+    if (prop === 'page') {
+      this.renderCurrentPage();
+    }
+    this.updateCoordsString();
+  }
+
+  updateCoordsString() {
+    this.coordsString = JSON.stringify(this.currentCoords, null, 4);
+  }
+
+  onCoordsEditorChange(event: any) {
+    try {
+      this.currentCoords = JSON.parse(event.target.value);
+      this.renderCurrentPage();
+    } catch(e) {}
+  }
+
+  copyConfig() {
+    navigator.clipboard.writeText(this.coordsString).then(() => {
+      alert('¡Copiado!');
+    });
+  }
+}

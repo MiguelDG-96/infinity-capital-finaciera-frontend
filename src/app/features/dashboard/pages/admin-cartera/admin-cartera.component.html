@@ -44,6 +44,34 @@
         </div>
     </div>
 
+    <!-- Reporte de Caja (Cierre de Caja) -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5 mt-6 mb-6 overflow-hidden rounded-3xl" *ngIf="reporteCaja">
+        <div class="px-6 py-4 border-b border-base-content/5 flex justify-between items-center bg-primary/5">
+            <h3 class="font-bold text-lg flex items-center gap-2">
+                <lucide-icon name="wallet" class="w-5 h-5 text-primary"></lucide-icon>
+                Reporte de Caja General
+            </h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-base-content/5">
+            <div class="p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Cuentas Banco (Yape/Transferencias)</p>
+                <p class="text-2xl font-black text-info">{{ reporteCaja.totalBanco | currency:'S/ ' }}</p>
+            </div>
+            <div class="p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Caja Física (Efectivo)</p>
+                <p class="text-2xl font-black text-success">{{ reporteCaja.totalFisico | currency:'S/ ' }}</p>
+            </div>
+            <div class="p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Ganancia/Pérdida por redondeos de caja</p>
+                <p class="text-2xl font-black" 
+                   [ngClass]="(reporteCaja.ajusteRedondeo || 0) > 0 ? 'text-success' : ((reporteCaja.ajusteRedondeo || 0) < 0 ? 'text-error' : 'text-base-content')">
+                    {{ (reporteCaja.ajusteRedondeo || 0) | currency:'S/ ' }}
+                </p>
+                <p class="text-xs opacity-50 mt-1 font-medium italic">(un margen de error contable totalmente legal y normal).</p>
+            </div>
+        </div>
+    </div>
+
     @if (cargando) {
         <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
             <span class="loading loading-spinner loading-lg text-primary"></span>

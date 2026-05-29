@@ -132,8 +132,11 @@ export class AdminCrearCreditoComponent implements OnInit {
       direccionEmpresa: [''],
 
       // 4. Cónyuge y Garante
-      conyugeNombre: [''],
-      conyugeDni: [''],
+      nombresConyuge: [''],
+      apellidoPaConyuge: [''],
+      apellidoMatConyuge: [''],
+      conyugeTipoDocumento: ['DNI'],
+      conyugeNumeroDocumento: [''],
       conyugeOcupacion: [''],
       
       garanteNombre: [''],
@@ -146,9 +149,11 @@ export class AdminCrearCreditoComponent implements OnInit {
       tipoCreditoId: ['', Validators.required],
       monedaId: [1, Validators.required], // Asumiendo PEN por defecto
       periodoGracia: [0],
+      bancoDesembolso: [''],
       cuentaDesembolso: ['', [Validators.pattern('^[0-9]+$')]],
       canalEstadoCuenta: ['EMAIL'],
-      desembolsarAutomaticamente: [false]
+      desembolsarAutomaticamente: [false],
+      descuentoRetencion: [0]
     });
   }
 

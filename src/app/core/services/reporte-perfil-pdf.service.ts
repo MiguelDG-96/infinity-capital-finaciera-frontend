@@ -174,8 +174,9 @@ export class ReportePerfilPdfService {
     if (c.conyuge) {
       y += 8; this.seccion(doc, '5. INFORMACIÓN DEL CÓNYUGE', y, primary); y += 10;
       y = this.grid(doc, [
-        ['Nombre Completo',   this.fmt(c.conyuge.nombreCompleto)],
-        ['DNI',               this.fmt(c.conyuge.dni)],
+        ['Nombre Completo',   this.fmt(`${c.conyuge.nombresConyuge || ''} ${c.conyuge.apellidoPaConyuge || ''} ${c.conyuge.apellidoMatConyuge || ''}`.trim())],
+        ['Tipo Documento',    this.fmt(c.conyuge.tipoDocumento || 'DNI')],
+        ['N° Documento',      this.fmt(c.conyuge.numeroDocumento)],
         ['Celular',           this.fmt(c.conyuge.telefono)],
         ['Ocupación',         this.fmt(c.conyuge.ocupacion)],
         ['Ingresos Mensuales',this.fmtMoney(c.conyuge.ingresosMensuales)],

@@ -52,8 +52,11 @@ export interface Cliente {
 
 export interface Conyuge {
   id?: number;
-  nombreCompleto: string;
-  dni: string;
+  nombresConyuge: string;
+  apellidoPaConyuge: string;
+  apellidoMatConyuge: string;
+  tipoDocumento?: string;
+  numeroDocumento?: string;
   ocupacion?: string;
   ingresosMensuales?: number;
   telefono?: string;

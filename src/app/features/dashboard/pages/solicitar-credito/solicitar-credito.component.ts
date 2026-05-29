@@ -143,6 +143,7 @@ export class SolicitarCreditoComponent implements OnInit {
       montoSolicitado: [1000, [Validators.required, Validators.min(100), Validators.max(1000000)]],
       plazoMeses: [12, [Validators.required, Validators.min(1), Validators.max(60)]],
       periodoGracia: [0, [Validators.min(0), Validators.max(6)]],
+      bancoDesembolso: ['', [Validators.required]],
       cuentaDesembolso: ['', [Validators.required, Validators.minLength(10)]],
 
       // Paso 2: Identidad y Contacto
@@ -185,8 +186,11 @@ export class SolicitarCreditoComponent implements OnInit {
       representanteLegal: [''],
 
       // Paso 5: Garante y Cónyuge
-      conyugeNombre: [''],
-      conyugeDni: [''],
+      nombresConyuge: [''],
+      apellidoPaConyuge: [''],
+      apellidoMatConyuge: [''],
+      conyugeTipoDocumento: ['DNI'],
+      conyugeNumeroDocumento: [''],
       conyugeOcupacion: [''],
 
       // Garante (Opcional)
@@ -217,14 +221,20 @@ export class SolicitarCreditoComponent implements OnInit {
 
     this.solicitudForm.get('estadoCivil')?.valueChanges.subscribe(val => {
       if (['CASADO', 'CONVIVIENTE'].includes(val)) {
-        this.solicitudForm.get('conyugeNombre')?.setValidators([Validators.required]);
-        this.solicitudForm.get('conyugeDni')?.setValidators([Validators.required, Validators.minLength(8)]);
+        this.solicitudForm.get('nombresConyuge')?.setValidators([Validators.required]);
+        this.solicitudForm.get('apellidoPaConyuge')?.setValidators([Validators.required]);
+        this.solicitudForm.get('apellidoMatConyuge')?.setValidators([Validators.required]);
+        this.solicitudForm.get('conyugeNumeroDocumento')?.setValidators([Validators.required, Validators.minLength(8)]);
       } else {
-        this.solicitudForm.get('conyugeNombre')?.clearValidators();
-        this.solicitudForm.get('conyugeDni')?.clearValidators();
+        this.solicitudForm.get('nombresConyuge')?.clearValidators();
+        this.solicitudForm.get('apellidoPaConyuge')?.clearValidators();
+        this.solicitudForm.get('apellidoMatConyuge')?.clearValidators();
+        this.solicitudForm.get('conyugeNumeroDocumento')?.clearValidators();
       }
-      this.solicitudForm.get('conyugeNombre')?.updateValueAndValidity();
-      this.solicitudForm.get('conyugeDni')?.updateValueAndValidity();
+      this.solicitudForm.get('nombresConyuge')?.updateValueAndValidity();
+      this.solicitudForm.get('apellidoPaConyuge')?.updateValueAndValidity();
+      this.solicitudForm.get('apellidoMatConyuge')?.updateValueAndValidity();
+      this.solicitudForm.get('conyugeNumeroDocumento')?.updateValueAndValidity();
     });
 
     this.solicitudForm.get('situacionLaboral')?.valueChanges.subscribe(val => {
@@ -284,8 +294,11 @@ export class SolicitarCreditoComponent implements OnInit {
 
           if (cliente.conyuge) {
             this.solicitudForm.patchValue({
-              conyugeNombre: cliente.conyuge.nombreCompleto || '',
-              conyugeDni: cliente.conyuge.dni || '',
+              nombresConyuge: cliente.conyuge.nombresConyuge || '',
+              apellidoPaConyuge: cliente.conyuge.apellidoPaConyuge || '',
+              apellidoMatConyuge: cliente.conyuge.apellidoMatConyuge || '',
+              conyugeTipoDocumento: cliente.conyuge.tipoDocumento || 'DNI',
+              conyugeNumeroDocumento: cliente.conyuge.numeroDocumento || '',
               conyugeOcupacion: cliente.conyuge.ocupacion || cliente.conyuge.profesion || ''
             });
           }
@@ -356,7 +369,7 @@ export class SolicitarCreditoComponent implements OnInit {
 
   private canContinue(): boolean {
     const fieldsByStep: { [key: number]: string[] } = {
-      1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'cuentaDesembolso'],
+      1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
       2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular'],
       3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral'],
@@ -394,11 +407,11 @@ export class SolicitarCreditoComponent implements OnInit {
 
   private markStepAsTouched(): void {
     const fieldsByStep: { [key: number]: string[] } = {
-      1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'cuentaDesembolso'],
+      1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
       2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular', 'telefono'],
       3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral', 'rucPropio', 'empresa', 'rucEmpresa', 'direccionEmpresa', 'razonSocialJuridica', 'rucJuridico', 'representanteLegal'],
-      5: ['conyugeNombre', 'conyugeDni', 'garanteNombre', 'garanteDni', 'canalEstadoCuenta', 'terminosAceptados']
+      5: ['nombresConyuge', 'apellidoPaConyuge', 'apellidoMatConyuge', 'conyugeNumeroDocumento', 'garanteNombre', 'garanteDni', 'canalEstadoCuenta', 'terminosAceptados']
     };
     const fields = fieldsByStep[this.currentStep] || [];
     fields.forEach(field => this.solicitudForm.get(field)?.markAsTouched());

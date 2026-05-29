@@ -95,11 +95,16 @@ export class CreditoMapper {
       montoSolicitado: domain.montoSolicitado,
       plazoMeses: domain.plazoMeses,
       periodoGracia: domain.periodoGracia,
+      bancoDesembolso: domain.bancoDesembolso,
       cuentaDesembolso: domain.cuentaDesembolso,
       canalEstadoCuenta: domain.canalEstadoCuenta,
+      descuentoRetencion: domain.descuentoRetencion,
 
-      conyugeNombre: domain.conyugeNombre,
-      conyugeDni: domain.conyugeDni,
+      nombresConyuge: domain.nombresConyuge,
+      apellidoPaConyuge: domain.apellidoPaConyuge,
+      apellidoMatConyuge: domain.apellidoMatConyuge,
+      conyugeTipoDocumento: domain.conyugeTipoDocumento,
+      conyugeNumeroDocumento: domain.conyugeNumeroDocumento,
       conyugeIngresos: domain.conyugeIngresos,
       conyugeOcupacion: domain.conyugeOcupacion,
 
@@ -116,6 +121,7 @@ export class CreditoMapper {
       montoAprobado: domain.montoAprobado,
       plazoMeses: domain.plazoMeses,
       tasaAprobada: domain.tasaAprobada,
+      descuentoRetencion: domain.descuentoRetencion,
       requisitosASolicitar: domain.requisitos
     };
   }
@@ -162,6 +168,7 @@ export class CreditoMapper {
       id: dto.id,
       montoCredito: dto.montoCredito ?? 0,
       montoAprobado: dto.montoAprobado,
+      descuentoRetencion: dto.descuentoRetencion,
       debeActualidad: dto.debeActualidad ?? 0,
       nombreCliente: dto.cliente?.usuario?.nombreCompleto || 'Cliente Desconocido',
       documento: dto.cliente ? `${dto.cliente.tipoDocumento} - ${dto.cliente.numeroDocumento}` : 'Sin Documento',
@@ -180,6 +187,7 @@ export class CreditoMapper {
       montoTotal: dto.montoTotal,
       cuotaMensual: dto.cuotaMensual,
       periodoGracia: dto.periodoGracia,
+      bancoDesembolso: dto.bancoDesembolso,
       cuentaDesembolso: dto.cuentaDesembolso,
       tem: dto.tem || dto.tasaAprobada,
       fechaSolicitud: dto.fechaSolicitud ? this.parseLocalDate(dto.fechaSolicitud) : (dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : new Date()),
