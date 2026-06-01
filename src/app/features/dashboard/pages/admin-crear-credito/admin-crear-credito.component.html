@@ -379,6 +379,12 @@
         </div>
 
         <div class="form-control md:col-span-1">
+          <label class="label"><span class="label-text font-bold text-info">Fecha Desembolso</span></label>
+          <input type="date" formControlName="fechaDesembolso" class="input input-bordered bg-base-200/30 w-full"
+            title="Dejar vacío para usar la fecha de hoy" />
+        </div>
+
+        <div class="form-control md:col-span-1">
           <label class="label"><span class="label-text font-bold">Banco Desembolso</span></label>
           <select formControlName="bancoDesembolso" class="select select-bordered bg-base w-full">
             <option value="">Seleccione Banco...</option>

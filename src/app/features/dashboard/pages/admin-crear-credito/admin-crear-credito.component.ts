@@ -1,5 +1,5 @@
 // src/app/features/dashboard/pages/admin-crear-credito/admin-crear-credito.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -36,7 +36,8 @@ export class AdminCrearCreditoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private creditoService: CreditoService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -80,7 +81,8 @@ export class AdminCrearCreditoComponent implements OnInit {
         numeroDependientes: 0,
         situacionLaboral: 'DEPENDIENTE',
         canalEstadoCuenta: 'EMAIL',
-        desembolsarAutomaticamente: false
+        desembolsarAutomaticamente: false,
+        fechaDesembolso: ''
       });
       localStorage.removeItem(this.DRAFT_KEY);
     }
@@ -153,7 +155,8 @@ export class AdminCrearCreditoComponent implements OnInit {
       cuentaDesembolso: ['', [Validators.pattern('^[0-9]+$')]],
       canalEstadoCuenta: ['EMAIL'],
       desembolsarAutomaticamente: [false],
-      descuentoRetencion: [0]
+      descuentoRetencion: [0],
+      fechaDesembolso: ['']
     });
   }
 
@@ -167,15 +170,19 @@ export class AdminCrearCreditoComponent implements OnInit {
 
   cargarCatalogos() {
     this.creditoService.obtenerTiposCreditoActivos().subscribe({
-      next: (res) => this.tiposCredito = res,
+      next: (res) => {
+        this.tiposCredito = res;
+        this.cdr.detectChanges();
+      },
       error: (err) => console.error('Error cargando tipos', err)
     });
     this.creditoService.obtenerMonedasActivas().subscribe({
       next: (res) => {
         this.monedas = res;
         if(res.length > 0) {
-          this.formulario.patchValue({ monedaId: res[0].id });
+          this.formulario.patchValue({ monedaId: res[0].id }, { emitEvent: false });
         }
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error cargando monedas', err)
     });
@@ -209,7 +216,8 @@ export class AdminCrearCreditoComponent implements OnInit {
       vals.montoSolicitado,
       vals.plazoMeses,
       this.tasaSimulada,
-      vals.periodoGracia || 0
+      vals.periodoGracia || 0,
+      vals.fechaDesembolso ? new Date(vals.fechaDesembolso + 'T00:00:00') : undefined
     );
 
     this.montoTotalSimulado = this.cuotasSimuladas.reduce((acc, c) => acc + c.total, 0);

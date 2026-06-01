@@ -21,7 +21,8 @@ export class FinancieroHelper {
     monto: number,
     plazo: number,
     tem: number,
-    gracia: number = 0
+    gracia: number = 0,
+    fechaInicio?: Date
   ): CuotaSimulada[] {
     const i = tem / 100;
     const nTotal = plazo;
@@ -41,7 +42,7 @@ export class FinancieroHelper {
 
     const cuotas: CuotaSimulada[] = [];
     let saldo = redondear(monto);
-    const fechaBase = new Date();
+    const fechaBase = fechaInicio ? new Date(fechaInicio) : new Date();
 
     for (let k = 1; k <= nTotal; k++) {
       const interesMes = redondear(saldo * i);
