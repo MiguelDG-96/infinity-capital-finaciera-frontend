@@ -1,4 +1,4 @@
-import { Component, OnInit, output, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { Credito } from '../../../../core/models/credito.model';
   templateUrl: './dashboard-navbar.component.html',
   styleUrl: './dashboard-navbar.component.css',
 })
-export class DashboardNavbarComponent implements OnInit {
+export class DashboardNavbarComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private creditoService = inject(CreditoService);
 
@@ -111,6 +111,10 @@ export class DashboardNavbarComponent implements OnInit {
     this.showDropdown.set(false);
     this.searchControl.setValue('', { emitEvent: false });
     this.router.navigate(['/dashboard/admin/cartera', creditoId]);
+  }
+
+  ngOnDestroy() {
+    this.notificationService.detenerPolling();
   }
 
   hideDropdown() {

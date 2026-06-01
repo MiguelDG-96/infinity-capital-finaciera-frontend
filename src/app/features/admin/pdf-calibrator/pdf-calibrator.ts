@@ -35,7 +35,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "dni_digits": {
-        "startX": 328,
+        "startX": 348,
         "y": 692,
         "spacing": 8.7,
         "page": 0
@@ -61,38 +61,38 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_secundaria": {
-        "x": 84,
-        "y": 508,
+        "x": 90,
+        "y": 507,
         "page": 0
     },
     "check_tecnica": {
-        "x": 144,
+        "x": 154,
         "y": 508,
         "page": 0
     },
     "check_universitaria": {
-        "x": 195,
+        "x": 208,
         "y": 507,
         "page": 0
     },
     "check_completa": {
-        "x": 247,
-        "y": 507,
+        "x": 262,
+        "y": 506,
         "page": 0
     },
     "check_incompleta": {
-        "x": 299,
+        "x": 319,
         "y": 507,
         "page": 0
     },
     "fecha_solicitud_digits": {
-        "startX": 359,
+        "startX": 379,
         "y": 778,
         "spacing": 5.99,
         "page": 0
     },
     "fecha_nacimiento_digits": {
-        "startX": 123,
+        "startX": 126,
         "y": 650,
         "spacing": 5.99,
         "page": 0
@@ -103,17 +103,17 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_casado": {
-        "x": 124,
-        "y": 637,
-        "page": 0
-    },
-    "check_viudo": {
-        "x": 171,
+        "x": 130,
         "y": 636,
         "page": 0
     },
+    "check_viudo": {
+        "x": 183,
+        "y": 637,
+        "page": 0
+    },
     "check_divorciado": {
-        "x": 213,
+        "x": 227,
         "y": 635,
         "page": 0
     },
@@ -123,7 +123,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "celular": {
-        "x": 501,
+        "x": 523,
         "y": 596,
         "page": 0
     },
@@ -133,13 +133,13 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_sexo_f": {
-        "x": 266,
+        "x": 282,
         "y": 650,
         "page": 0
     },
     "check_sexo_m": {
-        "x": 285,
-        "y": 650,
+        "x": 302,
+        "y": 649,
         "page": 0
     },
     "check_estudios": {
@@ -148,48 +148,48 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_negocio": {
-        "x": 79,
-        "y": 740,
+        "x": 85,
+        "y": 742,
         "page": 0
     },
     "check_personal": {
-        "x": 123,
-        "y": 741,
+        "x": 130,
+        "y": 742,
         "page": 0
     },
     "check_vehicular": {
-        "x": 167,
-        "y": 741,
+        "x": 179,
+        "y": 742,
         "page": 0
     },
     "check_hipotecario": {
-        "x": 212,
-        "y": 741,
+        "x": 226,
+        "y": 742,
         "page": 0
     },
     "check_empresarial": {
-        "x": 266,
-        "y": 741,
+        "x": 285,
+        "y": 742,
         "page": 0
     },
     "check_exclusivo_si": {
-        "x": 107,
-        "y": 730,
+        "x": 115,
+        "y": 732,
         "page": 0
     },
     "check_exclusivo_no": {
-        "x": 162,
+        "x": 173,
         "y": 732,
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 244,
-        "y": 732,
+        "x": 261,
+        "y": 730,
         "page": 0
     },
     "check_moneda_dolares": {
-        "x": 278,
-        "y": 731,
+        "x": 296,
+        "y": 732,
         "page": 0
     },
     "departamento": {
@@ -263,14 +263,14 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "ruc_empresa_digits": {
-        "startX": 81,
+        "startX": 74,
         "y": 396,
         "spacing": 9.7,
         "page": 0
     },
     "ruc_propio_digits": {
-        "startX": 81,
-        "y": 395,
+        "startX": 74,
+        "y": 397,
         "spacing": 9.7,
         "page": 0
     },
@@ -522,7 +522,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "spacing": 8.7,
         "page": 1
     }
-  };
+};
 
   coordsString = '';
 

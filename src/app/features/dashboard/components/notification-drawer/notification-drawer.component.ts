@@ -1,5 +1,5 @@
 // src/app/features/dashboard/components/notification-drawer/notification-drawer.component.ts
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -12,7 +12,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   templateUrl: './notification-drawer.component.html',
   styleUrls: ['./notification-drawer.component.css']
 })
-export class NotificationDrawerComponent implements OnInit {
+export class NotificationDrawerComponent implements OnInit, OnDestroy {
   notificationService = inject(NotificationService);
   private authService = inject(AuthService);
 
@@ -29,6 +29,10 @@ export class NotificationDrawerComponent implements OnInit {
 
   close() {
     this.notificationService.close();
+  }
+
+  ngOnDestroy() {
+    this.notificationService.detenerPolling();
   }
 
   irAlCredito(creditoId: number) {
