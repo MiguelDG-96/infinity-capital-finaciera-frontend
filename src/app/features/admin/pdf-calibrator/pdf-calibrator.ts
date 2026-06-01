@@ -35,9 +35,9 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "dni_digits": {
-        "startX": 350,
-        "y": 691,
-        "spacing": 9.7,
+        "startX": 328,
+        "y": 692,
+        "spacing": 8.7,
         "page": 0
     },
     "apellido_paterno": {
@@ -61,60 +61,60 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_secundaria": {
-        "x": 90,
+        "x": 84,
         "y": 508,
         "page": 0
     },
     "check_tecnica": {
-        "x": 153,
+        "x": 144,
         "y": 508,
         "page": 0
     },
     "check_universitaria": {
-        "x": 208,
-        "y": 509,
+        "x": 195,
+        "y": 507,
         "page": 0
     },
     "check_completa": {
-        "x": 263,
+        "x": 247,
         "y": 507,
         "page": 0
     },
     "check_incompleta": {
-        "x": 318,
+        "x": 299,
         "y": 507,
         "page": 0
     },
     "fecha_solicitud_digits": {
-        "startX": 380,
-        "y": 779,
+        "startX": 359,
+        "y": 778,
         "spacing": 5.99,
         "page": 0
     },
     "fecha_nacimiento_digits": {
-        "startX": 131,
+        "startX": 123,
         "y": 650,
         "spacing": 5.99,
         "page": 0
     },
     "check_soltero": {
-        "x": 83,
+        "x": 79,
         "y": 632,
         "page": 0
     },
     "check_casado": {
-        "x": 129,
+        "x": 124,
         "y": 637,
         "page": 0
     },
     "check_viudo": {
-        "x": 181,
-        "y": 637,
+        "x": 171,
+        "y": 636,
         "page": 0
     },
     "check_divorciado": {
-        "x": 226,
-        "y": 637,
+        "x": 213,
+        "y": 635,
         "page": 0
     },
     "telefono": {
@@ -123,8 +123,8 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "celular": {
-        "x": 528,
-        "y": 597,
+        "x": 501,
+        "y": 596,
         "page": 0
     },
     "correo_electronico": {
@@ -133,13 +133,13 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_sexo_f": {
-        "x": 283,
-        "y": 649,
+        "x": 266,
+        "y": 650,
         "page": 0
     },
     "check_sexo_m": {
-        "x": 302,
-        "y": 649,
+        "x": 285,
+        "y": 650,
         "page": 0
     },
     "check_estudios": {
@@ -148,48 +148,48 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_negocio": {
-        "x": 83,
-        "y": 741,
+        "x": 79,
+        "y": 740,
         "page": 0
     },
     "check_personal": {
-        "x": 129,
+        "x": 123,
         "y": 741,
         "page": 0
     },
     "check_vehicular": {
-        "x": 177,
+        "x": 167,
         "y": 741,
         "page": 0
     },
     "check_hipotecario": {
-        "x": 225,
+        "x": 212,
         "y": 741,
         "page": 0
     },
     "check_empresarial": {
-        "x": 283,
+        "x": 266,
         "y": 741,
         "page": 0
     },
     "check_exclusivo_si": {
-        "x": 113,
-        "y": 732,
+        "x": 107,
+        "y": 730,
         "page": 0
     },
     "check_exclusivo_no": {
-        "x": 171,
-        "y": 731,
+        "x": 162,
+        "y": 732,
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 260,
+        "x": 244,
         "y": 732,
         "page": 0
     },
     "check_moneda_dolares": {
-        "x": 294,
-        "y": 732,
+        "x": 278,
+        "y": 731,
         "page": 0
     },
     "departamento": {
@@ -208,27 +208,27 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "direccion": {
-        "x": 134,
-        "y": 561,
+        "x": 119,
+        "y": 560,
         "page": 0
     },
     "urbanizacion": {
-        "x": 432,
-        "y": 560,
+        "x": 404,
+        "y": 561,
         "page": 0
     },
     "manzana": {
-        "x": 303,
-        "y": 560,
+        "x": 260,
+        "y": 561,
         "page": 0
     },
     "lote": {
-        "x": 313,
+        "x": 308,
         "y": 560,
         "page": 0
     },
     "codigo_postal": {
-        "x": 128,
+        "x": 118,
         "y": 538,
         "page": 0
     },
@@ -263,14 +263,14 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "ruc_empresa_digits": {
-        "startX": 84,
-        "y": 398,
+        "startX": 81,
+        "y": 396,
         "spacing": 9.7,
         "page": 0
     },
     "ruc_propio_digits": {
-        "startX": 84,
-        "y": 398,
+        "startX": 81,
+        "y": 395,
         "spacing": 9.7,
         "page": 0
     },
@@ -280,7 +280,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "fecha_ingreso_laboral_digits": {
-        "startX": 181,
+        "startX": 175,
         "y": 325,
         "spacing": 5.7,
         "page": 0
@@ -306,14 +306,14 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "conyuge_dni_digits": {
-        "startX": 341,
+        "startX": 329,
         "y": 227,
         "spacing": 9.7,
         "page": 0
     },
     "conyuge_ocupacion": {
-        "x": 509,
-        "y": 89,
+        "x": 489,
+        "y": 87,
         "page": 0
     },
     "conyuge_ingreso_mensual": {
@@ -322,8 +322,8 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "conyuge_telefono": {
-        "x": 479,
-        "y": 152,
+        "x": 461,
+        "y": 153,
         "page": 0
     },
     "conyuge_nacionalidad": {
@@ -332,12 +332,12 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_dni_conyuge": {
-        "x": 35,
+        "x": 33,
         "y": 225,
         "page": 0
     },
     "check_carnet_conyuge": {
-        "x": 167,
+        "x": 158,
         "y": 225,
         "page": 0
     },
@@ -346,19 +346,114 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "y": 767,
         "page": 1
     },
+    "activo_inmueble": {
+        "x": 156,
+        "y": 750,
+        "page": 1
+    },
+    "activo_ahorros": {
+        "x": 156,
+        "y": 735,
+        "page": 1
+    },
+    "activo_plazofijo": {
+        "x": 156,
+        "y": 720,
+        "page": 1
+    },
+    "activo_otros": {
+        "x": 156,
+        "y": 707,
+        "page": 1
+    },
+    "total_activos": {
+        "x": 156,
+        "y": 693,
+        "page": 1
+    },
     "pasivo_tarjetas": {
-        "x": 337,
+        "x": 320,
+        "y": 753,
+        "page": 1
+    },
+    "pasivo_tarjetas_cuota": {
+        "x": 483,
+        "y": 754,
+        "page": 1
+    },
+    "pasivo_tarjetas_vencimiento": {
+        "x": 401,
         "y": 752,
         "page": 1
     },
-    "patrimonio_neto": {
-        "x": 206,
-        "y": 680,
+    "pasivo_cortoplazo": {
+        "x": 318,
+        "y": 767,
         "page": 1
     },
-    "monto_solicitado": {
-        "x": 103,
-        "y": 490,
+    "pasivo_cortoplazo_cuota": {
+        "x": 481,
+        "y": 767,
+        "page": 1
+    },
+    "pasivo_cortoplazo_vencimiento": {
+        "x": 401,
+        "y": 767,
+        "page": 1
+    },
+    "pasivo_largoplazo": {
+        "x": 321,
+        "y": 738,
+        "page": 1
+    },
+    "pasivo_largoplazo_cuota": {
+        "x": 484,
+        "y": 738,
+        "page": 1
+    },
+    "pasivo_largoplazo_vencimiento": {
+        "x": 402,
+        "y": 737,
+        "page": 1
+    },
+    "pasivo_hipotecario": {
+        "x": 320,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_hipotecario_cuota": {
+        "x": 484,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_hipotecario_vencimiento": {
+        "x": 401,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_otros": {
+        "x": 320,
+        "y": 709,
+        "page": 1
+    },
+    "pasivo_otros_cuota": {
+        "x": 483,
+        "y": 709,
+        "page": 1
+    },
+    "pasivo_otros_vencimiento": {
+        "x": 399,
+        "y": 708,
+        "page": 1
+    },
+    "total_pasivos": {
+        "x": 323,
+        "y": 693,
+        "page": 1
+    },
+    "patrimonio_neto": {
+        "x": 186,
+        "y": 678,
         "page": 1
     },
     "tasa": {
@@ -367,18 +462,13 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 1
     },
     "plazo_meses": {
-        "x": 76,
-        "y": 579,
-        "page": 1
-    },
-    "dia_pago": {
-        "x": 528,
-        "y": 545,
+        "x": 84,
+        "y": 580,
         "page": 1
     },
     "correo_envio": {
-        "x": 139,
-        "y": 360,
+        "x": 169,
+        "y": 357,
         "page": 1
     },
     "firma_titular_nombre": {
@@ -401,11 +491,6 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "y": 579,
         "page": 8
     },
-    "firma_infiny_representante": {
-        "x": 507,
-        "y": 717,
-        "page": 8
-    },
     "cronograma_monto": {
         "x": 160,
         "y": 765,
@@ -420,6 +505,22 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "x": 160,
         "y": 735,
         "page": 8
+    },
+    "monto_solicitado": {
+        "x": 119,
+        "y": 487,
+        "page": 1
+    },
+    "cuota_mensual": {
+        "x": 373,
+        "y": 451,
+        "page": 1
+    },
+    "cuenta_abono_digits": {
+        "startX": 285,
+        "y": 542,
+        "spacing": 8.7,
+        "page": 1
     }
   };
 
@@ -433,8 +534,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     "apellido_materno": "GARCIA", 
     "nombres": "RAUL CHRISTIAN", 
     "direccion": "AV. JAVIER PRADO 1500", 
-    "fecha_proceso": "06/04/2026",
-    "monto_aprobado": "S/ 5,000.00",
+    "monto_solicitado": "S/ 5,000.00",
     "cuota_mensual": "S/ 450.00",
     "correo_envio": "raul.mendoza@email.com",
     "ruc_empresa_digits": "10757761055",
@@ -454,18 +554,42 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     "firma_titular_doc": "DNI 12345678",
     "firma_conyuge_nombre": "MARIA LOPEZ",
     "firma_conyuge_doc": "DNI 45678912",
-    "firma_infiny_representante": "ROIDER MALUQUIS"
+    "activo_auto": "S/ 15,000",
+    "activo_inmueble": "S/ 150,000",
+    "activo_ahorros": "S/ 10,000",
+    "activo_plazofijo": "S/ 5,000",
+    "activo_otros": "S/ 2,000",
+    "total_activos": "S/ 182,000",
+    "pasivo_tarjetas": "S/ 3,000",
+    "pasivo_tarjetas_cuota": "S/ 300",
+    "pasivo_tarjetas_vencimiento": "12/2026",
+    "pasivo_cortoplazo": "S/ 5,000",
+    "pasivo_cortoplazo_cuota": "S/ 500",
+    "pasivo_cortoplazo_vencimiento": "06/2027",
+    "pasivo_largoplazo": "S/ 10,000",
+    "pasivo_largoplazo_cuota": "S/ 400",
+    "pasivo_largoplazo_vencimiento": "05/2030",
+    "pasivo_hipotecario": "S/ 50,000",
+    "pasivo_hipotecario_cuota": "S/ 800",
+    "pasivo_hipotecario_vencimiento": "01/2040",
+    "pasivo_otros": "S/ 1,000",
+    "pasivo_otros_cuota": "S/ 100",
+    "pasivo_otros_vencimiento": "12/2028",
+    "total_pasivos": "S/ 69,000",
+    "patrimonio_neto": "S/ 113,000",
+    "cuenta_abono_digits": "19112345678012",
+    "tasa": "5%"
   };
 
   categories: any = {
-    identidad: ['dni_check', 'dni_digits', 'fecha_solicitud_digits', 'fecha_nacimiento_digits', 'check_sexo_f', 'check_sexo_m', 'check_soltero', 'check_casado', 'check_viudo', 'check_divorciado', 'telefono', 'celular', 'correo_electronico', 'apellido_paterno', 'apellido_materno', 'nombres', 'nacionalidad', 'check_secundaria', 'check_tecnica', 'check_universitaria', 'check_completa', 'check_incompleta', 'check_estudios', 'check_negocio', 'check_personal', 'check_vehicular', 'check_hipotecario', 'check_empresarial'],
+    identidad: ['dni_check', 'dni_digits', 'fecha_solicitud_digits', 'fecha_nacimiento_digits', 'check_sexo_f', 'check_sexo_m', 'check_soltero', 'check_casado', 'check_viudo', 'check_divorciado', 'telefono', 'celular', 'correo_electronico', 'apellido_paterno', 'apellido_materno', 'nombres', 'nacionalidad', 'check_secundaria', 'check_tecnica', 'check_universitaria', 'check_completa', 'check_incompleta'],
     ubicacion: ['departamento', 'provincia', 'distrito', 'direccion', 'urbanizacion', 'manzana', 'lote', 'codigo_postal'],
     laboral: ['check_dependiente', 'check_independiente', 'empresa', 'cargo_ocupacion', 'ingreso_mensual', 'ingreso_bruto_mensual', 'ruc_empresa_digits', 'ruc_propio_digits', 'telefono_empresa', 'fecha_ingreso_laboral_digits', 'direccion_empresa'],
     conyuge: ['nombres_conyuge', 'apellido_pa_conyuge', 'apellido_mat_conyuge', 'check_dni_conyuge', 'check_carnet_conyuge', 'conyuge_dni_digits', 'conyuge_ocupacion', 'conyuge_ingreso_mensual', 'conyuge_telefono', 'conyuge_nacionalidad'],
-    patrimonio: ['activo_auto', 'pasivo_tarjetas', 'patrimonio_neto'],
-    credito: ['check_estudios', 'check_negocio', 'check_personal', 'check_vehicular', 'check_hipotecario', 'check_empresarial', 'check_exclusivo_si', 'check_exclusivo_no', 'check_moneda_soles', 'check_moneda_dolares', 'monto_solicitado', 'plazo_meses', 'dia_pago', 'correo_envio'],
-    calificacion: ['fecha_proceso', 'monto_aprobado', 'cuota_mensual'],
-    firmas: ['firma_titular_nombre', 'firma_titular_doc', 'firma_conyuge_nombre', 'firma_conyuge_doc', 'firma_infiny_representante']
+    patrimonio: ['activo_auto', 'activo_inmueble', 'activo_ahorros', 'activo_plazofijo', 'activo_otros', 'total_activos', 'pasivo_tarjetas', 'pasivo_tarjetas_cuota', 'pasivo_tarjetas_vencimiento', 'pasivo_cortoplazo', 'pasivo_cortoplazo_cuota', 'pasivo_cortoplazo_vencimiento', 'pasivo_largoplazo', 'pasivo_largoplazo_cuota', 'pasivo_largoplazo_vencimiento', 'pasivo_hipotecario', 'pasivo_hipotecario_cuota', 'pasivo_hipotecario_vencimiento', 'pasivo_otros', 'pasivo_otros_cuota', 'pasivo_otros_vencimiento', 'total_pasivos', 'patrimonio_neto'],
+    credito: ['check_estudios', 'check_negocio', 'check_personal', 'check_vehicular', 'check_hipotecario', 'check_empresarial', 'check_exclusivo_si', 'check_exclusivo_no', 'check_moneda_soles', 'check_moneda_dolares'],
+    calificacion: ['monto_solicitado', 'cuota_mensual', 'plazo_meses', 'tasa', 'cuenta_abono_digits', 'correo_envio'],
+    firmas: ['firma_titular_nombre', 'firma_titular_doc', 'firma_conyuge_nombre', 'firma_conyuge_doc']
   };
 
   tabs = Object.keys(this.categories);
@@ -481,7 +605,12 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
     try {
-      const loadingTask = pdfjsLib.getDocument('/pdf/contrato_template_v2.pdf');
+      const loadingTask = pdfjsLib.getDocument({
+        url: '/pdf/contrato_template_v2.pdf',
+        cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+        cMapPacked: true,
+        standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+      });
       this.pdfDoc = await loadingTask.promise;
       this.totalPages = this.pdfDoc.numPages;
       this.isLoading = false;
@@ -532,10 +661,6 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
       canvas.height = 842 * this.currentScale;
       
       await page.render({ canvasContext: context as any, viewport: viewport }).promise;
-      
-      // Dibujar recuadro faltante "Negocio" en la página 1
-      // (Eliminado a petición del usuario: se integrará directamente en la plantilla Word/PDF)
-
     } catch (err) {
       console.error("Error renderizando página:", err);
     }

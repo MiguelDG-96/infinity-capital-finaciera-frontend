@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
+import { PatrimonioService } from './patrimonio.service';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Credito } from '../models/credito.model';
 import { FinancieroHelper } from '../utils/financiero.helper';
@@ -7,6 +11,11 @@ import { FinancieroHelper } from '../utils/financiero.helper';
   providedIn: 'root'
 })
 export class ContratoPdfService {
+  constructor(
+      private http: HttpClient,
+      private patrimonioService: PatrimonioService
+  ) {}
+
   private readonly TEMPLATE_URL = '/pdf/contrato_template_v2.pdf';
 
   // Coordenadas portadas del legacy (v5.6)
@@ -17,9 +26,9 @@ export class ContratoPdfService {
         "page": 0
     },
     "dni_digits": {
-        "startX": 350,
-        "y": 691,
-        "spacing": 9.7,
+        "startX": 328,
+        "y": 692,
+        "spacing": 8.7,
         "page": 0
     },
     "apellido_paterno": {
@@ -43,60 +52,60 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_secundaria": {
-        "x": 90,
+        "x": 84,
         "y": 508,
         "page": 0
     },
     "check_tecnica": {
-        "x": 153,
+        "x": 144,
         "y": 508,
         "page": 0
     },
     "check_universitaria": {
-        "x": 208,
-        "y": 509,
+        "x": 195,
+        "y": 507,
         "page": 0
     },
     "check_completa": {
-        "x": 263,
+        "x": 247,
         "y": 507,
         "page": 0
     },
     "check_incompleta": {
-        "x": 318,
+        "x": 299,
         "y": 507,
         "page": 0
     },
     "fecha_solicitud_digits": {
-        "startX": 380,
-        "y": 779,
+        "startX": 359,
+        "y": 778,
         "spacing": 5.99,
         "page": 0
     },
     "fecha_nacimiento_digits": {
-        "startX": 131,
+        "startX": 123,
         "y": 650,
         "spacing": 5.99,
         "page": 0
     },
     "check_soltero": {
-        "x": 83,
+        "x": 79,
         "y": 632,
         "page": 0
     },
     "check_casado": {
-        "x": 129,
+        "x": 124,
         "y": 637,
         "page": 0
     },
     "check_viudo": {
-        "x": 181,
-        "y": 637,
+        "x": 171,
+        "y": 636,
         "page": 0
     },
     "check_divorciado": {
-        "x": 226,
-        "y": 637,
+        "x": 213,
+        "y": 635,
         "page": 0
     },
     "telefono": {
@@ -105,8 +114,8 @@ export class ContratoPdfService {
         "page": 0
     },
     "celular": {
-        "x": 528,
-        "y": 597,
+        "x": 501,
+        "y": 596,
         "page": 0
     },
     "correo_electronico": {
@@ -115,13 +124,13 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_sexo_f": {
-        "x": 283,
-        "y": 649,
+        "x": 266,
+        "y": 650,
         "page": 0
     },
     "check_sexo_m": {
-        "x": 302,
-        "y": 649,
+        "x": 285,
+        "y": 650,
         "page": 0
     },
     "check_estudios": {
@@ -130,48 +139,48 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_negocio": {
-        "x": 83,
-        "y": 741,
+        "x": 79,
+        "y": 740,
         "page": 0
     },
     "check_personal": {
-        "x": 129,
+        "x": 123,
         "y": 741,
         "page": 0
     },
     "check_vehicular": {
-        "x": 177,
+        "x": 167,
         "y": 741,
         "page": 0
     },
     "check_hipotecario": {
-        "x": 225,
+        "x": 212,
         "y": 741,
         "page": 0
     },
     "check_empresarial": {
-        "x": 283,
+        "x": 266,
         "y": 741,
         "page": 0
     },
     "check_exclusivo_si": {
-        "x": 113,
-        "y": 732,
+        "x": 107,
+        "y": 730,
         "page": 0
     },
     "check_exclusivo_no": {
-        "x": 171,
-        "y": 731,
+        "x": 162,
+        "y": 732,
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 260,
+        "x": 244,
         "y": 732,
         "page": 0
     },
     "check_moneda_dolares": {
-        "x": 294,
-        "y": 732,
+        "x": 278,
+        "y": 731,
         "page": 0
     },
     "departamento": {
@@ -190,27 +199,27 @@ export class ContratoPdfService {
         "page": 0
     },
     "direccion": {
-        "x": 134,
-        "y": 561,
+        "x": 119,
+        "y": 560,
         "page": 0
     },
     "urbanizacion": {
-        "x": 432,
-        "y": 560,
+        "x": 404,
+        "y": 561,
         "page": 0
     },
     "manzana": {
-        "x": 303,
-        "y": 560,
+        "x": 260,
+        "y": 561,
         "page": 0
     },
     "lote": {
-        "x": 313,
+        "x": 308,
         "y": 560,
         "page": 0
     },
     "codigo_postal": {
-        "x": 128,
+        "x": 118,
         "y": 538,
         "page": 0
     },
@@ -245,14 +254,14 @@ export class ContratoPdfService {
         "page": 0
     },
     "ruc_empresa_digits": {
-        "startX": 84,
-        "y": 398,
+        "startX": 81,
+        "y": 396,
         "spacing": 9.7,
         "page": 0
     },
     "ruc_propio_digits": {
-        "startX": 84,
-        "y": 398,
+        "startX": 81,
+        "y": 395,
         "spacing": 9.7,
         "page": 0
     },
@@ -262,7 +271,7 @@ export class ContratoPdfService {
         "page": 0
     },
     "fecha_ingreso_laboral_digits": {
-        "startX": 181,
+        "startX": 175,
         "y": 325,
         "spacing": 5.7,
         "page": 0
@@ -288,14 +297,14 @@ export class ContratoPdfService {
         "page": 0
     },
     "conyuge_dni_digits": {
-        "startX": 341,
+        "startX": 329,
         "y": 227,
         "spacing": 9.7,
         "page": 0
     },
     "conyuge_ocupacion": {
-        "x": 509,
-        "y": 89,
+        "x": 489,
+        "y": 87,
         "page": 0
     },
     "conyuge_ingreso_mensual": {
@@ -304,8 +313,8 @@ export class ContratoPdfService {
         "page": 0
     },
     "conyuge_telefono": {
-        "x": 479,
-        "y": 152,
+        "x": 461,
+        "y": 153,
         "page": 0
     },
     "conyuge_nacionalidad": {
@@ -314,12 +323,12 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_dni_conyuge": {
-        "x": 35,
+        "x": 33,
         "y": 225,
         "page": 0
     },
     "check_carnet_conyuge": {
-        "x": 167,
+        "x": 158,
         "y": 225,
         "page": 0
     },
@@ -328,19 +337,114 @@ export class ContratoPdfService {
         "y": 767,
         "page": 1
     },
+    "activo_inmueble": {
+        "x": 156,
+        "y": 750,
+        "page": 1
+    },
+    "activo_ahorros": {
+        "x": 156,
+        "y": 735,
+        "page": 1
+    },
+    "activo_plazofijo": {
+        "x": 156,
+        "y": 720,
+        "page": 1
+    },
+    "activo_otros": {
+        "x": 156,
+        "y": 707,
+        "page": 1
+    },
+    "total_activos": {
+        "x": 156,
+        "y": 693,
+        "page": 1
+    },
     "pasivo_tarjetas": {
-        "x": 337,
+        "x": 320,
+        "y": 753,
+        "page": 1
+    },
+    "pasivo_tarjetas_cuota": {
+        "x": 483,
+        "y": 754,
+        "page": 1
+    },
+    "pasivo_tarjetas_vencimiento": {
+        "x": 401,
         "y": 752,
         "page": 1
     },
-    "patrimonio_neto": {
-        "x": 206,
-        "y": 680,
+    "pasivo_cortoplazo": {
+        "x": 318,
+        "y": 767,
         "page": 1
     },
-    "monto_solicitado": {
-        "x": 103,
-        "y": 490,
+    "pasivo_cortoplazo_cuota": {
+        "x": 481,
+        "y": 767,
+        "page": 1
+    },
+    "pasivo_cortoplazo_vencimiento": {
+        "x": 401,
+        "y": 767,
+        "page": 1
+    },
+    "pasivo_largoplazo": {
+        "x": 321,
+        "y": 738,
+        "page": 1
+    },
+    "pasivo_largoplazo_cuota": {
+        "x": 484,
+        "y": 738,
+        "page": 1
+    },
+    "pasivo_largoplazo_vencimiento": {
+        "x": 402,
+        "y": 737,
+        "page": 1
+    },
+    "pasivo_hipotecario": {
+        "x": 320,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_hipotecario_cuota": {
+        "x": 484,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_hipotecario_vencimiento": {
+        "x": 401,
+        "y": 723,
+        "page": 1
+    },
+    "pasivo_otros": {
+        "x": 320,
+        "y": 709,
+        "page": 1
+    },
+    "pasivo_otros_cuota": {
+        "x": 483,
+        "y": 709,
+        "page": 1
+    },
+    "pasivo_otros_vencimiento": {
+        "x": 399,
+        "y": 708,
+        "page": 1
+    },
+    "total_pasivos": {
+        "x": 323,
+        "y": 693,
+        "page": 1
+    },
+    "patrimonio_neto": {
+        "x": 186,
+        "y": 678,
         "page": 1
     },
     "tasa": {
@@ -349,18 +453,13 @@ export class ContratoPdfService {
         "page": 1
     },
     "plazo_meses": {
-        "x": 76,
-        "y": 579,
-        "page": 1
-    },
-    "dia_pago": {
-        "x": 528,
-        "y": 545,
+        "x": 84,
+        "y": 580,
         "page": 1
     },
     "correo_envio": {
-        "x": 139,
-        "y": 360,
+        "x": 169,
+        "y": 357,
         "page": 1
     },
     "firma_titular_nombre": {
@@ -383,11 +482,6 @@ export class ContratoPdfService {
         "y": 579,
         "page": 8
     },
-    "firma_infiny_representante": {
-        "x": 507,
-        "y": 717,
-        "page": 8
-    },
     "cronograma_monto": {
         "x": 160,
         "y": 765,
@@ -402,10 +496,24 @@ export class ContratoPdfService {
         "x": 160,
         "y": 735,
         "page": 8
+    },
+    "monto_solicitado": {
+        "x": 119,
+        "y": 487,
+        "page": 1
+    },
+    "cuota_mensual": {
+        "x": 373,
+        "y": 451,
+        "page": 1
+    },
+    "cuenta_abono_digits": {
+        "startX": 285,
+        "y": 542,
+        "spacing": 8.7,
+        "page": 1
     }
   };
-
-  constructor() {}
 
   async generarContrato(credito: Credito, isClienteRecurrente?: boolean): Promise<Blob> {
     const response = await fetch(this.TEMPLATE_URL);
@@ -460,6 +568,52 @@ export class ContratoPdfService {
     let extra: any = {};
     if (cliente.datosSolicitud) {
         try { extra = JSON.parse(cliente.datosSolicitud); } catch (e) {}
+    }
+
+    // Sobreescribir patrimonio con los datos en vivo si es posible
+    if (cliente.id) {
+        try {
+            const patrimonioLive = await firstValueFrom(this.patrimonioService.obtenerPatrimonio(cliente.id));
+            const fm = (val: number | undefined | null) => val != null ? `S/ ${val.toLocaleString('es-PE', { minimumFractionDigits: 2 })}` : '';
+            
+            const getA = (tipo: string) => fm(patrimonioLive.activos.find(a => a.tipo === tipo)?.valorEstimado);
+            extra.activo_auto = getA('AUTO');
+            extra.activo_inmueble = getA('INMUEBLE');
+            extra.activo_ahorros = getA('AHORROS');
+            extra.activo_plazofijo = getA('PLAZO_FIJO');
+            extra.activo_otros = getA('OTRO');
+            extra.total_activos = fm(patrimonioLive.totalActivos);
+            extra.patrimonio_neto = fm(patrimonioLive.patrimonioNeto);
+            extra.total_pasivos = fm(patrimonioLive.totalPasivos);
+
+            const findP = (tipo: string) => patrimonioLive.pasivos.find(p => p.tipo === tipo);
+            const pT = findP('TARJETAS');
+            extra.pasivo_tarjetas = fm(pT?.montoPendiente);
+            extra.pasivo_tarjetas_cuota = fm(pT?.cuotaMensual);
+            extra.pasivo_tarjetas_vencimiento = pT?.vencimiento || '';
+
+            const pCP = findP('CORTO_PLAZO');
+            extra.pasivo_cortoplazo = fm(pCP?.montoPendiente);
+            extra.pasivo_cortoplazo_cuota = fm(pCP?.cuotaMensual);
+            extra.pasivo_cortoplazo_vencimiento = pCP?.vencimiento || '';
+
+            const pLP = findP('LARGO_PLAZO');
+            extra.pasivo_largoplazo = fm(pLP?.montoPendiente);
+            extra.pasivo_largoplazo_cuota = fm(pLP?.cuotaMensual);
+            extra.pasivo_largoplazo_vencimiento = pLP?.vencimiento || '';
+
+            const pHIP = findP('HIPOTECARIO');
+            extra.pasivo_hipotecario = fm(pHIP?.montoPendiente);
+            extra.pasivo_hipotecario_cuota = fm(pHIP?.cuotaMensual);
+            extra.pasivo_hipotecario_vencimiento = pHIP?.vencimiento || '';
+
+            const pOTR = findP('OTRO');
+            extra.pasivo_otros = fm(pOTR?.montoPendiente);
+            extra.pasivo_otros_cuota = fm(pOTR?.cuotaMensual);
+            extra.pasivo_otros_vencimiento = pOTR?.vencimiento || '';
+        } catch (e) {
+            console.error('Error obteniendo patrimonio live para contrato PDF:', e);
+        }
     }
 
     // 1. Identidad
@@ -599,7 +753,34 @@ export class ContratoPdfService {
 
     // Patrimonio (Extraídos de JSON dinámico)
     drawText(extra.activo_auto || extra.activoAuto || '', 'activo_auto');
+    drawText(extra.activo_inmueble || extra.activoInmueble || '', 'activo_inmueble');
+    drawText(extra.activo_ahorros || extra.activoAhorros || '', 'activo_ahorros');
+    drawText(extra.activo_plazofijo || extra.activoPlazofijo || '', 'activo_plazofijo');
+    drawText(extra.activo_otros || extra.activoOtros || '', 'activo_otros');
+    drawText(extra.total_activos || extra.totalActivos || '', 'total_activos');
+
     drawText(extra.pasivo_tarjetas || extra.pasivoTarjetas || '', 'pasivo_tarjetas');
+    drawText(extra.pasivo_tarjetas_cuota || extra.pasivoTarjetasCuota || '', 'pasivo_tarjetas_cuota');
+    drawText(extra.pasivo_tarjetas_vencimiento || extra.pasivoTarjetasVencimiento || '', 'pasivo_tarjetas_vencimiento');
+
+    drawText(extra.pasivo_cortoplazo || extra.pasivoCortoplazo || '', 'pasivo_cortoplazo');
+    drawText(extra.pasivo_cortoplazo_cuota || extra.pasivoCortoplazoCuota || '', 'pasivo_cortoplazo_cuota');
+    drawText(extra.pasivo_cortoplazo_vencimiento || extra.pasivoCortoplazoVencimiento || '', 'pasivo_cortoplazo_vencimiento');
+
+    drawText(extra.pasivo_largoplazo || extra.pasivoLargoplazo || '', 'pasivo_largoplazo');
+    drawText(extra.pasivo_largoplazo_cuota || extra.pasivoLargoplazoCuota || '', 'pasivo_largoplazo_cuota');
+    drawText(extra.pasivo_largoplazo_vencimiento || extra.pasivoLargoplazoVencimiento || '', 'pasivo_largoplazo_vencimiento');
+
+    drawText(extra.pasivo_hipotecario || extra.pasivoHipotecario || '', 'pasivo_hipotecario');
+    drawText(extra.pasivo_hipotecario_cuota || extra.pasivoHipotecarioCuota || '', 'pasivo_hipotecario_cuota');
+    drawText(extra.pasivo_hipotecario_vencimiento || extra.pasivoHipotecarioVencimiento || '', 'pasivo_hipotecario_vencimiento');
+
+    drawText(extra.pasivo_otros || extra.pasivoOtros || '', 'pasivo_otros');
+    drawText(extra.pasivo_otros_cuota || extra.pasivoOtrosCuota || '', 'pasivo_otros_cuota');
+    drawText(extra.pasivo_otros_vencimiento || extra.pasivoOtrosVencimiento || '', 'pasivo_otros_vencimiento');
+
+    drawText(extra.total_pasivos || extra.totalPasivos || '', 'total_pasivos');
+
     drawText(extra.patrimonio_neto || extra.patrimonioNeto || '', 'patrimonio_neto');
 
     // 3. Crédito
@@ -613,10 +794,20 @@ export class ContratoPdfService {
     drawCheck(tipoLower.includes('hipotecario'), 'check_hipotecario');
     drawCheck(tipoLower.includes('empresarial') || tipoLower.includes('empresa'), 'check_empresarial');
 
-    drawText(`S/ ${credito.montoAprobado || credito.montoCredito}`, 'monto_solicitado', true);
     drawText(`${credito.tasaAprobada || credito.tem || 0}%`, 'tasa', true);
     drawText(`${credito.plazoMeses} meses`, 'plazo_meses');
     drawText(cliente.usuario?.email || '--', 'correo_envio');
+    drawDigits(credito.cuentaDesembolso || '--', 'cuenta_abono_digits');
+    
+    // Calificación
+    drawText(`S/ ${credito.montoAprobado || credito.montoCredito || ''}`, 'monto_solicitado', true);
+    // calcular cuota si no hay
+    let cuotaMs = '--';
+    if (credito.montoAprobado && credito.plazoMeses) {
+        const cuota = (credito.montoAprobado * ((credito.tem || 0)/100)) / (1 - Math.pow(1 + ((credito.tem || 0)/100), -credito.plazoMeses));
+        cuotaMs = `S/ ${cuota.toFixed(2)}`;
+    }
+    drawText(cuotaMs, 'cuota_mensual', true);
 
     // Firmas (Página 9 / índice 8)
     const firmaNombreFallback = cliente.usuario?.nombreCompleto || extra.nombres || '';
@@ -632,12 +823,7 @@ export class ContratoPdfService {
     }
 
     // Para el representante, por ahora imprimimos un placeholder o lo dejamos estático
-    drawText('Representante Infinity', 'firma_infiny_representante');
-
-    // Resumen de Cronograma (Página 9 / índice 8, si existe en template)
-    drawText(`S/ ${credito.montoAprobado || credito.montoCredito}`, 'cronograma_monto');
-    drawText(String(credito.plazoMeses), 'cronograma_cuotas');
-    drawText(new Date().toLocaleDateString('es-PE'), 'cronograma_fecha');
+    // drawText('Representante Infinity', 'firma_infiny_representante');
 
     // Eliminar la página 10 de la plantilla original (índice 9)
     try {
@@ -737,11 +923,14 @@ export class ContratoPdfService {
   }
 
   private drawFullCronograma(page: any, cliente: any, data: Credito, font: any, fontBold: any) {
+    const PAGE_WIDTH = 595;
     const headT = 780;
     const tabT = 670;
     const rowH = 18;
-    const cols = [40, 80, 40, 65, 65, 55, 55, 75];
-    const headers = ["Cuota", "Vencimiento", "Días", "Capital", "Interés", "Comis.", "Seguros", "Importe"];
+    const cols = [40, 80, 40, 65, 65, 55, 55, 75]; // suma = 475
+    const TABLE_WIDTH = cols.reduce((a: number, b: number) => a + b, 0);
+    const tableX = (PAGE_WIDTH - TABLE_WIDTH) / 2; // centrado horizontal
+    const headers = ["Cuota", "Vencimiento", "Días", "Capital", "Interés", "Comis.", "Seguros", "Cuota Mensual"];
 
     // Datos Financieros
     const cuotas = FinancieroHelper.calcularAmortizacionFrancesa(
@@ -757,70 +946,76 @@ export class ContratoPdfService {
     const colorFilaZebra = rgb(0.96, 0.97, 0.98);
     const colorBorde = rgb(0.85, 0.85, 0.85);
 
-    // Encabezado
-    page.drawText("CRONOGRAMA DE PAGOS", { x: 40, y: headT, size: 18, font: fontBold, color: colorPrimario });
-    page.drawLine({ start: { x: 40, y: headT - 5 }, end: { x: 555, y: headT - 5 }, thickness: 2, color: colorPrimario });
+    // Título centrado en la página
+    const titleText = "CRONOGRAMA DE PAGOS";
+    const titleWidth = fontBold.widthOfTextAtSize(titleText, 18);
+    page.drawText(titleText, { x: (PAGE_WIDTH - titleWidth) / 2, y: headT, size: 18, font: fontBold, color: colorPrimario });
+    page.drawLine({ start: { x: tableX, y: headT - 5 }, end: { x: tableX + TABLE_WIDTH, y: headT - 5 }, thickness: 2, color: colorPrimario });
 
-    // Datos del Cliente y Crédito
+    // Datos del Cliente y Crédito (dos columnas alineadas a la tabla)
     const infoY = headT - 25;
+    const col2X = tableX + TABLE_WIDTH / 2;
     const nombreCliente = cliente.usuario?.nombreCompleto || `${cliente.nombres} ${cliente.apellidoPaterno}`;
-    page.drawText(`Cliente: ${nombreCliente}`, { x: 40, y: infoY, size: 9, font: fontBold });
-    page.drawText(`Documento: ${cliente.numeroDocumento}`, { x: 40, y: infoY - 15, size: 9, font });
-    
-    page.drawText(`Monto: S/ ${(data.montoAprobado || data.montoCredito || 0).toLocaleString('es-PE')}`, { x: 300, y: infoY, size: 9, font: fontBold });
-    page.drawText(`Plazo: ${data.plazoMeses} meses`, { x: 300, y: infoY - 15, size: 9, font });
-    page.drawText(`Tasa (TEM): ${data.tasaAprobada || data.tem}%`, { x: 440, y: infoY, size: 9, font });
-    page.drawText(`Moneda: Soles (S/)`, { x: 440, y: infoY - 15, size: 9, font });
+    page.drawText(`Cliente: ${nombreCliente}`, { x: tableX, y: infoY, size: 9, font: fontBold });
+    page.drawText(`Documento: ${cliente.numeroDocumento}`, { x: tableX, y: infoY - 15, size: 9, font });
+    page.drawText(`Monto: S/ ${(data.montoAprobado || data.montoCredito || 0).toLocaleString('es-PE')}`, { x: col2X, y: infoY, size: 9, font: fontBold });
+    page.drawText(`Plazo: ${data.plazoMeses} meses`, { x: col2X, y: infoY - 15, size: 9, font });
+    page.drawText(`Tasa (TEM): ${data.tasaAprobada || data.tem}%`, { x: col2X + 120, y: infoY, size: 9, font });
+    page.drawText(`Moneda: Soles (S/)`, { x: col2X + 120, y: infoY - 15, size: 9, font });
 
-    // Cabecera Tabla
-    page.drawRectangle({ x: 35, y: tabT, width: 485, height: rowH + 4, color: colorPrimario });
-    let curX = 35;
+    // Cabecera Tabla — texto centrado dentro de cada columna
+    page.drawRectangle({ x: tableX, y: tabT, width: TABLE_WIDTH, height: rowH + 4, color: colorPrimario });
+    let curX = tableX;
     headers.forEach((h, idx) => {
-        page.drawText(h.toUpperCase(), { x: curX + 5, y: tabT + 7, size: 7, font: fontBold, color: colorTextoHeader });
+        const hText = h.toUpperCase();
+        const hWidth = fontBold.widthOfTextAtSize(hText, 7);
+        const hX = curX + (cols[idx] - hWidth) / 2;
+        page.drawText(hText, { x: hX, y: tabT + 7, size: 7, font: fontBold, color: colorTextoHeader });
         curX += cols[idx];
     });
 
-    // Filas
-    cuotas.forEach((c, idx) => {
+    // Filas — contenido centrado dentro de cada celda
+    cuotas.forEach((c: any, idx: number) => {
         const y = tabT - ((idx + 1) * rowH);
-        
+
         // Zebra striping
         if (idx % 2 === 0) {
-            page.drawRectangle({ x: 35, y: y, width: 485, height: rowH, color: colorFilaZebra });
+            page.drawRectangle({ x: tableX, y, width: TABLE_WIDTH, height: rowH, color: colorFilaZebra });
         }
-        
+
         // Bordes de celda
-        page.drawRectangle({ x: 35, y: y, width: 485, height: rowH, borderWidth: 0.5, borderColor: colorBorde });
-        
-        let rX = 35;
+        page.drawRectangle({ x: tableX, y, width: TABLE_WIDTH, height: rowH, borderWidth: 0.5, borderColor: colorBorde });
+
+        let rX = tableX;
         const rowData = [
             String(c.numero),
             c.fecha.toLocaleDateString('es-PE'),
             "30",
             `S/ ${c.capital.toFixed(2)}`,
             `S/ ${c.interes.toFixed(2)}`,
-            "S/ 0.00", 
+            "S/ 0.00",
             "S/ 0.00",
             `S/ ${c.total.toFixed(2)}`
         ];
 
-        rowData.forEach((val, j) => {
-            const numeric = j > 1; // Todo es numérico excepto cuota(0) y fecha(1)
+        rowData.forEach((val: string, j: number) => {
             const isImporte = j === 7;
             const fontToUse = isImporte ? fontBold : font;
-            // Alineación derecha para números
-            const tX = numeric ? (rX + cols[j] - fontToUse.widthOfTextAtSize(val, 8) - 5) : (rX + 5);
+            const textWidth = fontToUse.widthOfTextAtSize(val, 8);
+            const tX = rX + (cols[j] - textWidth) / 2; // centrado horizontal dentro de la celda
             page.drawText(val, { x: tX, y: y + 5, size: 8, font: fontToUse });
             rX += cols[j];
         });
     });
 
-    // Resumen Total al final de la tabla
+    // Resumen Total al final de la tabla (alineado al borde derecho de la tabla)
     const totalY = tabT - (cuotas.length * rowH) - 25;
-    const totalMonto = cuotas.reduce((acc, c) => acc + c.total, 0);
-    page.drawRectangle({ x: 350, y: totalY, width: 170, height: 20, color: rgb(0.9, 0.9, 0.9), borderColor: colorBorde, borderWidth: 1 });
-    page.drawText("TOTAL A PAGAR:", { x: 355, y: totalY + 6, size: 8, font: fontBold });
-    page.drawText(`S/ ${totalMonto.toFixed(2)}`, { x: 445, y: totalY + 6, size: 9, font: fontBold, color: colorPrimario });
+    const totalMonto = cuotas.reduce((acc: number, c: any) => acc + c.total, 0);
+    const totalBoxW = 170;
+    const totalBoxX = tableX + TABLE_WIDTH - totalBoxW;
+    page.drawRectangle({ x: totalBoxX, y: totalY, width: totalBoxW, height: 20, color: rgb(0.9, 0.9, 0.9), borderColor: colorBorde, borderWidth: 1 });
+    page.drawText("TOTAL A PAGAR:", { x: totalBoxX + 5, y: totalY + 6, size: 8, font: fontBold });
+    page.drawText(`S/ ${totalMonto.toFixed(2)}`, { x: totalBoxX + 95, y: totalY + 6, size: 9, font: fontBold, color: colorPrimario });
   }
 
   async descargarPDF(credito: Credito, isClienteRecurrente?: boolean) {
