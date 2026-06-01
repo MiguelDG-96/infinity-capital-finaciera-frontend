@@ -32,11 +32,33 @@
                 <lucide-icon name="edit-2" class="w-4 h-4 mr-1"></lucide-icon>
                 Editar Crédito
             </button>
-            <button class="btn btn-primary btn-sm shadow-lg shadow-primary/20" (click)="mostrarModalPago.set(true)"
-                *ngIf="isAdminMode()">
-                <lucide-icon name="credit-card" class="w-4 h-4 mr-1"></lucide-icon>
-                Pago Anticipado
-            </button>
+            <div class="dropdown dropdown-end" *ngIf="isAdminMode()">
+                <div tabindex="0" role="button" class="btn btn-primary btn-sm shadow-lg shadow-primary/20 gap-2">
+                    <lucide-icon name="settings" class="w-4 h-4"></lucide-icon>
+                    Opciones Especiales
+                    <lucide-icon name="chevron-down" class="w-4 h-4"></lucide-icon>
+                </div>
+                <ul tabindex="0" class="dropdown-content z-[10] menu p-2 shadow-xl bg-base-100 rounded-box w-56 mt-2 border border-base-content/10">
+                    <li>
+                        <a (click)="mostrarModalPago.set(true)" class="hover:bg-primary/10 hover:text-primary">
+                            <lucide-icon name="credit-card" class="w-4 h-4 mr-2"></lucide-icon>
+                            Pago Anticipado
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="pagoGlobal()" class="hover:bg-success/10 hover:text-success">
+                            <lucide-icon name="coins" class="w-4 h-4 mr-2 text-success"></lucide-icon>
+                            Abono Global
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="generarCuotaPostVencimiento()" class="hover:bg-error/10 hover:text-error">
+                            <lucide-icon name="plus-circle" class="w-4 h-4 mr-2 text-error"></lucide-icon>
+                            Nueva Cuota Venc.
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <button class="btn btn-ghost btn-sm"
                 [routerLink]="isAdminMode() ? '/dashboard/admin/cartera' : '/dashboard/creditos/mis-creditos'">
                 <lucide-icon name="arrow-left" class="w-4 h-4 mr-1"></lucide-icon>

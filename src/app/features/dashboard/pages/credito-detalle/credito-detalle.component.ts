@@ -392,6 +392,61 @@ export class CreditoDetalleComponent implements OnInit {
     }
   }
 
+  pagoGlobal() {
+    if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
+    
+    const montoStr = prompt('Ingrese el monto del pago global (se distribuirá en cascada):');
+    if (!montoStr) return;
+    
+    const monto = parseFloat(montoStr);
+    if (isNaN(monto) || monto <= 0) {
+      alert('Monto inválido.');
+      return;
+    }
+    
+    const metodo = prompt('Ingrese el método de pago (Ej. EFECTIVO, YAPE, TRANSFERENCIA):', 'EFECTIVO');
+    if (!metodo) return;
+    
+    let comprobante = '';
+    if (metodo !== 'EFECTIVO') {
+      comprobante = prompt('Ingrese el número de comprobante/operación:') || '';
+    }
+    
+    if (confirm(`¿Confirmas el pago global de S/ ${monto} con método ${metodo}?`)) {
+      this.procesando.set(true);
+      this.creditoService.registrarPagoGlobal(this.credito()!.id, monto, metodo, comprobante).subscribe({
+        next: (resp) => {
+          this.procesando.set(false);
+          alert(resp.mensaje + ` (${resp.movimientosGenerados} cuotas afectadas)`);
+          this.cargarDetalle(this.credito()!.id);
+        },
+        error: (err) => {
+          this.procesando.set(false);
+          alert(err.error?.error || 'Error al procesar el pago global');
+        }
+      });
+    }
+  }
+
+  generarCuotaPostVencimiento() {
+    if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
+    
+    if (confirm('¿Generar nueva cuota post-vencimiento (10% del capital real pendiente)?')) {
+      this.procesando.set(true);
+      this.creditoService.generarCuotaPostVencimiento(this.credito()!.id).subscribe({
+        next: (resp) => {
+          this.procesando.set(false);
+          alert(resp.mensaje);
+          this.cargarDetalle(this.credito()!.id);
+        },
+        error: (err) => {
+          this.procesando.set(false);
+          alert(err.error?.error || 'Error al generar la cuota post-vencimiento');
+        }
+      });
+    }
+  }
+
   setPage(page: number) {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);

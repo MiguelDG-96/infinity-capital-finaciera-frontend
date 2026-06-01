@@ -11,7 +11,10 @@ import { FinancieroHelper, CuotaSimulada } from '../../../../core/utils/financie
   selector: 'app-admin-crear-credito',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, LucideAngularModule],
-  templateUrl: './admin-crear-credito.component.html'
+  templateUrl: './admin-crear-credito.component.html',
+  styles: [`
+    input[type="text"] { text-transform: uppercase; }
+  `]
 })
 export class AdminCrearCreditoComponent implements OnInit {
   formulario!: FormGroup;
@@ -82,7 +85,8 @@ export class AdminCrearCreditoComponent implements OnInit {
         situacionLaboral: 'DEPENDIENTE',
         canalEstadoCuenta: 'EMAIL',
         desembolsarAutomaticamente: false,
-        fechaDesembolso: ''
+        fechaDesembolso: '',
+        exentoMoraAutomatica: false
       });
       localStorage.removeItem(this.DRAFT_KEY);
     }
@@ -156,7 +160,8 @@ export class AdminCrearCreditoComponent implements OnInit {
       canalEstadoCuenta: ['EMAIL'],
       desembolsarAutomaticamente: [false],
       descuentoRetencion: [0],
-      fechaDesembolso: ['']
+      fechaDesembolso: [''],
+      exentoMoraAutomatica: [false]
     });
   }
 
@@ -256,6 +261,13 @@ export class AdminCrearCreditoComponent implements OnInit {
     
     // Sincronizar domicilio para compatibilidad con backend
     if (req.direccion) req.domicilio = req.direccion;
+
+    // Transformar todos los campos de texto a mayúsculas antes de enviar, excepto el email
+    Object.keys(req).forEach(key => {
+      if (typeof req[key] === 'string' && key !== 'email') {
+        req[key] = req[key].toUpperCase();
+      }
+    });
 
     this.creditoService.crearCreditoDirecto(req).subscribe({
       next: (res) => {

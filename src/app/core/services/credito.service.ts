@@ -145,6 +145,15 @@ export class CreditoService {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/desembolsar/${creditoId}`, {});
   }
 
+  registrarPagoGlobal(creditoId: number, monto: number, metodoPago: string, numeroComprobante?: string): Observable<any> {
+    const payload = { monto, metodoPago, numeroComprobante };
+    return this.http.post<any>(`${this.apiUrl}/creditos/admin/${creditoId}/pago-global`, payload);
+  }
+
+  generarCuotaPostVencimiento(creditoId: number): Observable<{ mensaje: string, nuevaCuotaId: number }> {
+    return this.http.post<{ mensaje: string, nuevaCuotaId: number }>(`${this.apiUrl}/creditos/admin/${creditoId}/generar-cuota-post-vencimiento`, {});
+  }
+
   resolverContrato(creditoId: number, motivo: string): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/resolver/${creditoId}`, { motivo });
   }

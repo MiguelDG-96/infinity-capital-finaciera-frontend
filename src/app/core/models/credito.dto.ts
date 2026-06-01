@@ -7,6 +7,7 @@ export interface CreditoDirectoRequestDTO extends SolicitudCreditoRequestDTO {
   email?: string;
   desembolsarAutomaticamente?: boolean;
   descuentoRetencion?: number;
+  exentoMoraAutomatica?: boolean;
 }
 
 export interface SolicitudCreditoRequestDTO {
