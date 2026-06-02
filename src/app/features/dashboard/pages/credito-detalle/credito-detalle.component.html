@@ -417,7 +417,7 @@
 }
 
 @if (mostrarModalEditarCuota() && cuotaSeleccionada()) {
-<app-edit-cuota-modal [cuota]="cuotaSeleccionada()!" (cerrar)="mostrarModalEditarCuota.set(false)"
+<app-edit-cuota-modal [cuota]="cuotaSeleccionada()!" [credito]="credito()!" (cerrar)="mostrarModalEditarCuota.set(false)"
     (guardadoExitoso)="mostrarModalEditarCuota.set(false); cargarDetalle(credito()!.id)">
 </app-edit-cuota-modal>
 }

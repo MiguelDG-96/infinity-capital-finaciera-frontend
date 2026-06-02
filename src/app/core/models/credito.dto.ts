@@ -202,4 +202,5 @@ export interface UpdateCuotaRequestDTO {
   comision?: number;
   seguro?: number;
   estadoCuota?: string;
+  aplicarMoraAutomatica?: boolean;
 }

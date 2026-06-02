@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Cuota } from '../../../../core/models/credito.model';
+import { Cuota, Credito } from '../../../../core/models/credito.model';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { UpdateCuotaRequestDTO } from '../../../../core/models/credito.dto';
 
@@ -51,6 +51,20 @@ import { UpdateCuotaRequestDTO } from '../../../../core/models/credito.dto';
             </div>
           </div>
 
+          <div class="grid grid-cols-2 gap-4 bg-error/5 p-3 rounded-2xl border border-error/10">
+            <div class="form-control">
+              <label class="label"><span class="label-text font-bold text-[10px] uppercase text-error/80">Mora Diaria</span></label>
+              <input type="number" [(ngModel)]="editReq.interesMora" name="interesMora" class="input input-bordered input-error w-full rounded-2xl" step="0.01">
+            </div>
+            <div class="form-control">
+              <label class="label flex justify-between">
+                <span class="label-text font-bold text-[10px] uppercase text-error/80">Penalidad Fija</span>
+                <button type="button" class="text-[9px] text-primary hover:underline font-bold" (click)="usarPenalidadSugerida()" *ngIf="penalidadSugerida > 0">Sugerido: {{ penalidadSugerida | currency:'S/ ' }}</button>
+              </label>
+              <input type="number" [(ngModel)]="editReq.penalidad" name="penalidad" class="input input-bordered input-error w-full rounded-2xl" step="0.01">
+            </div>
+          </div>
+
           <div class="form-control">
             <label class="label"><span class="label-text font-bold text-[10px] uppercase opacity-50">Estado de Cuota</span></label>
             <select [(ngModel)]="editReq.estadoCuota" name="estadoCuota" class="select select-bordered w-full rounded-2xl">
@@ -77,6 +91,7 @@ import { UpdateCuotaRequestDTO } from '../../../../core/models/credito.dto';
 })
 export class EditCuotaModalComponent implements OnInit {
   @Input() cuota!: Cuota;
+  @Input() credito!: Credito;
   @Output() cerrar = new EventEmitter<void>();
   @Output() guardadoExitoso = new EventEmitter<void>();
 
@@ -84,6 +99,7 @@ export class EditCuotaModalComponent implements OnInit {
   
   editReq: UpdateCuotaRequestDTO = {};
   cargando = false;
+  penalidadSugerida = 0;
 
   ngOnInit() {
     // Inicializar con los valores actuales
@@ -93,8 +109,48 @@ export class EditCuotaModalComponent implements OnInit {
       interes: this.cuota.interes,
       comision: this.cuota.comision,
       seguro: this.cuota.seguro,
-      estadoCuota: this.cuota.estadoCuota
+      estadoCuota: this.cuota.estadoCuota,
+      interesMora: this.cuota.interesMora || 0,
+      penalidad: this.cuota.penalidad || 0
     };
+    this.calcularSugerencia();
+  }
+
+  calcularSugerencia() {
+    if (!this.credito || !this.credito.cuotas) return;
+    
+    // Sumar capital de todas las cuotas vencidas (estado PENDIENTE o PAGADO_PARCIAL y fecha vencida)
+    const hoy = new Date();
+    hoy.setHours(0,0,0,0);
+    
+    let capitalVencido = 0;
+    for (const c of this.credito.cuotas) {
+      if ((c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'PAGADO_PARCIAL') && c.estadoCuota !== 'POSTERGADA') {
+        const fechaVenc = new Date(c.fechaVencimiento);
+        fechaVenc.setHours(0,0,0,0);
+        
+        // El usuario quiere incluir solo las vencidas.
+        // Si usamos la fecha del componente, podríamos estar editando una cuota actual.
+        // Simulamos la sugerencia basados en la fecha del sistema o del Vencimiento actual.
+        if (fechaVenc < hoy) {
+          capitalVencido += (c.capital || 0);
+        }
+      }
+    }
+    
+    // Si la cuota actual está vencida y no se sumó porque le cambiaron el estado manualmente:
+    const dVenc = new Date(this.cuota.fechaVencimiento);
+    dVenc.setHours(0,0,0,0);
+    if (dVenc < hoy && this.cuota.estadoCuota !== 'PENDIENTE' && this.cuota.estadoCuota !== 'PAGADO_PARCIAL') {
+       capitalVencido += (this.cuota.capital || 0);
+    }
+    
+    this.penalidadSugerida = capitalVencido * 0.06;
+  }
+
+  usarPenalidadSugerida() {
+    this.editReq.penalidad = Number(this.penalidadSugerida.toFixed(2));
+    this.editReq.estadoCuota = 'MORA';
   }
 
   private formatDate(date: Date): string {
