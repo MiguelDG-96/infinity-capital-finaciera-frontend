@@ -125,7 +125,7 @@ export class EditCuotaModalComponent implements OnInit {
     
     let capitalVencido = 0;
     for (const c of this.credito.cuotas) {
-      if ((c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'PAGADO_PARCIAL') && c.estadoCuota !== 'POSTERGADA') {
+      if (c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'PAGADO_PARCIAL') {
         const fechaVenc = new Date(c.fechaVencimiento);
         fechaVenc.setHours(0,0,0,0);
         
