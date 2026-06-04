@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     apellidoMaterno: [''],
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9+]{8,15}$/)]],
-    contrasena: ['', [Validators.required, Validators.minLength(6)]],
+    contrasena: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   private intervalId: any;
