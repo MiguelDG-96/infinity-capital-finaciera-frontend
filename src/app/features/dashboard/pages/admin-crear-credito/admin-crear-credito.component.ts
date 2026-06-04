@@ -73,7 +73,9 @@ export class AdminCrearCreditoComponent implements OnInit {
     try {
       const draft = localStorage.getItem(this.DRAFT_KEY);
       if (draft) {
-        this.formulario.patchValue(JSON.parse(draft), { emitEvent: false });
+        const parsedDraft = JSON.parse(draft);
+        parsedDraft.monedaId = 4; // Forzar siempre el ID 4 de la moneda Sol
+        this.formulario.patchValue(parsedDraft, { emitEvent: false });
       }
     } catch (e) {
       console.warn('Error leyendo borrador', e);
@@ -86,7 +88,7 @@ export class AdminCrearCreditoComponent implements OnInit {
         tipoPersona: 'NATURAL',
         tipoDocumento: 'DNI',
         plazoMeses: 12,
-        monedaId: 1,
+        monedaId: 4,
         periodoGracia: 0,
         numeroDependientes: 0,
         situacionLaboral: 'DEPENDIENTE',
@@ -163,7 +165,7 @@ export class AdminCrearCreditoComponent implements OnInit {
       montoSolicitado: [null, [Validators.required, Validators.min(100)]],
       plazoMeses: [12, [Validators.required, Validators.min(1)]],
       tipoCreditoId: ['', Validators.required],
-      monedaId: [1, Validators.required], // Asumiendo PEN por defecto
+      monedaId: [4, Validators.required], // ID 4 = Soles en BD
       periodoGracia: [0],
       bancoDesembolso: [''],
       cuentaDesembolso: ['', [Validators.pattern('^[0-9]+$')]],
@@ -283,9 +285,7 @@ export class AdminCrearCreditoComponent implements OnInit {
     this.creditoService.obtenerMonedasActivas().subscribe({
       next: (res) => {
         this.monedas = res;
-        if(res.length > 0) {
-          this.formulario.patchValue({ monedaId: res[0].id }, { emitEvent: false });
-        }
+        // Se omite la asignación automática para respetar el ID 4 fijo en BD
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error cargando monedas', err)
