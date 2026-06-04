@@ -149,7 +149,7 @@ export class ReportePerfilPdfService {
       ['RUC Propio',          this.fmt(c.rucPropio)],
       ['Fecha Ingreso Lab.',  this.fmt(c.fechaIngresoLaboral)],
       ['Ingreso Mensual',     this.fmtMoney(c.ingresoMensual)],
-      ['Ingreso Bruto Mens.', this.fmtMoney(c.ingresoBrutoMensual)],
+      ['Otros Ingresos Mens.', this.fmtMoney(c.ingresoBrutoMensual)],
       ['Otros Ingresos',      this.fmtMoney(c.otrosIngresos)],
       ['Tipo de Renta',       this.fmt(c.tipoRenta)],
       ['Nombre Negocio',      this.fmt(c.nombrePropioNegocio)],

@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
+import { ClienteService } from '../../../../core/services/cliente.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { FinancieroHelper, CuotaSimulada } from '../../../../core/utils/financiero.helper';
 
 @Component({
@@ -34,11 +36,16 @@ export class AdminCrearCreditoComponent implements OnInit {
   errorToast = false;
   mensajeErrorToast = '';
   
-  private readonly DRAFT_KEY = 'draft_admin_crear_credito';
+  private get DRAFT_KEY(): string {
+    const user = this.authService.currentUserData();
+    return `draft_admin_crear_credito_${user?.sub || 'default'}`;
+  }
 
   constructor(
     private fb: FormBuilder,
     private creditoService: CreditoService,
+    private clienteService: ClienteService,
+    private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -86,7 +93,10 @@ export class AdminCrearCreditoComponent implements OnInit {
         canalEstadoCuenta: 'EMAIL',
         desembolsarAutomaticamente: false,
         fechaDesembolso: '',
-        exentoMoraAutomatica: false
+        exentoMoraAutomatica: false,
+        aplicarDescuentoTasa: false,
+        tasaPersonalizada: null,
+        motivoDescuentoTasa: ''
       });
       localStorage.removeItem(this.DRAFT_KEY);
     }
@@ -161,7 +171,78 @@ export class AdminCrearCreditoComponent implements OnInit {
       desembolsarAutomaticamente: [false],
       descuentoRetencion: [0],
       fechaDesembolso: [''],
-      exentoMoraAutomatica: [false]
+      exentoMoraAutomatica: [false],
+      
+      // Descuento de Tasa
+      aplicarDescuentoTasa: [false],
+      tasaPersonalizada: [null],
+      motivoDescuentoTasa: ['']
+    });
+
+    // Subscripción para validaciones dinámicas del descuento
+    this.formulario.get('aplicarDescuentoTasa')?.valueChanges.subscribe(activado => {
+      const tasaCtrl = this.formulario.get('tasaPersonalizada');
+      const motivoCtrl = this.formulario.get('motivoDescuentoTasa');
+      
+      if (activado) {
+        tasaCtrl?.setValidators([Validators.required, Validators.min(0.01)]);
+        motivoCtrl?.setValidators([Validators.required]);
+      } else {
+        tasaCtrl?.clearValidators();
+        motivoCtrl?.clearValidators();
+        tasaCtrl?.setValue(null, { emitEvent: false });
+        motivoCtrl?.setValue('', { emitEvent: false });
+      }
+      tasaCtrl?.updateValueAndValidity();
+      motivoCtrl?.updateValueAndValidity();
+    });
+  }
+
+  buscarCliente() {
+    const documento = this.formulario.get('numeroDocumento')?.value;
+    if (!documento || documento.length < 8) {
+      this.mostrarError('Ingrese un número de documento válido para buscar.');
+      return;
+    }
+
+    this.cargando = true;
+    this.clienteService.buscarPorDocumento(documento).subscribe({
+      next: (cliente) => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+        if (cliente) {
+          // Autocompletar datos del cliente
+          this.formulario.patchValue({
+            tipoPersona: cliente.tipoPersona || 'NATURAL',
+            tipoDocumento: cliente.tipoDocumento || 'DNI',
+            nombres: cliente.usuario?.nombreCompleto?.split(' ')[0] || '', // Aproximación
+            email: cliente.usuario?.email || '',
+            fechaNacimiento: cliente.fechaNacimiento || '',
+            celular: cliente.celular || '',
+            telefono: cliente.telefono || '',
+            estadoCivil: cliente.estadoCivil || 'SOLTERO',
+            situacionLaboral: cliente.situacionLaboral || 'DEPENDIENTE',
+            empresa: cliente.empresa || '',
+            cargoOcupacion: cliente.cargoOcupacion || '',
+            ingresoMensual: cliente.ingresoMensual || null,
+            rucEmpresa: cliente.rucEmpresa || '',
+            telefonoEmpresa: cliente.telefonoEmpresa || '',
+            direccionEmpresa: cliente.direccionEmpresa || '',
+            departamento: '', // Deberían extraerse de domicilio si es posible, por ahora se dejan igual o se mapean si existen en la BD
+          });
+          
+          this.mostrarExitoTemporal('Cliente recurrente encontrado. Datos autocompletados.');
+        }
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+        if (err.status === 404) {
+          this.mostrarError('Cliente no encontrado. Es un cliente nuevo.');
+        } else {
+          this.mostrarError('Error al buscar el cliente.');
+        }
+      }
     });
   }
 
@@ -204,7 +285,6 @@ export class AdminCrearCreditoComponent implements OnInit {
     const tipo = this.tiposCredito.find(t => t.id === tipoId);
     
     // Asignar tasa simulada (si no hay tipo, se usa 0)
-    // Asumiremos que el tipo de crédito tiene un arreglo de rangos o una tasa general.
     // Buscaremos la tasa que aplique al monto, o usaremos la tasa base.
     this.tasaSimulada = 0;
     if (tipo) {
@@ -215,6 +295,11 @@ export class AdminCrearCreditoComponent implements OnInit {
         // En caso de que haya una tasa global en el tipo
         this.tasaSimulada = tipo.tasaMensual || 0;
       }
+    }
+    
+    // Si el usuario activó el descuento de tasa, usar esa en su lugar
+    if (vals.aplicarDescuentoTasa && vals.tasaPersonalizada) {
+      this.tasaSimulada = parseFloat(vals.tasaPersonalizada);
     }
 
     this.cuotasSimuladas = FinancieroHelper.calcularAmortizacionFrancesa(
@@ -273,18 +358,19 @@ export class AdminCrearCreditoComponent implements OnInit {
       next: (res) => {
         this.cargando = false;
         this.exito = true;
-        this.mensajeExito = res.mensaje || 'Crédito registrado con éxito';
+        this.mensajeExito = res.mensaje || 'Crédito creado correctamente';
         localStorage.removeItem(this.DRAFT_KEY);
-        
-        // Redirigir después de mostrar el mensaje de éxito
-        setTimeout(() => {
-          this.router.navigate(['/dashboard/admin/cartera']);
-        }, 2500);
+        setTimeout(() => this.router.navigate(['/dashboard/admin/cartera']), 2000);
       },
       error: (err) => {
         this.cargando = false;
-        console.error('Error al registrar', err);
-        this.mostrarError('Hubo un error al registrar el crédito: ' + (err.error?.message || err.error?.error || err.message));
+        console.error('Error al registrar crédito', err);
+        // Manejar ValidacionNegocioException o errores 400
+        if (err.status === 400 && err.error && err.error.error) {
+          this.mostrarError(err.error.error);
+        } else {
+          this.mostrarError('Hubo un error al registrar el crédito: ' + (err.error?.message || err.error?.error || err.message));
+        }
       }
     });
   }
@@ -294,6 +380,14 @@ export class AdminCrearCreditoComponent implements OnInit {
     this.errorToast = true;
     setTimeout(() => {
       this.errorToast = false;
-    }, 5000);
+    }, 4000);
+  }
+
+  private mostrarExitoTemporal(mensaje: string) {
+    this.mensajeExito = mensaje;
+    this.exito = true;
+    setTimeout(() => {
+      this.exito = false;
+    }, 4000);
   }
 }

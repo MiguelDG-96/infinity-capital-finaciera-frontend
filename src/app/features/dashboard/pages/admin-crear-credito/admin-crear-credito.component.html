@@ -76,8 +76,13 @@
 
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Número Documento *</span></label>
-          <input type="text" formControlName="numeroDocumento" class="input input-bordered bg-base-200/30"
-            placeholder="Ej: 12345678" (input)="soloNumeros($event, 'numeroDocumento')" />
+          <div class="join w-full">
+            <input type="text" formControlName="numeroDocumento" class="input input-bordered bg-base-200/30 join-item w-full"
+              placeholder="Ej: 12345678" (input)="soloNumeros($event, 'numeroDocumento')" />
+            <button type="button" class="btn btn-primary join-item" (click)="buscarCliente()" [disabled]="cargando" title="Buscar Cliente Existente">
+              <lucide-icon name="search" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
         </div>
 
         <div class="form-control">
@@ -267,7 +272,7 @@
         </div>
 
         <div class="form-control">
-          <label class="label"><span class="label-text font-bold">Ingreso Bruto Mensual S/</span></label>
+          <label class="label"><span class="label-text font-bold">Otros Ingresos Mensuales S/</span></label>
           <input type="number" formControlName="ingresoBrutoMensual" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
         </div>
 
@@ -419,6 +424,41 @@
           </select>
         </div>
 
+      </div>
+
+      <!-- Descuento Especial de Tasa -->
+      <div class="bg-base-200/50 p-6 border-t border-base-content/5 mt-4">
+        <div class="flex items-center gap-4 mb-4">
+          <input type="checkbox" formControlName="aplicarDescuentoTasa" class="toggle toggle-success" />
+          <div>
+            <span class="label-text font-bold block text-base-content text-lg flex items-center gap-2">
+              <lucide-icon name="percent" class="w-5 h-5 text-success"></lucide-icon>
+              Aplicar Descuento Especial de Tasa
+            </span>
+            <span class="text-xs opacity-60">Permite registrar una tasa de interés personalizada para este cliente en lugar de la del tarifario.</span>
+          </div>
+        </div>
+
+        @if (formulario.get('aplicarDescuentoTasa')?.value) {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-success/5 border border-success/20 p-5 rounded-2xl transition-all">
+          <div class="form-control md:col-span-1">
+            <label class="label"><span class="label-text font-bold text-success/80">Nueva Tasa Efectiva Mensual (%)</span></label>
+            <input type="number" formControlName="tasaPersonalizada" class="input input-bordered input-success bg-base-100 w-full font-black text-xl text-success"
+              placeholder="Ej: 8.5" step="0.01" />
+            @if (formulario.get('tasaPersonalizada')?.hasError('required') && formulario.get('tasaPersonalizada')?.touched) {
+              <span class="text-error text-xs mt-1">La tasa es obligatoria si aplica descuento.</span>
+            }
+          </div>
+          <div class="form-control md:col-span-2">
+            <label class="label"><span class="label-text font-bold text-success/80">Motivo / Sustento del Descuento</span></label>
+            <input type="text" formControlName="motivoDescuentoTasa" class="input input-bordered input-success bg-base-100 w-full"
+              placeholder="Ej: Cliente premium con excelente historial" />
+            @if (formulario.get('motivoDescuentoTasa')?.hasError('required') && formulario.get('motivoDescuentoTasa')?.touched) {
+              <span class="text-error text-xs mt-1">Debe ingresar el motivo del descuento.</span>
+            }
+          </div>
+        </div>
+        }
       </div>
 
       <!-- Action Footer -->

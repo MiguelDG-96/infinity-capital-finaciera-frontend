@@ -8,6 +8,8 @@ export interface CreditoDirectoRequestDTO extends SolicitudCreditoRequestDTO {
   desembolsarAutomaticamente?: boolean;
   descuentoRetencion?: number;
   exentoMoraAutomatica?: boolean;
+  tasaPersonalizada?: number;
+  motivoDescuentoTasa?: string;
 }
 
 export interface SolicitudCreditoRequestDTO {

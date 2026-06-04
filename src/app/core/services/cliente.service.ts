@@ -19,6 +19,10 @@ export class ClienteService {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
   }
 
+  buscarPorDocumento(documento: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.apiUrl}/buscar-por-documento/${documento}`);
+  }
+
   registrarConyuge(conyuge: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/conyuge`, conyuge);
   }

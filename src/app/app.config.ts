@@ -21,7 +21,7 @@ import {
   Key, Package, Truck, Users, Building, ShoppingCart, Folder, Box, Building2, Calculator, CalendarDays, IdCard,
   UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw,
   CircleDollarSign, Printer, ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
-  Paperclip, Save
+  Paperclip, Save, Coins
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -56,7 +56,7 @@ export const appConfig: ApplicationConfig = {
         Key, Package, Truck, Users, Building, Building2, ShoppingCart, Folder, Box, Calculator, CalendarDays, Wallet, CreditCard, IdCard,
         UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign, Printer,
         ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
-        Paperclip, Save
+        Paperclip, Save, Coins
       })
     )
   ]

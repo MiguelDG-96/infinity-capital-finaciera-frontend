@@ -312,9 +312,21 @@
                             <span class="font-bold">{{ (credito()?.garantes && credito()?.garantes!.length > 0) ? 'Con
                                 Garantía' : 'Sin Garantía' }}</span>
                         </div>
-                        <div class="flex justify-between items-center text-sm">
+                        <div class="flex justify-between items-center py-2 text-sm">
                             <span class="opacity-60">Tasa / Interés</span>
-                            <span class="font-bold">{{ credito()?.tasaAprobada || credito()?.tem || 0 }}%</span>
+                            <div class="text-right">
+                                @if (credito()?.motivoDescuentoTasa || (credito()?.tasaAprobada && credito()?.tem && credito()!.tasaAprobada! < credito()!.tem!)) {
+                                    <div class="flex items-center justify-end gap-2">
+                                        <span class="text-xs line-through opacity-50">{{ credito()?.tem }}%</span>
+                                        <span class="font-bold text-success bg-success/10 px-2 py-0.5 rounded-md">{{ credito()?.tasaAprobada }}%</span>
+                                    </div>
+                                    <div class="text-[9px] text-success/80 mt-0.5 max-w-[150px] truncate" [title]="credito()?.motivoDescuentoTasa">
+                                        {{ credito()?.motivoDescuentoTasa || 'Descuento aplicado' }}
+                                    </div>
+                                } @else {
+                                    <span class="font-bold">{{ credito()?.tasaAprobada || credito()?.tem || 0 }}%</span>
+                                }
+                            </div>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="opacity-60">Fecha de Vencimiento</span>
@@ -339,6 +351,17 @@
                                 'Completado' }}
                             </span>
                         </div>
+
+                        
+                        @if (credito()?.analistaRegistro) {
+                        <div class="flex justify-between items-center text-sm pt-2 mt-2 border-t border-base-content/5">
+                            <span class="opacity-60 flex items-center gap-1">
+                                <lucide-icon name="user-check" class="w-3.5 h-3.5"></lucide-icon>
+                                Registrado por
+                            </span>
+                            <span class="font-medium text-xs">{{ credito()!.analistaRegistro!.nombreCompleto || credito()!.analistaRegistro!.email }}</span>
+                        </div>
+                        }
                     </div>
 
                     <div class="divider opacity-50"></div>

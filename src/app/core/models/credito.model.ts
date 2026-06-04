@@ -73,6 +73,10 @@ export interface SolicitudCredito {
   canalEstadoCuenta?: string;
   descuentoRetencion?: number;
 
+  // Descuento de Tasa
+  tasaPersonalizada?: number;
+  motivoDescuentoTasa?: string;
+
   // Datos del cónyuge
   nombresConyuge?: string;
   apellidoPaConyuge?: string;
@@ -168,6 +172,8 @@ export interface Credito {
   cuentaDesembolso?: string;
   cliente?: Cliente;
   garantes?: Garante[];
+  motivoDescuentoTasa?: string;
+  analistaRegistro?: { id: number, nombreCompleto: string, email: string };
 }
 
 export interface Garante {
