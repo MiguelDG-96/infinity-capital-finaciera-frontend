@@ -49,6 +49,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     nombres: ['', [Validators.required, Validators.minLength(2)]],
     apellidoPaterno: ['', [Validators.required, Validators.minLength(2)]],
     apellidoMaterno: [''],
+    numeroDocumento: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]{8}$')]],
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9+]{8,15}$/)]],
     contrasena: ['', [Validators.required, Validators.minLength(8)]],
@@ -99,6 +100,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         nombres: this.registerForm.value.nombres!,
         apellidoPaterno: this.registerForm.value.apellidoPaterno!,
         apellidoMaterno: this.registerForm.value.apellidoMaterno || '',
+        numeroDocumento: this.registerForm.value.numeroDocumento!,
+        tipoDocumento: 'DNI',
         email: this.registerForm.value.email!,
         telefono: this.registerForm.value.telefono!,
         contrasena: this.registerForm.value.contrasena!
