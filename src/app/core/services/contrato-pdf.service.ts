@@ -804,7 +804,8 @@ export class ContratoPdfService {
     // calcular cuota si no hay
     let cuotaMs = '--';
     if (credito.montoAprobado && credito.plazoMeses) {
-        const cuota = (credito.montoAprobado * ((credito.tem || 0)/100)) / (1 - Math.pow(1 + ((credito.tem || 0)/100), -credito.plazoMeses));
+        const temAplicado = credito.tasaAprobada || credito.tem || 0;
+        const cuota = (credito.montoAprobado * (temAplicado/100)) / (1 - Math.pow(1 + (temAplicado/100), -credito.plazoMeses));
         cuotaMs = `S/ ${cuota.toFixed(2)}`;
     }
     drawText(cuotaMs, 'cuota_mensual', true);
@@ -936,7 +937,7 @@ export class ContratoPdfService {
     const cuotas = FinancieroHelper.calcularAmortizacionFrancesa(
         data.montoAprobado || data.montoCredito || 0,
         data.plazoMeses || 12,
-        data.tem || 5,
+        data.tasaAprobada || data.tem || 5,
         data.periodoGracia || 0
     );
 
