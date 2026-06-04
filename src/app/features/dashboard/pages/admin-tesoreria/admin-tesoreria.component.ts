@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { TesoreriaService, SolicitudRetiroTesoreria } from '../../../../core/services/tesoreria.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-tesoreria',
@@ -14,7 +15,8 @@ import { TesoreriaService, SolicitudRetiroTesoreria } from '../../../../core/ser
 export class AdminTesoreriaComponent implements OnInit {
   retiros: SolicitudRetiroTesoreria[] = [];
   desembolsos: any[] = [];
-  tabActiva: 'retiros' | 'desembolsos' = 'retiros';
+  historialRetiros: SolicitudRetiroTesoreria[] = [];
+  tabActiva: 'retiros' | 'desembolsos' | 'historial' = 'retiros';
   cargando = true;
   error = '';
   procesando = false;
@@ -29,6 +31,7 @@ export class AdminTesoreriaComponent implements OnInit {
   numeroOperacion = '';
   estadoResolucion: 'aprobar' | 'rechazar' = 'aprobar';
   motivoRechazo = '';
+  archivoSeleccionado: File | null = null;
 
   constructor(
     private tesoreriaService: TesoreriaService,
@@ -42,9 +45,10 @@ export class AdminTesoreriaComponent implements OnInit {
   cargarDatos(): void {
     this.cargarRetiros();
     this.cargarDesembolsos();
+    this.cargarHistorial();
   }
 
-  setTab(tab: 'retiros' | 'desembolsos'): void {
+  setTab(tab: 'retiros' | 'desembolsos' | 'historial'): void {
     this.tabActiva = tab;
   }
 
@@ -83,13 +87,39 @@ export class AdminTesoreriaComponent implements OnInit {
     });
   }
 
+  cargarHistorial(): void {
+    this.cargando = true;
+    this.tesoreriaService.obtenerHistorialRetiros().subscribe({
+      next: (data) => {
+        this.historialRetiros = data;
+        if (this.tabActiva === 'historial') this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (this.tabActiva === 'historial') {
+            this.error = 'Error al cargar el historial.';
+            this.cargando = false;
+        }
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   iniciarProcesamiento(retiro: SolicitudRetiroTesoreria): void {
     if (this.procesando) return;
     this.retiroSeleccionado = retiro;
     this.numeroOperacion = '';
     this.estadoResolucion = 'aprobar';
     this.motivoRechazo = '';
+    this.archivoSeleccionado = null;
     this.showProcesarModal = true;
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.archivoSeleccionado = file;
+    }
   }
 
   cerrarModal(): void {
@@ -113,17 +143,24 @@ export class AdminTesoreriaComponent implements OnInit {
     }
 
     this.procesando = true;
-    const req = {
-      numeroOperacion: this.numeroOperacion,
-      aprobado: this.estadoResolucion === 'aprobar',
-      motivoRechazo: this.motivoRechazo
-    };
+    const formData = new FormData();
+    formData.append('aprobado', this.estadoResolucion === 'aprobar' ? 'true' : 'false');
+    
+    if (this.estadoResolucion === 'aprobar') {
+      formData.append('numeroOperacion', this.numeroOperacion);
+      if (this.archivoSeleccionado) {
+        formData.append('archivo', this.archivoSeleccionado);
+      }
+    } else {
+      formData.append('motivoRechazo', this.motivoRechazo);
+    }
 
-    this.tesoreriaService.procesarRetiro(this.retiroSeleccionado.id, req).subscribe({
+    this.tesoreriaService.procesarRetiro(this.retiroSeleccionado.id, formData).subscribe({
       next: () => {
         this.procesando = false;
         this.cerrarModal();
         this.cargarRetiros();
+        this.cargarHistorial();
       },
       error: (err) => {
         this.procesando = false;
@@ -154,5 +191,11 @@ export class AdminTesoreriaComponent implements OnInit {
         alert(err.error?.error || 'Error al procesar el desembolso.');
       }
     });
+  }
+
+  verComprobante(url: string | undefined): void {
+    if (!url) return;
+    const fullUrl = environment.apiUrl.replace('/api/v1', '') + url;
+    window.open(fullUrl, '_blank');
   }
 }

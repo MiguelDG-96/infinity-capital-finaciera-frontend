@@ -2,9 +2,8 @@
 import { Injectable, signal, inject, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, forkJoin, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface PagoRevisionItem {
@@ -19,6 +18,17 @@ export interface PagoRevisionItem {
   imagenComprobante?: string;
 }
 
+export interface RetiroPendienteItem {
+  id: number;
+  monto: number;
+  estado: string;
+  fechaSolicitud: string;
+  nombreCliente: string;
+  documentoCliente: string;
+  banco: string;
+  numeroCuenta: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,11 +40,13 @@ export class NotificationService {
 
   private _isOpen = signal(false);
   private _pagosEnRevision = signal<PagoRevisionItem[]>([]);
+  private _retirosPendientes = signal<RetiroPendienteItem[]>([]);
   private pollingSubscription: Subscription | null = null;
 
   readonly isOpen = this._isOpen.asReadonly();
   readonly pagosEnRevision = this._pagosEnRevision.asReadonly();
-  readonly totalNotificaciones = computed(() => this._pagosEnRevision().length);
+  readonly retirosPendientes = this._retirosPendientes.asReadonly();
+  readonly totalNotificaciones = computed(() => this._pagosEnRevision().length + this._retirosPendientes().length);
 
   open() { this._isOpen.set(true); }
   close() { this._isOpen.set(false); }
@@ -52,10 +64,14 @@ export class NotificationService {
 
     // Luego cada 60 segundos
     this.pollingSubscription = interval(60_000).pipe(
-      switchMap(() => this.fetchPagos())
-    ).subscribe(data => {
-      this.verificarYNotificar(data);
-      this._pagosEnRevision.set(data);
+      switchMap(() => forkJoin({
+        pagos: this.fetchPagos(),
+        retiros: this.fetchRetiros()
+      }))
+    ).subscribe(({ pagos, retiros }) => {
+      this.verificarYNotificar(pagos, retiros);
+      this._pagosEnRevision.set(pagos);
+      this._retirosPendientes.set(retiros);
     });
   }
 
@@ -63,6 +79,7 @@ export class NotificationService {
     this.pollingSubscription?.unsubscribe();
     this.pollingSubscription = null;
     this._pagosEnRevision.set([]);
+    this._retirosPendientes.set([]);
   }
 
   recargar() {
@@ -74,17 +91,28 @@ export class NotificationService {
     this.router.navigate(['/dashboard/admin/cartera', creditoId]);
   }
 
+  irATesoreria() {
+    this.close();
+    this.router.navigate(['/dashboard/admin/tesoreria']);
+  }
+
   private fetchAndUpdate() {
-    this.fetchPagos().subscribe(data => {
-      this.verificarYNotificar(data);
-      this._pagosEnRevision.set(data);
+    forkJoin({
+      pagos: this.fetchPagos(),
+      retiros: this.fetchRetiros()
+    }).subscribe(({ pagos, retiros }) => {
+      this.verificarYNotificar(pagos, retiros);
+      this._pagosEnRevision.set(pagos);
+      this._retirosPendientes.set(retiros);
     });
   }
 
-  private verificarYNotificar(newData: PagoRevisionItem[]) {
-    const currentLength = this._pagosEnRevision().length;
+  private verificarYNotificar(newPagos: PagoRevisionItem[], newRetiros: RetiroPendienteItem[]) {
+    const currentTotalLength = this._pagosEnRevision().length + this._retirosPendientes().length;
+    const newTotalLength = newPagos.length + newRetiros.length;
+    
     // Reproducir sonido solo si hay nuevas notificaciones (más de las que ya teníamos)
-    if (newData.length > currentLength && currentLength >= 0) {
+    if (newTotalLength > currentTotalLength && currentTotalLength >= 0) {
       this.playNotificationSound();
     }
   }
@@ -122,6 +150,14 @@ export class NotificationService {
       `${this.apiUrl}/creditos/admin/pagos-en-revision`
     ).pipe(
       catchError(() => of([] as PagoRevisionItem[]))
+    );
+  }
+
+  private fetchRetiros() {
+    return this.http.get<RetiroPendienteItem[]>(
+      `${this.apiUrl}/tesoreria/retiros-pendientes`
+    ).pipe(
+      catchError(() => of([] as RetiroPendienteItem[]))
     );
   }
 }

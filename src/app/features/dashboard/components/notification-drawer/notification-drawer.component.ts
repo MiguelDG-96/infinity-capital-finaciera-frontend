@@ -39,6 +39,10 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     this.notificationService.irAlCredito(creditoId);
   }
 
+  irATesoreria() {
+    this.notificationService.irATesoreria();
+  }
+
   recargar() {
     this.notificationService.recargar();
   }

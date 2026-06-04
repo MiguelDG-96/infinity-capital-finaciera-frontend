@@ -44,58 +44,112 @@
 
     <!-- Sección: Pagos en Revisión (solo admin/trabajador) -->
     @if (isAdmin) {
-      @if (notificationService.pagosEnRevision().length > 0) {
-        <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-white mb-2 flex items-center gap-1.5">
-            <lucide-icon name="scan-eye" size="12"></lucide-icon>
-            Comprobantes pendientes de revisión
-          </p>
-          <div class="flex flex-col gap-2">
-            @for (pago of notificationService.pagosEnRevision(); track pago.cuotaId) {
-              <button
-                class="group flex flex-col gap-2 rounded-2xl bg-base-200/40 hover:bg-primary/5 border border-transparent hover:border-primary/20 p-3 text-left transition-all w-full cursor-pointer"
-                (click)="irAlCredito(pago.creditoId)"
-                [id]="'notif-pago-' + pago.cuotaId"
-              >
-                <!-- Fila superior -->
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex items-center gap-2 flex-1 min-w-0">
-                    <!-- Ícono de alerta -->
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-warning/15 text-warning">
-                      <lucide-icon name="receipt" size="18"></lucide-icon>
+      @if (notificationService.pagosEnRevision().length > 0 || notificationService.retirosPendientes().length > 0) {
+        
+        @if (notificationService.pagosEnRevision().length > 0) {
+          <div class="mb-4">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-white mb-2 flex items-center gap-1.5">
+              <lucide-icon name="scan-eye" size="12"></lucide-icon>
+              Comprobantes pendientes de revisión
+            </p>
+            <div class="flex flex-col gap-2">
+              @for (pago of notificationService.pagosEnRevision(); track pago.cuotaId) {
+                <button
+                  class="group flex flex-col gap-2 rounded-2xl bg-base-200/40 hover:bg-primary/5 border border-transparent hover:border-primary/20 p-3 text-left transition-all w-full cursor-pointer"
+                  (click)="irAlCredito(pago.creditoId)"
+                  [id]="'notif-pago-' + pago.cuotaId"
+                >
+                  <!-- Fila superior -->
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                      <!-- Ícono de alerta -->
+                      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-warning/15 text-warning">
+                        <lucide-icon name="receipt" size="18"></lucide-icon>
+                      </div>
+                      <div class="min-w-0">
+                        <p class="text-xs font-bold text-base-content truncate">{{ pago.nombreCliente }}</p>
+                        <p class="text-[10px] text-base-content/50">DNI: {{ pago.dniCliente }}</p>
+                      </div>
                     </div>
-                    <div class="min-w-0">
-                      <p class="text-xs font-bold text-base-content truncate">{{ pago.nombreCliente }}</p>
-                      <p class="text-[10px] text-base-content/50">DNI: {{ pago.dniCliente }}</p>
-                    </div>
+                    <!-- Badge -->
+                    <span class="badge badge-warning badge-xs font-bold shrink-0 mt-0.5">EN REVISIÓN</span>
                   </div>
-                  <!-- Badge -->
-                  <span class="badge badge-warning badge-xs font-bold shrink-0 mt-0.5">EN REVISIÓN</span>
-                </div>
 
-                <!-- Detalle del pago -->
-                <div class="pl-11 space-y-1">
-                  <p class="text-[11px] text-base-content/70 leading-relaxed">
-                    Cuota #{{ pago.numeroCuota }} — 
-                    <span class="font-bold text-base-content">S/ {{ pago.montoPagadoCliente | number:'1.2-2' }}</span>
-                    vía <span class="font-semibold">{{ pago.metodoPago }}</span>
-                  </p>
-                  @if (pago.numeroComprobante) {
-                    <p class="text-[10px] font-mono text-base-content/40">Ref: {{ pago.numeroComprobante }}</p>
-                  }
-                </div>
+                  <!-- Detalle del pago -->
+                  <div class="pl-11 space-y-1">
+                    <p class="text-[11px] text-base-content/70 leading-relaxed">
+                      Cuota #{{ pago.numeroCuota }} — 
+                      <span class="font-bold text-base-content">S/ {{ pago.montoPagadoCliente | number:'1.2-2' }}</span>
+                      vía <span class="font-semibold">{{ pago.metodoPago }}</span>
+                    </p>
+                    @if (pago.numeroComprobante) {
+                      <p class="text-[10px] font-mono text-base-content/40">Ref: {{ pago.numeroComprobante }}</p>
+                    }
+                  </div>
 
-                <!-- CTA -->
-                <div class="pl-11">
-                  <span class="text-[10px] text-primary font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                    <lucide-icon name="arrow-right" size="12"></lucide-icon>
-                    Revisar comprobante
-                  </span>
-                </div>
-              </button>
-            }
+                  <!-- CTA -->
+                  <div class="pl-11">
+                    <span class="text-[10px] text-primary font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                      <lucide-icon name="arrow-right" size="12"></lucide-icon>
+                      Revisar comprobante
+                    </span>
+                  </div>
+                </button>
+              }
+            </div>
           </div>
-        </div>
+        }
+
+        @if (notificationService.retirosPendientes().length > 0) {
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-white mb-2 flex items-center gap-1.5 mt-2">
+              <lucide-icon name="landmark" size="12"></lucide-icon>
+              Retiros de Efectivo Pendientes
+            </p>
+            <div class="flex flex-col gap-2">
+              @for (retiro of notificationService.retirosPendientes(); track retiro.id) {
+                <button
+                  class="group flex flex-col gap-2 rounded-2xl bg-base-200/40 hover:bg-info/5 border border-transparent hover:border-info/20 p-3 text-left transition-all w-full cursor-pointer"
+                  (click)="irATesoreria()"
+                  [id]="'notif-retiro-' + retiro.id"
+                >
+                  <!-- Fila superior -->
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                      <!-- Ícono de alerta -->
+                      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-info/15 text-info">
+                        <lucide-icon name="banknote" size="18"></lucide-icon>
+                      </div>
+                      <div class="min-w-0">
+                        <p class="text-xs font-bold text-base-content truncate">{{ retiro.nombreCliente }}</p>
+                        <p class="text-[10px] text-base-content/50">DNI: {{ retiro.documentoCliente }}</p>
+                      </div>
+                    </div>
+                    <!-- Badge -->
+                    <span class="badge badge-info badge-xs font-bold shrink-0 mt-0.5 text-white">POR APROBAR</span>
+                  </div>
+
+                  <!-- Detalle del retiro -->
+                  <div class="pl-11 space-y-1">
+                    <p class="text-[11px] text-base-content/70 leading-relaxed">
+                      Monto a retirar: <span class="font-bold text-base-content">S/ {{ retiro.monto | number:'1.2-2' }}</span>
+                    </p>
+                    <p class="text-[10px] font-mono text-base-content/40">{{ retiro.banco }} / Cta: {{ retiro.numeroCuenta }}</p>
+                  </div>
+
+                  <!-- CTA -->
+                  <div class="pl-11">
+                    <span class="text-[10px] text-info font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                      <lucide-icon name="arrow-right" size="12"></lucide-icon>
+                      Ir a Tesorería
+                    </span>
+                  </div>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
       } @else {
         <div class="flex flex-col items-center justify-center py-10 gap-3 text-base-content/30">
           <div class="p-4 rounded-full bg-base-200/60">
@@ -103,7 +157,7 @@
           </div>
           <div class="text-center">
             <p class="text-sm font-bold">Sin pendientes</p>
-            <p class="text-xs opacity-60">No hay comprobantes esperando revisión</p>
+            <p class="text-xs opacity-60">No hay comprobantes ni retiros esperando revisión</p>
           </div>
         </div>
       }

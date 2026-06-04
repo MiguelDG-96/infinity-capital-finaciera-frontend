@@ -15,6 +15,7 @@ export interface SolicitudRetiroTesoreria {
   fechaSolicitud: string;
   fechaProcesamiento?: string;
   numeroOperacion?: string;
+  comprobanteUrl?: string;
 }
 
 export interface ProcesarRetiroRequest {
@@ -44,12 +45,16 @@ export class TesoreriaService {
     return this.http.get<SolicitudRetiroTesoreria[]>(`${this.apiUrl}/retiros-pendientes`);
   }
 
+  obtenerHistorialRetiros(): Observable<SolicitudRetiroTesoreria[]> {
+    return this.http.get<SolicitudRetiroTesoreria[]>(`${this.apiUrl}/historial-retiros`);
+  }
+
   obtenerDesembolsosPendientes(): Observable<DesembolsoPendiente[]> {
     return this.http.get<DesembolsoPendiente[]>(`${this.apiUrl}/desembolsos-pendientes`);
   }
 
-  procesarRetiro(id: number, request: ProcesarRetiroRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/retiros/${id}/procesar`, request);
+  procesarRetiro(id: number, formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/retiros/${id}/procesar`, formData);
   }
 
   procesarDesembolso(id: number): Observable<any> {

@@ -22,6 +22,10 @@
             Desembolsos
             <div class="badge badge-sm badge-secondary opacity-60 ml-1">{{ desembolsos.length }}</div>
         </button>
+        <button (click)="setTab('historial')" [class.tab-active]="tabActiva === 'historial'" class="tab tab-lg font-bold transition-all duration-300 gap-2">
+            <lucide-icon name="history" class="w-4 h-4"></lucide-icon>
+            Historial de Retiros
+        </button>
     </div>
 
     @if (cargando) {
@@ -147,6 +151,71 @@
                 </div>
             }
         }
+        
+        <!-- Sección de Historial -->
+        @if (tabActiva === 'historial') {
+            @if (historialRetiros.length === 0) {
+                <div class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-base-content/10 rounded-3xl bg-base-200/20 animate-fade-in">
+                    <div class="w-20 h-20 bg-base-content/5 rounded-full flex items-center justify-center mb-6">
+                        <lucide-icon name="history" class="w-10 h-10 text-base-content opacity-40"></lucide-icon>
+                    </div>
+                    <h2 class="text-2xl font-bold">Sin historial</h2>
+                    <p class="opacity-60 max-w-md mt-2">Aún no se ha procesado ningún retiro de tesorería.</p>
+                </div>
+            } @else {
+                <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl animate-fade-in">
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra table-md w-full">
+                            <thead>
+                                <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
+                                    <th class="py-4 pl-6">ID / Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                    <th class="text-right pr-6">Comprobante</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (h of historialRetiros; track h.id) {
+                                    <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                                        <td class="pl-6">
+                                            <div class="flex flex-col">
+                                                <span class="font-mono text-xs opacity-60 font-bold">#{{ h.id }}</span>
+                                                <span class="text-[10px] opacity-40">{{ h.fechaProcesamiento | date:'dd MMM yyyy, HH:mm' }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex flex-col">
+                                                <span class="font-bold text-sm text-base-content/80">{{ h.nombreCliente }}</span>
+                                                <span class="text-[10px] opacity-40 font-mono tracking-tighter">DNI: {{ h.documentoCliente }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="font-black text-sm text-primary">{{ h.monto | currency:'S/ ' }}</td>
+                                        <td>
+                                            @if (h.estado === 'COMPLETADO') {
+                                                <span class="badge badge-success badge-sm opacity-80 gap-1"><lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Completado</span>
+                                                <p class="text-[9px] font-mono mt-1 opacity-50">VOUCHER: {{ h.numeroOperacion }}</p>
+                                            } @else {
+                                                <span class="badge badge-error badge-sm opacity-80 gap-1"><lucide-icon name="x-circle" class="w-3 h-3"></lucide-icon> Rechazado</span>
+                                            }
+                                        </td>
+                                        <td class="text-right pr-6">
+                                            @if (h.estado === 'COMPLETADO' && h.comprobanteUrl) {
+                                                <button (click)="verComprobante(h.comprobanteUrl)" class="btn btn-ghost btn-sm text-xs px-2 rounded-full shadow-sm hover:bg-base-200 transition-all text-primary">
+                                                    <lucide-icon name="file-text" class="w-4 h-4 mr-1"></lucide-icon> Ver PDF/Foto
+                                                </button>
+                                            } @else {
+                                                <span class="text-xs opacity-30 italic">Sin archivo</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
     }
 </div>
 
@@ -192,14 +261,22 @@
                 </div>
 
                 @if (estadoResolucion === 'aprobar') {
-                    <div class="form-control animate-fade-in">
-                        <label class="label">
-                            <span class="label-text text-xs font-bold uppercase tracking-widest opacity-60">Número de Operación (Voucher)</span>
-                        </label>
-                        <input type="text" [(ngModel)]="numeroOperacion" placeholder="Ej. 182741982" class="input input-bordered font-mono font-bold focus:border-primary">
-                        <label class="label">
-                            <span class="label-text-alt opacity-50">Obligatorio. Este código será la prueba del depósito.</span>
-                        </label>
+                    <div class="form-control animate-fade-in space-y-4">
+                        <div>
+                            <label class="label">
+                                <span class="label-text text-xs font-bold uppercase tracking-widest opacity-60">Número de Operación (Voucher)</span>
+                            </label>
+                            <input type="text" [(ngModel)]="numeroOperacion" placeholder="Ej. 182741982" class="input input-bordered w-full font-mono font-bold focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text text-xs font-bold uppercase tracking-widest opacity-60">Comprobante (Foto o PDF)</span>
+                            </label>
+                            <input type="file" class="file-input file-input-bordered file-input-primary w-full text-sm" accept="image/*,.pdf" (change)="onFileSelected($event)" />
+                            <label class="label">
+                                <span class="label-text-alt opacity-50">Sube la foto del voucher o constancia de transferencia.</span>
+                            </label>
+                        </div>
                     </div>
                 }
 
