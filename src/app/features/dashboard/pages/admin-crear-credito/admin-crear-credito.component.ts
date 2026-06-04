@@ -211,14 +211,32 @@ export class AdminCrearCreditoComponent implements OnInit {
         this.cargando = false;
         this.cdr.detectChanges();
         if (cliente) {
+          // Parsear datosSolicitud si existe para obtener nombres y apellidos exactos
+          let nombres = cliente.usuario?.nombreCompleto?.split(' ')[0] || '';
+          let apellidoPaterno = '';
+          let apellidoMaterno = '';
+
+          if (cliente.datosSolicitud) {
+            try {
+              const extra = JSON.parse(cliente.datosSolicitud);
+              if (extra.nombres) nombres = extra.nombres;
+              if (extra.apellidoPaterno) apellidoPaterno = extra.apellidoPaterno;
+              if (extra.apellidoMaterno) apellidoMaterno = extra.apellidoMaterno;
+            } catch (e) {
+              console.error('Error parseando datosSolicitud:', e);
+            }
+          }
+
           // Autocompletar datos del cliente
           this.formulario.patchValue({
             tipoPersona: cliente.tipoPersona || 'NATURAL',
             tipoDocumento: cliente.tipoDocumento || 'DNI',
-            nombres: cliente.usuario?.nombreCompleto?.split(' ')[0] || '', // Aproximación
+            nombres: nombres,
+            apellidoPaterno: apellidoPaterno,
+            apellidoMaterno: apellidoMaterno,
             email: cliente.usuario?.email || '',
             fechaNacimiento: cliente.fechaNacimiento || '',
-            celular: cliente.celular || '',
+            celular: cliente.celular || cliente.telefono || '',
             telefono: cliente.telefono || '',
             estadoCivil: cliente.estadoCivil || 'SOLTERO',
             situacionLaboral: cliente.situacionLaboral || 'DEPENDIENTE',
