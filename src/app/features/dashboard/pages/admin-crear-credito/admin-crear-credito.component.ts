@@ -115,6 +115,7 @@ export class AdminCrearCreditoComponent implements OnInit {
       apellidoMaterno: [''],
       email: [''],
       fechaNacimiento: [''],
+      sexo: ['MASCULINO'],
       celular: ['', [Validators.pattern('^[0-9]+$')]],
       telefono: [''],
       nacionalidad: ['PERUANA'],

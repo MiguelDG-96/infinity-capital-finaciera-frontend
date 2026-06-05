@@ -115,6 +115,14 @@
         </div>
 
         <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Sexo *</span></label>
+          <select formControlName="sexo" class="select select-bordered bg-base">
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMENINO">Femenino</option>
+          </select>
+        </div>
+
+        <div class="form-control">
           <label class="label"><span class="label-text font-bold">Celular</span></label>
           <input type="text" formControlName="celular" class="input input-bordered bg-base-200/30"
             placeholder="Opcional" (input)="soloNumeros($event, 'celular')" />

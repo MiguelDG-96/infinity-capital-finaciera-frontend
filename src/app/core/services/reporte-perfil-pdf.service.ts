@@ -115,6 +115,7 @@ export class ReportePerfilPdfService {
       ['Tipo Documento',    this.fmt(c.tipoDocumento)],
       ['Nro. Documento',    this.fmt(c.numeroDocumento)],
       ['Fecha Nacimiento',  this.formatDate(c.fechaNacimiento)],
+      ['Sexo',              this.fmt(c.sexo)],
       ['Estado Civil',      this.fmt(c.estadoCivil)],
       ['Grado Instrucción', this.fmt(c.gradoInstruccion)],
       ['Nro. Dependientes', this.fmt(c.numeroDependientes)],
