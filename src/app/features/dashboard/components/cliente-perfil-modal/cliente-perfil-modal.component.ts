@@ -190,7 +190,20 @@ export class ClientePerfilModalComponent implements OnChanges {
     this.guardando.set(true);
     this.error.set(null);
 
-    const data = this.clienteEdit();
+    const data = { ...this.clienteEdit() };
+
+    // Convertir a mayúsculas todos los strings excepto email
+    const upperCaseStrings = (obj: any) => {
+      if (!obj) return;
+      Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'string' && key !== 'email') {
+          obj[key] = obj[key].toUpperCase();
+        } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+          upperCaseStrings(obj[key]);
+        }
+      });
+    };
+    upperCaseStrings(data);
 
     const datosSolicitudObj = {
       departamento: data.departamento,
