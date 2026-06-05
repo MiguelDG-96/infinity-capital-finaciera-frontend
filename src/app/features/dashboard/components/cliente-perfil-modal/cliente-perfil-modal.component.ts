@@ -185,6 +185,15 @@ export class ClientePerfilModalComponent implements OnChanges {
     this.isEditMode.set(false);
   }
 
+  soloNumerosObj(obj: any, field: string, event: Event) {
+    const input = event.target as HTMLInputElement;
+    const numericValue = input.value.replace(/[^0-9]/g, '');
+    if (input.value !== numericValue) {
+      input.value = numericValue;
+      obj[field] = numericValue;
+    }
+  }
+
   guardarCambios() {
     if (!this.cliente?.id) return;
     this.guardando.set(true);

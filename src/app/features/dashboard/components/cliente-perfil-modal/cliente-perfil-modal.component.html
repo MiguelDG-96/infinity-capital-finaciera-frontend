@@ -787,7 +787,7 @@
                 </div>
               } @else {
                 <!-- MODO EDICIÓN -->
-                <div class="space-y-6 animate-fade-in">
+                <div class="space-y-6 animate-fade-in [&_input[type=text]]:uppercase [&_textarea]:uppercase">
                   
                   @if (tabActiva() === 'personal') {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -797,7 +797,7 @@
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">DNI / Documento</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().numeroDocumento" class="input input-bordered input-sm rounded-xl" />
+                        <input type="text" [(ngModel)]="clienteEdit().numeroDocumento" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit(), 'numeroDocumento', $event)" />
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Fecha Nacimiento</span></label>
@@ -822,7 +822,7 @@
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().celular" class="input input-bordered input-sm rounded-xl" />
+                        <input type="text" [(ngModel)]="clienteEdit().celular" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit(), 'celular', $event)" />
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Límite Crédito (S/)</span></label>
@@ -843,7 +843,7 @@
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular Familiar</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().contactoFamiliarCelular" class="input input-bordered input-sm rounded-xl" />
+                        <input type="text" [(ngModel)]="clienteEdit().contactoFamiliarCelular" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit(), 'contactoFamiliarCelular', $event)" />
                       </div>
                       <div class="form-control flex flex-row items-center gap-2 pt-2">
                         <input type="checkbox" [(ngModel)]="clienteEdit().viveCasaPropia" class="checkbox checkbox-primary checkbox-sm rounded-lg" />
@@ -868,7 +868,7 @@
                         </div>
                         <div class="form-control">
                           <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Empresa</span></label>
-                          <input type="text" [(ngModel)]="clienteEdit().rucEmpresa" class="input input-bordered input-sm rounded-xl" />
+                          <input type="text" [(ngModel)]="clienteEdit().rucEmpresa" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit(), 'rucEmpresa', $event)" />
                         </div>
                         <div class="form-control sm:col-span-2">
                           <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Dirección Empresa</span></label>
@@ -878,7 +878,7 @@
                       @if (clienteEdit().situacionLaboral === 'INDEPENDIENTE') {
                         <div class="form-control">
                           <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">RUC Propio</span></label>
-                          <input type="text" [(ngModel)]="clienteEdit().rucPropio" class="input input-bordered input-sm rounded-xl" />
+                          <input type="text" [(ngModel)]="clienteEdit().rucPropio" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit(), 'rucPropio', $event)" />
                         </div>
                       }
                       <div class="form-control">
@@ -961,11 +961,11 @@
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Número Documento</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().conyuge.numeroDocumento" class="input input-bordered input-sm rounded-xl" />
+                        <input type="text" [(ngModel)]="clienteEdit().conyuge.numeroDocumento" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit().conyuge, 'numeroDocumento', $event)" />
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Celular</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().conyuge.telefono" class="input input-bordered input-sm rounded-xl" />
+                        <input type="text" [(ngModel)]="clienteEdit().conyuge.telefono" class="input input-bordered input-sm rounded-xl" (input)="soloNumerosObj(clienteEdit().conyuge, 'telefono', $event)" />
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Ocupación / Profesión</span></label>

@@ -57,7 +57,7 @@
           </div>
           <div class="form-control">
             <label class="label"><span class="label-text font-bold">RUC Jurídico *</span></label>
-            <input type="text" formControlName="rucJuridico" class="input input-bordered bg-base-200/30" />
+            <input type="text" formControlName="rucJuridico" class="input input-bordered bg-base-200/30" (input)="soloNumeros($event, 'rucJuridico')" />
           </div>
           <div class="form-control md:col-span-2">
             <label class="label"><span class="label-text font-bold">Representante Legal *</span></label>
@@ -131,7 +131,7 @@
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Teléfono Fijo</span></label>
           <input type="text" formControlName="telefono" class="input input-bordered bg-base-200/30"
-            placeholder="Opcional" />
+            placeholder="Opcional" (input)="soloNumeros($event, 'telefono')" />
         </div>
 
         <div class="form-control">
@@ -249,7 +249,7 @@
           </div>
           <div class="form-control">
             <label class="label"><span class="label-text font-bold">RUC Empresa</span></label>
-            <input type="text" formControlName="rucEmpresa" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+            <input type="text" formControlName="rucEmpresa" class="input input-bordered bg-base-200/30" placeholder="Opcional" (input)="soloNumeros($event, 'rucEmpresa')" />
           </div>
           <div class="form-control">
             <label class="label"><span class="label-text font-bold">Dirección Empresa</span></label>
@@ -260,7 +260,7 @@
         <ng-container *ngIf="formulario.get('situacionLaboral')?.value === 'INDEPENDIENTE'">
           <div class="form-control">
             <label class="label"><span class="label-text font-bold">RUC Propio</span></label>
-            <input type="text" formControlName="rucPropio" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+            <input type="text" formControlName="rucPropio" class="input input-bordered bg-base-200/30" placeholder="Opcional" (input)="soloNumeros($event, 'rucPropio')" />
           </div>
         </ng-container>
 
@@ -320,7 +320,7 @@
         </div>
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Número Documento</span></label>
-          <input type="text" formControlName="conyugeNumeroDocumento" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          <input type="text" formControlName="conyugeNumeroDocumento" class="input input-bordered bg-base-200/30" placeholder="Opcional" (input)="soloNumeros($event, 'conyugeNumeroDocumento')" />
         </div>
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Ocupación</span></label>
@@ -336,11 +336,11 @@
         </div>
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">DNI</span></label>
-          <input type="text" formControlName="garanteDni" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          <input type="text" formControlName="garanteDni" class="input input-bordered bg-base-200/30" placeholder="Opcional" (input)="soloNumeros($event, 'garanteDni')" />
         </div>
         <div class="form-control">
           <label class="label"><span class="label-text font-bold">Teléfono</span></label>
-          <input type="text" formControlName="garanteTelefono" class="input input-bordered bg-base-200/30" placeholder="Opcional" />
+          <input type="text" formControlName="garanteTelefono" class="input input-bordered bg-base-200/30" placeholder="Opcional" (input)="soloNumeros($event, 'garanteTelefono')" />
         </div>
 
       </div>
