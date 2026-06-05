@@ -151,6 +151,7 @@ export class SolicitarCreditoComponent implements OnInit {
       numeroDocumento: ['', [Validators.required, Validators.pattern('^[0-9A-Z]+$'), Validators.minLength(8)]],
       nacionalidad: ['PERUANA', [Validators.required]],
       fechaNacimiento: ['', [Validators.required]],
+      sexo: ['', [Validators.required]],
       estadoCivil: ['SOLTERO', [Validators.required]],
       gradoInstruccion: ['SECUNDARIA', [Validators.required]],
       celular: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
@@ -267,6 +268,7 @@ export class SolicitarCreditoComponent implements OnInit {
             numeroDocumento: cliente.numeroDocumento || '',
             nacionalidad: cliente.nacionalidad || 'PERUANA',
             fechaNacimiento: cliente.fechaNacimiento ? new Date(cliente.fechaNacimiento).toISOString().split('T')[0] : '',
+            sexo: cliente.sexo || '',
             estadoCivil: cliente.estadoCivil || 'SOLTERO',
             gradoInstruccion: cliente.gradoInstruccion || 'SECUNDARIA',
             celular: cliente.celular || '',
@@ -370,7 +372,7 @@ export class SolicitarCreditoComponent implements OnInit {
   private canContinue(): boolean {
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
-      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular'],
+      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'sexo', 'estadoCivil', 'gradoInstruccion', 'celular'],
       3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral'],
       5: ['terminosAceptados']
@@ -408,7 +410,7 @@ export class SolicitarCreditoComponent implements OnInit {
   private markStepAsTouched(): void {
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
-      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'estadoCivil', 'gradoInstruccion', 'celular', 'telefono'],
+      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'sexo', 'estadoCivil', 'gradoInstruccion', 'celular', 'telefono'],
       3: ['distrito', 'direccion', 'referencia'],
       4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral', 'rucPropio', 'empresa', 'rucEmpresa', 'direccionEmpresa', 'razonSocialJuridica', 'rucJuridico', 'representanteLegal'],
       5: ['nombresConyuge', 'apellidoPaConyuge', 'apellidoMatConyuge', 'conyugeNumeroDocumento', 'garanteNombre', 'garanteDni', 'canalEstadoCuenta', 'terminosAceptados']

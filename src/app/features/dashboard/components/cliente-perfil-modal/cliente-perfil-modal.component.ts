@@ -215,6 +215,7 @@ export class ClientePerfilModalComponent implements OnChanges {
       referencia:              data.referencia,
       domicilio:               data.domicilio,
       fechaNacimiento:         data.fechaNacimiento,
+      sexo:                    data.sexo,
       estadoCivil:             data.estadoCivil,
       situacionLaboral:        data.situacionLaboral,
       empresa:                 data.empresa,

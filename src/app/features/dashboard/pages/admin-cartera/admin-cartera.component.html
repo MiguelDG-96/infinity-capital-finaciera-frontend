@@ -90,10 +90,10 @@
                     <thead>
                         <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
                             <th class="py-4 pl-6">Cliente / Documento</th>
-                            <th>Producto / Moneda</th>
-                            <th>Monto Aprobado</th>
-                            <th>Saldo Act.</th>
-                            <th>Estado</th>
+                            <th class="text-center">Producto / Moneda</th>
+                            <th class="text-center">Monto Aprobado</th>
+                            <th class="text-center">Saldo Actual</th>
+                            <th class="text-center">Estado</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -106,23 +106,23 @@
                                         <span class="text-[10px] opacity-40 font-mono tracking-tighter">{{ c.documento }}</span>
                                     </div>
                                 </td>
-                                <td>
-                                    <div class="flex flex-col">
+                                <td class="text-center">
+                                    <div class="flex flex-col items-center">
                                         <span class="text-xs font-medium">{{ c.tipoCredito }}</span>
                                         <span class="text-[9px] opacity-40 uppercase">{{ c.moneda }}</span>
                                     </div>
                                 </td>
-                                <td class="font-bold text-xs">{{ (c.montoAprobado || c.montoCredito) | currency:'S/ ' }}</td>
-                                <td class="font-black text-xs" [class.text-primary]="c.debeActualidad > 0" [class.opacity-20]="c.debeActualidad === 0">
+                                <td class="text-center font-bold text-xs">{{ (c.montoAprobado || c.montoCredito) | currency:'S/ ' }}</td>
+                                <td class="text-center font-black text-xs" [class.text-primary]="c.debeActualidad > 0" [class.opacity-20]="c.debeActualidad === 0">
                                     {{ c.debeActualidad | currency:'S/ ' }}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <div class="badge badge-sm font-black whitespace-nowrap px-3 py-2 border-none" [ngClass]="getEstadoClase(c.estado)">
                                         {{ c.estado.replace('_', ' ') }}
                                     </div>
                                 </td>
-                                <td class="text-right pr-6">
-                                    <div class="flex justify-end gap-2">
+                                <td class="text-center pr-6">
+                                    <div class="flex justify-center gap-2">
                                         <!-- Botón Desembolsar -->
                                         @if (c.estado === 'APROBADO' || c.estado === 'EN_EVALUACION' || c.estado === 'PENDIENTE_REQUISITOS') {
                                             <button (click)="abrirFormalizacion(c)"

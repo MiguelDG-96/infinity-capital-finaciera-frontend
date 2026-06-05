@@ -578,6 +578,10 @@
                         <p class="font-black text-sm">{{ clienteView.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
                       </div>
                       <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Sexo</p>
+                        <p class="font-black text-sm">{{ clienteView.sexo || '--' }}</p>
+                      </div>
+                      <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Estado Civil</p>
                         <p class="font-black text-sm">{{ clienteView.estadoCivil || '--' }}</p>
                       </div>
@@ -798,6 +802,13 @@
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Fecha Nacimiento</span></label>
                         <input type="date" [(ngModel)]="clienteEdit().fechaNacimiento" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Sexo</span></label>
+                        <select [(ngModel)]="clienteEdit().sexo" class="select select-bordered select-sm rounded-xl">
+                          <option value="MASCULINO">MASCULINO</option>
+                          <option value="FEMENINO">FEMENINO</option>
+                        </select>
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Estado Civil</span></label>

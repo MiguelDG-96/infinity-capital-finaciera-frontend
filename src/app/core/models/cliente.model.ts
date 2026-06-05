@@ -10,6 +10,7 @@ export interface Cliente {
   referencia?: string;
   domicilio: string;
   fechaNacimiento: Date;
+  sexo?: string;
   estadoCivil: string;
   situacionLaboral: string;
   empresa?: string;
