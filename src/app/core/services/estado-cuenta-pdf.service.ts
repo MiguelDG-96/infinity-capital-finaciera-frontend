@@ -58,7 +58,22 @@ export class EstadoCuentaPdfService {
    * @param cuotas   Cronograma de cuotas
    */
   async generarEstadoCuenta(credito: Credito, cuotas: Cuota[]): Promise<Blob> {
-    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const cliente: any = credito.cliente || {};
+    const usuario: any = cliente.usuario || {};
+    const dni = cliente.numeroDocumento || credito.documento || '12345678';
+
+    // Encriptar el PDF usando el DNI del cliente
+    // @ts-ignore - Las definiciones de tipos de jsPDF pueden no incluir encryption en esta versión
+    const doc = new jsPDF({ 
+      unit: 'mm', 
+      format: 'a4',
+      encryption: {
+        userPassword: dni,
+        ownerPassword: dni,
+        userPermissions: ['print']
+      }
+    });
+
     const W = 210;
     const margin = 14;
     const pageH = 297;
@@ -72,11 +87,8 @@ export class EstadoCuentaPdfService {
     const AMBER: [number, number, number] = [180, 83, 9];
     const DRED:  [number, number, number] = [185, 28, 28];
 
-    const cliente: any = credito.cliente || {};
-    const usuario: any = cliente.usuario || {};
     const simbolo = credito.simboloMoneda || 'S/';
     const nombreCompleto = usuario.nombreCompleto || credito.nombreCliente || 'Cliente';
-    const dni = cliente.numeroDocumento || credito.documento || '—';
     const email = usuario.email || '—';
     const direccion = cliente.domicilio || cliente.direccion || '—';
 

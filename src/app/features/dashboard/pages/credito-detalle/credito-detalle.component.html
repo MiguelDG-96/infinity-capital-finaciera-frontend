@@ -24,6 +24,14 @@
             }
         </div>
         <div class="flex gap-2" *ngIf="credito()?.estado === 'ACTIVO'">
+            <button class="btn btn-info btn-sm text-white shadow-lg shadow-info/20" (click)="descargarEstadoCuenta()" [disabled]="descargandoEstadoCuenta()">
+                @if (descargandoEstadoCuenta()) {
+                    <span class="loading loading-spinner loading-xs mr-1"></span>
+                } @else {
+                    <lucide-icon name="file-bar-chart-2" class="w-4 h-4 mr-1"></lucide-icon>
+                }
+                Estado de Cuenta
+            </button>
             <button class="btn btn-outline btn-sm" (click)="descargarContrato()">
                 <lucide-icon name="file-text" class="w-4 h-4 mr-1"></lucide-icon>
                 Descargar Contrato
@@ -66,6 +74,14 @@
             </button>
         </div>
         <div class="flex gap-2" *ngIf="credito()?.estado !== 'ACTIVO'">
+            <button class="btn btn-info btn-sm text-white shadow-lg shadow-info/20" (click)="descargarEstadoCuenta()" [disabled]="descargandoEstadoCuenta()" *ngIf="credito()?.estado === 'PAGADO' || credito()?.estado === 'ATRASADO' || credito()?.estado === 'MORA' || credito()?.estado === 'RESUELTO'">
+                @if (descargandoEstadoCuenta()) {
+                    <span class="loading loading-spinner loading-xs mr-1"></span>
+                } @else {
+                    <lucide-icon name="file-bar-chart-2" class="w-4 h-4 mr-1"></lucide-icon>
+                }
+                Estado de Cuenta
+            </button>
             <button class="btn btn-success btn-sm text-white shadow-lg shadow-success/20" (click)="desembolsar()"
                 *ngIf="isAdminMode() && credito()?.estado === 'APROBADO'" [disabled]="procesando()">
                 <lucide-icon name="play" class="w-4 h-4 mr-1"></lucide-icon>

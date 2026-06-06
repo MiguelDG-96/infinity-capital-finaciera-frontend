@@ -8,6 +8,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito, Cuota } from '../../../../core/models/credito.model';
 import { ContratoPdfService } from '../../../../core/services/contrato-pdf.service';
+import { EstadoCuentaPdfService } from '../../../../core/services/estado-cuenta-pdf.service';
 import { PagoAnticipadoModalComponent } from '../../components/pago-anticipado-modal/pago-anticipado-modal.component';
 import { GaranteModalComponent } from '../../components/garante-modal/garante-modal.component';
 import { EditCuotaModalComponent } from '../../components/edit-cuota-modal/edit-cuota-modal.component';
@@ -28,6 +29,7 @@ export class CreditoDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private creditoService = inject(CreditoService);
   private pdfService = inject(ContratoPdfService);
+  private estadoCuentaPdfService = inject(EstadoCuentaPdfService);
 
   readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
@@ -37,6 +39,7 @@ export class CreditoDetalleComponent implements OnInit {
   error = signal<string | null>(null);
   procesando = signal<boolean>(false);
   descargando = signal<boolean>(false);
+  descargandoEstadoCuenta = signal<boolean>(false);
   mostrarModalPago = signal<boolean>(false);
   mostrarModalGarante = signal<boolean>(false);
   mostrarModalEditarCuota = signal<boolean>(false);
@@ -339,6 +342,32 @@ export class CreditoDetalleComponent implements OnInit {
         this.descargando.set(false);
         console.error('Error al generar PDF:', err);
         alert('Error al generar el contrato PDF. Por favor reintente.');
+    });
+  }
+
+  descargarEstadoCuenta() {
+    const c = this.credito();
+    if (!c || this.descargandoEstadoCuenta()) return;
+
+    this.descargandoEstadoCuenta.set(true);
+    // Asegurarse de enviar las cuotas ordenadas
+    const cuotasOrdenadas = [...c.cuotas].sort((a, b) => a.numeroCuota - b.numeroCuota);
+    
+    this.estadoCuentaPdfService.generarEstadoCuenta(c, cuotasOrdenadas).then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const dni = c.cliente?.numeroDocumento || c.documento || 'credito';
+        a.download = `Estado_Cuenta_${dni}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.descargandoEstadoCuenta.set(false);
+    }).catch(err => {
+        this.descargandoEstadoCuenta.set(false);
+        console.error('Error al generar Estado de Cuenta:', err);
+        alert('Error al generar el Estado de Cuenta. Por favor reintente.');
     });
   }
 
