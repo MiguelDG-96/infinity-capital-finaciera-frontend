@@ -144,7 +144,7 @@ export class SolicitarCreditoComponent implements OnInit {
       plazoMeses: [12, [Validators.required, Validators.min(1), Validators.max(60)]],
       periodoGracia: [0, [Validators.min(0), Validators.max(6)]],
       bancoDesembolso: ['', [Validators.required]],
-      cuentaDesembolso: ['', [Validators.required, Validators.minLength(10)]],
+      cuentaDesembolso: ['', [Validators.required]],
 
       // Paso 2: Identidad y Contacto
       tipoDocumento: ['DNI', [Validators.required]],
