@@ -91,6 +91,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.showPassword.update(v => !v);
   }
 
+  soloNumeros(event: Event, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.replace(/[^0-9]/g, '');
+    this.registerForm.get(controlName)?.setValue(value, { emitEvent: false });
+    input.value = value;
+  }
+
   onSubmit() {
     if (this.registerForm.valid) {
       this.isLoading.set(true);

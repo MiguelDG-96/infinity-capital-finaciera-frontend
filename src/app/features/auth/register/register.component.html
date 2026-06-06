@@ -151,6 +151,7 @@
                 class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
                 placeholder="Ej. 12345678" 
                 maxlength="8"
+                (input)="soloNumeros($event, 'numeroDocumento')"
               />
             </label>
             @if (registerForm.get('numeroDocumento')?.invalid && registerForm.get('numeroDocumento')?.touched) {
@@ -246,7 +247,8 @@
                 type="tel" 
                 formControlName="telefono"
                 class="grow bg-transparent text-sm font-medium placeholder:font-normal placeholder:text-base-content/30 focus:outline-none" 
-                placeholder="+51 987 654 321" 
+                placeholder="Ej. 987654321" 
+                (input)="soloNumeros($event, 'telefono')"
               />
             </label>
             @if (registerForm.get('telefono')?.invalid && registerForm.get('telefono')?.touched) {
