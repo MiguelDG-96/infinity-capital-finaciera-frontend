@@ -103,3 +103,8 @@ calendar-date svg {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
+
+/* Transformar texto a mayúsculas visualmente en inputs de texto */
+input[type="text"] {
+  text-transform: uppercase;
+}

@@ -514,6 +514,14 @@ export class SolicitarCreditoComponent implements OnInit {
       domicilio: this.solicitudForm.get('direccion')?.value // Sync for compatibility
     };
 
+    // Transformar todos los campos de texto a mayúsculas antes de enviar, excepto el email
+    Object.keys(solicitud).forEach(key => {
+      const val = (solicitud as any)[key];
+      if (typeof val === 'string' && key !== 'email') {
+        (solicitud as any)[key] = val.toUpperCase();
+      }
+    });
+
     this.creditoService.solicitarCredito(solicitud).subscribe({
       next: (res) => {
         this.exito = true;
