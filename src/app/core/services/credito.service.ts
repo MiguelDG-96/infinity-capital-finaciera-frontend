@@ -197,4 +197,13 @@ export class CreditoService {
   obtenerReporteCaja(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/creditos/admin/reporte-caja`);
   }
+
+  enviarEstadoCuenta(creditoId: number, pdfBlob: Blob): Observable<{ mensaje: string }> {
+    const formData = new FormData();
+    formData.append('pdf', pdfBlob, `EstadoCuenta_${creditoId}.pdf`);
+    return this.http.post<{ mensaje: string }>(
+      `${this.apiUrl}/creditos/admin/${creditoId}/enviar-estado-cuenta`,
+      formData
+    );
+  }
 }

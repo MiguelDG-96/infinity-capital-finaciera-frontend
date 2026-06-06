@@ -1,0 +1,139 @@
+<!-- Estado de Cuenta Modal -->
+<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
+  <div class="relative w-full max-w-4xl bg-base-100 rounded-2xl shadow-2xl border border-base-content/10 overflow-hidden flex flex-col max-h-[92vh]">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-base-content/10 bg-base-100 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+          <lucide-icon name="file-text" class="w-5 h-5 text-primary"></lucide-icon>
+        </div>
+        <div>
+          <h2 class="font-bold text-base text-base-content leading-tight">Estado de Cuenta</h2>
+          <p class="text-[11px] text-base-content/50 font-medium">
+            Crédito #{{ credito.id }} — {{ credito.nombreCliente }}
+          </p>
+        </div>
+      </div>
+      <button (click)="onCerrar()" class="btn btn-ghost btn-sm btn-circle">
+        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 overflow-auto">
+
+      <!-- Estado: GENERANDO -->
+      @if (estado() === 'generando') {
+        <div class="flex flex-col items-center justify-center py-20 gap-4">
+          <span class="loading loading-spinner loading-lg text-primary"></span>
+          <div class="text-center">
+            <p class="font-bold text-sm text-base-content">Generando Estado de Cuenta...</p>
+            <p class="text-xs text-base-content/50 mt-1">Cargando cronograma y preparando el documento</p>
+          </div>
+        </div>
+      }
+
+      <!-- Estado: PREVIEW -->
+      @if (estado() === 'preview' && pdfUrl) {
+        <div class="flex flex-col h-full">
+          <!-- Info bar -->
+          <div class="px-6 py-3 bg-base-200/40 border-b border-base-content/5 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-base-content/60">
+              <lucide-icon name="mail" class="w-3.5 h-3.5"></lucide-icon>
+              <span>Se enviará a: <span class="font-semibold text-base-content/80">{{ emailCliente }}</span></span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="badge badge-warning badge-sm gap-1">
+                <lucide-icon name="lock" class="w-2.5 h-2.5"></lucide-icon>
+                Clave: DNI del cliente
+              </span>
+            </div>
+          </div>
+          <!-- PDF embed -->
+          <iframe
+            [src]="safePdfUrl"
+            class="w-full flex-1 border-none"
+            style="min-height: 520px;"
+            title="Vista previa Estado de Cuenta">
+          </iframe>
+        </div>
+      }
+
+      <!-- Estado: ENVIANDO -->
+      @if (estado() === 'enviando') {
+        <div class="flex flex-col items-center justify-center py-20 gap-4">
+          <span class="loading loading-spinner loading-lg text-primary"></span>
+          <div class="text-center">
+            <p class="font-bold text-sm text-base-content">Enviando correo...</p>
+            <p class="text-xs text-base-content/50 mt-1">Adjuntando PDF y enviando a {{ emailCliente }}</p>
+          </div>
+        </div>
+      }
+
+      <!-- Estado: ÉXITO -->
+      @if (estado() === 'exito') {
+        <div class="flex flex-col items-center justify-center py-16 gap-5">
+          <div class="w-20 h-20 rounded-full bg-success/15 flex items-center justify-center">
+            <lucide-icon name="check-circle-2" class="w-10 h-10 text-success"></lucide-icon>
+          </div>
+          <div class="text-center">
+            <h3 class="text-xl font-bold text-base-content">¡Correo Enviado!</h3>
+            <p class="text-sm text-base-content/60 mt-2 max-w-xs">
+              El estado de cuenta fue enviado correctamente a
+            </p>
+            <p class="font-semibold text-primary text-sm mt-1">{{ emailCliente }}</p>
+          </div>
+          <div class="bg-base-200/60 rounded-xl px-5 py-4 text-xs text-base-content/60 max-w-sm text-center leading-relaxed">
+            El cliente deberá abrir el PDF adjunto usando su <strong class="text-base-content/80">número de DNI</strong> como contraseña de acceso.
+          </div>
+        </div>
+      }
+
+      <!-- Estado: ERROR -->
+      @if (estado() === 'error') {
+        <div class="flex flex-col items-center justify-center py-16 gap-5">
+          <div class="w-20 h-20 rounded-full bg-error/15 flex items-center justify-center">
+            <lucide-icon name="alert-circle" class="w-10 h-10 text-error"></lucide-icon>
+          </div>
+          <div class="text-center">
+            <h3 class="text-xl font-bold text-base-content">Ocurrió un error</h3>
+            <p class="text-sm text-base-content/60 mt-2 max-w-sm">{{ errorMsg() }}</p>
+          </div>
+          <button (click)="reintentar()" class="btn btn-outline btn-sm gap-2">
+            <lucide-icon name="refresh-cw" class="w-4 h-4"></lucide-icon>
+            Reintentar
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- Footer / Acciones -->
+    @if (estado() === 'preview') {
+      <div class="px-6 py-4 border-t border-base-content/10 bg-base-100 flex items-center justify-between gap-3 shrink-0">
+        <button (click)="descargarPdf()" class="btn btn-outline btn-sm gap-2">
+          <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+          Descargar PDF
+        </button>
+        <div class="flex items-center gap-3">
+          <button (click)="onCerrar()" class="btn btn-ghost btn-sm">Cancelar</button>
+          <button (click)="enviarEmail()" class="btn btn-primary btn-sm gap-2 shadow-md shadow-primary/20">
+            <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+            Enviar por Email
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (estado() === 'exito') {
+      <div class="px-6 py-4 border-t border-base-content/10 bg-base-100 flex justify-end gap-3 shrink-0">
+        <button (click)="descargarPdf()" class="btn btn-outline btn-sm gap-2">
+          <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+          Descargar
+        </button>
+        <button (click)="onCerrar()" class="btn btn-primary btn-sm">Listo</button>
+      </div>
+    }
+
+  </div>
+</div>

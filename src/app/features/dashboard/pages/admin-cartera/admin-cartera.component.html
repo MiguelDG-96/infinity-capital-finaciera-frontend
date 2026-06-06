@@ -170,6 +170,15 @@
                                            title="Ver Detalle del Crédito">
                                            Detalle
                                         </a>
+
+                                        <!-- Botón Estado de Cuenta -->
+                                        @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA' || c.estado === 'PAGADO') {
+                                            <button (click)="abrirEstadoCuenta(c)"
+                                                    class="btn btn-ghost btn-xs text-success hover:bg-success/10"
+                                                    title="Enviar Estado de Cuenta">
+                                               <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon>
+                                            </button>
+                                        }
                                     </div>
                                 </td>
                             </tr>
@@ -275,4 +284,11 @@
         (cerrar)="mostrarModalEditCredito.set(false)"
         (guardadoExitoso)="handleEditCreditoExito()">
     </app-edit-credito-modal>
+}
+
+@if (mostrarModalEstadoCuenta() && creditoSeleccionado) {
+    <app-estado-cuenta-modal
+        [credito]="creditoSeleccionado!"
+        (cerrar)="mostrarModalEstadoCuenta.set(false)">
+    </app-estado-cuenta-modal>
 }

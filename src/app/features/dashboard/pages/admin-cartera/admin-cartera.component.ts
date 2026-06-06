@@ -7,16 +7,16 @@ import { Credito } from '../../../../core/models/credito.model';
 import { LucideAngularModule } from 'lucide-angular';
 import { RouterLink } from '@angular/router';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
-
 import { FormsModule } from '@angular/forms';
 import { ClientePerfilModalComponent } from '../../components/cliente-perfil-modal/cliente-perfil-modal.component';
 import { FormalizacionModalComponent } from '../../components/formalizacion-modal/formalizacion-modal.component';
 import { EditCreditoModalComponent } from '../../components/edit-credito-modal/edit-credito-modal.component';
+import { EstadoCuentaModalComponent } from '../../components/estado-cuenta-modal/estado-cuenta-modal.component';
 
 @Component({
   selector: 'app-admin-cartera',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent, FormsModule, ClientePerfilModalComponent, FormalizacionModalComponent, EditCreditoModalComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, ResolverContratoModalComponent, FormsModule, ClientePerfilModalComponent, FormalizacionModalComponent, EditCreditoModalComponent, EstadoCuentaModalComponent],
   templateUrl: './admin-cartera.component.html',
   styleUrl: './admin-cartera.component.css'
 })
@@ -82,6 +82,7 @@ export class AdminCarteraComponent implements OnInit {
   // Nuevos modales
   mostrarModalFormalizacion = signal<boolean>(false);
   mostrarModalEditCredito = signal<boolean>(false);
+  mostrarModalEstadoCuenta = signal<boolean>(false);
 
   constructor(
     private creditoService: CreditoService,
@@ -202,6 +203,11 @@ export class AdminCarteraComponent implements OnInit {
   handleEditCreditoExito() {
     this.mostrarModalEditCredito.set(false);
     this.cargarCartera();
+  }
+
+  abrirEstadoCuenta(c: Credito) {
+    this.creditoSeleccionado = c;
+    this.mostrarModalEstadoCuenta.set(true);
   }
 
   getEstadoClase(estado: string): string {
