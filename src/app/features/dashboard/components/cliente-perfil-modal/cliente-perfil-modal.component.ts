@@ -171,6 +171,7 @@ export class ClientePerfilModalComponent implements OnChanges {
 
   activarEdicion() {
     const data = { ...this.clienteView };
+    data.email = data.usuario?.email || '';
     if (!data.conyuge) {
       data.conyuge = {
         nombresConyuge: '', apellidoPaConyuge: '', apellidoMatConyuge: '',
@@ -229,6 +230,7 @@ export class ClientePerfilModalComponent implements OnChanges {
 
     const updateData = {
       nombreCompleto:          data.nombre,
+      email:                   data.email,
       telefono:                data.telefono,
       celular:                 data.celular,
       tipoDocumento:           data.tipoDocumento,

@@ -570,6 +570,10 @@
                         <p class="font-black text-sm">{{ clienteView.nombre }}</p>
                       </div>
                       <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Correo Electrónico</p>
+                        <p class="font-black text-sm normal-case">{{ clienteView.usuario?.email || '--' }}</p>
+                      </div>
+                      <div>
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-primary">Identidad</p>
                         <p class="font-black text-sm">{{ clienteView.tipoDocumento }} {{ clienteView.numeroDocumento }}</p>
                       </div>
@@ -794,6 +798,16 @@
                       <div class="form-control sm:col-span-2">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre Completo</span></label>
                         <input type="text" [(ngModel)]="clienteEdit().nombre" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control sm:col-span-2">
+                        <label class="label flex justify-between">
+                           <span class="label-text text-[10px] font-bold uppercase opacity-50">Correo Electrónico (Usuario de Acceso)</span>
+                        </label>
+                        <div class="alert alert-warning bg-warning/10 border-warning/20 text-warning text-[10px] rounded-lg p-2 mb-2 flex items-center gap-2">
+                           <lucide-icon name="alert-triangle" class="w-4 h-4 shrink-0"></lucide-icon>
+                           <span>Si cambias el correo, el inicio de sesión cambiará a este nuevo correo. La contraseña no será afectada.</span>
+                        </div>
+                        <input type="email" [(ngModel)]="clienteEdit().email" class="input input-bordered input-sm rounded-xl normal-case" placeholder="ejemplo@correo.com" />
                       </div>
                       <div class="form-control">
                         <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">DNI / Documento</span></label>
