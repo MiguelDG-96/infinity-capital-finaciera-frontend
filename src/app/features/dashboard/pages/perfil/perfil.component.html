@@ -42,7 +42,7 @@
             @if (fotoPreviewUrl()) {
               <img [src]="fotoPreviewUrl()!" class="w-full h-full object-cover" alt="Preview" />
             } @else if (userPhotoUrl) {
-              <img [src]="userPhotoUrl" [alt]="form.nombreCompleto" class="w-full h-full object-cover" />
+              <img [src]="userPhotoUrl" [alt]="nombreCompletoConstruido" class="w-full h-full object-cover" />
             } @else {
               <span class="text-3xl font-black select-none">{{ userInitials }}</span>
             }
@@ -71,7 +71,7 @@
 
         <!-- Info en blanco -->
         <div class="text-center sm:text-left flex-1 min-w-0 pb-1">
-          <h2 class="text-2xl font-black text-white truncate leading-tight drop-shadow">{{ form.nombreCompleto }}</h2>
+          <h2 class="text-2xl font-black text-white truncate leading-tight drop-shadow">{{ nombreCompletoConstruido }}</h2>
           <p class="text-white/60 text-sm mt-0.5 truncate">{{ form.email }}</p>
           <span class="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/20 text-white backdrop-blur-sm border border-white/20">
             {{ rolLabel }}
@@ -122,10 +122,22 @@
         </div>
 
         <div class="space-y-3">
-          <div class="form-control">
-            <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Nombre Completo</span></label>
-            <input type="text" [(ngModel)]="form.nombreCompleto" placeholder="Tu nombre completo"
-              class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="form-control">
+              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Nombres</span></label>
+              <input type="text" [(ngModel)]="form.nombres" placeholder="Ej: Juan Carlos"
+                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+            </div>
+            <div class="form-control">
+              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Apellido Paterno</span></label>
+              <input type="text" [(ngModel)]="form.apellidoPaterno" placeholder="Ej: Perez"
+                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+            </div>
+            <div class="form-control md:col-span-2">
+              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Apellido Materno</span></label>
+              <input type="text" [(ngModel)]="form.apellidoMaterno" placeholder="Ej: Gomez (Opcional)"
+                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+            </div>
           </div>
           <div class="form-control">
             <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Correo Electrónico</span></label>
@@ -135,7 +147,8 @@
         </div>
 
         <button class="btn btn-primary btn-sm w-full rounded-xl shadow-lg shadow-primary/20 mt-2"
-          (click)="guardarDatos()" [disabled]="guardandoDatos() || !form.nombreCompleto.trim()">
+          (click)="guardarDatos()" [disabled]="guardandoDatos() || !form.nombres.trim() || !form.apellidoPaterno.trim()">
+
           @if (guardandoDatos()) {
             <span class="loading loading-spinner loading-xs"></span>
           } @else {

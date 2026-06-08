@@ -41,7 +41,12 @@ export class PerfilComponent implements OnInit {
   fotoArchivo: File | null = null;
 
   // Formulario
-  form = { nombreCompleto: '', email: '' };
+  form = { 
+    nombres: '',
+    apellidoPaterno: '',
+    apellidoMaterno: '',
+    email: '' 
+  };
   emailReset = '';
   resetEnviado = signal(false);
 
@@ -51,8 +56,11 @@ export class PerfilComponent implements OnInit {
     if (local) return `${this.baseUrl}/api/v1/archivos${local}`;
     return null;
   }
+  get nombreCompletoConstruido(): string {
+    return `${this.form.nombres} ${this.form.apellidoPaterno} ${this.form.apellidoMaterno}`.trim().replace(/\s+/g, ' ');
+  }
   get userInitials(): string {
-    const name = this.form.nombreCompleto.trim() || 'US';
+    const name = this.nombreCompletoConstruido || 'US';
     const parts = name.split(' ');
     if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
@@ -70,9 +78,15 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form.nombreCompleto = this.userData?.nombreCompleto || '';
     this.form.email = this.userData?.sub || '';
     this.emailReset = this.userData?.sub || '';
+    
+    // Intento básico de split para no dejar vacío
+    const full = this.userData?.nombreCompleto || '';
+    const parts = full.split(' ');
+    if (parts.length > 0) this.form.nombres = parts[0];
+    if (parts.length > 1) this.form.apellidoPaterno = parts[1];
+    if (parts.length > 2) this.form.apellidoMaterno = parts.slice(2).join(' ');
 
     if (this.isCliente) {
       this.cargando.set(true);
@@ -81,6 +95,15 @@ export class PerfilComponent implements OnInit {
           this.clienteData.set(c);
           this.cargando.set(false);
           if (c.fotoUrl) this.authService.updateProfilePhoto(c.fotoUrl);
+          
+          if (c.datosSolicitud) {
+            try {
+              const d = JSON.parse(c.datosSolicitud);
+              if (d.nombres) this.form.nombres = d.nombres;
+              if (d.apellidoPaterno) this.form.apellidoPaterno = d.apellidoPaterno;
+              if (d.apellidoMaterno) this.form.apellidoMaterno = d.apellidoMaterno;
+            } catch(e) {}
+          }
         },
         error: () => this.cargando.set(false)
       });
@@ -98,15 +121,24 @@ export class PerfilComponent implements OnInit {
   }
 
   guardarDatos() {
-    if (!this.form.nombreCompleto.trim()) return;
+    if (!this.form.nombres.trim() || !this.form.apellidoPaterno.trim()) return;
     this.guardandoDatos.set(true);
     this.clearMessages();
 
     if (this.isCliente) {
-      this.clienteService.actualizarPerfilPropio({
-        nombreCompleto: this.form.nombreCompleto,
-        email: this.form.email
-      }).subscribe({
+      const extra = {
+        nombres: this.form.nombres,
+        apellidoPaterno: this.form.apellidoPaterno,
+        apellidoMaterno: this.form.apellidoMaterno
+      };
+      // Usar 'any' para pasar datosSolicitud en el patch temporalmente si no está en el tipo explícito
+      const payload: any = {
+        nombreCompleto: this.nombreCompletoConstruido,
+        email: this.form.email,
+        datosSolicitud: JSON.stringify(extra)
+      };
+
+      this.clienteService.actualizarPerfilPropio(payload).subscribe({
         next: () => {
           this.guardandoDatos.set(false);
           this.mensajeExito.set('Datos actualizados. Vuelve a iniciar sesión para ver el nombre actualizado.');
@@ -124,7 +156,7 @@ export class PerfilComponent implements OnInit {
         return;
       }
       this.usuarioService.actualizarMiPerfil(id, {
-        nombreCompleto: this.form.nombreCompleto,
+        nombreCompleto: this.nombreCompletoConstruido,
         email: this.form.email
       }).subscribe({
 
