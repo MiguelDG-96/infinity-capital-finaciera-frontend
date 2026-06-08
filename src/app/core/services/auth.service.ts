@@ -16,16 +16,17 @@ import { AuthMapper } from '../mappers/auth.mapper';
 export class AuthService {
   private readonly status = signal<AuthModel | null>(this.loadFromStorage());
 
+  // Signal separado para la foto (no viene en el JWT)
+  readonly profilePhotoUrl = signal<string | null>(null);
+
   readonly currentUser = this.status.asReadonly();
 
-  // Decodifica el token en vivo para extraer claims del Backend (nombre, rol, etc)
   readonly currentUserData = computed(() => {
     const auth = this.status();
     if (!auth || !auth.accessToken) return null;
     try {
       const parts = auth.accessToken.split('.');
       if (parts.length !== 3) return null;
-      
       const payloadBase64Url = parts[1];
       const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
@@ -41,6 +42,10 @@ export class AuthService {
   });
 
   constructor(private http: HttpClient) {}
+
+  updateProfilePhoto(url: string | null): void {
+    this.profilePhotoUrl.set(url);
+  }
 
   login(credentials: AutenticacionRequestDto): Observable<AuthModel> {
     return this.http.post<AutenticacionResponseDto>(
@@ -114,6 +119,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('auth_token');
     this.status.set(null);
+    this.profilePhotoUrl.set(null);
   }
 
   private saveToStorage(auth: AuthModel): void {
@@ -124,7 +130,6 @@ export class AuthService {
   private loadFromStorage(): AuthModel | null {
     const stored = localStorage.getItem('auth_token');
     if (!stored) return null;
-
     try {
       return JSON.parse(stored);
     } catch (e) {

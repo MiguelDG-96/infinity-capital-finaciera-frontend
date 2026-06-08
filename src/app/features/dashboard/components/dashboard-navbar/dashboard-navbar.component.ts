@@ -11,6 +11,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { AuthService } from '../../../../core/services/auth.service';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito } from '../../../../core/models/credito.model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-navbar',
@@ -22,6 +23,7 @@ import { Credito } from '../../../../core/models/credito.model';
 export class DashboardNavbarComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private creditoService = inject(CreditoService);
+  readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   searchControl = new FormControl('');
   searchResults = signal<Credito[]>([]);
@@ -38,29 +40,36 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
     return this.authService.currentUserData()?.nombreCompleto || 'Usuario';
   }
 
+  get userEmail(): string {
+    return this.authService.currentUserData()?.sub || '';
+  }
+
   get userPhotoUrl(): string | null {
-    return this.authService.currentUserData()?.fotoUrl || null;
+    const localPhoto = this.authService.profilePhotoUrl();
+    if (localPhoto) return `${this.baseUrl}/api/v1/archivos${localPhoto}`;
+    return null;
   }
 
   get userInitials(): string {
     const name = this.userFullName.trim();
     if (!name || name === 'Usuario') return 'US';
-    
     const parts = name.split(' ');
     if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
-  
+
+  get userRolLabel(): string {
+    const rol = this.authService.currentUserData()?.rol || '';
+    if (rol === 'ROLE_ADMIN') return 'Administrador';
+    if (rol === 'ROLE_TRABAJADOR') return 'Trabajador';
+    return 'Cliente';
+  }
+
   toggleSidebar = output<void>();
   logoutRequested = output<void>();
 
-  onToggleSidebar() {
-    this.toggleSidebar.emit();
-  }
-
-  onToggleDarkMode() {
-    this.themeService.toggleDarkMode();
-  }
+  onToggleSidebar() { this.toggleSidebar.emit(); }
+  onToggleDarkMode() { this.themeService.toggleDarkMode(); }
 
   onToggleNotifications() {
     this.notificationService.toggle();
@@ -69,13 +78,16 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  goToPerfil() {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    this.router.navigate(['/dashboard/perfil']);
+  }
+
   ngOnInit() {
     const rol = this.authService.currentUserData()?.rol || '';
     const isAdmin = rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR';
     if (isAdmin) {
       this.notificationService.iniciarPolling();
-
-      // Configurar buscador
       this.searchControl.valueChanges.pipe(
         debounceTime(300),
         distinctUntilChanged(),
@@ -88,15 +100,12 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
           this.isSearching.set(true);
           this.showDropdown.set(true);
           const searchTerm = term.toLowerCase().trim();
-          
           return this.creditoService.obtenerCarteraGeneral().pipe(
-            map(creditos => {
-              return creditos.filter(c => 
-                c.id.toString() === searchTerm ||
-                (c.nombreCliente && c.nombreCliente.toLowerCase().includes(searchTerm)) ||
-                (c.documento && c.documento.includes(searchTerm))
-              ).slice(0, 6); // Limitar a 6 resultados
-            }),
+            map(creditos => creditos.filter(c =>
+              c.id.toString() === searchTerm ||
+              (c.nombreCliente && c.nombreCliente.toLowerCase().includes(searchTerm)) ||
+              (c.documento && c.documento.includes(searchTerm))
+            ).slice(0, 6)),
             catchError(() => of([]))
           );
         })
@@ -113,11 +122,7 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard/admin/cartera', creditoId]);
   }
 
-  ngOnDestroy() {
-    this.notificationService.detenerPolling();
-  }
+  ngOnDestroy() { this.notificationService.detenerPolling(); }
 
-  hideDropdown() {
-    setTimeout(() => this.showDropdown.set(false), 200);
-  }
+  hideDropdown() { setTimeout(() => this.showDropdown.set(false), 200); }
 }

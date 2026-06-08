@@ -69,7 +69,7 @@ export class AdminSeguridadComponent implements OnInit {
       this.usuarioForm = {
         email: user.email,
         nombreCompleto: user.nombreCompleto,
-        rolId: user.rol.id,
+        rolId: this.rolesParaUsuarios().find(r => r.nombre === user.rol)?.id ?? 0,
         contrasena: ''
       };
     } else {

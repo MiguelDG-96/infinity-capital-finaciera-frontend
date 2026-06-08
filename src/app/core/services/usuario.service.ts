@@ -27,6 +27,10 @@ export class UsuarioService {
     return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario);
   }
 
+  actualizarMiPerfil(id: number, data: { nombreCompleto: string; email: string; contrasena?: string; rolId?: number }): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, data);
+  }
+
   cambiarEstado(id: number, habilitado: boolean): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.apiUrl}/${id}/estado`, null, {
       params: { habilitado: habilitado.toString() }

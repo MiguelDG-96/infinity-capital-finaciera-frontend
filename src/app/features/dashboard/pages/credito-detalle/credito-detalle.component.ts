@@ -513,4 +513,10 @@ export class CreditoDetalleComponent implements OnInit {
     
     return proxima ? proxima.fechaVencimiento : null;
   }
+
+  removeFocus(event: Event) {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }
 }

@@ -48,6 +48,9 @@ export const routes: Routes = [
       { path: 'admin/tesoreria', loadComponent: () => import('./features/dashboard/pages/admin-tesoreria/admin-tesoreria.component').then(m => m.AdminTesoreriaComponent) },
       // Reportes
       { path: 'reportes', loadComponent: () => import('./features/dashboard/pages/reportes/reportes').then(m => m.Reportes) },
+      // Perfil de usuario
+      { path: 'perfil', loadComponent: () => import('./features/dashboard/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
+
     ]
   },
   {

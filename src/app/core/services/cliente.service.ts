@@ -36,4 +36,8 @@ export class ClienteService {
   actualizarCliente(id: number, data: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, data);
   }
+
+  actualizarPerfilPropio(data: { nombreCompleto?: string; email?: string }): Observable<Cliente> {
+    return this.http.patch<Cliente>(`${this.apiUrl}/perfil`, data);
+  }
 }
