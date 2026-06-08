@@ -64,7 +64,15 @@ export class FinancieroHelper {
       }
 
       const fechaVencimiento = new Date(fechaBase);
+      const diaOriginal = fechaBase.getDate();
       fechaVencimiento.setMonth(fechaBase.getMonth() + k);
+      
+      // Javascript setMonth() sufre de "overflow". Ej: 31 Enero + 1 mes = 31 Febrero = 3 Marzo.
+      // Para solucionarlo, verificamos si el mes de la fecha resultante se saltó de largo.
+      // Si el día original era mayor al día resultante, significa que hubo overflow.
+      if (fechaVencimiento.getDate() < diaOriginal) {
+        fechaVencimiento.setDate(0); // Retrocede al último día del mes anterior (el mes correcto)
+      }
 
       cuotas.push({
         numero: k,
