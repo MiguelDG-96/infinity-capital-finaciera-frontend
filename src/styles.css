@@ -123,3 +123,8 @@ html {
 @theme {
   --font-sans: 'Inter', sans-serif;
 }
+
+/* ─── Fix theme transition delay ─── */
+.theme-transitioning * {
+  transition: none !important;
+}

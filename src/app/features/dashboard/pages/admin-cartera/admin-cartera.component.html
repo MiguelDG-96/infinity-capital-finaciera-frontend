@@ -195,7 +195,8 @@
                     </thead>
                     <tbody>
                         @for (c of creditosPaginados; track c.id) {
-                            <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+                            <tr class="hover:bg-base-200/30 transition-colors border-b border-base-content/5 cursor-pointer"
+                                (click)="irADetalle(c.id)">
                                 <td class="pl-6">
                                     <div class="flex flex-col">
                                         <span class="font-bold text-sm text-base-content/80">{{ c.nombreCliente }}</span>
@@ -221,7 +222,7 @@
                                 <td class="text-center pr-6">
                                     <div class="flex justify-center gap-2">
                                         @if (c.estado === 'APROBADO' || c.estado === 'EN_EVALUACION' || c.estado === 'PENDIENTE_REQUISITOS') {
-                                            <button (click)="abrirFormalizacion(c)"
+                                            <button (click)="$event.stopPropagation(); abrirFormalizacion(c)"
                                                     class="btn btn-ghost btn-xs text-info hover:bg-info/10"
                                                     title="Formalización en Oficina">
                                                <lucide-icon name="building" class="w-4 h-4"></lucide-icon>
@@ -229,7 +230,7 @@
                                         }
 
                                         @if (c.estado === 'APROBADO') {
-                                            <button (click)="iniciarDesembolso(c.id)"
+                                            <button (click)="$event.stopPropagation(); iniciarDesembolso(c.id)"
                                                     class="btn btn-success btn-xs text-white shadow-sm border-none px-4 hover:scale-105 active:scale-95 transition-all"
                                                     [disabled]="procesando">
                                                 Desembolsar
@@ -237,7 +238,7 @@
                                         }
                                         
                                         @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA') {
-                                            <button (click)="resolverContrato(c)"
+                                            <button (click)="$event.stopPropagation(); resolverContrato(c)"
                                                     class="btn btn-outline btn-error btn-xs border-error/30 hover:border-error hover:scale-105 active:scale-95 transition-all"
                                                     [disabled]="procesando">
                                                 Resolver
@@ -248,26 +249,20 @@
                                             <span class="text-[10px] italic opacity-20 font-medium">Finalizado</span>
                                         }
 
-                                        <button (click)="abrirMaestro(c)"
+                                        <button (click)="$event.stopPropagation(); abrirMaestro(c)"
                                                 class="btn btn-ghost btn-xs text-slate-400 hover:bg-base-300"
                                                 title="Ver Maestro (Configuración del Crédito)">
                                            <lucide-icon name="settings-2" class="w-4 h-4"></lucide-icon>
                                         </button>
 
-                                        <button (click)="abrirEditarCliente(c.cliente?.id || 0)"
+                                        <button (click)="$event.stopPropagation(); abrirEditarCliente(c.cliente?.id || 0)"
                                                 class="btn btn-ghost btn-xs text-info hover:bg-info/10"
                                                 title="Editar Datos del Cliente">
                                            <lucide-icon name="user-cog" class="w-4 h-4"></lucide-icon>
                                         </button>
 
-                                        <a [routerLink]="['/dashboard/admin/cartera', c.id]"
-                                           class="btn btn-ghost btn-xs text-primary hover:bg-primary/10"
-                                           title="Ver Detalle del Crédito">
-                                           Detalle
-                                        </a>
-
                                         @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA' || c.estado === 'PAGADO') {
-                                            <button (click)="abrirEstadoCuenta(c)"
+                                            <button (click)="$event.stopPropagation(); abrirEstadoCuenta(c)"
                                                     class="btn btn-ghost btn-xs text-success hover:bg-success/10"
                                                     title="Enviar Estado de Cuenta">
                                                <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon>

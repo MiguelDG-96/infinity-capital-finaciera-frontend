@@ -16,12 +16,13 @@ import { EditCreditoModalComponent } from '../../components/edit-credito-modal/e
 import { ClientePerfilModalComponent } from '../../components/cliente-perfil-modal/cliente-perfil-modal.component';
 import { PostergarCuotaModalComponent } from '../../components/postergar-cuota-modal/postergar-cuota-modal.component';
 import { RenovarSoloInteresModalComponent } from '../../components/renovar-solo-interes-modal/renovar-solo-interes-modal.component';
+import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
@@ -47,6 +48,7 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalClientePerfil = signal<boolean>(false);
   mostrarModalPostergar = signal<boolean>(false);
   mostrarModalRenovar = signal<boolean>(false);
+  mostrarModalResolver = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
   pagosRestringidos = signal<boolean>(false);
   mostrarModalRestriccion = signal<boolean>(false);
@@ -303,6 +305,17 @@ export class CreditoDetalleComponent implements OnInit {
   }
 
   // ============ OTROS ============
+
+  pagoAnticipadoGuardado(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) this.cargarDetalle(id);
+  }
+
+  handleResolucionConfirmada(): void {
+    this.mostrarModalResolver.set(false);
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) this.cargarDetalle(id);
+  }
 
   pagoAnticipado() {
     if (this.pagosRestringidos() && !this.isAdminMode()) {

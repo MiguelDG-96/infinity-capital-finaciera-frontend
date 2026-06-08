@@ -2,6 +2,7 @@
 
 import { Component, OnInit, ChangeDetectorRef, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito } from '../../../../core/models/credito.model';
 import { LucideAngularModule } from 'lucide-angular';
@@ -137,7 +138,8 @@ export class AdminCarteraComponent implements OnInit {
 
   constructor(
     private creditoService: CreditoService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -259,6 +261,10 @@ export class AdminCarteraComponent implements OnInit {
   abrirEstadoCuenta(c: Credito) {
     this.creditoSeleccionado = c;
     this.mostrarModalEstadoCuenta.set(true);
+  }
+
+  irADetalle(id: number) {
+    this.router.navigate(['/dashboard/admin/cartera', id]);
   }
 
   getTipoCreditoBadge(c: Credito): { clase: string; icon: string } {

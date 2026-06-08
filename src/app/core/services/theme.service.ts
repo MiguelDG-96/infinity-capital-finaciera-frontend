@@ -24,7 +24,13 @@ export class ThemeService {
   }
 
   toggleDarkMode() {
+    document.documentElement.classList.add('theme-transitioning');
     this.darkMode.update(v => !v);
+    
+    // Remove the class after a short delay to re-enable transitions
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 50);
   }
 
   private loadTheme(): boolean {
