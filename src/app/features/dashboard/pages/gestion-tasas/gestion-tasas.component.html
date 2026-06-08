@@ -39,7 +39,7 @@
           <div class="collapse-title flex items-center justify-between pr-12">
             <div class="flex items-center gap-4">
               <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                <lucide-icon name="banknote" class="w-6 h-6"></lucide-icon>
+                <lucide-icon [name]="tipo.icono || 'banknote'" class="w-6 h-6"></lucide-icon>
               </div>
               <div>
                 <h3 class="font-bold text-lg">{{ tipo.nombre }}</h3>
@@ -194,9 +194,52 @@
       </h3>
       
       <div class="space-y-4">
-        <div class="form-control w-full">
-          <label class="label"><span class="label-text">Nombre de la Tasa / Producto</span></label>
-          <input type="text" [(ngModel)]="tipoForm.nombre" class="input input-bordered w-full" placeholder="Ej: Efectivo, Hipotecario..." />
+        <!-- Ícono y Nombre -->
+        <div class="flex gap-4">
+          <!-- Selector de Ícono -->
+          <div class="form-control w-24">
+            <label class="label"><span class="label-text font-bold text-xs uppercase tracking-wider text-base-content/60">Ícono</span></label>
+            <div class="relative">
+              <button 
+                type="button"
+                (click)="togglePicker()"
+                class="btn bg-base-200 border-dashed border-base-300 hover:border-primary hover:bg-primary/5 w-full h-12 relative overflow-hidden transition-all duration-300 group"
+              >
+                <lucide-icon [name]="tipoForm.icono || 'box'" class="text-error w-6 h-6 group-hover:scale-110 transition-transform duration-300"></lucide-icon>
+              </button>
+
+              @if (isPickerOpen()) {
+                <div class="absolute top-14 left-0 z-[100] w-[280px] sm:w-[320px] bg-base-100 border border-base-200 shadow-2xl rounded-xl p-4 animate-in fade-in zoom-in-95 duration-200">
+                  <div class="flex items-center justify-between mb-3 border-b border-base-200 pb-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-base-content/60">Seleccionar Icono</span>
+                    <button type="button" (click)="togglePicker()" class="btn btn-ghost btn-xs btn-square text-base-content/40 hover:text-error">
+                      <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+                    </button>
+                  </div>
+                  <div class="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+                    @for (icon of LUCIDE_CATALOG; track icon) {
+                      <button 
+                        type="button"
+                        (click)="selectIcon(icon)"
+                        class="btn btn-ghost btn-sm btn-square hover:bg-primary/10 hover:text-primary transition-colors"
+                        [class.bg-primary]="tipoForm.icono === icon"
+                        [class.text-primary-content]="tipoForm.icono === icon"
+                        [class.hover:text-primary-content]="tipoForm.icono === icon"
+                      >
+                        <lucide-icon [name]="icon" class="w-4 h-4"></lucide-icon>
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Nombre -->
+          <div class="form-control flex-1">
+            <label class="label"><span class="label-text">Nombre de la Tasa / Producto</span></label>
+            <input type="text" [(ngModel)]="tipoForm.nombre" class="input input-bordered w-full" placeholder="Ej: Efectivo, Hipotecario..." />
+          </div>
         </div>
         
         <div class="form-control w-full">

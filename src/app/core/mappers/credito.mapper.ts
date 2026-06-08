@@ -179,6 +179,7 @@ export class CreditoMapper {
       fechaVencimiento: dto.fechaVencimiento ? this.parseLocalDate(dto.fechaVencimiento) : undefined,
       fechaInicio: dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : undefined,
       tipoCredito: dto.tipoCredito?.nombre || 'General',
+      iconoTipoCredito: dto.tipoCredito?.icono,
       moneda: dto.moneda?.nombre || 'Moneda Local',
       simboloMoneda: dto.moneda?.simbolo || '$',
       cuotas: dto.cuotas ? dto.cuotas.map(dto => this.toCuotaDomain(dto)) : [],

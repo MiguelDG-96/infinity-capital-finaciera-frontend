@@ -128,7 +128,7 @@ export interface CreditoDTOResponse {
   fechaDesembolso?: string;
   fechaVencimiento?: string;
   fechaInicio?: string;
-  tipoCredito: { id: number, nombre: string };
+  tipoCredito: { id: number, nombre: string, icono?: string };
   moneda: { id: number, nombre: string, simbolo: string };
   cliente: {
     usuario: { nombreCompleto: string };

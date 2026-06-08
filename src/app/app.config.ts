@@ -23,7 +23,10 @@ import {
   CircleDollarSign, Printer, ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
   Paperclip, Save, Coins,
   FileBarChart2,
-  UserCircle, MailCheck, Camera, Image
+  UserCircle, MailCheck, Camera, Image,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -59,7 +62,7 @@ export const appConfig: ApplicationConfig = {
         UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign, Printer,
         ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
         Paperclip, Save, Coins, FileBarChart2,
-        UserCircle, MailCheck, Camera, Image
+        UserCircle, MailCheck, Camera, Image,ArrowUpDown,ArrowUp,ArrowDown
       })
     )
   ]

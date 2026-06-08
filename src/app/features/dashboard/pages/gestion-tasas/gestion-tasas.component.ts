@@ -44,9 +44,29 @@ export class GestionTasasComponent implements OnInit {
   tipoForm: TipoCreditoRequest = {
     nombre: '',
     descripcion: '',
+    icono: 'box',
     activo: true,
     temDefecto: 0
   };
+
+  isPickerOpen = signal<boolean>(false);
+
+  readonly LUCIDE_CATALOG = [
+    'briefcase', 'wallet', 'credit-card', 'bar-chart', 'pie-chart', 'activity', 'trending-up', 'trending-down', 
+    'home', 'landmark', 'search', 'shield', 'lock', 'key', 'settings', 'wrench', 
+    'package', 'truck', 'users', 'user', 'building', 'layers', 'globe', 'zap', 
+    'lightbulb', 'clock', 'file-text', 'calendar', 'message-square', 'bell', 
+    'rocket', 'star', 'map-pin', 'folder', 'laptop', 'smartphone', 'shopping-cart', 'box', 'banknote', 'graduation-cap', 'coins'
+  ];
+
+  togglePicker() {
+    this.isPickerOpen.update(v => !v);
+  }
+
+  selectIcon(icon: string) {
+    this.tipoForm.icono = icon;
+    this.isPickerOpen.set(false);
+  }
 
   constructor(
     private tasasService: TasasService,
@@ -77,6 +97,7 @@ export class GestionTasasComponent implements OnInit {
     this.tipoForm = {
       nombre: '',
       descripcion: '',
+      icono: 'box',
       activo: true,
       temDefecto: 0
     };
@@ -89,6 +110,7 @@ export class GestionTasasComponent implements OnInit {
     this.tipoForm = {
       nombre: tipo.nombre,
       descripcion: tipo.descripcion,
+      icono: tipo.icono || 'box',
       activo: tipo.activo,
       temDefecto: tipo.temDefecto
     };

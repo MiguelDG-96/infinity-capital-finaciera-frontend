@@ -1,1 +1,18 @@
 /* src/app/features/dashboard/pages/admin-cartera/admin-cartera.component.css */
+
+/* Quitar el outline doble de DaisyUI al hacer focus en el buscador */
+label.input:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

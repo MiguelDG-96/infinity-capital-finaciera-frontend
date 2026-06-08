@@ -6,8 +6,7 @@
             <h1 class="text-2xl font-bold text-base-content uppercase tracking-tight">Cartera de Créditos</h1>
             <p class="text-sm opacity-50 font-medium">Gestión administrativa de préstamos y desembolsos.</p>
         </div>
-        <div class="flex flex-col md:flex-row items-start md:items-center gap-3 w-full md:w-auto self-end md:self-center justify-end">
-            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="paginaActual = 1" placeholder="Buscar por cliente, DNI o monto..." class="input input-bordered input-sm w-full md:w-64 bg-base-100 focus:border-primary rounded-xl" />
+        <div class="flex items-center gap-3 self-end md:self-center">
             <button (click)="cargarCartera()" class="btn btn-ghost btn-sm gap-2 whitespace-nowrap" [disabled]="cargando">
                 <span *ngIf="cargando" class="loading loading-spinner loading-xs"></span>
                 Actualizar
@@ -44,7 +43,7 @@
         </div>
     </div>
 
-    <!-- Reporte de Caja (Cierre de Caja) -->
+    <!-- Reporte de Caja -->
     <div class="card bg-base-100 shadow-xl border border-base-content/5 mt-6 mb-6 overflow-hidden rounded-3xl" *ngIf="reporteCaja">
         <div class="px-6 py-4 border-b border-base-content/5 flex justify-between items-center bg-primary/5">
             <h3 class="font-bold text-lg flex items-center gap-2">
@@ -85,12 +84,109 @@
     } @else {
         <!-- Tabla de Cartera -->
         <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+
+            <!-- ── Filament-style toolbar ── -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-5 py-4 border-b border-base-content/10 bg-base-200/40">
+
+                <!-- Sort toggle -->
+                <button
+                    (click)="toggleSort()"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-base-content/15 bg-base-100 hover:bg-base-200 text-base-content/70 transition-all duration-200 shadow-sm select-none w-full sm:w-auto justify-center sm:justify-start">
+                    <lucide-icon name="arrow-up-down" class="w-4 h-4 text-base-content/40 shrink-0"></lucide-icon>
+                    <span class="text-base-content/50">Fecha solicitud:</span>
+                    <span class="flex items-center gap-1 text-primary font-black">
+                        @if (sortAscending) {
+                            <lucide-icon name="arrow-up" class="w-3.5 h-3.5"></lucide-icon> Ascendente
+                        } @else {
+                            <lucide-icon name="arrow-down" class="w-3.5 h-3.5"></lucide-icon> Descendente
+                        }
+                    </span>
+                </button>
+
+                <!-- Spacer -->
+                <div class="flex-1"></div>
+
+                <!-- Search bar -->
+                <label class="input input-sm flex w-full sm:w-64 items-center gap-2 rounded-xl border border-base-content/15 bg-base-100 focus-within:border-primary focus-within:outline-none transition-all duration-200">
+                    <lucide-icon name="search" size="16" strokeWidth="2" class="text-base-content/40 shrink-0"></lucide-icon>
+                    <input
+                        type="text"
+                        [(ngModel)]="searchTerm"
+                        (ngModelChange)="paginaActual = 1"
+                        placeholder="Buscar cliente, DNI o monto..."
+                        class="grow bg-transparent text-sm outline-none placeholder:text-base-content/30" />
+                </label>
+
+                <!-- Filter button + dropdown -->
+                <div id="filtro-container" class="relative" (click)="$event.stopPropagation()">
+                    <button
+                        (click)="toggleFiltro($event)"
+                        class="relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border bg-base-100 hover:bg-base-200 transition-all duration-200 shadow-sm select-none w-full sm:w-auto justify-center"
+                        [class.border-primary]="tiposSeleccionados.size > 0"
+                        [class.text-primary]="tiposSeleccionados.size > 0"
+                        [class.border-base-content]="tiposSeleccionados.size === 0"
+                        [ngClass]="tiposSeleccionados.size === 0 ? 'border-base-content/15 text-base-content/70' : ''">
+                        <lucide-icon name="filter" class="w-4 h-4 shrink-0"></lucide-icon>
+                        Filtros
+                        @if (tiposSeleccionados.size > 0) {
+                            <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-content text-[10px] font-black leading-none">
+                                {{ tiposSeleccionados.size }}
+                            </span>
+                        }
+                    </button>
+
+                    <!-- Dropdown panel -->
+                    @if (filtroAbierto) {
+                        <div class="absolute right-0 top-full mt-2 z-50 w-72 rounded-2xl border border-base-content/10 bg-base-100 shadow-2xl shadow-black/15 overflow-hidden"
+                             style="animation: fadeInDown 0.15s ease-out both;">
+                            
+                            <!-- Header -->
+                            <div class="flex items-center justify-between px-4 py-3 border-b border-base-content/8 bg-base-200/60">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-base-content/50">Tipo de Tasa</span>
+                                @if (tiposSeleccionados.size > 0) {
+                                    <button (click)="limpiarFiltros()" class="text-xs font-bold text-error hover:underline transition-colors">
+                                        Limpiar todo
+                                    </button>
+                                }
+                            </div>
+
+                            <!-- Options list -->
+                            <ul class="py-1.5 max-h-64 overflow-y-auto">
+                                @if (tiposFiltro.length === 0) {
+                                    <li class="px-4 py-3 text-xs text-base-content/40 italic">Sin tipos disponibles</li>
+                                }
+                                @for (tipo of tiposFiltro; track tipo) {
+                                    <li>
+                                        <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-base-200/70 transition-colors duration-100 group">
+                                            <input
+                                                type="checkbox"
+                                                class="checkbox checkbox-primary checkbox-sm rounded-md shrink-0"
+                                                [checked]="tiposSeleccionados.has(tipo)"
+                                                (change)="toggleTipo(tipo)" />
+                                            <span class="text-sm font-medium text-base-content group-hover:text-primary transition-colors duration-100">{{ tipo }}</span>
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+
+                            <!-- Footer -->
+                            <div class="px-4 py-2.5 border-t border-base-content/8 bg-base-200/40">
+                                <p class="text-[11px] text-base-content/45 font-medium">
+                                    {{ creditosFiltrados.length }} resultado{{ creditosFiltrados.length !== 1 ? 's' : '' }}
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- ── End toolbar ── -->
+
             <div class="overflow-x-auto">
                 <table class="table table-zebra table-md w-full">
                     <thead>
                         <tr class="bg-base-200/50 text-[10px] uppercase tracking-widest opacity-60">
                             <th class="py-4 pl-6">Cliente / Documento</th>
-                            <th class="text-center">Producto / Moneda</th>
+                            <th class="text-center">Tipo de tasa</th>
                             <th class="text-center">Monto Aprobado</th>
                             <th class="text-center">Saldo Actual</th>
                             <th class="text-center">Estado</th>
@@ -107,9 +203,10 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-xs font-medium">{{ c.tipoCredito }}</span>
-                                        <span class="text-[9px] opacity-40 uppercase">{{ c.moneda }}</span>
+                                    <div class="badge badge-sm font-semibold gap-1 border"
+                                          [ngClass]="getTipoCreditoBadge(c).clase">
+                                        <lucide-icon [name]="getTipoCreditoBadge(c).icon" class="w-3 h-3 shrink-0"></lucide-icon>
+                                        {{ c.tipoCredito }}
                                     </div>
                                 </td>
                                 <td class="text-center font-bold text-xs">{{ (c.montoAprobado || c.montoCredito) | currency:'S/ ' }}</td>
@@ -123,7 +220,6 @@
                                 </td>
                                 <td class="text-center pr-6">
                                     <div class="flex justify-center gap-2">
-                                        <!-- Botón Desembolsar -->
                                         @if (c.estado === 'APROBADO' || c.estado === 'EN_EVALUACION' || c.estado === 'PENDIENTE_REQUISITOS') {
                                             <button (click)="abrirFormalizacion(c)"
                                                     class="btn btn-ghost btn-xs text-info hover:bg-info/10"
@@ -140,7 +236,6 @@
                                             </button>
                                         }
                                         
-                                        <!-- Botón Resolver -->
                                         @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA') {
                                             <button (click)="resolverContrato(c)"
                                                     class="btn btn-outline btn-error btn-xs border-error/30 hover:border-error hover:scale-105 active:scale-95 transition-all"
@@ -171,7 +266,6 @@
                                            Detalle
                                         </a>
 
-                                        <!-- Botón Estado de Cuenta -->
                                         @if (c.estado === 'ACTIVO' || c.estado === 'ATRASADO' || c.estado === 'MORA' || c.estado === 'PAGADO') {
                                             <button (click)="abrirEstadoCuenta(c)"
                                                     class="btn btn-ghost btn-xs text-success hover:bg-success/10"
@@ -186,10 +280,10 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Pagination controls -->
+            <!-- Pagination -->
             <div class="flex justify-between items-center px-6 py-4 bg-base-200/20 border-t border-base-content/5">
                 <div class="text-xs opacity-50 font-medium">
-                    Mostrando {{ creditosPaginados.length }} de {{ creditos.length }} contratos
+                    Mostrando {{ creditosPaginados.length }} de {{ creditosFiltrados.length }} contratos
                 </div>
                 <div class="join">
                     <button class="join-item btn btn-outline btn-xs" 
@@ -209,6 +303,7 @@
             </div>
         </div>
     }
+
 </div>
 
 @if (mostrarModalResolver && creditoSeleccionado) {
@@ -223,7 +318,6 @@
 @if (showDesembolsoModal) {
     <div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm pr-0">
         <div class="relative w-full max-w-sm m-4 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-base-content/10 animate-fade-in text-center overflow-hidden">
-            <!-- Fondo Decorativo Sutil -->
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
             
             <h3 class="font-bold text-xl text-base-content mb-4 flex items-center justify-center gap-2">

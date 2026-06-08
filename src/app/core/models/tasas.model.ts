@@ -12,12 +12,14 @@ export interface TipoCredito {
   descripcion: string;
   activo: boolean;
   temDefecto: number;
+  icono?: string;
   rangos?: RangoInteres[];
 }
 
 export interface TipoCreditoRequest {
   nombre: string;
   descripcion: string;
+  icono?: string;
   activo: boolean;
   temDefecto: number;
 }

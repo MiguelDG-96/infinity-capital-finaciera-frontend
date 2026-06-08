@@ -1,6 +1,6 @@
 // src/app/features/dashboard/pages/admin-cartera/admin-cartera.component.ts
 
-import { Component, OnInit, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito } from '../../../../core/models/credito.model';
@@ -25,7 +25,13 @@ export class AdminCarteraComponent implements OnInit {
   cargando = true;
   error = '';
 
+  // Toolbar state
   searchTerm = '';
+  sortAscending = true;
+  filtroAbierto = false;
+  tiposFiltro: string[] = [];
+  tiposSeleccionados: Set<string> = new Set();
+
   paginaActual = 1;
   registrosPorPagina = 10;
 
@@ -34,16 +40,32 @@ export class AdminCarteraComponent implements OnInit {
   }
 
   get creditosFiltrados(): Credito[] {
-    if (!this.searchTerm.trim()) {
-      return this.creditos;
-    }
+    let list = [...this.creditos];
+
+    // Búsqueda
     const term = this.searchTerm.toLowerCase().trim();
-    return this.creditos.filter(c => {
-      const nombre = (c.nombreCliente || '').toLowerCase();
-      const documento = (c.documento || '').toLowerCase();
-      const monto = (c.montoAprobado || c.montoCredito || 0).toString();
-      return nombre.includes(term) || documento.includes(term) || monto.includes(term);
+    if (term) {
+      list = list.filter(c => {
+        const nombre = (c.nombreCliente || '').toLowerCase();
+        const documento = (c.documento || '').toLowerCase();
+        const monto = (c.montoAprobado || c.montoCredito || 0).toString();
+        return nombre.includes(term) || documento.includes(term) || monto.includes(term);
+      });
+    }
+
+    // Filtro por tipo de tasa
+    if (this.tiposSeleccionados.size > 0) {
+      list = list.filter(c => this.tiposSeleccionados.has(c.tipoCredito || ''));
+    }
+
+    // Ordenar por fecha de solicitud (todos los créditos siempre la tienen)
+    list.sort((a, b) => {
+      const da = new Date(a.fechaSolicitud || 0).getTime();
+      const db = new Date(b.fechaSolicitud || 0).getTime();
+      return this.sortAscending ? da - db : db - da;
     });
+
+    return list;
   }
 
   get creditosPaginados(): Credito[] {
@@ -55,6 +77,38 @@ export class AdminCarteraComponent implements OnInit {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
       this.paginaActual = pagina;
     }
+  }
+
+  toggleSort(): void {
+    this.sortAscending = !this.sortAscending;
+    this.paginaActual = 1;
+  }
+
+  toggleFiltro(event: MouseEvent): void {
+    event.stopPropagation();
+    this.filtroAbierto = !this.filtroAbierto;
+  }
+
+  toggleTipo(tipo: string): void {
+    const next = new Set(this.tiposSeleccionados);
+    if (next.has(tipo)) {
+      next.delete(tipo);
+    } else {
+      next.add(tipo);
+    }
+    this.tiposSeleccionados = next;
+    this.paginaActual = 1;
+  }
+
+  limpiarFiltros(): void {
+    this.tiposSeleccionados = new Set();
+    this.paginaActual = 1;
+    this.filtroAbierto = false;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.filtroAbierto = false;
   }
 
   // Metricas
@@ -69,17 +123,14 @@ export class AdminCarteraComponent implements OnInit {
   mostrarModalResolver = false;
   creditoSeleccionado: Credito | null = null;
 
-  // Variables para el modal de desembolso
   showDesembolsoModal = false;
   creditoADesembolsar: number | null = null;
   desembolsoExitoso = false;
 
-  // Variables para el modal de edición de cliente
   mostrarModalClientePerfil = false;
   clienteSeleccionadoId = signal<number>(0);
   clienteSeleccionado: any = null;
 
-  // Nuevos modales
   mostrarModalFormalizacion = signal<boolean>(false);
   mostrarModalEditCredito = signal<boolean>(false);
   mostrarModalEstadoCuenta = signal<boolean>(false);
@@ -101,6 +152,7 @@ export class AdminCarteraComponent implements OnInit {
         this.paginaActual = 1;
         this.calcularMetricas(data);
         this.cargarReporteCaja();
+        this.tiposFiltro = [...new Set(data.map(c => c.tipoCredito || '').filter(t => t))].sort();
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -143,7 +195,6 @@ export class AdminCarteraComponent implements OnInit {
   confirmarDesembolso(): void {
     if (!this.creditoADesembolsar || this.procesando) return;
     this.procesando = true;
-    
     this.creditoService.desembolsarCredito(this.creditoADesembolsar).subscribe({
       next: () => {
         this.procesando = false;
@@ -208,6 +259,28 @@ export class AdminCarteraComponent implements OnInit {
   abrirEstadoCuenta(c: Credito) {
     this.creditoSeleccionado = c;
     this.mostrarModalEstadoCuenta.set(true);
+  }
+
+  getTipoCreditoBadge(c: Credito): { clase: string; icon: string } {
+    if (c.iconoTipoCredito) {
+      return { clase: 'bg-primary/10 text-primary border-primary/20', icon: c.iconoTipoCredito };
+    }
+    const t = (c.tipoCredito || '').toLowerCase();
+    if (t.includes('efectivo') || t.includes('personal')) {
+      return { clase: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25', icon: 'banknote' };
+    } else if (t.includes('vehicul')) {
+      return { clase: 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/25', icon: 'truck' };
+    } else if (t.includes('estudi') || t.includes('educac')) {
+      return { clase: 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border border-violet-500/25', icon: 'graduation-cap' };
+    } else if (t.includes('negocio') || t.includes('empresa') || t.includes('comerci')) {
+      return { clase: 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/25', icon: 'briefcase' };
+    } else if (t.includes('hipotec') || t.includes('inmueble') || t.includes('viviend')) {
+      return { clase: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25', icon: 'home' };
+    } else if (t.includes('consume') || t.includes('compra')) {
+      return { clase: 'bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/25', icon: 'shopping-cart' };
+    } else {
+      return { clase: 'bg-base-300 text-base-content/60 border border-base-content/15', icon: 'coins' };
+    }
   }
 
   getEstadoClase(estado: string): string {

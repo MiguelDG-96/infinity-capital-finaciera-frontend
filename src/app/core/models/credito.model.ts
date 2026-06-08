@@ -158,6 +158,7 @@ export interface Credito {
   fechaVencimiento?: Date;
   fechaInicio?: Date;
   tipoCredito: string;
+  iconoTipoCredito?: string;
   moneda: string;
   simboloMoneda: string;
   cuotas: Cuota[];
