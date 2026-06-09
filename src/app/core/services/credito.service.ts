@@ -154,6 +154,10 @@ export class CreditoService {
     return this.http.post<{ mensaje: string, nuevaCuotaId: number }>(`${this.apiUrl}/creditos/admin/${creditoId}/generar-cuota-post-vencimiento`, {});
   }
 
+  generarCuotasPostVencimientoHastaHoy(creditoId: number): Observable<{ mensaje: string, cantidadGenerada: number }> {
+    return this.http.post<{ mensaje: string, cantidadGenerada: number }>(`${this.apiUrl}/creditos/admin/${creditoId}/generar-cuotas-post-vencimiento-hasta-hoy`, {});
+  }
+
   resolverContrato(creditoId: number, motivo: string): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/resolver/${creditoId}`, { motivo });
   }

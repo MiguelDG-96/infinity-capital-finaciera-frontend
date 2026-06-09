@@ -18,6 +18,7 @@ import { PostergarCuotaModalComponent } from '../../components/postergar-cuota-m
 import { RenovarSoloInteresModalComponent } from '../../components/renovar-solo-interes-modal/renovar-solo-interes-modal.component';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
 import { environment } from '../../../../../environments/environment';
+import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
 
 @Component({
   selector: 'app-credito-detalle',
@@ -38,6 +39,7 @@ export class CreditoDetalleComponent implements OnInit {
   isAdminMode = signal<boolean>(false);
   cargando = signal<boolean>(true);
   error = signal<string | null>(null);
+  errorRegistrarPago = signal<string | null>(null);
   procesando = signal<boolean>(false);
   descargando = signal<boolean>(false);
   descargandoEstadoCuenta = signal<boolean>(false);
@@ -162,13 +164,20 @@ export class CreditoDetalleComponent implements OnInit {
     };
     this.comprobanteArchivo = null;
     this.comprobantePreviewUrl.set(null);
+    this.errorRegistrarPago.set(null);
     this.mostrarModalSubirComprobante.set(true);
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
+    if (input.files && input.files.length > 0) {
       const file = input.files[0];
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        this.errorRegistrarPago.set(errorMsg);
+        return;
+      }
+      this.errorRegistrarPago.set(null);
       this.comprobanteArchivo = file;
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -484,6 +493,25 @@ export class CreditoDetalleComponent implements OnInit {
         error: (err) => {
           this.procesando.set(false);
           alert(err.error?.error || 'Error al generar la cuota post-vencimiento');
+        }
+      });
+    }
+  }
+
+  generarCuotasPostVencimientoHastaHoy() {
+    if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
+    
+    if (confirm('¿Generar todas las cuotas post-vencimiento adeudadas hasta el día de hoy?')) {
+      this.procesando.set(true);
+      this.creditoService.generarCuotasPostVencimientoHastaHoy(this.credito()!.id).subscribe({
+        next: (resp) => {
+          this.procesando.set(false);
+          alert(`${resp.mensaje} (Se generaron ${resp.cantidadGenerada} cuotas)`);
+          this.cargarDetalle(this.credito()!.id);
+        },
+        error: (err) => {
+          this.procesando.set(false);
+          alert(err.error?.error || 'Error al generar las cuotas');
         }
       });
     }

@@ -14,6 +14,7 @@ import { ClienteService } from '../../../../core/services/cliente.service';
 import { PatrimonioService } from '../../../../core/services/patrimonio.service';
 import { ReportePerfilPdfService } from '../../../../core/services/reporte-perfil-pdf.service';
 import { environment } from '../../../../../environments/environment';
+import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
 
 type TabActiva = 'personal' | 'laboral' | 'ubicacion' | 'conyuge' | 'patrimonio';
 
@@ -139,7 +140,15 @@ export class ClientePerfilModalComponent implements OnChanges {
   // ── Foto de perfil ───────────────────────────────────────────────────────
   onFileSelected(event: any) {
     const file = event.target.files[0];
-    if (file) this.archivoSeleccionado.set(file);
+    if (file) {
+      const errorMsg = validateFileClientSide(file, true);
+      if (errorMsg) {
+        this.error.set(errorMsg);
+        return;
+      }
+      this.archivoSeleccionado.set(file);
+      this.error.set(null);
+    }
   }
 
   subirFoto() {
@@ -344,12 +353,30 @@ export class ClientePerfilModalComponent implements OnChanges {
 
   onDocActivoNuevoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.nuevoActivo.archivoDoc = input.files?.[0] ?? null;
+    const file = input.files?.[0];
+    if (file) {
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        this.nuevoActivo.error = errorMsg;
+        return;
+      }
+      this.nuevoActivo.archivoDoc = file;
+      this.nuevoActivo.error = undefined;
+    }
   }
 
   onDocActivoExistenteSelected(event: Event, fila: FilaActivoEdit) {
     const input = event.target as HTMLInputElement;
-    fila.archivoDoc = input.files?.[0] ?? null;
+    const file = input.files?.[0];
+    if (file) {
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        fila.error = errorMsg;
+        return;
+      }
+      fila.archivoDoc = file;
+      fila.error = undefined;
+    }
   }
 
   guardarNuevoActivo() {
@@ -474,12 +501,30 @@ export class ClientePerfilModalComponent implements OnChanges {
 
   onDocPasivoNuevoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.nuevoPasivo.archivoDoc = input.files?.[0] ?? null;
+    const file = input.files?.[0];
+    if (file) {
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        this.nuevoPasivo.error = errorMsg;
+        return;
+      }
+      this.nuevoPasivo.archivoDoc = file;
+      this.nuevoPasivo.error = undefined;
+    }
   }
 
   onDocPasivoExistenteSelected(event: Event, fila: FilaPasivoEdit) {
     const input = event.target as HTMLInputElement;
-    fila.archivoDoc = input.files?.[0] ?? null;
+    const file = input.files?.[0];
+    if (file) {
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        fila.error = errorMsg;
+        return;
+      }
+      fila.archivoDoc = file;
+      fila.error = undefined;
+    }
   }
 
   guardarNuevoPasivo() {

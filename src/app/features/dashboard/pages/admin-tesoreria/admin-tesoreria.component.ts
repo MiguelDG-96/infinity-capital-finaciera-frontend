@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { TesoreriaService, SolicitudRetiroTesoreria } from '../../../../core/services/tesoreria.service';
 import { environment } from '../../../../../environments/environment';
+import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
 
 @Component({
   selector: 'app-admin-tesoreria',
@@ -118,6 +119,12 @@ export class AdminTesoreriaComponent implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      const errorMsg = validateFileClientSide(file, false);
+      if (errorMsg) {
+        alert(errorMsg);
+        event.target.value = ''; // Reset input
+        return;
+      }
       this.archivoSeleccionado = file;
     }
   }

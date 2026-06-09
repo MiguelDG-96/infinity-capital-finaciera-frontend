@@ -75,7 +75,13 @@
                     <li>
                         <a (click)="generarCuotaPostVencimiento(); removeFocus($event)" class="hover:bg-error/10 hover:text-error">
                             <lucide-icon name="plus-circle" class="w-4 h-4 mr-2 text-error"></lucide-icon>
-                            Nueva Cuota Venc.
+                            Nueva Cuota Venc. (+1)
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="generarCuotasPostVencimientoHastaHoy(); removeFocus($event)" class="hover:bg-error/10 hover:text-error">
+                            <lucide-icon name="calendar-days" class="w-4 h-4 mr-2 text-error"></lucide-icon>
+                            Cuotas hasta Hoy
                         </a>
                     </li>
                     <li>
