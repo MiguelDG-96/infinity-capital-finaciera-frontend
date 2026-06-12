@@ -1017,6 +1017,24 @@ export class ContratoPdfService {
     page.drawRectangle({ x: totalBoxX, y: totalY, width: totalBoxW, height: 20, color: rgb(0.9, 0.9, 0.9), borderColor: colorBorde, borderWidth: 1 });
     page.drawText("TOTAL A PAGAR:", { x: totalBoxX + 5, y: totalY + 6, size: 8, font: fontBold });
     page.drawText(`S/ ${totalMonto.toFixed(2)}`, { x: totalBoxX + 95, y: totalY + 6, size: 9, font: fontBold, color: colorPrimario });
+
+    // Mensaje de pagos
+    let msgY = totalY - 40;
+    page.drawText("Datos para efectuar los pagos", { x: tableX, y: msgY, size: 10, font: fontBold });
+    msgY -= 15;
+    page.drawText("El cliente deberá realizar los abonos correspondientes del crédito a la siguiente cuenta bancaria o medio autorizado:", { x: tableX, y: msgY, size: 8, font: font });
+    msgY -= 15;
+    page.drawText("Entidad financiera: INFINYCAPITAL Financiera", { x: tableX, y: msgY, size: 8, font: fontBold });
+    msgY -= 12;
+    page.drawText("Banco: BCP - Banco de Crédito del Perú", { x: tableX, y: msgY, size: 8, font: font });
+    msgY -= 12;
+    page.drawText("N.º de cuenta: 4357231801032", { x: tableX, y: msgY, size: 8, font: font });
+    msgY -= 12;
+    page.drawText("CCI: 00243500723180103268", { x: tableX, y: msgY, size: 8, font: font });
+    msgY -= 12;
+    page.drawText("Pago por Yape: 954 862 745", { x: tableX, y: msgY, size: 8, font: font });
+    msgY -= 15;
+    page.drawText("Se considerará válido el pago únicamente cuando el comprobante sea remitido y verificado por INFINYCAPITAL Financiera.", { x: tableX, y: msgY, size: 8, font: fontBold });
   }
 
   async descargarPDF(credito: Credito, isClienteRecurrente?: boolean) {
