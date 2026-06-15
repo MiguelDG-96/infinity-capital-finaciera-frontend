@@ -796,8 +796,16 @@
                   @if (tabActiva() === 'personal') {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div class="form-control sm:col-span-2">
-                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombre Completo</span></label>
-                        <input type="text" [(ngModel)]="clienteEdit().nombre" class="input input-bordered input-sm rounded-xl" />
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Nombres</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().nombres" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Apellido Paterno</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().apellidoPaterno" class="input input-bordered input-sm rounded-xl" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-[10px] font-bold uppercase opacity-50">Apellido Materno</span></label>
+                        <input type="text" [(ngModel)]="clienteEdit().apellidoMaterno" class="input input-bordered input-sm rounded-xl" />
                       </div>
                       <div class="form-control sm:col-span-2">
                         <label class="label flex justify-between">

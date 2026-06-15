@@ -187,6 +187,22 @@ export class ClientePerfilModalComponent implements OnChanges {
         tipoDocumento: 'DNI', numeroDocumento: ''
       };
     }
+    
+    // Fallback: si se perdieron los campos separados, intentar recuperarlos del nombre completo
+    if (!data.nombres && data.nombre) {
+      const partes = data.nombre.trim().split(/\s+/);
+      if (partes.length >= 3) {
+        data.apellidoMaterno = partes.pop();
+        data.apellidoPaterno = partes.pop();
+        data.nombres = partes.join(' ');
+      } else if (partes.length === 2) {
+        data.apellidoPaterno = partes.pop();
+        data.nombres = partes.join(' ');
+      } else {
+        data.nombres = data.nombre;
+      }
+    }
+
     this.clienteEdit.set(data);
     this.isEditMode.set(true);
   }
@@ -234,11 +250,19 @@ export class ClientePerfilModalComponent implements OnChanges {
       codigoPostal: data.codigoPostal,
       referencia: data.referencia,
       nacionalidad: data.nacionalidad,
-      gradoInstruccion: data.gradoInstruccion
+      gradoInstruccion: data.gradoInstruccion,
+      nombres: data.nombres,
+      apellidoPaterno: data.apellidoPaterno,
+      apellidoMaterno: data.apellidoMaterno
     };
 
+    const nombreCompletoConstruido = [data.nombres, data.apellidoPaterno, data.apellidoMaterno]
+      .filter(n => n && n.trim().length > 0)
+      .join(' ')
+      .trim();
+
     const updateData = {
-      nombreCompleto:          data.nombre,
+      nombreCompleto:          nombreCompletoConstruido || data.nombre,
       email:                   data.email,
       telefono:                data.telefono,
       celular:                 data.celular,
