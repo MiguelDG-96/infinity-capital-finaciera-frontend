@@ -1,48 +1,41 @@
 <!-- src/app/features/dashboard/components/renovar-solo-interes-modal/renovar-solo-interes-modal.component.html -->
-<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4">
-    <div class="relative w-full max-w-md max-h-[95vh] flex flex-col rounded-[2.5rem] bg-base-100/90 shadow-[0_32px_64px_rgba(0,0,0,0.4)] p-0 overflow-hidden transform transition-all border border-red-500/20">
+<div class="modal modal-open">
+  <div class="modal-box bg-base-100 max-w-sm border border-base-content/10 shadow-2xl rounded-3xl p-6">
       
-      <!-- Fondo Decorativo -->
-      <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-red-500/20 to-primary/5 -z-10 blur-3xl opacity-50"></div>
-  
       <!-- Botón Cerrar -->
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
-  
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10" (click)="cerrar.emit()">
+        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+      </button>
+
       @if (pasoExito()) {
-        <div class="p-12 text-center animate-scale-in">
-          <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-red-500/20 text-red-400 mb-8 shadow-lg shadow-red-500/10 border border-red-500/20">
-            <lucide-icon name="check-circle" class="h-12 w-12"></lucide-icon>
+        <div class="text-center py-6 animate-scale-in">
+          <div class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-success/20 text-success mb-4 shadow-lg shadow-success/10 border border-success/20">
+            <lucide-icon name="check-circle" class="h-8 w-8"></lucide-icon>
           </div>
-          <h3 class="text-3xl font-black mb-3 text-red-400">¡Renovado!</h3>
-          <p class="text-base-content/60 font-medium">Interés cobrado y capital renovado para el próximo mes.</p>
+          <h3 class="text-2xl font-black mb-2 text-success">¡Renovado!</h3>
+          <p class="text-base-content/60 text-sm font-medium">Interés cobrado y capital renovado para el próximo mes.</p>
         </div>
       } @else {
         <!-- Encabezado -->
-        <div class="p-5 pb-3 shrink-0">
-          <div class="flex items-center gap-3 mb-1">
-            <div class="h-10 w-10 rounded-[1rem] bg-red-500/10 flex items-center justify-center text-red-400 border border-red-500/20 shadow-inner">
-                <lucide-icon name="refresh-cw" class="h-5 w-5"></lucide-icon>
+        <div class="flex flex-col items-center text-center mb-6 pt-2">
+            <div class="h-12 w-12 rounded-full bg-error/10 flex items-center justify-center text-error border border-error/20 shadow-inner mb-3">
+                <lucide-icon name="refresh-cw" class="h-6 w-6"></lucide-icon>
             </div>
-            <div>
-                <h3 class="font-black text-xl tracking-tight leading-none">Renovación de Interés</h3>
-                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">CUOTA #{{ cuota.numeroCuota }} — SOLO INTERÉS</p>
-            </div>
-          </div>
+            <h3 class="font-black text-xl tracking-tight leading-none text-error">Renovación de Interés</h3>
+            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">CUOTA #{{ cuota.numeroCuota }}</p>
         </div>
   
-        <div class="divider m-0 px-6 opacity-10 shrink-0"></div>
-  
-        <div class="p-5 space-y-4">
-            <div class="bg-red-500/10 border border-red-500/10 p-4 rounded-2xl text-center">
+        <div class="space-y-4">
+            <div class="bg-error/10 border border-error/10 p-4 rounded-2xl text-center">
                 <p class="text-[9px] font-black uppercase tracking-widest opacity-50 mb-0.5">Monto a Cobrar Hoy</p>
-                <p class="text-3xl font-black text-red-400">{{ cuota.interes | currency:'S/ ' }}</p>
+                <p class="text-3xl font-black text-error">{{ cuota.interes | currency:'S/ ' }}</p>
                 <p class="text-[9px] font-bold opacity-40 mt-1 uppercase">(Solo intereses acumulados)</p>
             </div>
 
             <div class="space-y-3">
                 <div class="form-control">
-                    <label class="label pt-0 pb-1"><span class="label-text-alt text-[9px] font-bold opacity-50 uppercase">Método de Pago</span></label>
-                    <select [(ngModel)]="metodoPago" class="select select-bordered select-sm w-full rounded-xl font-bold bg-base text-xs h-9">
+                    <label class="label py-0.5"><span class="label-text-alt text-[9px] font-bold opacity-50 uppercase">Método de Pago</span></label>
+                    <select [(ngModel)]="metodoPago" class="select select-bordered select-sm w-full rounded-xl font-bold bg-base text-xs">
                         <option value="EFECTIVO">EFECTIVO / OFICINA</option>
                         <option value="TRANSFERENCIA">TRANSFERENCIA BANCARIA</option>
                         <option value="YAPE_PLIN">YAPE / PLIN</option>
@@ -50,26 +43,26 @@
                     </select>
                 </div>
                 <div class="form-control">
-                    <label class="label pt-0 pb-1"><span class="label-text-alt text-[9px] font-bold opacity-50 uppercase">Nº de Comprobante / Ref</span></label>
-                    <input type="text" [(ngModel)]="numeroComprobante" class="input input-bordered input-sm w-full rounded-xl font-mono text-xs h-9" placeholder="REF-000000">
+                    <label class="label py-0.5"><span class="label-text-alt text-[9px] font-bold opacity-50 uppercase">Nº de Comprobante / Ref</span></label>
+                    <input type="text" [(ngModel)]="numeroComprobante" class="input input-bordered input-sm w-full rounded-xl font-mono text-xs" placeholder="REF-000000">
                 </div>
             </div>
 
-            <div class="bg-base-200/50 p-3 rounded-2xl border border-base-content/5 flex gap-2 items-start">
-                <lucide-icon name="info" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></lucide-icon>
-                <p class="text-[9px] leading-tight opacity-70 font-medium">Al confirmar, el sistema registrará el pago de intereses y moverá la fecha de vencimiento del capital un mes hacia adelante.</p>
+            <div class="bg-base-200/50 p-3 rounded-2xl border border-base-content/5 flex gap-2 items-start mt-2">
+                <lucide-icon name="info" class="w-4 h-4 text-error shrink-0 mt-0.5"></lucide-icon>
+                <p class="text-[10px] leading-tight opacity-70 font-medium">Al confirmar, el sistema registrará el pago de intereses y moverá la fecha de vencimiento del capital un mes hacia adelante.</p>
             </div>
 
             @if (error()) {
-                <div class="alert alert-error text-xs rounded-2xl py-3">
-                    <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
-                    {{ error() }}
+                <div class="alert alert-error text-xs rounded-xl py-2 px-3 flex gap-2">
+                    <lucide-icon name="alert-circle" class="w-4 h-4 shrink-0"></lucide-icon>
+                    <span>{{ error() }}</span>
                 </div>
             }
 
-            <div class="pt-1 space-y-2">
+            <div class="flex flex-col gap-2 pt-2 border-t border-base-content/5 mt-4">
                 <button (click)="confirmar()" 
-                        class="btn btn-red-500 w-full rounded-2xl shadow-lg shadow-red-500/20 bg-red-500 hover:bg-red-600 text-white border-none min-h-[2.5rem] h-10 text-xs"
+                        class="btn btn-error w-full rounded-2xl shadow-lg shadow-error/30 text-white border-none font-bold text-sm"
                         [disabled]="enviando()">
                     @if (enviando()) {
                         <span class="loading loading-spinner loading-sm"></span>
@@ -78,9 +71,9 @@
                     }
                     Cobrar y Renovar
                 </button>
-                <button (click)="cerrar.emit()" class="btn btn-ghost btn-sm w-full rounded-xl opacity-50 text-xs" [disabled]="enviando()">Cancelar</button>
+                <button (click)="cerrar.emit()" class="btn btn-ghost btn-sm w-full rounded-2xl opacity-70 font-bold" [disabled]="enviando()">Cancelar</button>
             </div>
         </div>
       }
-    </div>
   </div>
+</div>

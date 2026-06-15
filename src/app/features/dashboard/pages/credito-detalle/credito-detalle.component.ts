@@ -17,13 +17,14 @@ import { ClientePerfilModalComponent } from '../../components/cliente-perfil-mod
 import { PostergarCuotaModalComponent } from '../../components/postergar-cuota-modal/postergar-cuota-modal.component';
 import { RenovarSoloInteresModalComponent } from '../../components/renovar-solo-interes-modal/renovar-solo-interes-modal.component';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
+import { PagoGlobalModalComponent } from '../../components/pago-global-modal/pago-global-modal.component';
 import { environment } from '../../../../../environments/environment';
 import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
 
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent, PagoGlobalModalComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
@@ -51,6 +52,9 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalPostergar = signal<boolean>(false);
   mostrarModalRenovar = signal<boolean>(false);
   mostrarModalResolver = signal<boolean>(false);
+  mostrarModalPagoGlobal = signal<boolean>(false);
+  mostrarModalConfirmarCuotasHastaHoy = signal<boolean>(false);
+  mostrarModalConfirmarCuotaVencida = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
   pagosRestringidos = signal<boolean>(false);
   mostrarModalRestriccion = signal<boolean>(false);
@@ -445,76 +449,57 @@ export class CreditoDetalleComponent implements OnInit {
 
   pagoGlobal() {
     if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
-    
-    const montoStr = prompt('Ingrese el monto del pago global (se distribuirá en cascada):');
-    if (!montoStr) return;
-    
-    const monto = parseFloat(montoStr);
-    if (isNaN(monto) || monto <= 0) {
-      alert('Monto inválido.');
-      return;
-    }
-    
-    const metodo = prompt('Ingrese el método de pago (Ej. EFECTIVO, YAPE, TRANSFERENCIA):', 'EFECTIVO');
-    if (!metodo) return;
-    
-    let comprobante = '';
-    if (metodo !== 'EFECTIVO') {
-      comprobante = prompt('Ingrese el número de comprobante/operación:') || '';
-    }
-    
-    if (confirm(`¿Confirmas el pago global de S/ ${monto} con método ${metodo}?`)) {
-      this.procesando.set(true);
-      this.creditoService.registrarPagoGlobal(this.credito()!.id, monto, metodo, comprobante).subscribe({
-        next: (resp) => {
-          this.procesando.set(false);
-          alert(resp.mensaje + ` (${resp.movimientosGenerados} cuotas afectadas)`);
-          this.cargarDetalle(this.credito()!.id);
-        },
-        error: (err) => {
-          this.procesando.set(false);
-          alert(err.error?.error || 'Error al procesar el pago global');
-        }
-      });
-    }
+    this.mostrarModalPagoGlobal.set(true);
+  }
+
+  handlePagoGlobalExitoso(resp: any) {
+    this.mostrarModalPagoGlobal.set(false);
+    alert(resp.mensaje + ` (${resp.movimientosGenerados} cuotas afectadas)`);
+    this.cargarDetalle(this.credito()!.id);
   }
 
   generarCuotaPostVencimiento() {
     if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
-    
-    if (confirm('¿Generar nueva cuota post-vencimiento (10% del capital real pendiente)?')) {
-      this.procesando.set(true);
-      this.creditoService.generarCuotaPostVencimiento(this.credito()!.id).subscribe({
-        next: (resp) => {
-          this.procesando.set(false);
-          alert(resp.mensaje);
-          this.cargarDetalle(this.credito()!.id);
-        },
-        error: (err) => {
-          this.procesando.set(false);
-          alert(err.error?.error || 'Error al generar la cuota post-vencimiento');
-        }
-      });
-    }
+    this.mostrarModalConfirmarCuotaVencida.set(true);
+  }
+
+  ejecutarGenerarCuotaPostVencimiento() {
+    this.procesando.set(true);
+    this.creditoService.generarCuotaPostVencimiento(this.credito()!.id).subscribe({
+      next: (resp) => {
+        this.procesando.set(false);
+        this.mostrarModalConfirmarCuotaVencida.set(false);
+        alert(resp.mensaje);
+        this.cargarDetalle(this.credito()!.id);
+      },
+      error: (err) => {
+        this.procesando.set(false);
+        this.mostrarModalConfirmarCuotaVencida.set(false);
+        alert(err.error?.error || 'Error al generar la cuota post-vencimiento');
+      }
+    });
   }
 
   generarCuotasPostVencimientoHastaHoy() {
     if (!this.isAdminMode() || this.procesando() || !this.credito()) return;
-    
-    if (confirm('¿Generar todas las cuotas post-vencimiento adeudadas hasta el día de hoy?')) {
-      this.procesando.set(true);
-      this.creditoService.generarCuotasPostVencimientoHastaHoy(this.credito()!.id).subscribe({
-        next: (resp) => {
-          this.procesando.set(false);
-          alert(`${resp.mensaje} (Se generaron ${resp.cantidadGenerada} cuotas)`);
-          this.cargarDetalle(this.credito()!.id);
-        },
-        error: (err) => {
-          this.procesando.set(false);
-          alert(err.error?.error || 'Error al generar las cuotas');
-        }
-      });
-    }
+    this.mostrarModalConfirmarCuotasHastaHoy.set(true);
+  }
+
+  ejecutarGenerarCuotasHastaHoy() {
+    this.procesando.set(true);
+    this.creditoService.generarCuotasPostVencimientoHastaHoy(this.credito()!.id).subscribe({
+      next: (resp) => {
+        this.procesando.set(false);
+        this.mostrarModalConfirmarCuotasHastaHoy.set(false);
+        alert(`${resp.mensaje} (Se generaron ${resp.cantidadGenerada} cuotas)`);
+        this.cargarDetalle(this.credito()!.id);
+      },
+      error: (err) => {
+        this.procesando.set(false);
+        this.mostrarModalConfirmarCuotasHastaHoy.set(false);
+        alert(err.error?.error || 'Error al generar las cuotas');
+      }
+    });
   }
 
   setPage(page: number) {

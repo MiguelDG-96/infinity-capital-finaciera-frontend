@@ -288,6 +288,14 @@
                                     <!-- ADMIN: botones de acción -->
                                     @if (isAdminMode()) {
                                     <div class="flex justify-center gap-1">
+                                        
+                                        @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'REVISION') {
+                                        <button class="btn btn-ghost btn-xs text-success" (click)="abrirSubirComprobante(cuota)"
+                                            title="Registrar Abono/Pago">
+                                            <lucide-icon name="coins" class="w-3.5 h-3.5"></lucide-icon>
+                                        </button>
+                                        }
+
                                         <button class="btn btn-ghost btn-xs text-info" (click)="abrirEditarCuota(cuota)"
                                             title="Editar Cuota">
                                             <lucide-icon name="edit-3" class="w-3.5 h-3.5"></lucide-icon>
@@ -526,143 +534,136 @@
 }
 
 
-<!-- ========== MODAL: SUBIR COMPROBANTE (CLIENTE) ========== -->
+<!-- ========== MODAL: SUBIR COMPROBANTE (CLIENTE/ADMIN) ========== -->
 @if (mostrarModalSubirComprobante() && cuotaSeleccionada()) {
 <div class="modal modal-open" id="modal-subir-comprobante">
-    <div class="modal-box rounded-3xl border border-base-content/10 shadow-2xl p-0 max-w-lg overflow-hidden">
+  <div class="modal-box bg-base-100 max-w-sm border border-base-content/10 shadow-2xl rounded-3xl p-4 sm:p-5">
+    <div class="flex justify-between items-center mb-3">
+      <h3 class="font-black text-lg flex items-center gap-2">
+        <lucide-icon name="receipt" class="text-primary w-5 h-5"></lucide-icon>
+        Pago Cuota #{{ cuotaSeleccionada()?.numeroCuota }}
+      </h3>
+      <button class="btn btn-ghost btn-sm btn-circle" (click)="cerrarModalSubirComprobante()">
+        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
 
-        <!-- Header Compacto -->
-        <div class="bg-primary p-4 text-primary-content flex justify-between items-center">
-            <div>
-                <div class="flex items-center gap-1.5 opacity-80 mb-0.5">
-                    <lucide-icon name="receipt" class="w-4 h-4"></lucide-icon>
-                    <span class="text-[10px] font-bold uppercase tracking-wider">Cuota #{{ cuotaSeleccionada()?.numeroCuota }}</span>
-                </div>
-                <h3 class="font-bold text-lg leading-tight">Subir Comprobante</h3>
-            </div>
-            <button class="btn btn-ghost btn-circle btn-sm text-primary-content hover:bg-white/20" (click)="cerrarModalSubirComprobante()">
-                <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
-            </button>
-        </div>
-
-        <!-- Resumen de cuota más sutil, debajo del header rojo -->
-        <div class="bg-base-200/50 p-3 px-5 flex items-center justify-between border-b border-base-content/5">
-            <div>
-                <p class="text-[9px] uppercase font-bold text-base-content/50">Monto a pagar</p>
-                <p class="font-black text-lg text-primary">{{ (comprobanteForm.metodoPago === 'EFECTIVO' ? (comprobanteForm.monto | number:'1.0-0') : comprobanteForm.monto) | currency:'S/ ' }}</p>
-                <span *ngIf="comprobanteForm.metodoPago === 'EFECTIVO'" class="text-[9px] text-yellow-600 block leading-none font-bold">Redondeado</span>
-            </div>
-        </div>
-
-        <!-- Alertas de mora o penalidad compactas -->
-        @if ((cuotaSeleccionada()?.interesMora || 0) > 0 || (cuotaSeleccionada()?.penalidad || 0) > 0) {
-        <div class="px-5 py-2 bg-error/10 flex gap-2 text-[10px]">
-            @if ((cuotaSeleccionada()?.interesMora || 0) > 0) {
-            <span class="text-error font-bold">+{{ cuotaSeleccionada()?.interesMora | currency:'S/ ' }} MORA</span>
-            }
-            @if ((cuotaSeleccionada()?.penalidad || 0) > 0) {
-            <span class="text-error font-bold">+{{ cuotaSeleccionada()?.penalidad | currency:'S/ ' }} PENALIDAD</span>
-            }
-        </div>
-        }
-
-        <!-- Formulario -->
-        <div class="p-5 space-y-4">
-            <!-- Método de pago -->
-            <div>
-                <label class="block text-[10px] font-bold uppercase text-base-content/50 mb-1">Método de Pago</label>
-                <select [(ngModel)]="comprobanteForm.metodoPago" class="select select-sm select-bordered w-full rounded-xl focus:select-primary font-bold text-xs">
-                    <option value="YAPE">YAPE</option>
-                    <option value="PLIN">PLIN</option>
-                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                    <option value="DEPOSITO_BANCO">DEPÓSITO</option>
-                    <option value="EFECTIVO">EFECTIVO</option>
-                </select>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Código de operación -->
-                <div *ngIf="comprobanteForm.metodoPago !== 'EFECTIVO'">
-                    <label class="block text-[10px] font-bold uppercase text-base-content/50 mb-1">Nº Operación</label>
-                    <input type="text" [(ngModel)]="comprobanteForm.numeroComprobante" placeholder="Ej: 12345678"
-                        class="input input-sm input-bordered w-full rounded-xl focus:input-primary font-mono text-sm" />
-                </div>
-
-                <!-- Monto declarado (editable) -->
-                <div>
-                    <label class="block text-[10px] font-bold uppercase text-base-content/50 mb-1 flex items-center justify-between">
-                        <span>Monto Real Pagado</span>
-                        <span class="opacity-50 font-normal normal-case text-[9px]">(Editable)</span>
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold opacity-50">S/</span>
-                        <input type="number" [(ngModel)]="comprobanteForm.monto" step="0.01"
-                            class="input input-sm input-bordered w-full rounded-xl pl-8 focus:input-primary font-mono text-sm font-bold" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Zona de subida de imagen y QR Yape -->
-            <div *ngIf="comprobanteForm.metodoPago !== 'EFECTIVO'" 
-                 class="grid gap-4"
-                 [ngClass]="comprobanteForm.metodoPago === 'YAPE' ? 'grid-cols-2' : 'grid-cols-1'">
-                
-                <div class="flex flex-col justify-center">
-                    <label class="block text-[10px] font-bold uppercase text-base-content/50 mb-1">Comprobante</label>
-
-                    <!-- Preview si hay imagen seleccionada -->
-                    @if (comprobantePreviewUrl()) {
-                    <div class="relative rounded-xl overflow-hidden border border-primary/20 bg-base-200/50 p-3 flex flex-col items-center justify-center text-center h-full min-h-[140px]">
-                        <img [src]="comprobantePreviewUrl()" alt="Preview" class="max-h-20 object-contain mb-2 rounded shadow-sm border border-base-300">
-                        <p class="text-xs font-bold text-success flex items-center gap-1 justify-center">
-                            <lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Cargada
-                        </p>
-                        <button type="button" class="btn btn-ghost btn-xs text-error hover:bg-error/10 mt-1"
-                            (click)="comprobantePreviewUrl.set(null); comprobanteArchivo = null">
-                            Quitar
-                        </button>
-                    </div>
-                    } @else {
-                    <!-- Zona de drop compacta -->
-                    <label class="flex flex-col items-center justify-center gap-2 w-full border border-dashed border-base-content/20 rounded-xl cursor-pointer bg-base-200/30 hover:bg-primary/5 transition-all p-4 text-center h-full min-h-[140px]"
-                        (dragover)="onDragOver($event)" (drop)="onFileDrop($event)" for="file-comprobante-input">
-                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                            <lucide-icon name="upload" class="w-5 h-5"></lucide-icon>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-base-content/80 leading-tight">Haz clic o arrastra tu voucher aquí</p>
-                            <p class="text-[9px] text-base-content/40 mt-1">PNG, JPG, PDF (máx. 5MB)</p>
-                        </div>
-                        <input id="file-comprobante-input" type="file" class="hidden" accept="image/*,application/pdf" (change)="onFileSelected($event)">
-                    </label>
-                    }
-                </div>
-                
-                <!-- QR de Yape a la derecha -->
-                <div *ngIf="comprobanteForm.metodoPago === 'YAPE'" class="flex flex-col justify-center items-center rounded-xl overflow-hidden bg-base-200/30 border border-base-content/10 p-3 h-full min-h-[140px]">
-                    <img src="/yape/yape-foto.webp" alt="QR Yape" class="h-28 object-contain rounded-lg shadow-sm">
-                    <span class="text-[10px] font-bold mt-2 text-center opacity-70 uppercase tracking-wider">Escanea y paga</span>
-                </div>
-            </div>
-
-            <!-- Botones de acción -->
-            <div class="flex gap-2 pt-2">
-                <button type="button" class="btn btn-sm rounded-xl flex-1 btn-ghost bg-base-200" (click)="cerrarModalSubirComprobante()" [disabled]="subiendoComprobante()">
-                    Cancelar
-                </button>
-                <button type="button" class="btn btn-sm rounded-xl flex-[2] btn-primary shadow-lg shadow-primary/20"
-                    (click)="enviarComprobante()" [disabled]="subiendoComprobante() || (!comprobanteArchivo && comprobanteForm.metodoPago !== 'EFECTIVO')">
-                    @if (subiendoComprobante()) {
-                    <span class="loading loading-spinner loading-xs"></span>
-                    } @else {
-                    <lucide-icon name="send" class="w-3.5 h-3.5"></lucide-icon>
-                    Confirmar Pago
-                    }
-                </button>
-            </div>
+    <!-- Resumen de cuota -->
+    <div class="bg-base-200/50 px-4 py-2 rounded-2xl flex items-center justify-between mb-2 border border-base-content/5">
+        <div>
+            <p class="text-[9px] uppercase font-bold text-base-content/50">Monto Esperado</p>
+            <p class="font-black text-lg leading-none text-primary">{{ (comprobanteForm.metodoPago === 'EFECTIVO' ? (comprobanteForm.monto | number:'1.0-0') : comprobanteForm.monto) | currency:'S/ ' }}</p>
+            <span *ngIf="comprobanteForm.metodoPago === 'EFECTIVO'" class="text-[9px] text-yellow-600 block leading-tight font-bold">Redondeado</span>
         </div>
     </div>
-    <div class="modal-backdrop bg-black/60 backdrop-blur-sm" (click)="cerrarModalSubirComprobante()"></div>
+
+    <!-- Alertas de mora o penalidad compactas -->
+    @if ((cuotaSeleccionada()?.interesMora || 0) > 0 || (cuotaSeleccionada()?.penalidad || 0) > 0) {
+    <div class="px-3 py-1.5 mb-2 rounded-xl bg-error/10 flex gap-2 text-[9px]">
+        @if ((cuotaSeleccionada()?.interesMora || 0) > 0) {
+        <span class="text-error font-bold">+{{ cuotaSeleccionada()?.interesMora | currency:'S/ ' }} MORA</span>
+        }
+        @if ((cuotaSeleccionada()?.penalidad || 0) > 0) {
+        <span class="text-error font-bold">+{{ cuotaSeleccionada()?.penalidad | currency:'S/ ' }} PENALIDAD</span>
+        }
+    </div>
+    }
+
+    <!-- Formulario -->
+    <div class="space-y-2">
+        <!-- Método de pago -->
+        <div class="form-control">
+            <label class="label py-0.5"><span class="label-text font-bold text-[9px] uppercase opacity-50">Método de Pago</span></label>
+            <select [(ngModel)]="comprobanteForm.metodoPago" class="select select-sm select-bordered w-full rounded-xl">
+                <option value="YAPE">YAPE</option>
+                <option value="PLIN">PLIN</option>
+                <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                <option value="DEPOSITO_BANCO">DEPÓSITO</option>
+                <option value="EFECTIVO">EFECTIVO</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+            <!-- Código de operación -->
+            <div *ngIf="comprobanteForm.metodoPago !== 'EFECTIVO'" class="form-control">
+                <label class="label flex py-0.5 min-h-[20px] items-end">
+                    <span class="label-text font-bold text-[9px] uppercase opacity-50 leading-none">Nº Operación</span>
+                </label>
+                <input type="text" [(ngModel)]="comprobanteForm.numeroComprobante" placeholder="Ej: 12345678"
+                    class="input input-sm input-bordered w-full rounded-xl" />
+            </div>
+
+            <!-- Monto declarado (editable) -->
+            <div class="form-control" [ngClass]="{'col-span-2': comprobanteForm.metodoPago === 'EFECTIVO'}">
+                <label class="label flex py-0.5 min-h-[20px] items-end">
+                    <span class="label-text font-bold text-[9px] uppercase opacity-50 leading-none">Real Pagado</span>
+                </label>
+                <div class="relative w-full">
+                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold opacity-50">S/</span>
+                    <input type="number" [(ngModel)]="comprobanteForm.monto" step="0.01"
+                        class="input input-sm input-bordered w-full rounded-xl pl-7" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Zona de subida de imagen y QR Yape -->
+        <div *ngIf="comprobanteForm.metodoPago !== 'EFECTIVO'" class="grid gap-2"
+             [ngClass]="comprobanteForm.metodoPago === 'YAPE' ? 'grid-cols-2' : 'grid-cols-1'">
+            
+            <div class="form-control">
+                <label class="label py-0.5"><span class="label-text font-bold text-[9px] uppercase opacity-50">Comprobante</span></label>
+
+                <!-- Preview si hay imagen seleccionada -->
+                @if (comprobantePreviewUrl()) {
+                <div class="relative rounded-xl overflow-hidden border border-primary/20 bg-base-200/50 p-1 flex flex-col items-center justify-center text-center h-full min-h-[130px]">
+                    <img [src]="comprobantePreviewUrl()" alt="Preview" class="max-h-20 object-contain mb-1 rounded shadow-sm border border-base-300">
+                    <p class="text-[9px] font-bold text-success flex items-center gap-1 justify-center">
+                        <lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Cargada
+                    </p>
+                    <button type="button" class="btn btn-ghost btn-xs text-error hover:bg-error/10 mt-1 h-5 min-h-0 text-[10px]"
+                        (click)="comprobantePreviewUrl.set(null); comprobanteArchivo = null">
+                        Quitar
+                    </button>
+                </div>
+                } @else {
+                <!-- Zona de drop compacta -->
+                <label class="flex flex-col items-center justify-center gap-1 w-full border border-dashed border-base-content/20 rounded-xl cursor-pointer bg-base-200/30 hover:bg-primary/5 transition-all p-2 text-center h-full min-h-[130px]"
+                    (dragover)="onDragOver($event)" (drop)="onFileDrop($event)" for="file-comprobante-input">
+                    <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <lucide-icon name="upload" class="w-3 h-3"></lucide-icon>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-bold text-base-content/80 leading-tight">Haz clic o arrastra</p>
+                        <p class="text-[8px] text-base-content/40 mt-0.5">PNG, JPG, PDF</p>
+                    </div>
+                    <input id="file-comprobante-input" type="file" class="hidden" accept="image/*,application/pdf" (change)="onFileSelected($event)">
+                </label>
+                }
+            </div>
+
+            <!-- QR de Yape a la derecha -->
+            <div *ngIf="comprobanteForm.metodoPago === 'YAPE'" class="form-control">
+                <label class="label py-0.5"><span class="label-text font-bold text-[9px] uppercase opacity-50 text-center w-full">Código QR</span></label>
+                <div class="flex flex-col justify-center items-center rounded-xl overflow-hidden bg-base-200/30 border border-base-content/10 p-1 h-full min-h-[130px]">
+                    <img src="/yape/yape-foto.webp" alt="QR Yape" class="h-28 object-contain rounded-md shadow-sm">
+                    <span class="text-[8px] font-bold mt-1 text-center opacity-70 uppercase tracking-wider">Escanea y paga</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-action mt-2 pt-2 flex gap-2 border-t border-base-content/5">
+            <button type="button" class="btn btn-sm btn-ghost rounded-xl flex-1 text-xs" (click)="cerrarModalSubirComprobante()" [disabled]="subiendoComprobante()">Cancelar</button>
+            <button type="button" class="btn btn-sm btn-primary rounded-xl shadow-lg shadow-primary/20 flex-1 text-xs"
+                (click)="enviarComprobante()" [disabled]="subiendoComprobante() || (!comprobanteArchivo && comprobanteForm.metodoPago !== 'EFECTIVO')">
+                @if (subiendoComprobante()) {
+                <span class="loading loading-spinner loading-xs"></span>
+                } @else {
+                Confirmar
+                }
+            </button>
+        </div>
+    </div>
+  </div>
 </div>
 }
 
@@ -860,4 +861,64 @@
         (cerrar)="mostrarModalResolver.set(false)" 
         (confirmado)="handleResolucionConfirmada()">
     </app-resolver-contrato-modal>
+}
+
+<!-- Modal Confirmación Cuotas Hasta Hoy -->
+@if (mostrarModalConfirmarCuotasHastaHoy()) {
+<div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="relative w-full max-w-sm m-4 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-white/20 dark:border-white/5 animate-fade-in text-center overflow-hidden">
+    <!-- Fondo Decorativo Sutil -->
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-error/20 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <h3 class="font-bold text-xl text-base-content mb-4 flex items-center justify-center gap-2">
+      <lucide-icon name="calendar-days" class="w-6 h-6 text-error"></lucide-icon>
+      Cuotas hasta Hoy
+    </h3>
+    <p class="py-2 text-base-content/80 relative z-10 text-sm leading-relaxed">¿Estás seguro de generar todas las cuotas post-vencimiento adeudadas hasta el día de hoy?</p>
+    <div class="mt-6 flex justify-center gap-4 relative z-10">
+      <button class="btn btn-ghost hover:bg-base-content/10 border-transparent" (click)="mostrarModalConfirmarCuotasHastaHoy.set(false)">Cancelar</button>
+      <button class="btn btn-error text-white shadow-lg shadow-error/30" (click)="ejecutarGenerarCuotasHastaHoy()" [disabled]="procesando()">
+        @if (procesando()) {
+          <span class="loading loading-spinner loading-xs"></span>
+        } @else {
+          Sí, generar
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+@if (mostrarModalPagoGlobal() && credito()) {
+    <app-pago-global-modal 
+        [credito]="credito()!" 
+        (cerrar)="mostrarModalPagoGlobal.set(false)" 
+        (pagoExitoso)="handlePagoGlobalExitoso($event)">
+    </app-pago-global-modal>
+}
+
+<!-- Modal Confirmación Nueva Cuota Vencida (+1) -->
+@if (mostrarModalConfirmarCuotaVencida()) {
+<div class="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="relative w-full max-w-sm m-4 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] bg-base-100/60 backdrop-blur-xl border border-white/20 dark:border-white/5 animate-fade-in text-center overflow-hidden">
+    <!-- Fondo Decorativo Sutil -->
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-warning/20 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <h3 class="font-bold text-xl text-base-content mb-4 flex items-center justify-center gap-2">
+      <lucide-icon name="plus-circle" class="w-6 h-6 text-warning"></lucide-icon>
+      Nueva Cuota Vencida
+    </h3>
+    <p class="py-2 text-base-content/80 relative z-10 text-sm leading-relaxed">¿Estás seguro de generar una nueva cuota post-vencimiento equivalente al 10% del capital real pendiente?</p>
+    <div class="mt-6 flex justify-center gap-4 relative z-10">
+      <button class="btn btn-ghost hover:bg-base-content/10 border-transparent" (click)="mostrarModalConfirmarCuotaVencida.set(false)">Cancelar</button>
+      <button class="btn btn-warning text-warning-content shadow-lg shadow-warning/30" (click)="ejecutarGenerarCuotaPostVencimiento()" [disabled]="procesando()">
+        @if (procesando()) {
+          <span class="loading loading-spinner loading-xs"></span>
+        } @else {
+          Sí, generar
+        }
+      </button>
+    </div>
+  </div>
+</div>
 }

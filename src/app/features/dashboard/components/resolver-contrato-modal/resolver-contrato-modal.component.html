@@ -1,98 +1,71 @@
-<!-- src/app/features/dashboard/components/resolver-contrato-modal/resolver-contrato-modal.component.html -->
-<div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4">
-    <div class="relative w-full max-w-lg rounded-[2.5rem] bg-base-100/90 shadow-[0_32px_64px_rgba(0,0,0,0.4)] p-0 overflow-hidden transform transition-all border border-error/20">
-      
-      <!-- Fondo Decorativo Glass Danger -->
-      <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-error/20 to-warning/5 -z-10 blur-3xl opacity-50"></div>
-  
-      <!-- Botón Cerrar -->
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 z-10" (click)="cerrar.emit()">✕</button>
-  
-      @if (exito()) {
-        <div class="p-12 text-center animate-scale-in">
-          <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-error/20 text-error mb-8 shadow-lg shadow-error/10 border border-error/20">
-            <lucide-icon name="check-circle" class="h-12 w-12"></lucide-icon>
+<div class="modal modal-open">
+  <div class="modal-box bg-base-100 max-w-md border border-base-content/10 shadow-2xl rounded-3xl">
+    
+    @if (exito()) {
+      <div class="p-8 text-center animate-scale-in">
+        <div class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-error/20 text-error mb-6 shadow-lg shadow-error/10 border border-error/20">
+          <lucide-icon name="check-circle" class="h-10 w-10"></lucide-icon>
+        </div>
+        <h3 class="text-2xl font-black mb-2 text-error">Contrato Resuelto</h3>
+        <p class="text-base-content/60 font-medium text-sm">El crédito ha sido finalizado administrativamente.</p>
+      </div>
+    } @else {
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-black text-xl flex items-center gap-2">
+          <lucide-icon name="alert-octagon" class="text-error w-6 h-6"></lucide-icon>
+          Resolver Contrato #{{ credito.id }}
+        </h3>
+        <button class="btn btn-ghost btn-sm btn-circle" (click)="cerrar.emit()">
+          <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Advertencia Crítica -->
+      <div class="bg-error/5 border border-error/10 p-4 rounded-2xl flex gap-3 items-start mb-6">
+          <lucide-icon name="info" class="h-5 w-5 text-error shrink-0 mt-0.5"></lucide-icon>
+          <div class="text-xs space-y-1">
+              <p class="font-bold uppercase tracking-wider text-error">Acción Irreversible</p>
+              <p class="opacity-70 leading-relaxed">Esta acción cerrará el contrato de forma permanente. El saldo pendiente figurará como no recuperable.</p>
           </div>
-          <h3 class="text-3xl font-black mb-3 text-error">Contrato Resuelto</h3>
-          <p class="text-base-content/60 font-medium">El crédito ha sido finalizado administrativamente.</p>
-        </div>
-      } @else {
-        <!-- Encabezado -->
-        <div class="p-8 pb-4">
-          <div class="flex items-center gap-4 mb-2">
-            <div class="h-14 w-14 rounded-2xl bg-error/10 flex items-center justify-center text-error border border-error/20 shadow-inner">
-                <lucide-icon name="alert-octagon" class="h-7 w-7"></lucide-icon>
-            </div>
-            <div>
-                <h3 class="font-black text-2xl tracking-tight text-error">Resolver Contrato</h3>
-                <p class="text-xs font-bold opacity-40 uppercase tracking-widest leading-none">ID DE CRÉDITO #{{ credito.id }}</p>
-            </div>
+      </div>
+
+      <!-- Formulario -->
+      <form [formGroup]="resolverForm" (ngSubmit)="confirmarResolucion()" class="space-y-4">
+        
+        @if (error()) {
+          <div class="alert alert-error bg-error/10 border-error/20 text-error text-sm rounded-2xl animate-shake py-2 px-3">
+            <lucide-icon name="x-circle" class="h-4 w-4"></lucide-icon>
+            <span>{{ error() }}</span>
           </div>
-        </div>
-  
-        <div class="divider m-0 px-8 opacity-10"></div>
-  
-        <!-- Advertencia Crítica -->
-        <div class="px-8 mt-6">
-            <div class="bg-error/5 border border-error/10 p-4 rounded-3xl flex gap-4 items-start">
-                <lucide-icon name="info" class="h-5 w-5 text-error shrink-0 mt-1"></lucide-icon>
-                <div class="text-xs space-y-1">
-                    <p class="font-black uppercase tracking-wider text-error">Acción Irreversible</p>
-                    <p class="opacity-70 leading-relaxed font-medium">Esta acción cerrará el contrato de forma permanente. El saldo pendiente figurará como no recuperable o resuelto.</p>
-                </div>
-            </div>
-        </div>
-  
-        <!-- Formulario -->
-        <form [formGroup]="resolverForm" (ngSubmit)="confirmarResolucion()" class="p-8 pt-6 space-y-6">
-          
-          @if (error()) {
-            <div class="alert alert-error bg-error/10 border-error/20 text-error text-sm rounded-2xl animate-shake">
-              <lucide-icon name="x-circle" class="h-4 w-4"></lucide-icon>
-              <span>{{ error() }}</span>
-            </div>
+        }
+
+        <!-- Input de Motivo -->
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold text-[10px] uppercase opacity-50">Motivo de Resolución</span></label>
+          <textarea 
+                 formControlName="motivo" 
+                 class="textarea textarea-bordered w-full h-24 rounded-2xl font-medium text-sm transition-all resize-none"
+                 placeholder="Explica detalladamente por qué se está cerrando este contrato..."
+                 [class.textarea-error]="isFieldInvalid('motivo')"></textarea>
+          @if (isFieldInvalid('motivo')) {
+              <label class="label pb-0">
+                  <span class="text-[10px] text-error font-bold italic">Mínimo 10 caracteres obligatorios</span>
+              </label>
           }
-  
-          <!-- Input de Motivo -->
-          <div class="form-control">
-            <label class="label pt-0">
-                <span class="label-text-alt font-black uppercase opacity-40 tracking-wider">Motivo de Resolución</span>
-            </label>
-            <div class="relative group">
-                <textarea 
-                       formControlName="motivo" 
-                       class="textarea textarea-bordered w-full h-32 rounded-3xl font-medium text-sm transition-all focus:border-error focus:ring-4 focus:ring-error/10 shadow-sm resize-none p-6"
-                       placeholder="Explica detalladamente por qué se está cerrando este contrato..."
-                       [class.textarea-error]="isFieldInvalid('motivo')"></textarea>
-            </div>
-            @if (isFieldInvalid('motivo')) {
-                <label class="label pb-0">
-                    <span class="text-[10px] text-error font-bold uppercase tracking-widest italic animate-pulse">Min. 10 caracteres obligatorios</span>
-                </label>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="modal-action pt-4 flex gap-2">
+          <button type="button" class="btn btn-ghost rounded-2xl flex-1" (click)="cerrar.emit()" [disabled]="enviando()">Cancelar</button>
+          <button type="submit" class="btn btn-error text-white px-6 rounded-2xl shadow-lg shadow-error/20 flex-1" [disabled]="resolverForm.invalid || enviando()">
+            @if (enviando()) {
+              <span class="loading loading-spinner loading-xs"></span>
             }
-          </div>
-  
-          <!-- Acciones -->
-          <div class="pt-2 space-y-3">
-            <button type="submit" 
-                    class="btn btn-error btn-lg w-full rounded-3xl shadow-xl shadow-error/30 gap-3 border-none hover:scale-[1.02] active:scale-[0.98] transition-all bg-error hover:bg-error/90 text-white"
-                    [disabled]="resolverForm.invalid || enviando()">
-                @if (enviando()) {
-                    <span class="loading loading-spinner"></span>
-                } @else {
-                    <lucide-icon name="trash-2" class="h-5 w-5"></lucide-icon>
-                }
-                Resolver Contrato Permanentemente
-            </button>
-            <button type="button" 
-                    class="btn btn-ghost w-full rounded-3xl opacity-50 font-bold hover:opacity-100 hover:bg-base-200" 
-                    (click)="cerrar.emit()"
-                    [disabled]="enviando()">
-                Cancelar Acción
-            </button>
-          </div>
-  
-        </form>
-      }
-    </div>
+            Resolver
+          </button>
+        </div>
+      </form>
+    }
   </div>
+</div>
