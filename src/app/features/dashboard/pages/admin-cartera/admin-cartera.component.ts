@@ -98,11 +98,13 @@ export class AdminCarteraComponent implements OnInit {
       next.add(tipo);
     }
     this.tiposSeleccionados = next;
+    sessionStorage.setItem('carteraTiposFiltro', JSON.stringify(Array.from(this.tiposSeleccionados)));
     this.paginaActual = 1;
   }
 
   limpiarFiltros(): void {
     this.tiposSeleccionados = new Set();
+    sessionStorage.removeItem('carteraTiposFiltro');
     this.paginaActual = 1;
     this.filtroAbierto = false;
   }
@@ -143,7 +145,37 @@ export class AdminCarteraComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const savedSearch = sessionStorage.getItem('carteraSearchTerm');
+    if (savedSearch) {
+      this.searchTerm = savedSearch;
+    }
+    const savedTipos = sessionStorage.getItem('carteraTiposFiltro');
+    if (savedTipos) {
+      try {
+        this.tiposSeleccionados = new Set(JSON.parse(savedTipos));
+      } catch (e) {}
+    }
     this.cargarCartera();
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    sessionStorage.setItem('carteraSearchTerm', term);
+    this.paginaActual = 1;
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    sessionStorage.removeItem('carteraSearchTerm');
+    this.paginaActual = 1;
+  }
+
+  limpiarTodosLosFiltros(): void {
+    this.searchTerm = '';
+    sessionStorage.removeItem('carteraSearchTerm');
+    this.tiposSeleccionados = new Set();
+    sessionStorage.removeItem('carteraTiposFiltro');
+    this.paginaActual = 1;
   }
 
   cargarCartera(): void {

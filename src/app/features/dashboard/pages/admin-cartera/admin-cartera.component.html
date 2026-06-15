@@ -111,8 +111,8 @@
                     <lucide-icon name="search" size="16" strokeWidth="2" class="text-base-content/40 shrink-0"></lucide-icon>
                     <input
                         type="text"
-                        [(ngModel)]="searchTerm"
-                        (ngModelChange)="paginaActual = 1"
+                        [ngModel]="searchTerm"
+                        (ngModelChange)="onSearchChange($event)"
                         placeholder="Buscar cliente, DNI o monto..."
                         class="grow bg-transparent text-sm outline-none placeholder:text-base-content/30" />
                 </label>
@@ -181,6 +181,36 @@
             </div>
             <!-- ── End toolbar ── -->
 
+            <!-- Active filters -->
+            @if (searchTerm || tiposSeleccionados.size > 0) {
+                <div class="flex items-center gap-4 px-5 py-2 border-b border-base-content/10 bg-base-100 text-sm overflow-x-auto min-h-[44px]">
+                    <span class="text-base-content/60 font-medium whitespace-nowrap">Active filters</span>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        @if (searchTerm) {
+                            <div class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                <span>Search: {{ searchTerm }}</span>
+                                <button (click)="clearSearch()" class="hover:bg-primary/20 rounded-full p-0.5 transition-colors">
+                                    <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                                </button>
+                            </div>
+                        }
+                        @for (tipo of tiposSeleccionados; track tipo) {
+                            <div class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs font-medium bg-base-200 text-base-content border border-base-content/10">
+                                <span>Tipo: {{ tipo }}</span>
+                                <button (click)="toggleTipo(tipo)" class="hover:bg-base-300 rounded-full p-0.5 transition-colors">
+                                    <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="flex-1 min-w-[1rem]"></div>
+                    <button (click)="limpiarTodosLosFiltros()" class="btn btn-ghost btn-xs text-base-content/50 hover:bg-base-200 hover:text-base-content shrink-0 border-none px-2 h-auto min-h-0 py-1 font-medium transition-colors">
+                        <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+                    </button>
+                </div>
+            }
+
             <div class="overflow-x-auto">
                 <table class="table table-zebra table-md w-full">
                     <thead>
@@ -200,7 +230,10 @@
                                 <td class="pl-6">
                                     <div class="flex flex-col">
                                         <span class="font-bold text-sm text-base-content/80">{{ c.nombreCliente }}</span>
-                                        <span class="text-[10px] opacity-40 font-mono tracking-tighter">{{ c.documento }}</span>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-[10px] opacity-40 font-mono tracking-tighter">{{ c.documento }}</span>
+                                            <span class="text-[9px] font-black opacity-30 bg-base-content/5 px-1.5 rounded">#{{ c.id }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="text-center">
