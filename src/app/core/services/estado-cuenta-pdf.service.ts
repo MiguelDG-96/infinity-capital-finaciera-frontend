@@ -42,9 +42,9 @@ export class EstadoCuentaPdfService {
       img.crossOrigin = 'anonymous';
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        canvas.width = 200; canvas.height = 200;
+        canvas.width = img.width || 159; canvas.height = img.height || 72;
         const ctx = canvas.getContext('2d');
-        if (ctx) { ctx.drawImage(img, 0, 0, 200, 200); resolve(canvas.toDataURL('image/png')); }
+        if (ctx) { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); resolve(canvas.toDataURL('image/png')); }
         else resolve('');
       };
       img.onerror = () => resolve('');
@@ -80,6 +80,7 @@ export class EstadoCuentaPdfService {
 
     // ── Colores ──────────────────────────────────────────────────────────────
     const RED:   [number, number, number] = [185, 28, 28];
+    const HEADER_BG: [number, number, number] = [100, 15, 15];
     const DARK:  [number, number, number] = [15,  23, 42];
     const GRAY:  [number, number, number] = [100, 116, 139];
     const LGRAY: [number, number, number] = [241, 245, 249];
@@ -107,15 +108,15 @@ export class EstadoCuentaPdfService {
 
     // Logo
     const logoUrl = await this.getSvgDataUrl();
-    if (logoUrl) doc.addImage(logoUrl, 'PNG', margin, 3, 14, 14);
+    if (logoUrl) doc.addImage(logoUrl, 'PNG', margin, 6, 22, 10);
 
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('InfinyCapital', margin + 17, 11);
+    doc.text('INFINYCAPITAL', margin + 26, 11);
     doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
-    doc.text('SERVICIOS FINANCIEROS', margin + 17, 16);
+    doc.text('SERVICIOS FINANCIEROS', margin + 26, 15);
 
     // Título derecha
     doc.setFontSize(11);

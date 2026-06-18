@@ -47,6 +47,26 @@
                             Descargar Contrato
                         </a>
                     </li>
+                    @if (credito()?.estado === 'PAGADO') {
+                    <li>
+                        <a (click)="descargarCartaNoAdeudo(); removeFocus($event)" class="hover:bg-success/10 hover:text-success" [class.pointer-events-none]="isDownloading()">
+                            @if (isDownloading()) {
+                                <span class="loading loading-spinner loading-xs mr-2"></span>
+                            } @else {
+                                <lucide-icon name="file-check-2" class="w-4 h-4 mr-2 text-success"></lucide-icon>
+                            }
+                            Carta de No Adeudo
+                        </a>
+                    </li>
+                    }
+                    @if (isAdminMode() && credito()?.debeActualidad! > 0) {
+                    <li>
+                        <a (click)="abrirModalCartaCobranza(); removeFocus($event)" class="hover:bg-error/10 hover:text-error">
+                            <lucide-icon name="alert-triangle" class="w-4 h-4 mr-2 text-error"></lucide-icon>
+                            Carta de Cobranza
+                        </a>
+                    </li>
+                    }
                 </ul>
             </div>
             <button class="btn btn-warning btn-sm" (click)="abrirEditarCredito()" *ngIf="isAdminMode()">
@@ -122,6 +142,26 @@
                             Descargar Contrato
                         </a>
                     </li>
+                    @if (credito()?.estado === 'PAGADO') {
+                    <li>
+                        <a (click)="descargarCartaNoAdeudo(); removeFocus($event)" class="hover:bg-success/10 hover:text-success" [class.pointer-events-none]="isDownloading()">
+                            @if (isDownloading()) {
+                                <span class="loading loading-spinner loading-xs mr-2"></span>
+                            } @else {
+                                <lucide-icon name="file-check-2" class="w-4 h-4 mr-2 text-success"></lucide-icon>
+                            }
+                            Carta de No Adeudo
+                        </a>
+                    </li>
+                    }
+                    @if (isAdminMode() && (credito()?.estado === 'MORA' || credito()?.estado === 'ATRASADO')) {
+                    <li>
+                        <a (click)="abrirModalCartaCobranza(); removeFocus($event)" class="hover:bg-error/10 hover:text-error">
+                            <lucide-icon name="alert-triangle" class="w-4 h-4 mr-2 text-error"></lucide-icon>
+                            Carta de Cobranza
+                        </a>
+                    </li>
+                    }
                 </ul>
             </div>
             <button class="btn btn-success btn-sm text-white shadow-lg shadow-success/20" (click)="desembolsar()"
@@ -154,24 +194,20 @@
     } @else if (credito()) {
 
     <!-- Resumen de Deuda -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-            class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm hover:shadow-md transition-shadow">
-            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Saldo Pendiente</p>
-            <p class="text-3xl font-black text-primary">{{ credito()?.debeActualidad | currency:'S/ ' }}</p>
+            class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm hover:shadow-md transition-shadow min-w-0">
+            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2 truncate">Saldo Pendiente</p>
+            <p class="text-2xl font-bold text-primary whitespace-nowrap overflow-hidden text-ellipsis">{{ credito()?.debeActualidad | currency:'S/ ' }}</p>
         </div>
-        <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
-            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Monto Original</p>
-            <p class="text-2xl font-bold">{{ (credito()?.montoAprobado || credito()?.montoCredito) | currency:'S/ ' }}
+        <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm min-w-0">
+            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2 truncate">Monto Original</p>
+            <p class="text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis">{{ (credito()?.montoAprobado || credito()?.montoCredito) | currency:'S/ ' }}
             </p>
         </div>
-        <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
-            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Tasa Mensual (TEM)</p>
-            <p class="text-2xl font-bold text-success">{{ (credito()?.tasaAprobada || credito()?.tem || 0) }}%</p>
-        </div>
-        <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm">
-            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2">Cuota Mensual</p>
-            <p class="text-2xl font-bold text-secondary">{{ credito()?.cuotaMensual | currency:'S/ ' }}</p>
+        <div class="bg-base-100 p-6 rounded-3xl border border-base-content/5 shadow-sm min-w-0">
+            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-2 truncate">Cuota Mensual</p>
+            <p class="text-2xl font-bold text-secondary whitespace-nowrap overflow-hidden text-ellipsis">{{ credito()?.cuotaMensual | currency:'S/ ' }}</p>
         </div>
     </div>
 
@@ -533,6 +569,46 @@
 </app-renovar-solo-interes-modal>
 }
 
+@if (mostrarModalCartaCobranza() && credito()) {
+<div class="modal modal-open">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg flex items-center gap-2">
+      <lucide-icon name="alert-triangle" class="text-error w-5 h-5"></lucide-icon>
+      Generar Carta de Cobranza
+    </h3>
+    <div class="py-4 space-y-4">
+      <div class="form-control">
+        <label class="label"><span class="label-text font-bold">Nivel de Notificación</span></label>
+        <select class="select select-bordered" (change)="nivelCobranzaSelect.set($any($event.target).value * 1)">
+          <option value="1" [selected]="nivelCobranzaSelect() === 1">Nivel 1 - Recordatorio Amigable</option>
+          <option value="2" [selected]="nivelCobranzaSelect() === 2">Nivel 2 - Requerimiento Formal</option>
+          <option value="3" [selected]="nivelCobranzaSelect() === 3">Nivel 3 - Aviso Pre-Legal</option>
+        </select>
+      </div>
+      <div class="form-control" *ngIf="credito()?.garantes?.length">
+        <label class="label"><span class="label-text font-bold">Destinatario</span></label>
+        <select class="select select-bordered" (change)="destinatarioCobranzaSelect.set($any($event.target).value)">
+          <option value="TITULAR" [selected]="destinatarioCobranzaSelect() === 'TITULAR'">Titular ({{ credito()?.nombreCliente }})</option>
+          <option value="GARANTE" [selected]="destinatarioCobranzaSelect() === 'GARANTE'">Garante ({{ credito()?.garantes![0].nombreCompleto }})</option>
+        </select>
+      </div>
+      
+      <div class="alert bg-base-200 border-base-content/10 shadow-sm mt-4 text-xs">
+        <lucide-icon name="info" class="w-4 h-4"></lucide-icon>
+        <span>El PDF incluirá los montos actuales de deuda vencida y moras automáticas hasta el día de hoy.</span>
+      </div>
+    </div>
+    <div class="modal-action">
+      <button class="btn btn-ghost" (click)="mostrarModalCartaCobranza.set(false)">Cancelar</button>
+      <button class="btn btn-primary" (click)="descargarCartaCobranza()" [disabled]="isDownloading()">
+        @if (isDownloading()) { <span class="loading loading-spinner loading-xs"></span> }
+        <lucide-icon *ngIf="!isDownloading()" name="download" class="w-4 h-4 mr-1"></lucide-icon>
+        Generar PDF
+      </button>
+    </div>
+  </div>
+</div>
+}
 
 <!-- ========== MODAL: SUBIR COMPROBANTE (CLIENTE/ADMIN) ========== -->
 @if (mostrarModalSubirComprobante() && cuotaSeleccionada()) {

@@ -1,0 +1,212 @@
+<div class="p-6 max-w-6xl mx-auto pb-24">
+  <!-- Header -->
+  <div class="mb-10 text-center">
+    <div class="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
+      <lucide-icon name="book-open" class="text-primary w-8 h-8"></lucide-icon>
+    </div>
+    <h1 class="text-3xl font-bold text-base-content mb-2">Manual de Funciones</h1>
+    <p class="text-base-content/70 max-w-2xl mx-auto">
+      Conoce en detalle todas las funcionalidades disponibles en la pantalla de "Detalle de Crédito" para gestionar correctamente la cartera.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <!-- 1. Gestión Diaria y Pagos -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body">
+        <h2 class="card-title text-xl text-primary mb-4 flex items-center gap-2">
+          <lucide-icon name="calendar-check" class="w-5 h-5"></lucide-icon>
+          Gestión Diaria y Pagos
+        </h2>
+        <div class="space-y-6">
+          
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-success btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon> Pagar Cuota
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Pagar Cuota</p>
+              <p class="text-sm text-base-content/70">Registra el pago de una cuota regular que el cliente entrega en efectivo o mediante validación directa.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-info btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="upload" class="w-4 h-4"></lucide-icon> Subir Comp.
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Subir / Revisar Comprobante</p>
+              <p class="text-sm text-base-content/70">Inicia el flujo para adjuntar un voucher de Yape/Plin o transferencia bancaria, el cual luego es revisado y aprobado por la administración.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0 flex flex-col gap-2">
+              <button class="btn btn-outline btn-sm pointer-events-none whitespace-nowrap">
+                <lucide-icon name="download" class="w-4 h-4"></lucide-icon> Contrato
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Descargar Documentos PDF</p>
+              <p class="text-sm text-base-content/70">Genera y descarga los documentos legales del crédito (Contrato y Estado de Cuenta) actualizados al día.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Operaciones Extraordinarias -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body">
+        <h2 class="card-title text-xl text-secondary mb-4 flex items-center gap-2">
+          <lucide-icon name="briefcase" class="w-5 h-5"></lucide-icon>
+          Operaciones Extraordinarias
+        </h2>
+        <div class="space-y-6">
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-primary btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="banknote" class="w-4 h-4"></lucide-icon> Pago Global
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Pago Global</p>
+              <p class="text-sm text-base-content/70">Permite registrar un abono general (o la liquidación total) del crédito, afectando múltiples cuotas de manera automática según el monto ingresado.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-warning btn-sm text-warning-content no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="calendar-clock" class="w-4 h-4"></lucide-icon> Postergar
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Postergar Cuota</p>
+              <p class="text-sm text-base-content/70">Desplaza la fecha de vencimiento de una cuota a una fecha futura. Ideal para clientes que piden un "periodo de gracia" o ampliación de plazo.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-secondary btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="refresh-ccw" class="w-4 h-4"></lucide-icon> Solo Interés
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Renovar Solo Interés</p>
+              <p class="text-sm text-base-content/70">Se cobra al cliente solo los intereses generados en la cuota actual, trasladando el cobro del capital principal al siguiente periodo.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Gestión de Morosidad -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body">
+        <h2 class="card-title text-xl text-error mb-4 flex items-center gap-2">
+          <lucide-icon name="alert-triangle" class="w-5 h-5"></lucide-icon>
+          Gestión de Morosidad
+        </h2>
+        <div class="space-y-6">
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-error btn-outline btn-sm no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="plus-circle" class="w-4 h-4"></lucide-icon> Cuota Extra
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Generar Cuota Post Vencimiento</p>
+              <p class="text-sm text-base-content/70">Añade de forma manual una cuota de penalidad o mora al cronograma si el cliente no ha cumplido con sus fechas de pago.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-error btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="clock" class="w-4 h-4"></lucide-icon> Cuotas Hasta Hoy
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Generar Cuotas Hasta Hoy</p>
+              <p class="text-sm text-base-content/70">Actualiza automáticamente la deuda de un cliente moroso, generando en lote todas las cuotas de interés vencidas hasta la fecha actual.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-neutral btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="file-x-2" class="w-4 h-4"></lucide-icon> Resolver
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Resolver Contrato</p>
+              <p class="text-sm text-base-content/70">Finaliza el crédito anticipadamente, pasando el estado del préstamo a resuelto o incobrable según las políticas internas.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Administración y Ajustes -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body">
+        <h2 class="card-title text-xl text-accent mb-4 flex items-center gap-2">
+          <lucide-icon name="settings" class="w-5 h-5"></lucide-icon>
+          Administración y Ajustes
+        </h2>
+        <div class="space-y-6">
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-accent btn-sm text-white no-animation pointer-events-none whitespace-nowrap">
+                <lucide-icon name="wallet" class="w-4 h-4"></lucide-icon> Desembolsar
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Desembolsar Crédito</p>
+              <p class="text-sm text-base-content/70">Confirma la entrega del dinero al cliente. Esta acción cambia el crédito a estado "En Curso" y emite el cronograma oficial de pagos.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0 flex flex-col gap-2">
+              <button class="btn btn-ghost btn-xs btn-outline pointer-events-none whitespace-nowrap">
+                <lucide-icon name="edit-2" class="w-3 h-3"></lucide-icon> Editar Cuota
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Edición Manual</p>
+              <p class="text-sm text-base-content/70">Las opciones de "Editar Cuota" o "Editar Crédito" permiten ajustar valores de saldo, capital e intereses en casos de error del sistema o negociaciones especiales.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="mt-1 shrink-0">
+              <button class="btn btn-outline btn-sm pointer-events-none whitespace-nowrap">
+                <lucide-icon name="user-plus" class="w-4 h-4"></lucide-icon> Garante
+              </button>
+            </div>
+            <div>
+              <p class="font-medium">Agregar Garante</p>
+              <p class="text-sm text-base-content/70">Permite registrar los datos de una persona que actuará como aval para este crédito en caso de incumplimiento.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

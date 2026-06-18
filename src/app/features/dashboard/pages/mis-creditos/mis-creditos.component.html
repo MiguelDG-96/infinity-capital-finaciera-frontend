@@ -65,18 +65,30 @@
               <div class="h-6 mb-4"></div>
             }
 
-            <div class="card-actions grid grid-cols-2 gap-2 mt-2">
-              <button (click)="descargarContrato(credito, $event)" 
-                      class="btn btn-sm btn-outline btn-primary">
-                PDF Contrato
-              </button>
-              <a [routerLink]="['/dashboard/creditos/mis-creditos', credito.id]" 
-                 class="btn btn-sm btn-ghost justify-between hover:bg-primary hover:text-white transition-all text-xs">
-                Ver Cronograma
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+            <div class="card-actions flex flex-col w-full gap-2 mt-2">
+              <div class="grid grid-cols-2 gap-2 w-full">
+                <button (click)="descargarContrato(credito, $event)" 
+                        class="btn btn-sm btn-outline btn-primary">
+                  PDF Contrato
+                </button>
+                <a [routerLink]="['/dashboard/creditos/mis-creditos', credito.id]" 
+                   class="btn btn-sm btn-ghost justify-between hover:bg-primary hover:text-white transition-all text-xs">
+                  Ver Cronograma
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+              @if (credito.estado === 'PAGADO') {
+                <button (click)="descargarCartaNoAdeudo(credito, $event)" 
+                        class="btn btn-sm btn-success text-white w-full shadow-sm"
+                        [disabled]="isDownloadingCarta()">
+                  Carta de No Adeudo
+                  @if (isDownloadingCarta()) {
+                    <span class="loading loading-spinner loading-xs ml-1"></span>
+                  }
+                </button>
+              }
             </div>
           </div>
         </div>

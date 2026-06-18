@@ -1,11 +1,13 @@
 // src/app/features/dashboard/pages/mis-creditos/mis-creditos.component.ts
 
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito } from '../../../../core/models/credito.model';
 import { ContratoPdfService } from '../../../../core/services/contrato-pdf.service';
+import { CartaNoAdeudoPdfService } from '../../../../core/services/carta-no-adeudo-pdf.service';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-mis-creditos',
@@ -18,6 +20,10 @@ export class MisCreditosComponent implements OnInit {
   creditos: Credito[] = [];
   cargando = true;
   error = '';
+  isDownloadingCarta = signal<boolean>(false);
+
+  private toastService = inject(ToastService);
+  private cartaNoAdeudoPdfService = inject(CartaNoAdeudoPdfService);
 
   constructor(
     private creditoService: CreditoService,
@@ -75,5 +81,27 @@ export class MisCreditosComponent implements OnInit {
       console.error('Error al generar PDF:', err);
       alert('Error al generar el contrato PDF.');
     });
+  }
+
+  async descargarCartaNoAdeudo(credito: Credito, event: Event) {
+    event.stopPropagation();
+    try {
+      this.isDownloadingCarta.set(true);
+      const blob = await this.cartaNoAdeudoPdfService.generarCarta(credito);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Carta_No_Adeudo_${credito.cliente?.numeroDocumento || 'Cliente'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      this.toastService.show('Carta de No Adeudo descargada correctamente', 'success');
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      this.toastService.show('Error al generar la Carta de No Adeudo', 'error');
+    } finally {
+      this.isDownloadingCarta.set(false);
+    }
   }
 }

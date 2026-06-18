@@ -9,6 +9,9 @@ import { CreditoService } from '../../../../core/services/credito.service';
 import { Credito, Cuota } from '../../../../core/models/credito.model';
 import { ContratoPdfService } from '../../../../core/services/contrato-pdf.service';
 import { EstadoCuentaPdfService } from '../../../../core/services/estado-cuenta-pdf.service';
+import { CartaNoAdeudoPdfService } from '../../../../core/services/carta-no-adeudo-pdf.service';
+import { CartaCobranzaPdfService } from '../../../../core/services/carta-cobranza-pdf.service';
+import { ToastService } from '../../../../core/services/toast.service';
 import { PagoAnticipadoModalComponent } from '../../components/pago-anticipado-modal/pago-anticipado-modal.component';
 import { GaranteModalComponent } from '../../components/garante-modal/garante-modal.component';
 import { EditCuotaModalComponent } from '../../components/edit-cuota-modal/edit-cuota-modal.component';
@@ -33,6 +36,9 @@ export class CreditoDetalleComponent implements OnInit {
   private creditoService = inject(CreditoService);
   private pdfService = inject(ContratoPdfService);
   private estadoCuentaPdfService = inject(EstadoCuentaPdfService);
+  private cartaNoAdeudoPdfService = inject(CartaNoAdeudoPdfService);
+  private cartaCobranzaPdfService = inject(CartaCobranzaPdfService);
+  private toastService = inject(ToastService);
 
   readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
@@ -44,6 +50,7 @@ export class CreditoDetalleComponent implements OnInit {
   procesando = signal<boolean>(false);
   descargando = signal<boolean>(false);
   descargandoEstadoCuenta = signal<boolean>(false);
+  isDownloading = signal<boolean>(false);
   mostrarModalPago = signal<boolean>(false);
   mostrarModalGarante = signal<boolean>(false);
   mostrarModalEditarCuota = signal<boolean>(false);
@@ -55,11 +62,15 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalPagoGlobal = signal<boolean>(false);
   mostrarModalConfirmarCuotasHastaHoy = signal<boolean>(false);
   mostrarModalConfirmarCuotaVencida = signal<boolean>(false);
+  mostrarModalCartaCobranza = signal<boolean>(false);
   cuotaSeleccionada = signal<Cuota | null>(null);
   pagosRestringidos = signal<boolean>(false);
   mostrarModalRestriccion = signal<boolean>(false);
   isClienteRecurrente = signal<boolean>(false);
   mostrarInfoCredito = signal<boolean>(false);
+
+  nivelCobranzaSelect = signal<number>(1);
+  destinatarioCobranzaSelect = signal<'TITULAR' | 'GARANTE'>('TITULAR');
 
   // --- Subir Comprobante (Cliente) ---
   mostrarModalSubirComprobante = signal<boolean>(false);
@@ -397,6 +408,67 @@ export class CreditoDetalleComponent implements OnInit {
     });
   }
 
+  async descargarCartaNoAdeudo() {
+    const data = this.credito();
+    if (!data) return;
+
+    try {
+      this.isDownloading.set(true);
+      const blob = await this.cartaNoAdeudoPdfService.generarCarta(data);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Carta_No_Adeudo_${data.cliente?.numeroDocumento || 'Cliente'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      this.toastService.show('Carta de No Adeudo descargada correctamente', 'success');
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      this.toastService.show('Error al generar la Carta de No Adeudo', 'error');
+    } finally {
+      this.isDownloading.set(false);
+    }
+  }
+
+  abrirModalCartaCobranza() {
+    this.nivelCobranzaSelect.set(1);
+    this.destinatarioCobranzaSelect.set('TITULAR');
+    this.mostrarModalCartaCobranza.set(true);
+  }
+
+  async descargarCartaCobranza() {
+    const c = this.credito();
+    if (!c || this.isDownloading()) return;
+
+    try {
+      this.isDownloading.set(true);
+      const blob = await this.cartaCobranzaPdfService.generarCarta(
+        c, 
+        c.cuotas, 
+        this.nivelCobranzaSelect(), 
+        this.destinatarioCobranzaSelect() === 'GARANTE'
+      );
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const destinatario = this.destinatarioCobranzaSelect() === 'GARANTE' ? 'Garante' : 'Titular';
+      a.download = `Carta_Cobranza_Nivel${this.nivelCobranzaSelect()}_${destinatario}_${c.documento}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      this.mostrarModalCartaCobranza.set(false);
+      this.toastService.show('Carta de cobranza descargada correctamente', 'success');
+    } catch (error) {
+      console.error('Error al generar PDF de cobranza:', error);
+      this.toastService.show('Error al generar la Carta de Cobranza', 'error');
+    } finally {
+      this.isDownloading.set(false);
+    }
+  }
+
   postergarCuota(cuota: Cuota) {
     if (!this.isAdminMode() || this.procesando()) return;
     this.cuotaSeleccionada.set(cuota);
@@ -491,13 +563,13 @@ export class CreditoDetalleComponent implements OnInit {
       next: (resp) => {
         this.procesando.set(false);
         this.mostrarModalConfirmarCuotasHastaHoy.set(false);
-        alert(`${resp.mensaje} (Se generaron ${resp.cantidadGenerada} cuotas)`);
+        this.toastService.show(`${resp.mensaje} (Se generaron ${resp.cantidadGenerada} cuotas)`, 'success');
         this.cargarDetalle(this.credito()!.id);
       },
       error: (err) => {
         this.procesando.set(false);
         this.mostrarModalConfirmarCuotasHastaHoy.set(false);
-        alert(err.error?.error || 'Error al generar las cuotas');
+        this.toastService.show(err.error?.error || 'Error al generar las cuotas', 'error');
       }
     });
   }

@@ -46,6 +46,7 @@ export const routes: Routes = [
       { path: 'admin/seguridad', loadComponent: () => import('./features/dashboard/pages/admin-seguridad/admin-seguridad.component').then(m => m.AdminSeguridadComponent) },
       { path: 'admin/personal', loadComponent: () => import('./features/dashboard/pages/admin-personal/admin-personal.component').then(m => m.AdminPersonalComponent) },
       { path: 'admin/tesoreria', loadComponent: () => import('./features/dashboard/pages/admin-tesoreria/admin-tesoreria.component').then(m => m.AdminTesoreriaComponent) },
+      { path: 'admin/ayuda', loadComponent: () => import('./features/dashboard/pages/admin-ayuda/admin-ayuda').then(m => m.AdminAyuda) },
       // Reportes
       { path: 'reportes', loadComponent: () => import('./features/dashboard/pages/reportes/reportes').then(m => m.Reportes) },
       // Perfil de usuario
