@@ -700,3 +700,4 @@ export class CreditoDetalleComponent implements OnInit {
     }
   }
 }
+// trigger recompile
