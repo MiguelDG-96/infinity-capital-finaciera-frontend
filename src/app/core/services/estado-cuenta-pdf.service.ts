@@ -101,6 +101,15 @@ export class EstadoCuentaPdfService {
     const fechaGeneracion = this.datePipe.transform(new Date(), 'dd/MM/yyyy HH:mm') || '';
     const periodoLabel = this.datePipe.transform(new Date(), 'MMMM yyyy') || '';
 
+    let deudaTotalPendiente = 0;
+    for (const c of cuotas) {
+      if (c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'MORA' || c.estadoCuota === 'POSTERGADA' || c.estadoCuota === 'REVISION') {
+        deudaTotalPendiente += (c.totalCuota || 0);
+      } else if (c.estadoCuota === 'PAGADO_PARCIAL') {
+        deudaTotalPendiente += Math.max(0, (c.totalCuota || 0) - (c.montoPagadoCliente || 0));
+      }
+    }
+
     // ── HEADER ───────────────────────────────────────────────────────────────
     // Franja roja superior
     doc.setFillColor(...RED);
@@ -331,9 +340,12 @@ export class EstadoCuentaPdfService {
       // Interés
       cellText(this.fmtMoney(cuota.interes, ''), cols[3], rowH);
       // Mora
-      if (mora > 0) {
+      const baseCuota = (cuota.capital || 0) + (cuota.interes || 0) + (cuota.seguro || 0) + (cuota.comision || 0);
+      const moraVisual = (cuota.interesMora && cuota.interesMora > 0) ? cuota.interesMora : Math.max(0, (cuota.totalCuota || 0) - baseCuota - (cuota.penalidad || 0));
+      
+      if (moraVisual > 0.01) {
         doc.setTextColor(...DRED);
-        cellText(this.fmtMoney(mora, ''), cols[4], rowH);
+        cellText(this.fmtMoney(moraVisual, ''), cols[4], rowH);
         doc.setTextColor(...DARK);
       } else {
         doc.text('—', cols[4].x + cols[4].w / 2, rowH, { align: 'center' });
@@ -378,6 +390,19 @@ export class EstadoCuentaPdfService {
     doc.setTextColor(...RED);
     cellText(this.fmtMoney(totalGeneral, simbolo), cols[5], y + 1);
     y += 8;
+
+    // DEUDA TOTAL PENDIENTE
+    doc.setFillColor(254, 242, 242);
+    doc.rect(margin, y, W - margin * 2, 9, 'F');
+    doc.setDrawColor(...RED);
+    doc.rect(margin, y, W - margin * 2, 9, 'S');
+    doc.setTextColor(...RED);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`DEUDA TOTAL PENDIENTE AL DÍA DE HOY (Incl. moras, saldo de cuotas parciales y cuotas pendientes):`, margin + 3, y + 6);
+    doc.setFontSize(9);
+    doc.text(this.fmtMoney(deudaTotalPendiente, simbolo), W - margin - 3, y + 6, { align: 'right' });
+    y += 12;
 
     // ── FOOTER en todas las páginas ──────────────────────────────────────────
     const totalPages = (doc as any).internal.getNumberOfPages();

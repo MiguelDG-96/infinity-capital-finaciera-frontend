@@ -173,8 +173,7 @@ export class CreditoDetalleComponent implements OnInit {
 
   abrirSubirComprobante(cuota: Cuota) {
     this.cuotaSeleccionada.set(cuota);
-    const totalConMora = (cuota.totalCuota || 0) + (cuota.interesMora || 0) + (cuota.penalidad || 0);
-    const montoPendiente = Math.max(0, totalConMora - (cuota.montoPagadoCliente || 0));
+    const montoPendiente = Math.max(0, (cuota.totalCuota || 0) - (cuota.montoPagadoCliente || 0));
     this.comprobanteForm = {
       monto: Number(montoPendiente.toFixed(2)),
       metodoPago: 'YAPE',
@@ -679,6 +678,13 @@ export class CreditoDetalleComponent implements OnInit {
       case 'REVISION': return 'badge-info text-info-content';
       default: return 'badge-ghost opacity-60';
     }
+  }
+
+  getMoraVisual(cuota: Cuota): number {
+    if (cuota.interesMora && cuota.interesMora > 0) return cuota.interesMora;
+    const base = (cuota.capital || 0) + (cuota.interes || 0) + (cuota.seguro || 0) + (cuota.comision || 0);
+    const dif = (cuota.totalCuota || 0) - base - (cuota.penalidad || 0);
+    return dif > 0.01 ? dif : 0;
   }
 
   getProximoVencimiento(): Date | null {
