@@ -23,7 +23,7 @@ export class CartaCobranzaPdfService {
     });
   }
 
-  private async getSelloDataUrl(): Promise<{url: string, ratio: number} | null> {
+  private async getSelloFirmadoDataUrl(): Promise<{url: string, ratio: number} | null> {
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
@@ -38,26 +38,7 @@ export class CartaCobranzaPdfService {
         else resolve(null);
       };
       img.onerror = () => resolve(null);
-      img.src = '/sello/sello.png';
-    });
-  }
-
-  private async getFirmaGerenteDataUrl(): Promise<{url: string, ratio: number} | null> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width || 200; canvas.height = img.height || 100;
-        const ctx = canvas.getContext('2d');
-        if (ctx) { 
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height); 
-          resolve({ url: canvas.toDataURL('image/png'), ratio: canvas.width / canvas.height }); 
-        }
-        else resolve(null);
-      };
-      img.onerror = () => resolve(null);
-      img.src = '/sello/firma-gerente.png';
+      img.src = '/sello/sello-firmado.png';
     });
   }
 
@@ -219,21 +200,62 @@ export class CartaCobranzaPdfService {
 
     // Detalle de la Deuda
     doc.setFont('helvetica', 'bold');
-    doc.text('Detalle de la Deuda Actual:', contentMargin + 10, y);
-    y += 8;
+    doc.text('Detalle de la Deuda Actual:', contentMargin, y);
+    y += 6;
 
-    doc.setFont('helvetica', 'normal');
-    doc.text(`• Días de atraso:`, contentMargin + 15, y);
-    doc.text(`${diasAtraso} días`, contentMargin + 60, y);
-    y += 6;
-    doc.text(`• Cuotas vencidas:`, contentMargin + 15, y);
-    doc.text(`${cuotasVencidas.length} cuotas`, contentMargin + 60, y);
-    y += 6;
-    doc.text(`• Importe adeudado:`, contentMargin + 15, y);
+    const tableX = contentMargin;
+    const tableWidth = W - (contentMargin * 2); // Ancho completo disponible
+    const colWidth = tableWidth / 3;
+    const rowHeight = 10;
+    
+    const HEADER_BG_TABLE: [number, number, number] = [185, 28, 28]; // Rojo
+    
+    doc.setDrawColor(HEADER_BG_TABLE[0], HEADER_BG_TABLE[1], HEADER_BG_TABLE[2]);
+    doc.setLineWidth(0.3);
+
+    // --- Fila 1: Cabeceras (Fondo Rojo, Texto Blanco) ---
+    doc.setFillColor(...HEADER_BG_TABLE);
+    // Dibujar 3 rectángulos para las cabeceras
+    for(let i=0; i<3; i++) {
+        doc.rect(tableX + (i * colWidth), y, colWidth, rowHeight, 'FD'); // Fill and stroke
+    }
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${moneda} ${totalAdeudado.toLocaleString('es-PE', {minimumFractionDigits: 2})}`, contentMargin + 60, y);
+    
+    const centerText = (text: string, xBase: number, w: number, yPos: number) => {
+        const textWidth = doc.getTextWidth(text);
+        doc.text(text, xBase + (w / 2) - (textWidth / 2), yPos);
+    };
+
+    centerText('DÍAS DE ATRASO', tableX, colWidth, y + 6.5);
+    centerText('CUOTAS VENCIDAS', tableX + colWidth, colWidth, y + 6.5);
+    centerText('IMPORTE ADEUDADO', tableX + (colWidth * 2), colWidth, y + 6.5);
+    
+    y += rowHeight;
+
+    // --- Fila 2: Valores (Fondo Blanco, Texto Negro/Rojo) ---
+    doc.setTextColor(0, 0, 0); // Texto negro para valores
+    // Dibujar 3 rectángulos para los valores
+    for(let i=0; i<3; i++) {
+        doc.rect(tableX + (i * colWidth), y, colWidth, rowHeight, 'S'); // Only stroke
+    }
+
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    y += 15;
+    
+    centerText(`${diasAtraso} días`, tableX, colWidth, y + 6.5);
+    centerText(`${cuotasVencidas.length} cuotas`, tableX + colWidth, colWidth, y + 6.5);
+    
+    doc.setFont('helvetica', 'bold');
+    // doc.setTextColor(...HEADER_BG_TABLE); // Opcional: poner el monto en rojo
+    centerText(`${moneda} ${totalAdeudado.toLocaleString('es-PE', {minimumFractionDigits: 2})}`, tableX + (colWidth * 2), colWidth, y + 6.5);
+
+    // Restaurar color de texto a oscuro para el resto del documento
+    doc.setTextColor(15, 23, 42); 
+    
+    y += rowHeight + 10;
 
     // Cierre
     let cierre = '';
@@ -255,20 +277,12 @@ export class CartaCobranzaPdfService {
     // ── FIRMAS Y SELLOS (CENTRADOS) ──────────────────────────────────────────
     const xCenter = W / 2;
     
-    // Sello
-    const selloInfo = await this.getSelloDataUrl();
-    if (selloInfo) {
-      const targetWidth = 55;
-      const targetHeight = targetWidth / selloInfo.ratio;
-      doc.addImage(selloInfo.url, 'PNG', xCenter - targetWidth / 2, y - targetHeight + 10, targetWidth, targetHeight);
-    }
-
-    // Firma
-    const firmaGerenteInfo = await this.getFirmaGerenteDataUrl();
-    if (firmaGerenteInfo) {
-      const targetWidth = 35;
-      const targetHeight = targetWidth / firmaGerenteInfo.ratio;
-      doc.addImage(firmaGerenteInfo.url, 'PNG', xCenter - targetWidth / 2, y - targetHeight, targetWidth, targetHeight);
+    // Sello y Firma
+    const selloFirmadoInfo = await this.getSelloFirmadoDataUrl();
+    if (selloFirmadoInfo) {
+      const targetWidth = 60;
+      const targetHeight = targetWidth / selloFirmadoInfo.ratio;
+      doc.addImage(selloFirmadoInfo.url, 'PNG', xCenter - targetWidth / 2, y - targetHeight, targetWidth, targetHeight);
     }
 
     y += 15;
@@ -283,7 +297,7 @@ export class CartaCobranzaPdfService {
     // doc.setTextColor(...HEADER_BG);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
-    doc.text('Celular: 933 695 647', xCenter, y, { align: 'center' }); // Celular genérico, ajustar al de la empresa
+    doc.text('Celular: 954 862 745', xCenter, y, { align: 'center' }); // Celular genérico, ajustar al de la empresa
     doc.setFontSize(8);
     doc.text('INFINYCAPITAL - SERVICIOS FINANCIEROS', xCenter, y + 5, { align: 'center' });
 

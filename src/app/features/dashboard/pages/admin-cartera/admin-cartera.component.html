@@ -19,7 +19,7 @@
     </div>
 
     <!-- Metricas -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" *ngIf="!cargando && !error">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" *ngIf="!cargando && !error">
         <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
             <div class="stat">
                 <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest">Cartera Total</div>
@@ -32,6 +32,13 @@
                 <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest">Créditos Activos</div>
                 <div class="stat-value text-secondary text-2xl">{{ totalActivos }}</div>
                 <div class="stat-desc mt-1 font-medium">Contratos vigentes hoy</div>
+            </div>
+        </div>
+        <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
+            <div class="stat">
+                <div class="stat-title text-[10px] font-bold uppercase opacity-50 tracking-widest text-success">Total Recaudado</div>
+                <div class="stat-value text-success text-2xl">{{ totalPagadoCartera | currency:'S/ ' }}</div>
+                <div class="stat-desc mt-1 font-medium">Suma de pagos realizados</div>
             </div>
         </div>
         <div class="stats shadow bg-base-100 border border-base-content/5 overflow-hidden">
@@ -122,15 +129,15 @@
                     <button
                         (click)="toggleFiltro($event)"
                         class="relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border bg-base-100 hover:bg-base-200 transition-all duration-200 shadow-sm select-none w-full sm:w-auto justify-center"
-                        [class.border-primary]="tiposSeleccionados.size > 0"
-                        [class.text-primary]="tiposSeleccionados.size > 0"
-                        [class.border-base-content]="tiposSeleccionados.size === 0"
-                        [ngClass]="tiposSeleccionados.size === 0 ? 'border-base-content/15 text-base-content/70' : ''">
+                        [class.border-primary]="tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0"
+                        [class.text-primary]="tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0"
+                        [class.border-base-content]="tiposSeleccionados.size === 0 && estadosSeleccionados.size === 0"
+                        [ngClass]="tiposSeleccionados.size === 0 && estadosSeleccionados.size === 0 ? 'border-base-content/15 text-base-content/70' : ''">
                         <lucide-icon name="filter" class="w-4 h-4 shrink-0"></lucide-icon>
                         Filtros
-                        @if (tiposSeleccionados.size > 0) {
+                        @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0) {
                             <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-content text-[10px] font-black leading-none">
-                                {{ tiposSeleccionados.size }}
+                                {{ tiposSeleccionados.size + estadosSeleccionados.size }}
                             </span>
                         }
                     </button>
@@ -140,18 +147,18 @@
                         <div class="absolute right-0 top-full mt-2 z-50 w-72 rounded-2xl border border-base-content/10 bg-base-100 shadow-2xl shadow-black/15 overflow-hidden"
                              style="animation: fadeInDown 0.15s ease-out both;">
                             
-                            <!-- Header -->
+                            <!-- Header Tipo -->
                             <div class="flex items-center justify-between px-4 py-3 border-b border-base-content/8 bg-base-200/60">
                                 <span class="text-[11px] font-black uppercase tracking-widest text-base-content/50">Tipo de Tasa</span>
-                                @if (tiposSeleccionados.size > 0) {
+                                @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0) {
                                     <button (click)="limpiarFiltros()" class="text-xs font-bold text-error hover:underline transition-colors">
                                         Limpiar todo
                                     </button>
                                 }
                             </div>
 
-                            <!-- Options list -->
-                            <ul class="py-1.5 max-h-64 overflow-y-auto">
+                            <!-- Options list Tipo -->
+                            <ul class="py-1.5 max-h-48 overflow-y-auto">
                                 @if (tiposFiltro.length === 0) {
                                     <li class="px-4 py-3 text-xs text-base-content/40 italic">Sin tipos disponibles</li>
                                 }
@@ -164,6 +171,30 @@
                                                 [checked]="tiposSeleccionados.has(tipo)"
                                                 (change)="toggleTipo(tipo)" />
                                             <span class="text-sm font-medium text-base-content group-hover:text-primary transition-colors duration-100">{{ tipo }}</span>
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+
+                            <!-- Header Estado -->
+                            <div class="flex items-center justify-between px-4 py-3 border-y border-base-content/8 bg-base-200/60">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-base-content/50">Estado</span>
+                            </div>
+
+                            <!-- Options list Estado -->
+                            <ul class="py-1.5 max-h-48 overflow-y-auto">
+                                @if (estadosFiltro.length === 0) {
+                                    <li class="px-4 py-3 text-xs text-base-content/40 italic">Sin estados disponibles</li>
+                                }
+                                @for (estado of estadosFiltro; track estado) {
+                                    <li>
+                                        <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-base-200/70 transition-colors duration-100 group">
+                                            <input
+                                                type="checkbox"
+                                                class="checkbox checkbox-primary checkbox-sm rounded-md shrink-0"
+                                                [checked]="estadosSeleccionados.has(estado)"
+                                                (change)="toggleEstado(estado)" />
+                                            <span class="text-sm font-medium text-base-content group-hover:text-primary transition-colors duration-100">{{ estado | titlecase }}</span>
                                         </label>
                                     </li>
                                 }
@@ -218,7 +249,7 @@
                             <th class="py-4 pl-6">Cliente / Documento</th>
                             <th class="text-center">Tipo de tasa</th>
                             <th class="text-center">Monto Aprobado</th>
-                            <th class="text-center">Saldo Actual</th>
+                            <th class="text-center">Monto a pagar</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center">Acciones</th>
                         </tr>
@@ -244,8 +275,8 @@
                                     </div>
                                 </td>
                                 <td class="text-center font-bold text-xs">{{ (c.montoAprobado || c.montoCredito) | currency:'S/ ' }}</td>
-                                <td class="text-center font-black text-xs" [class.text-primary]="c.debeActualidad > 0" [class.opacity-20]="c.debeActualidad === 0">
-                                    {{ c.debeActualidad | currency:'S/ ' }}
+                                <td class="text-center font-black text-xs text-primary">
+                                    {{ (c.montoTotal || 0) | currency:'S/ ' }}
                                 </td>
                                 <td class="text-center">
                                     <div class="badge badge-sm font-black whitespace-nowrap px-3 py-2 border-none" [ngClass]="getEstadoClase(c.estado)">

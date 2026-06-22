@@ -71,6 +71,8 @@ export class CreditoDetalleComponent implements OnInit {
 
   nivelCobranzaSelect = signal<number>(1);
   destinatarioCobranzaSelect = signal<'TITULAR' | 'GARANTE'>('TITULAR');
+  emailCobranzaInput = signal<string>('');
+  enviandoCorreoCobranza = signal<boolean>(false);
 
   // --- Subir Comprobante (Cliente) ---
   mostrarModalSubirComprobante = signal<boolean>(false);
@@ -172,8 +174,9 @@ export class CreditoDetalleComponent implements OnInit {
   abrirSubirComprobante(cuota: Cuota) {
     this.cuotaSeleccionada.set(cuota);
     const totalConMora = (cuota.totalCuota || 0) + (cuota.interesMora || 0) + (cuota.penalidad || 0);
+    const montoPendiente = Math.max(0, totalConMora - (cuota.montoPagadoCliente || 0));
     this.comprobanteForm = {
-      monto: totalConMora,
+      monto: Number(montoPendiente.toFixed(2)),
       metodoPago: 'YAPE',
       numeroComprobante: ''
     };
@@ -435,7 +438,86 @@ export class CreditoDetalleComponent implements OnInit {
   abrirModalCartaCobranza() {
     this.nivelCobranzaSelect.set(1);
     this.destinatarioCobranzaSelect.set('TITULAR');
+    this.prellenarEmailCobranza();
     this.mostrarModalCartaCobranza.set(true);
+  }
+
+  cambioDestinatarioCobranza(dest: 'TITULAR' | 'GARANTE') {
+    this.destinatarioCobranzaSelect.set(dest);
+    this.prellenarEmailCobranza();
+  }
+
+  prellenarEmailCobranza() {
+    const c = this.credito();
+    if (!c) return;
+    if (this.destinatarioCobranzaSelect() === 'TITULAR') {
+      this.emailCobranzaInput.set(c.cliente?.usuario?.email || '');
+    } else {
+      this.emailCobranzaInput.set(''); // Los garantes actualmente no tienen email por defecto en su modelo
+    }
+  }
+
+  async generarBlobCartaCobranza(): Promise<Blob | null> {
+    const c = this.credito();
+    if (!c) return null;
+    try {
+      return await this.cartaCobranzaPdfService.generarCarta(
+        c,
+        c.cuotas,
+        this.nivelCobranzaSelect(),
+        this.destinatarioCobranzaSelect() === 'GARANTE'
+      );
+    } catch (error) {
+      console.error('Error al generar Blob de cobranza:', error);
+      return null;
+    }
+  }
+
+  async enviarCartaCobranzaCorreo() {
+    const c = this.credito();
+    if (!c || this.enviandoCorreoCobranza()) return;
+
+    const email = this.emailCobranzaInput().trim();
+    if (!email) {
+      this.toastService.show('Por favor, ingresa un correo electrónico válido.', 'error');
+      return;
+    }
+
+    this.enviandoCorreoCobranza.set(true);
+    const blob = await this.generarBlobCartaCobranza();
+    
+    if (!blob) {
+      this.enviandoCorreoCobranza.set(false);
+      this.toastService.show('Error al generar la Carta de Cobranza para enviar', 'error');
+      return;
+    }
+
+    let nombreDestinatario = 'Cliente';
+    if (this.destinatarioCobranzaSelect() === 'TITULAR') {
+       nombreDestinatario = c.cliente?.usuario?.nombreCompleto || c.nombreCliente || 'Titular';
+    } else {
+       const garanteActivo = c.garantes?.find(g => true); // In this context garantes just exist.
+       nombreDestinatario = garanteActivo?.nombreCompleto || 'Garante';
+    }
+
+    this.creditoService.enviarCartaCobranza(
+      c.id,
+      blob,
+      email,
+      nombreDestinatario,
+      this.nivelCobranzaSelect()
+    ).subscribe({
+      next: (resp) => {
+        this.enviandoCorreoCobranza.set(false);
+        this.mostrarModalCartaCobranza.set(false);
+        this.toastService.show(resp.mensaje || 'Carta enviada exitosamente por correo.', 'success');
+      },
+      error: (err) => {
+        this.enviandoCorreoCobranza.set(false);
+        console.error('Error enviando carta de cobranza:', err);
+        this.toastService.show(err.error?.error || 'Error al enviar la carta de cobranza por correo', 'error');
+      }
+    });
   }
 
   async descargarCartaCobranza() {

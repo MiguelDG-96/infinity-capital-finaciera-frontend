@@ -32,6 +32,8 @@ export class AdminCarteraComponent implements OnInit {
   filtroAbierto = false;
   tiposFiltro: string[] = [];
   tiposSeleccionados: Set<string> = new Set();
+  estadosFiltro: string[] = [];
+  estadosSeleccionados: Set<string> = new Set();
 
   paginaActual = 1;
   registrosPorPagina = 10;
@@ -57,6 +59,11 @@ export class AdminCarteraComponent implements OnInit {
     // Filtro por tipo de tasa
     if (this.tiposSeleccionados.size > 0) {
       list = list.filter(c => this.tiposSeleccionados.has(c.tipoCredito || ''));
+    }
+
+    // Filtro por estado
+    if (this.estadosSeleccionados.size > 0) {
+      list = list.filter(c => this.estadosSeleccionados.has(c.estado || ''));
     }
 
     // Ordenar por fecha de solicitud (todos los créditos siempre la tienen)
@@ -102,9 +109,23 @@ export class AdminCarteraComponent implements OnInit {
     this.paginaActual = 1;
   }
 
+  toggleEstado(estado: string): void {
+    const next = new Set(this.estadosSeleccionados);
+    if (next.has(estado)) {
+      next.delete(estado);
+    } else {
+      next.add(estado);
+    }
+    this.estadosSeleccionados = next;
+    sessionStorage.setItem('carteraEstadosFiltro', JSON.stringify(Array.from(this.estadosSeleccionados)));
+    this.paginaActual = 1;
+  }
+
   limpiarFiltros(): void {
     this.tiposSeleccionados = new Set();
+    this.estadosSeleccionados = new Set();
     sessionStorage.removeItem('carteraTiposFiltro');
+    sessionStorage.removeItem('carteraEstadosFiltro');
     this.paginaActual = 1;
     this.filtroAbierto = false;
   }
@@ -118,6 +139,7 @@ export class AdminCarteraComponent implements OnInit {
   totalCartera = 0;
   totalActivos = 0;
   totalAtrasados = 0;
+  totalPagadoCartera = 0;
 
   // Reporte de Caja
   reporteCaja: any = null;
@@ -155,6 +177,12 @@ export class AdminCarteraComponent implements OnInit {
         this.tiposSeleccionados = new Set(JSON.parse(savedTipos));
       } catch (e) {}
     }
+    const savedEstados = sessionStorage.getItem('carteraEstadosFiltro');
+    if (savedEstados) {
+      try {
+        this.estadosSeleccionados = new Set(JSON.parse(savedEstados));
+      } catch (e) {}
+    }
     this.cargarCartera();
   }
 
@@ -174,7 +202,9 @@ export class AdminCarteraComponent implements OnInit {
     this.searchTerm = '';
     sessionStorage.removeItem('carteraSearchTerm');
     this.tiposSeleccionados = new Set();
+    this.estadosSeleccionados = new Set();
     sessionStorage.removeItem('carteraTiposFiltro');
+    sessionStorage.removeItem('carteraEstadosFiltro');
     this.paginaActual = 1;
   }
 
@@ -187,6 +217,7 @@ export class AdminCarteraComponent implements OnInit {
         this.calcularMetricas(data);
         this.cargarReporteCaja();
         this.tiposFiltro = [...new Set(data.map(c => c.tipoCredito || '').filter(t => t))].sort();
+        this.estadosFiltro = [...new Set(data.map(c => c.estado || '').filter(e => e))].sort();
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -203,6 +234,19 @@ export class AdminCarteraComponent implements OnInit {
     this.totalCartera = data.reduce((sum, c) => sum + (c.montoAprobado || c.montoCredito), 0);
     this.totalActivos = data.filter(c => c.estado === 'ACTIVO').length;
     this.totalAtrasados = data.filter(c => c.estado === 'ATRASADO' || c.estado === 'MORA').reduce((sum, c) => sum + c.debeActualidad, 0);
+    this.totalPagadoCartera = data.reduce((sum, c) => sum + this.getMontoPagado(c), 0);
+  }
+
+  getMontoPagado(c: Credito): number {
+    if (c.cuotas && c.cuotas.length > 0) {
+      return c.cuotas.reduce((sum, cuota) => {
+        if (cuota.estadoCuota === 'PAGADO') return sum + cuota.totalCuota;
+        if (cuota.estadoCuota === 'PAGADO_PARCIAL' && cuota.montoPagadoCliente) return sum + cuota.montoPagadoCliente;
+        return sum;
+      }, 0);
+    }
+    // Fallback if cuotas are not available
+    return Math.max(0, (c.montoTotal || c.montoCredito || 0) - (c.debeActualidad || 0));
   }
 
   cargarReporteCaja(): void {

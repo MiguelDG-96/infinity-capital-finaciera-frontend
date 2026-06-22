@@ -238,7 +238,7 @@
                                 <th class="text-center">Vencimiento</th>
                                 <th class="text-center">Capital</th>
                                 <th class="text-center">Interés</th>
-                                <th class="text-center">Mora / Pen.</th>
+                                <th class="text-center">Mora</th>
                                 <th class="text-center">Cuota Total</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acción</th>
@@ -288,7 +288,14 @@
                                         }
                                     </div>
                                 </td>
-                                <td class="font-black text-sm text-base-content text-center">{{ cuota.totalCuota | currency:'S/ ' }}
+                                <td class="text-center">
+                                    <div class="font-black text-sm text-base-content">{{ cuota.totalCuota | currency:'S/ ' }}</div>
+                                    @if (cuota.montoPagadoCliente) {
+                                        <div class="text-[9px] text-success font-bold mt-0.5">Abono: {{ cuota.montoPagadoCliente | currency:'S/ ' }}</div>
+                                        @if (cuota.estadoCuota === 'PAGADO_PARCIAL' || cuota.totalCuota > cuota.montoPagadoCliente) {
+                                            <div class="text-[9px] text-error font-bold leading-tight">Resta: {{ (cuota.totalCuota - cuota.montoPagadoCliente) | currency:'S/ ' }}</div>
+                                        }
+                                    }
                                 </td>
                                 <td class="text-center">
                                     <div class="badge badge-sm font-bold text-[9px] tracking-wider px-2 py-3"
@@ -587,10 +594,16 @@
       </div>
       <div class="form-control" *ngIf="credito()?.garantes?.length">
         <label class="label"><span class="label-text font-bold">Destinatario</span></label>
-        <select class="select select-bordered" (change)="destinatarioCobranzaSelect.set($any($event.target).value)">
+        <select class="select select-bordered" (change)="cambioDestinatarioCobranza($any($event.target).value)">
           <option value="TITULAR" [selected]="destinatarioCobranzaSelect() === 'TITULAR'">Titular ({{ credito()?.nombreCliente }})</option>
           <option value="GARANTE" [selected]="destinatarioCobranzaSelect() === 'GARANTE'">Garante ({{ credito()?.garantes![0].nombreCompleto }})</option>
         </select>
+      </div>
+
+      <div class="form-control">
+        <label class="label"><span class="label-text font-bold">Correo Electrónico (Opcional)</span></label>
+        <input type="email" placeholder="ejemplo@correo.com" class="input input-bordered w-full"
+          [ngModel]="emailCobranzaInput()" (ngModelChange)="emailCobranzaInput.set($event)" />
       </div>
       
       <div class="alert bg-base-200 border-base-content/10 shadow-sm mt-4 text-xs">
@@ -598,13 +611,20 @@
         <span>El PDF incluirá los montos actuales de deuda vencida y moras automáticas hasta el día de hoy.</span>
       </div>
     </div>
-    <div class="modal-action">
-      <button class="btn btn-ghost" (click)="mostrarModalCartaCobranza.set(false)">Cancelar</button>
-      <button class="btn btn-primary" (click)="descargarCartaCobranza()" [disabled]="isDownloading()">
-        @if (isDownloading()) { <span class="loading loading-spinner loading-xs"></span> }
-        <lucide-icon *ngIf="!isDownloading()" name="download" class="w-4 h-4 mr-1"></lucide-icon>
-        Generar PDF
-      </button>
+    <div class="modal-action flex justify-between">
+      <button class="btn btn-ghost" (click)="mostrarModalCartaCobranza.set(false)" [disabled]="isDownloading() || enviandoCorreoCobranza()">Cancelar</button>
+      <div class="flex gap-2">
+        <button class="btn btn-outline btn-primary" (click)="descargarCartaCobranza()" [disabled]="isDownloading() || enviandoCorreoCobranza()">
+          @if (isDownloading()) { <span class="loading loading-spinner loading-xs"></span> }
+          <lucide-icon *ngIf="!isDownloading()" name="download" class="w-4 h-4 mr-1"></lucide-icon>
+          Descargar PDF
+        </button>
+        <button class="btn btn-primary" (click)="enviarCartaCobranzaCorreo()" [disabled]="isDownloading() || enviandoCorreoCobranza() || !emailCobranzaInput().trim()">
+          @if (enviandoCorreoCobranza()) { <span class="loading loading-spinner loading-xs"></span> }
+          <lucide-icon *ngIf="!enviandoCorreoCobranza()" name="send" class="w-4 h-4 mr-1"></lucide-icon>
+          Enviar por Correo
+        </button>
+      </div>
     </div>
   </div>
 </div>

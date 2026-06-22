@@ -81,6 +81,25 @@ export class CartaNoAdeudoPdfService {
     });
   }
 
+  private async getSelloFirmadoDataUrl(): Promise<{url: string, ratio: number} | null> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width || 200; canvas.height = img.height || 200;
+        const ctx = canvas.getContext('2d');
+        if (ctx) { 
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height); 
+          resolve({ url: canvas.toDataURL('image/png'), ratio: canvas.width / canvas.height }); 
+        }
+        else resolve(null);
+      };
+      img.onerror = () => resolve(null);
+      img.src = '/sello/sello-firmado.png';
+    });
+  }
+
   async generarCarta(credito: Credito): Promise<Blob> {
     const cliente: any = credito.cliente || {};
     const usuario: any = cliente.usuario || {};
@@ -254,23 +273,13 @@ export class CartaNoAdeudoPdfService {
       // Centrado aproximado sobre la línea de analista
       doc.addImage(firmaInfo.url, 'PNG', contentMargin + dotsW / 2 - targetWidth / 2, y - targetHeight + 25, targetWidth, targetHeight);
     }
-    
-    // ── SELLO GERENCIA ───────────────────────────────────────────────────────
-    const selloInfo = await this.getSelloDataUrl();
-    if (selloInfo) {
+    // ── SELLO Y FIRMA GERENCIA ──────────────────────────────────────────────
+    const selloFirmadoInfo = await this.getSelloFirmadoDataUrl();
+    if (selloFirmadoInfo) {
       const targetWidth = 55;
-      const targetHeight = targetWidth / selloInfo.ratio;
+      const targetHeight = targetWidth / selloFirmadoInfo.ratio;
       // Bajamos el sello sumándole a la posición Y para que su línea coincida con la firma
-      doc.addImage(selloInfo.url, 'PNG', xGerencia + dotsW / 2 - targetWidth / 2, y - targetHeight + 35, targetWidth, targetHeight);
-    }
-
-    // ── FIRMA GERENTE (SOBRE EL SELLO) ───────────────────────────────────────
-    const firmaGerenteInfo = await this.getFirmaGerenteDataUrl();
-    if (firmaGerenteInfo) {
-      const targetWidth = 35;
-      const targetHeight = targetWidth / firmaGerenteInfo.ratio;
-      // Posición de la firma (superpuesta, centrada sobre la línea)
-      doc.addImage(firmaGerenteInfo.url, 'PNG', xGerencia + dotsW / 2 - targetWidth / 2, y - targetHeight + 25, targetWidth, targetHeight);
+      doc.addImage(selloFirmadoInfo.url, 'PNG', xGerencia + dotsW / 2 - targetWidth / 2, y - targetHeight + 35, targetWidth, targetHeight);
     }
 
     y += 25;

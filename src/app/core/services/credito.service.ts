@@ -210,4 +210,17 @@ export class CreditoService {
       formData
     );
   }
+
+  enviarCartaCobranza(creditoId: number, pdfBlob: Blob, email: string, nombre: string, nivel: number): Observable<{ mensaje: string }> {
+    const formData = new FormData();
+    formData.append('pdf', pdfBlob, `CartaCobranza_Nivel${nivel}_${creditoId}.pdf`);
+    formData.append('email', email);
+    formData.append('nombre', nombre);
+    formData.append('nivel', nivel.toString());
+    
+    return this.http.post<{ mensaje: string }>(
+      `${this.apiUrl}/creditos/admin/${creditoId}/enviar-carta-cobranza`,
+      formData
+    );
+  }
 }
