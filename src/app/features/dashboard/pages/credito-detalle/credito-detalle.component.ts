@@ -23,11 +23,12 @@ import { ResolverContratoModalComponent } from '../../components/resolver-contra
 import { PagoGlobalModalComponent } from '../../components/pago-global-modal/pago-global-modal.component';
 import { environment } from '../../../../../environments/environment';
 import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
+import { ComprobantePagoComponent, ComprobanteData } from '../../../../shared/components/comprobante-pago/comprobante-pago';
 
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent, PagoGlobalModalComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent, PagoGlobalModalComponent, ComprobantePagoComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
@@ -68,6 +69,9 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalRestriccion = signal<boolean>(false);
   isClienteRecurrente = signal<boolean>(false);
   mostrarInfoCredito = signal<boolean>(false);
+
+  mostrarModalComprobante = signal<boolean>(false);
+  comprobanteData = signal<ComprobanteData | null>(null);
 
   nivelCobranzaSelect = signal<number>(1);
   destinatarioCobranzaSelect = signal<'TITULAR' | 'GARANTE'>('TITULAR');
@@ -328,6 +332,48 @@ export class CreditoDetalleComponent implements OnInit {
     this.mostrarModalRevisarPago.set(false);
     this.mostrarFormRechazo.set(false);
     this.comentarioRechazoInput.set('');
+  }
+
+  // ============ VER COMPROBANTE DE PAGO ============
+  abrirComprobanteCuota(cuota: Cuota) {
+    const cred = this.credito();
+    if (!cred) return;
+
+    // Convert total to words simple logic (fallback to string concatenation if complex)
+    const intPart = Math.floor(cuota.montoPagadoCliente || cuota.totalCuota);
+    const decimalPart = Math.round(((cuota.montoPagadoCliente || cuota.totalCuota) - intPart) * 100);
+    
+    // Preparar los conceptos (Capital, Interés, Seguro, Mora, etc)
+    const conceptos = [];
+    if ((cuota.capital || 0) > 0) conceptos.push({ description: 'PAGO A CAPITAL', value: cuota.capital || 0 });
+    if ((cuota.interes || 0) > 0) conceptos.push({ description: 'PAGO A INTERESES', value: cuota.interes || 0 });
+    if ((cuota.seguro || 0) > 0) conceptos.push({ description: 'PAGO DE SEGURO', value: cuota.seguro || 0 });
+    if ((cuota.comision || 0) > 0) conceptos.push({ description: 'COMISIONES', value: cuota.comision || 0 });
+    if ((cuota.penalidad || 0) > 0) conceptos.push({ description: 'PENALIDAD', value: cuota.penalidad || 0 });
+    const mora = this.getMoraVisual(cuota);
+    if (mora > 0) conceptos.push({ description: 'PAGO DE MORA', value: mora });
+
+    // Ajuste si hay monto pagado diferente al total (solo para que cuadre el recibo visual)
+    const totalConceptos = conceptos.reduce((sum, item) => sum + item.value, 0);
+
+    const data: ComprobanteData = {
+      customerName: cred.cliente?.usuario?.nombreCompleto || cred.nombreCliente || '',
+      customerAddress: cred.cliente?.direccion || 'NO REGISTRADO',
+      customerDni: cred.cliente?.numeroDocumento || cred.documento || '',
+      operationNumber: String(cuota.id).padStart(8, '0'),
+      emissionDate: cuota.fechaPago || new Date(),
+      paymentDate: cuota.fechaPago || new Date(),
+      product: 'CRÉDITO ' + (cred.tipoCredito ? cred.tipoCredito.toUpperCase() : 'PERSONAL'),
+      subProduct: 'CUOTA NRO ' + cuota.numeroCuota,
+      installmentNumber: cuota.numeroCuota + ' de ' + cred.cuotas.length,
+      paymentToCapital: cuota.capital,
+      concepts: conceptos,
+      isFullPayment: cuota.estadoCuota === 'PAGADO',
+      totalInWords: `SON: ${intPart} CON ${decimalPart}/100 SOLES` // Simple format
+    };
+
+    this.comprobanteData.set(data);
+    this.mostrarModalComprobante.set(true);
   }
 
   // ============ OTROS ============

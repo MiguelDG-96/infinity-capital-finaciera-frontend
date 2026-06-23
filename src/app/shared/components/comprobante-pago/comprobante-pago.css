@@ -1,0 +1,45 @@
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body.printing-receipt > *:not(#comprobante-pdf) {
+    display: none !important;
+  }
+
+  body.printing-receipt {
+    background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #comprobante-pdf {
+    position: static !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 auto !important;
+    padding: 15mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-color: white !important;
+    overflow: visible !important;
+  }
+  
+  /* Asegurar que las tablas e imagenes no se rompan */
+  #comprobante-pdf table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+  }
+  
+  #comprobante-pdf table th,
+  #comprobante-pdf table td {
+    word-wrap: break-word !important;
+  }
+
+  /* Mejora de la imagen SVG */
+  #comprobante-pdf img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}

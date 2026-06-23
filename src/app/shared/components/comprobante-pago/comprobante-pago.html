@@ -1,0 +1,128 @@
+@if (data && data.isFullPayment) {
+<div class="max-w-4xl mx-auto bg-white p-8 border border-gray-200 shadow-sm text-sm text-gray-800" id="comprobante-pdf">
+  <!-- Header -->
+  <div class="flex justify-between items-start mb-8">
+    <div>
+      <img src="/comprobante/logo-infinycapital.svg" alt="INFINYCAPITAL S.A.C." class="w-64 h-auto object-left object-contain mb-4" />
+      <h1 class="text-xl font-bold text-gray-900 uppercase">{{ businessInfo.name }}</h1>
+      <p class="text-gray-600 uppercase text-xs">{{ businessInfo.address }}</p>
+      <p class="text-gray-600 text-xs">Teléfono: {{ businessInfo.phone }}</p>
+    </div>
+    
+    <div class="border-2 border-gray-800 p-4 text-center min-w-[250px]">
+      <p class="font-bold text-lg">RUC: {{ businessInfo.ruc }}</p>
+      <p class="font-bold text-lg my-2 uppercase bg-gray-100 py-1">Comprobante de Pago</p>
+      <p class="font-bold text-lg">Nro. OPE-{{ data.operationNumber }}</p>
+    </div>
+  </div>
+
+  <!-- Client Data -->
+  <div class="border border-gray-800 mb-6">
+    <div class="grid grid-cols-12 border-b border-gray-800">
+      <div class="col-span-3 sm:col-span-2 p-2 border-r border-gray-800 font-semibold bg-gray-50">Señor(es):</div>
+      <div class="col-span-9 sm:col-span-10 p-2 uppercase">{{ data.customerName }}</div>
+    </div>
+    <div class="grid grid-cols-12 border-b border-gray-800">
+      <div class="col-span-3 sm:col-span-2 p-2 border-r border-gray-800 font-semibold bg-gray-50">Dirección:</div>
+      <div class="col-span-9 sm:col-span-10 p-2 uppercase">{{ data.customerAddress }}</div>
+    </div>
+    <div class="grid grid-cols-12 border-b border-gray-800">
+      <div class="col-span-3 sm:col-span-2 p-2 border-r border-gray-800 font-semibold bg-gray-50">DNI:</div>
+      <div class="col-span-3 sm:col-span-4 p-2 border-r border-gray-800">{{ data.customerDni }}</div>
+      <div class="col-span-3 sm:col-span-2 p-2 border-r border-gray-800 font-semibold bg-gray-50">Moneda:</div>
+      <div class="col-span-3 sm:col-span-4 p-2">SOLES</div>
+    </div>
+    <div class="grid grid-cols-12">
+      <div class="col-span-4 sm:col-span-2 p-2 border-r border-gray-800 font-semibold bg-gray-50">Fecha de Emisión:</div>
+      <div class="col-span-8 sm:col-span-10 p-2">{{ data.emissionDate | date:'dd/MM/yyyy' }}</div>
+    </div>
+  </div>
+
+  <!-- Details Table -->
+  <div class="mb-2 overflow-x-hidden">
+    <table class="w-full text-left border-collapse border border-gray-800">
+      <thead>
+        <tr class="bg-red-600 text-white text-xs uppercase" style="background-color: #dc2626 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+          <th class="p-2 border border-gray-800 text-center w-32">Fecha de Pago</th>
+          <th class="p-2 border border-gray-800">Descripción</th>
+          <th class="p-2 border border-gray-800 text-right w-32">Valor Venta Total</th>
+          <th class="p-2 border border-gray-800 text-right w-24">IGV</th>
+          <th class="p-2 border border-gray-800 text-right w-32">Precio Venta Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (concept of data.concepts; track $index) {
+          <tr class="text-xs">
+            <td class="p-2 border border-gray-800 text-center">{{ data.paymentDate | date:'dd/MM/yyyy' }}</td>
+            <td class="p-2 border border-gray-800 uppercase">{{ concept.description }}</td>
+            <td class="p-2 border border-gray-800 text-right">{{ concept.value | number:'1.2-2' }}</td>
+            <td class="p-2 border border-gray-800 text-right">0.00</td>
+            <td class="p-2 border border-gray-800 text-right">{{ concept.value | number:'1.2-2' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="text-xs font-bold mb-6 pl-2 uppercase">
+    SON: {{ data.totalInWords ? data.totalInWords : (total | number:'1.2-2') + ' SOLES' }}
+  </div>
+
+  <!-- Additional Info & Totals -->
+  <div class="flex flex-col sm:flex-row border border-gray-800 mb-6">
+    <div class="w-full sm:w-2/3 border-b sm:border-b-0 sm:border-r border-gray-800">
+      <div class="bg-gray-50 border-b border-gray-800 p-2 font-semibold">Información Adicional:</div>
+      <div class="grid grid-cols-2 p-2 text-xs gap-y-2">
+        <div class="uppercase text-gray-600">Producto</div>
+        <div class="uppercase font-medium">{{ data.product }}</div>
+        
+        <div class="uppercase text-gray-600">Sub Producto</div>
+        <div class="uppercase font-medium">{{ data.subProduct }}</div>
+        
+        <div class="uppercase text-gray-600">Cuota Nro</div>
+        <div class="font-medium">{{ data.installmentNumber }}</div>
+        
+        <div class="uppercase text-gray-600">Pago a Capital</div>
+        <div class="font-medium">{{ data.paymentToCapital | number:'1.2-2' }}</div>
+      </div>
+    </div>
+    <div class="w-full sm:w-1/3 flex flex-col">
+      <div class="flex-grow bg-gray-50"></div>
+      <div class="flex justify-between p-2 border-t border-gray-800 text-xs">
+        <span class="font-semibold">Sub Total</span>
+        <span>{{ subTotal | number:'1.2-2' }}</span>
+      </div>
+      <div class="flex justify-between p-2 border-t border-gray-800 text-xs">
+        <span class="font-semibold">I.G.V.</span>
+        <span>0.00</span>
+      </div>
+      <div class="flex justify-between p-2 border-t border-gray-800 text-sm font-bold bg-gray-200">
+        <span>Importe Total</span>
+        <span>{{ total | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="border-t-2 border-gray-800 pt-4 mt-8 flex flex-col sm:flex-row justify-between items-end">
+    <div class="text-xs text-gray-600 w-full sm:w-3/4">
+      <span class="font-semibold text-black">Información importante:</span><br>
+      El presente documento certifica el pago de la cuota correspondiente. Los montos presentados corresponden a la acumulación de los conceptos pagados en la fecha de pago indicada.
+    </div>
+    <div class="text-[10px] text-gray-500 text-right mt-4 sm:mt-0 w-full sm:w-1/4">
+      Fecha y Hora de Autorización: <br>
+      {{ data.emissionDate | date:'dd/MM/yyyy HH:mm:ss' }}
+    </div>
+  </div>
+  
+  <div class="mt-8 text-center print:hidden">
+    <button (click)="printReceipt()" class="bg-gray-800 hover:bg-black text-white py-2 px-6 rounded shadow uppercase font-bold text-sm tracking-wider transition-colors">
+      Imprimir / Guardar PDF
+    </button>
+  </div>
+</div>
+} @else {
+<div class="p-6 text-center text-gray-500">
+  El comprobante de pago detallado solo se genera para pagos totales de cuota.
+</div>
+}

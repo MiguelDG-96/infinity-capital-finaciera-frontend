@@ -308,8 +308,11 @@
                                     <!-- CLIENTE: botón subir comprobante -->
                                     @if (!isAdminMode() && credito()?.estado === 'ACTIVO') {
                                     @if (cuota.estadoCuota === 'PAGADO') {
-                                    <div class="flex items-center justify-center gap-1 opacity-40">
-                                        <lucide-icon name="check-circle-2" class="w-4 h-4 text-success"></lucide-icon>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <lucide-icon name="check-circle-2" class="w-4 h-4 text-success opacity-40"></lucide-icon>
+                                        <button class="btn btn-ghost btn-xs text-primary" (click)="abrirComprobanteCuota(cuota)" title="Ver Comprobante">
+                                            <lucide-icon name="receipt" class="w-4 h-4"></lucide-icon>
+                                        </button>
                                     </div>
                                     } @else if (cuota.estadoCuota === 'REVISION') {
                                     <div class="flex items-center justify-center gap-1.5">
@@ -332,6 +335,12 @@
                                     @if (isAdminMode()) {
                                     <div class="flex justify-center gap-1">
                                         
+                                        @if (cuota.estadoCuota === 'PAGADO') {
+                                            <button class="btn btn-ghost btn-xs text-primary" (click)="abrirComprobanteCuota(cuota)" title="Ver Comprobante">
+                                                <lucide-icon name="receipt" class="w-3.5 h-3.5"></lucide-icon>
+                                            </button>
+                                        }
+
                                         @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'REVISION') {
                                         <button class="btn btn-ghost btn-xs text-success" (click)="abrirSubirComprobante(cuota)"
                                             title="Registrar Abono/Pago">
@@ -626,6 +635,16 @@
         </button>
       </div>
     </div>
+  </div>
+</div>
+}
+
+<!-- ========== MODAL: VER COMPROBANTE ========== -->
+@if (mostrarModalComprobante() && comprobanteData()) {
+<div class="modal modal-open">
+  <div class="modal-box max-w-5xl bg-base-200 p-4 relative shadow-2xl overflow-y-auto">
+    <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-50 print:hidden" (click)="mostrarModalComprobante.set(false)">✕</button>
+    <app-comprobante-pago [data]="comprobanteData()!"></app-comprobante-pago>
   </div>
 </div>
 }
