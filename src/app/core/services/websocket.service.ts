@@ -27,7 +27,7 @@ export class WebsocketService {
   constructor() {
     this.client = new Client({
       // Como no tenemos proxy para ws:// usamos sockjs que va sobre http
-      webSocketFactory: () => new SockJS(`${this.baseUrl}/ws`),
+      webSocketFactory: () => new SockJS(`${environment.apiUrl}/ws`),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
