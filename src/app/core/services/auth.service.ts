@@ -107,6 +107,13 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/autenticacion/restablecer-contrasena`, data);
   }
 
+  cambiarContrasena(contrasenaActual: string, nuevaContrasena: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/usuarios/cambiar-contrasena`, {
+      contrasenaActual,
+      nuevaContrasena
+    });
+  }
+
   refreshToken(refreshToken: string): Observable<AuthModel> {
     return this.http.post<AutenticacionResponseDto>(
       `${environment.apiUrl}/autenticacion/refresh`,

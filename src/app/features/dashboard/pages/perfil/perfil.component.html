@@ -1,4 +1,4 @@
-<div class="p-4 md:p-8 max-w-4xl mx-auto space-y-6 animate-fade-in">
+<div class="p-4 md:p-8 max-w-6xl mx-auto space-y-6 animate-fade-in text-base-content">
 
   <!-- Alertas globales -->
   @if (mensajeExito()) {
@@ -14,238 +14,304 @@
     </div>
   }
 
-  <!-- ===== HERO CARD ===== -->
-  <div class="card shadow-xl border border-base-content/5 overflow-hidden bg-base-100">
+  <!-- Cabecera -->
+  <div class="flex items-center gap-4 mb-6">
+    <button class="btn btn-ghost btn-sm btn-circle text-base-content/70 hover:bg-base-200" (click)="volver()">
+      <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
+    </button>
+    <div>
+      <h1 class="text-2xl font-black text-base-content">Mi Perfil</h1>
+      <p class="text-sm text-base-content/60">Gestiona tu información personal, preferencias y seguridad de la cuenta.</p>
+    </div>
+  </div>
 
-    <!-- Banner con todo el contenido dentro -->
-    <div class="relative bg-gradient-to-br from-primary via-primary/90 to-secondary/80 px-6 pt-8 pb-6">
+  <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
 
-      <!-- Patrón decorativo -->
-      <div class="absolute inset-0 opacity-10 pointer-events-none"
-           style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 28px 28px;"></div>
+    <!-- COLUMNA IZQUIERDA: Info Resumida y Menú -->
+    <div class="space-y-4">
+      
+      <!-- Card del Usuario -->
+      <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden">
+        <div class="card-body p-6 flex flex-col items-center text-center">
+          
+          <!-- Avatar con botón de edición -->
+          <div class="relative group shrink-0 mb-4">
+            <div class="w-24 h-24 rounded-full shadow-lg overflow-hidden flex items-center justify-center bg-primary text-primary-content text-3xl font-black">
+              @if (fotoPreviewUrl()) {
+                <img [src]="fotoPreviewUrl()!" class="w-full h-full object-cover" alt="Preview" />
+              } @else if (userPhotoUrl) {
+                <img [src]="userPhotoUrl" [alt]="nombreCompletoConstruido" class="w-full h-full object-cover" />
+              } @else {
+                <span class="select-none">{{ userInitials }}</span>
+              }
+            </div>
 
-      <!-- Botón volver -->
-      <button class="absolute top-4 right-4 btn btn-ghost btn-sm btn-circle text-white/70 hover:text-white hover:bg-white/10"
-              (click)="volver()">
-        <lucide-icon name="arrow-left" class="w-4 h-4"></lucide-icon>
-      </button>
-
-      <!-- Contenido del hero -->
-      <div class="flex flex-col sm:flex-row items-center sm:items-end gap-5 relative z-10">
-
-        <!-- Avatar con botón de edición -->
-        <div class="relative group shrink-0">
-          <!-- Foto / Iniciales -->
-          <div class="w-24 h-24 rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center ring-4 ring-white/30"
-               [class.bg-white]="!userPhotoUrl && !fotoPreviewUrl()"
-               [class.text-primary]="!userPhotoUrl && !fotoPreviewUrl()">
-            @if (fotoPreviewUrl()) {
-              <img [src]="fotoPreviewUrl()!" class="w-full h-full object-cover" alt="Preview" />
-            } @else if (userPhotoUrl) {
-              <img [src]="userPhotoUrl" [alt]="nombreCompletoConstruido" class="w-full h-full object-cover" />
-            } @else {
-              <span class="text-3xl font-black select-none">{{ userInitials }}</span>
+            <!-- Overlay de edición (solo clientes) -->
+            @if (isCliente) {
+              <label for="input-foto-hero"
+                class="absolute inset-0 rounded-full flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-all cursor-pointer">
+                <div class="opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center gap-1">
+                  <lucide-icon name="camera" class="w-6 h-6 text-white drop-shadow"></lucide-icon>
+                </div>
+              </label>
+              <input id="input-foto-hero" type="file" class="hidden" accept="image/*" (change)="onFotoSelected($event)" />
             }
           </div>
 
-          <!-- Overlay de edición (solo clientes) -->
-          @if (isCliente) {
-            <label for="input-foto-hero"
-              class="absolute inset-0 rounded-2xl flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-all cursor-pointer">
-              <div class="opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center gap-1">
-                <lucide-icon name="camera" class="w-6 h-6 text-white drop-shadow"></lucide-icon>
-                <span class="text-white text-[10px] font-bold drop-shadow">Cambiar</span>
-              </div>
-            </label>
-            <input id="input-foto-hero" type="file" class="hidden" accept="image/*"
-                   (change)="onFotoSelected($event)" />
+          <!-- Botón guardar foto (aparece solo si hay preview) -->
+          @if (fotoPreviewUrl() && isCliente) {
+            <div class="flex gap-2 w-full mt-2 mb-4">
+              <button class="btn btn-sm btn-outline flex-1 rounded-xl" (click)="fotoPreviewUrl.set(null); fotoArchivo = null">
+                Cancelar
+              </button>
+              <button class="btn btn-sm btn-primary flex-1 rounded-xl" (click)="guardarFoto()" [disabled]="subiendoFoto()">
+                @if (subiendoFoto()) { <span class="loading loading-spinner loading-xs"></span> }
+                Guardar
+              </button>
+            </div>
           }
 
-          <!-- Indicador de foto nueva seleccionada -->
-          @if (fotoPreviewUrl()) {
-            <span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-success border-2 border-base-100 flex items-center justify-center">
-              <lucide-icon name="check" class="w-3 h-3 text-white"></lucide-icon>
-            </span>
-          }
-        </div>
-
-        <!-- Info en blanco -->
-        <div class="text-center sm:text-left flex-1 min-w-0 pb-1">
-          <h2 class="text-2xl font-black text-white truncate leading-tight drop-shadow">{{ nombreCompletoConstruido }}</h2>
-          <p class="text-white/60 text-sm mt-0.5 truncate">{{ form.email }}</p>
-          <span class="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/20 text-white backdrop-blur-sm border border-white/20">
+          <h2 class="text-lg font-black leading-tight">{{ nombreCompletoConstruido }}</h2>
+          <p class="text-sm text-base-content/60">{{ form.email }}</p>
+          <span class="inline-block mt-3 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
             {{ rolLabel }}
           </span>
         </div>
 
-        <!-- Botón guardar foto (aparece solo si hay preview) -->
-        @if (fotoPreviewUrl() && isCliente) {
-          <div class="flex gap-2 shrink-0">
-            <button class="btn btn-sm bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl backdrop-blur-sm"
-                    (click)="fotoPreviewUrl.set(null); fotoArchivo = null">
-              Cancelar
-            </button>
-            <button class="btn btn-sm bg-white text-primary hover:bg-white/90 rounded-xl font-bold shadow-lg"
-                    (click)="guardarFoto()" [disabled]="subiendoFoto()">
-              @if (subiendoFoto()) {
-                <span class="loading loading-spinner loading-xs"></span>
-              } @else {
-                <lucide-icon name="upload" class="w-4 h-4 mr-1"></lucide-icon>
-              }
-              Guardar Foto
-            </button>
+        <!-- Menú lateral tipo Pills -->
+        <ul class="menu w-full px-4 pb-4">
+          <li>
+            <a [class.active]="activeTab() === 'personal'" (click)="setTab('personal')" class="rounded-xl mb-1">
+              <lucide-icon name="user" class="w-4 h-4"></lucide-icon> Información Personal
+            </a>
+          </li>
+          <li>
+            <a [class.active]="activeTab() === 'seguridad'" (click)="setTab('seguridad')" class="rounded-xl mb-1">
+              <lucide-icon name="key" class="w-4 h-4"></lucide-icon> Seguridad
+            </a>
+          </li>
+          <li>
+            <a [class.active]="activeTab() === 'sesion'" (click)="setTab('sesion')" class="rounded-xl mb-1">
+              <lucide-icon name="monitor" class="w-4 h-4"></lucide-icon> Sesión Activa
+            </a>
+          </li>
+          <li>
+            <a [class.active]="activeTab() === 'dispositivos'" (click)="setTab('dispositivos')" class="rounded-xl">
+              <lucide-icon name="smartphone" class="w-4 h-4"></lucide-icon> Dispositivos Confiables
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: Contenido Dinámico -->
+    <div class="card bg-base-100 shadow-xl border border-base-content/5">
+      <div class="card-body p-6 md:p-8">
+
+        <!-- TAB: Información Personal -->
+        @if (activeTab() === 'personal') {
+          <div class="space-y-6 animate-fade-in">
+            <div>
+              <h3 class="text-lg font-bold flex items-center gap-2">
+                <lucide-icon name="user" class="w-5 h-5 text-primary"></lucide-icon>
+                Información Personal
+              </h3>
+              <p class="text-sm text-base-content/60">Actualiza tu información básica.</p>
+            </div>
+            
+            <div class="divider my-0"></div>
+
+            <div class="form-control">
+              <label class="label"><span class="label-text font-bold">Usuario (No modificable)</span></label>
+              <input type="text" [value]="form.email" class="input input-bordered rounded-xl bg-base-200" readonly disabled />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label"><span class="label-text font-bold">Nombres <span class="text-error">*</span></span></label>
+                <input type="text" [(ngModel)]="form.nombres" class="input input-bordered rounded-xl focus:input-primary" />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text font-bold">Apellido Paterno <span class="text-error">*</span></span></label>
+                <input type="text" [(ngModel)]="form.apellidoPaterno" class="input input-bordered rounded-xl focus:input-primary" />
+              </div>
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-bold">Apellido Materno</span></label>
+                <input type="text" [(ngModel)]="form.apellidoMaterno" class="input input-bordered rounded-xl focus:input-primary" />
+              </div>
+            </div>
+
+            <div class="form-control">
+              <label class="label"><span class="label-text font-bold">Correo Electrónico <span class="text-error">*</span></span></label>
+              <input type="email" [(ngModel)]="form.email" class="input input-bordered rounded-xl focus:input-primary" />
+            </div>
+
+            <div class="form-control">
+              <label class="label"><span class="label-text font-bold">Rol en el sistema</span></label>
+              <input type="text" [value]="rolLabel" class="input input-bordered rounded-xl bg-base-200" readonly disabled />
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button class="btn btn-primary rounded-xl px-8"
+                (click)="guardarDatos()" [disabled]="guardandoDatos() || !form.nombres.trim() || !form.apellidoPaterno.trim()">
+                @if (guardandoDatos()) { <span class="loading loading-spinner loading-sm"></span> }
+                Guardar Cambios
+              </button>
+            </div>
           </div>
         }
-      </div>
 
-      <!-- Hint hover editar (solo clientes) -->
-      @if (isCliente && !fotoPreviewUrl()) {
-        <p class="text-white/40 text-[10px] mt-3 relative z-10">
-          <lucide-icon name="camera" class="w-3 h-3 inline mr-1"></lucide-icon>
-          Pasa el cursor sobre la foto para cambiarla
-        </p>
-      }
-    </div>
-  </div>
+        <!-- TAB: Seguridad -->
+        @if (activeTab() === 'seguridad') {
+          <div class="space-y-6 animate-fade-in">
+            <div>
+              <h3 class="text-lg font-bold flex items-center gap-2">
+                <lucide-icon name="key" class="w-5 h-5 text-primary"></lucide-icon>
+                Cambiar Contraseña
+              </h3>
+              <p class="text-sm text-base-content/60">Actualiza tu contraseña regularmente para mantener tu cuenta segura.</p>
+            </div>
+            
+            <div class="divider my-0"></div>
 
-  <!-- ===== CARDS ===== -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-    <!-- Datos Personales -->
-    <div class="card bg-base-100 shadow-xl border border-base-content/5">
-      <div class="card-body p-6 space-y-4">
-        <div class="flex items-center gap-2 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-            <lucide-icon name="user" class="w-4 h-4"></lucide-icon>
-          </div>
-          <h3 class="font-bold text-base">Datos Personales</h3>
-        </div>
-
-        <div class="space-y-3">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="form-control">
-              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Nombres</span></label>
-              <input type="text" [(ngModel)]="form.nombres" placeholder="Ej: Juan Carlos"
-                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+              <label class="label"><span class="label-text font-bold">Contraseña actual <span class="text-error">*</span></span></label>
+              <input type="password" [(ngModel)]="formPassword.actual" placeholder="Ingresa tu contraseña actual" class="input input-bordered rounded-xl focus:input-primary" />
             </div>
+
             <div class="form-control">
-              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Apellido Paterno</span></label>
-              <input type="text" [(ngModel)]="form.apellidoPaterno" placeholder="Ej: Perez"
-                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+              <label class="label"><span class="label-text font-bold">Nueva contraseña <span class="text-error">*</span></span></label>
+              <input type="password" [(ngModel)]="formPassword.nueva" placeholder="Ingresa tu nueva contraseña" class="input input-bordered rounded-xl focus:input-primary" />
+              <div class="mt-2 text-xs text-base-content/60 space-y-1">
+                <p>Requisitos de la contraseña:</p>
+                <ul class="list-disc list-inside pl-1">
+                  <li>Al menos 8 caracteres</li>
+                  <li>Al menos una letra mayúscula</li>
+                  <li>Al menos un número</li>
+                </ul>
+              </div>
             </div>
-            <div class="form-control md:col-span-2">
-              <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Apellido Materno</span></label>
-              <input type="text" [(ngModel)]="form.apellidoMaterno" placeholder="Ej: Gomez (Opcional)"
-                class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
+
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text font-bold">Confirmar contraseña <span class="text-error">*</span></span></label>
+              <input type="password" [(ngModel)]="formPassword.confirmar" placeholder="Confirma tu nueva contraseña" class="input input-bordered rounded-xl focus:input-primary" />
             </div>
-          </div>
-          <div class="form-control">
-            <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Correo Electrónico</span></label>
-            <input type="email" [(ngModel)]="form.email" placeholder="tu@correo.com"
-              class="input input-bordered input-sm rounded-xl focus:input-primary w-full" />
-          </div>
-        </div>
 
-        <button class="btn btn-primary btn-sm w-full rounded-xl shadow-lg shadow-primary/20 mt-2"
-          (click)="guardarDatos()" [disabled]="guardandoDatos() || !form.nombres.trim() || !form.apellidoPaterno.trim()">
-
-          @if (guardandoDatos()) {
-            <span class="loading loading-spinner loading-xs"></span>
-          } @else {
-            <lucide-icon name="save" class="w-4 h-4 mr-1"></lucide-icon>
-          }
-          Guardar Cambios
-        </button>
-        <p class="text-[10px] text-base-content/40 text-center">
-          El nombre en la barra se actualizará al volver a iniciar sesión.
-        </p>
-      </div>
-    </div>
-
-    <!-- Seguridad y Accesos -->
-    <div class="card bg-base-100 shadow-xl border border-base-content/5">
-      <div class="card-body p-6 space-y-6">
-        <div class="flex items-center gap-2 border-b border-base-content/10 pb-2">
-          <div class="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center text-warning">
-            <lucide-icon name="shield-check" class="w-4 h-4"></lucide-icon>
-          </div>
-          <h3 class="font-bold text-base">Seguridad y Accesos</h3>
-        </div>
-
-        <!-- Cambio de contraseña -->
-        <div class="space-y-3">
-          <h4 class="text-sm font-bold text-base-content/70">Contraseña</h4>
-          @if (!resetEnviado()) {
-            <p class="text-xs text-base-content/60">Enviaremos un enlace a tu correo para cambiarla.</p>
-            <button class="btn btn-warning btn-sm rounded-xl"
-              (click)="enviarResetContrasena()" [disabled]="enviandoReset()">
-              @if (enviandoReset()) { <span class="loading loading-spinner loading-xs"></span> } 
-              @else { <lucide-icon name="key" class="w-4 h-4 mr-1"></lucide-icon> }
-              Restablecer Contraseña
-            </button>
-          } @else {
-            <div class="text-success text-xs font-bold flex items-center gap-1">
-              <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon>
-              Código enviado a tu correo.
+            <div class="flex justify-end pt-4 gap-2">
+              <button class="btn btn-ghost rounded-xl" (click)="formPassword = {actual: '', nueva: '', confirmar: ''}">Cancelar</button>
+              <button class="btn btn-primary rounded-xl px-8"
+                (click)="cambiarContrasena()" [disabled]="cambiandoPassword() || !formPassword.actual || !formPassword.nueva || !formPassword.confirmar">
+                @if (cambiandoPassword()) { <span class="loading loading-spinner loading-sm"></span> }
+                Cambiar Contraseña
+              </button>
             </div>
-          }
-        </div>
 
-        <!-- Biometría / Passkeys -->
-        <div class="space-y-3 pt-4 border-t border-base-content/5">
-          <h4 class="text-sm font-bold text-base-content/70">Biometría (Passkeys)</h4>
-          <p class="text-xs text-base-content/60">Inicia sesión usando tu huella dactilar, Face ID o llave física sin necesitar contraseña ni código 2FA.</p>
-          <button class="btn btn-outline btn-primary btn-sm rounded-xl" (click)="registrarPasskey()">
-            <lucide-icon name="fingerprint" class="w-4 h-4 mr-1"></lucide-icon>
-            Registrar Dispositivo Actual
-          </button>
-        </div>
-
-        <!-- Sesión Activa -->
-        <div class="space-y-3 pt-4 border-t border-base-content/5">
-          <h4 class="text-sm font-bold text-base-content/70">Sesión Actual</h4>
-          @if (cargandoSeguridad()) {
-            <span class="loading loading-dots loading-sm"></span>
-          } @else if (sesionActiva()) {
-            <div class="bg-base-200/50 p-3 rounded-lg text-xs space-y-1">
-              <div class="flex justify-between"><span class="font-bold">IP:</span> <span>{{ sesionActiva().ipDireccion }}</span></div>
-              <div class="flex justify-between"><span class="font-bold">Navegador:</span> <span class="truncate ml-2" [title]="sesionActiva().userAgent">{{ sesionActiva().userAgent }}</span></div>
-              <div class="flex justify-between"><span class="font-bold">Expira:</span> <span>{{ sesionActiva().fechaExpiracion | date:'medium' }}</span></div>
-            </div>
-          }
-        </div>
-
-        <!-- Dispositivos Confiables -->
-        <div class="space-y-3 pt-4 border-t border-base-content/5">
-          <h4 class="text-sm font-bold text-base-content/70 flex justify-between items-center">
-            Dispositivos Confiables
-            <span class="badge badge-sm">{{ dispositivos().length }}/3</span>
-          </h4>
-          <p class="text-xs text-base-content/60">Dispositivos donde no se pide código 2FA.</p>
-          
-          @if (cargandoSeguridad()) {
-            <span class="loading loading-dots loading-sm"></span>
-          } @else if (dispositivos().length === 0) {
-            <div class="text-xs text-base-content/40 text-center py-2">No tienes dispositivos confiables.</div>
-          } @else {
-            <div class="space-y-2">
-              @for (d of dispositivos(); track d.id) {
-                <div class="flex items-center justify-between bg-base-200/30 p-2 rounded-lg border border-base-content/5">
-                  <div class="flex flex-col min-w-0">
-                    <span class="text-xs font-bold truncate">{{ d.userAgent }}</span>
-                    <span class="text-[10px] text-base-content/50">Agregado: {{ d.fechaCreacion | date:'shortDate' }}</span>
-                  </div>
-                  <button class="btn btn-ghost btn-xs text-error ml-2 px-2" (click)="revocarDispositivo(d.id)" title="Revocar acceso">
-                    <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
-                  </button>
+            <!-- Passkeys -->
+            <div class="mt-8 pt-6 border-t border-base-content/10">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h4 class="font-bold text-base flex items-center gap-2">
+                    <lucide-icon name="fingerprint" class="w-4 h-4"></lucide-icon> Llaves Biométricas (Passkeys)
+                  </h4>
+                  <p class="text-sm text-base-content/60 mt-1">Usa tu huella, rostro o llave USB para iniciar sesión de forma ultra-segura.</p>
                 </div>
-              }
+                <button class="btn btn-outline btn-primary btn-sm rounded-xl shrink-0" (click)="registrarPasskey()">
+                  Registrar Dispositivo
+                </button>
+              </div>
             </div>
-          }
-        </div>
+          </div>
+        }
+
+        <!-- TAB: Sesión Activa -->
+        @if (activeTab() === 'sesion') {
+          <div class="space-y-6 animate-fade-in">
+            <div>
+              <h3 class="text-lg font-bold flex items-center gap-2">
+                <lucide-icon name="monitor" class="w-5 h-5 text-primary"></lucide-icon>
+                Sesión Activa
+              </h3>
+              <p class="text-sm text-base-content/60">Detalles de tu conexión actual al sistema.</p>
+            </div>
+            
+            <div class="divider my-0"></div>
+
+            @if (cargandoSeguridad()) {
+              <div class="flex justify-center p-8"><span class="loading loading-spinner text-primary"></span></div>
+            } @else if (sesionActiva()) {
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-base-200 rounded-xl border border-base-content/5">
+                  <p class="text-xs font-bold text-base-content/50 uppercase mb-1">Dirección IP</p>
+                  <p class="font-medium font-mono text-sm">{{ sesionActiva().ipOrigen || 'Desconocida' }}</p>
+                </div>
+                <div class="p-4 bg-base-200 rounded-xl border border-base-content/5">
+                  <p class="text-xs font-bold text-base-content/50 uppercase mb-1">Dispositivo / Navegador</p>
+                  <p class="font-medium text-sm line-clamp-2" [title]="sesionActiva().dispositivo">{{ sesionActiva().dispositivo || 'Desconocido' }}</p>
+                </div>
+                <div class="p-4 bg-base-200 rounded-xl border border-base-content/5">
+                  <p class="text-xs font-bold text-base-content/50 uppercase mb-1">Inicio de Sesión</p>
+                  <p class="font-medium text-sm">{{ (sesionActiva().fechaInicio | date:'medium') || 'Desconocida' }}</p>
+                </div>
+                <div class="p-4 bg-base-200 rounded-xl border border-base-content/5">
+                  <p class="text-xs font-bold text-base-content/50 uppercase mb-1">Expiración del Token</p>
+                  <p class="font-medium text-sm">{{ (sesionActiva().tokenExpira | date:'medium') || 'Desconocida' }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- TAB: Dispositivos Confiables -->
+        @if (activeTab() === 'dispositivos') {
+          <div class="space-y-6 animate-fade-in">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                  <lucide-icon name="smartphone" class="w-5 h-5 text-primary"></lucide-icon>
+                  Dispositivos Confiables
+                </h3>
+                <p class="text-sm text-base-content/60">Dispositivos donde no se pide código 2FA.</p>
+              </div>
+              <div class="badge badge-primary badge-outline">{{ dispositivos().length }}/3 permitidos</div>
+            </div>
+            
+            <div class="divider my-0"></div>
+
+            @if (cargandoSeguridad()) {
+              <div class="flex justify-center p-8"><span class="loading loading-spinner text-primary"></span></div>
+            } @else if (dispositivos().length === 0) {
+              <div class="text-center py-12 px-4 border-2 border-dashed border-base-content/10 rounded-2xl">
+                <lucide-icon name="shield-alert" class="w-12 h-12 mx-auto text-base-content/20 mb-3"></lucide-icon>
+                <h3 class="font-bold text-lg mb-1">Sin dispositivos confiables</h3>
+                <p class="text-base-content/60 text-sm">Aún no has marcado ningún dispositivo como confiable al iniciar sesión.</p>
+              </div>
+            } @else {
+              <div class="space-y-3">
+                @for (d of dispositivos(); track d.id) {
+                  <div class="flex items-center justify-between p-4 bg-base-100 rounded-xl border border-base-content/10 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start gap-3 min-w-0">
+                      <div class="p-2 bg-primary/10 text-primary rounded-lg shrink-0 mt-1">
+                        <lucide-icon [name]="d.userAgent.toLowerCase().includes('mobile') ? 'smartphone' : 'monitor'" class="w-5 h-5"></lucide-icon>
+                      </div>
+                      <div class="min-w-0">
+                        <p class="font-bold text-sm text-base-content truncate" [title]="d.userAgent">{{ d.userAgent }}</p>
+                        <div class="flex items-center gap-4 mt-1 text-xs text-base-content/60">
+                          <span class="flex items-center gap-1"><lucide-icon name="calendar" class="w-3 h-3"></lucide-icon> Agregado: {{ d.fechaCreacion | date:'mediumDate' }}</span>
+                          <span class="flex items-center gap-1"><lucide-icon name="clock" class="w-3 h-3"></lucide-icon> Expira: {{ d.fechaExpiracion | date:'mediumDate' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="btn btn-ghost btn-square text-error hover:bg-error/10 shrink-0 ml-4" (click)="revocarDispositivo(d.id)" title="Revocar acceso">
+                      <lucide-icon name="trash-2" class="w-5 h-5"></lucide-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
 
       </div>
     </div>
-
   </div>
 </div>

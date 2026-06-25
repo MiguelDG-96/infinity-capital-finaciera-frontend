@@ -29,7 +29,7 @@ export class PerfilComponent implements OnInit {
   // Estado
   cargando = signal(false);
   guardandoDatos = signal(false);
-  enviandoReset = signal(false);
+  cambiandoPassword = signal(false);
   subiendoFoto = signal(false);
   mensajeExito = signal<string | null>(null);
   mensajeError = signal<string | null>(null);
@@ -41,6 +41,9 @@ export class PerfilComponent implements OnInit {
   fotoPreviewUrl = signal<string | null>(null);
   fotoArchivo: File | null = null;
 
+  // Tabs
+  activeTab = signal<'personal' | 'seguridad' | 'sesion' | 'dispositivos'>('personal');
+
   // Formulario
   form = { 
     nombres: '',
@@ -48,8 +51,13 @@ export class PerfilComponent implements OnInit {
     apellidoMaterno: '',
     email: '' 
   };
-  emailReset = '';
-  resetEnviado = signal(false);
+  
+  // Contraseña
+  formPassword = {
+    actual: '',
+    nueva: '',
+    confirmar: ''
+  };
 
   // Seguridad
   dispositivos = signal<any[]>([]);
@@ -85,9 +93,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.form.email = this.userData?.sub || '';
-    this.emailReset = this.userData?.sub || '';
     
-    // Intento básico de split para no dejar vacío
     const full = this.userData?.nombreCompleto || '';
     const parts = full.split(' ');
     if (parts.length > 0) this.form.nombres = parts[0];
@@ -127,6 +133,11 @@ export class PerfilComponent implements OnInit {
     this.cargarDatosSeguridad();
   }
 
+  setTab(tab: 'personal' | 'seguridad' | 'sesion' | 'dispositivos') {
+    this.activeTab.set(tab);
+    this.clearMessages();
+  }
+
   cargarDatosSeguridad() {
     this.cargandoSeguridad.set(true);
     this.authService.getSesionActiva().subscribe({
@@ -157,14 +168,9 @@ export class PerfilComponent implements OnInit {
   async registrarPasskey() {
     this.clearMessages();
     try {
-      // 1. Get options
       const optionsJson = await this.authService.getOpcionesRegistroPasskey().toPromise();
       const options = WebAuthnUtils.parseCreationOptions(JSON.stringify(optionsJson));
-
-      // 2. Request creation
       const credential = await navigator.credentials.create({ publicKey: options }) as PublicKeyCredential;
-
-      // 3. Verify
       const responseJson = WebAuthnUtils.serializeRegistrationResponse(credential);
       await this.authService.verificarRegistroPasskey(responseJson).toPromise();
 
@@ -186,7 +192,6 @@ export class PerfilComponent implements OnInit {
         apellidoPaterno: this.form.apellidoPaterno,
         apellidoMaterno: this.form.apellidoMaterno
       };
-      // Usar 'any' para pasar datosSolicitud en el patch temporalmente si no está en el tipo explícito
       const payload: any = {
         nombreCompleto: this.nombreCompletoConstruido,
         email: this.form.email,
@@ -214,7 +219,6 @@ export class PerfilComponent implements OnInit {
         nombreCompleto: this.nombreCompletoConstruido,
         email: this.form.email
       }).subscribe({
-
         next: () => {
           this.guardandoDatos.set(false);
           this.mensajeExito.set('Datos actualizados. Vuelve a iniciar sesión para ver los cambios reflejados.');
@@ -227,19 +231,30 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  enviarResetContrasena() {
-    if (!this.emailReset.trim()) return;
-    this.enviandoReset.set(true);
+  cambiarContrasena() {
     this.clearMessages();
-    this.authService.forgotPassword(this.emailReset).subscribe({
+    
+    if (!this.formPassword.actual || !this.formPassword.nueva || !this.formPassword.confirmar) {
+      this.mensajeError.set('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (this.formPassword.nueva !== this.formPassword.confirmar) {
+      this.mensajeError.set('Las contraseñas no coinciden.');
+      return;
+    }
+
+    this.cambiandoPassword.set(true);
+
+    this.authService.cambiarContrasena(this.formPassword.actual, this.formPassword.nueva).subscribe({
       next: () => {
-        this.enviandoReset.set(false);
-        this.resetEnviado.set(true);
-        this.mensajeExito.set(`Se envió un código a ${this.emailReset}. Revisa tu correo.`);
+        this.cambiandoPassword.set(false);
+        this.mensajeExito.set('Contraseña actualizada exitosamente.');
+        this.formPassword = { actual: '', nueva: '', confirmar: '' };
       },
       error: (err) => {
-        this.enviandoReset.set(false);
-        this.mensajeError.set(err.error?.mensaje || 'Error al enviar el correo.');
+        this.cambiandoPassword.set(false);
+        this.mensajeError.set(err.error?.error || err.error?.mensaje || 'Error al cambiar la contraseña.');
       }
     });
   }

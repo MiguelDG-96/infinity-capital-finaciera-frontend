@@ -1,4 +1,4 @@
-import { Component, signal, ViewEncapsulation } from '@angular/core';
+import { Component, signal, ViewEncapsulation, OnInit, OnDestroy, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardNavbarComponent } from '../../features/dashboard/components/dashboard-navbar/dashboard-navbar.component';
@@ -8,6 +8,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { NotificationService } from '../../core/services/notification.service';
 
 import { AuthService } from '../../core/services/auth.service';
+import { WebsocketService } from '../../core/services/websocket.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,7 +25,7 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css',
 })
-export class DashboardLayoutComponent {
+export class DashboardLayoutComponent implements OnInit, OnDestroy {
   sidebarOpen = signal(false);
   
   showLogoutModal = signal(false);
@@ -34,8 +35,36 @@ export class DashboardLayoutComponent {
     public themeService: ThemeService,
     public notificationService: NotificationService,
     private authService: AuthService,
+    private websocketService: WebsocketService,
     private router: Router
-  ) {}
+  ) {
+    // Escuchar notificaciones del WS y mandarlas al NotificationService
+    effect(() => {
+      const notifs = this.websocketService.notifications();
+      if (notifs.length > 0) {
+        const last = notifs[0];
+        if (!last.leida) {
+          this.notificationService.addNotification({
+            title: last.tipo === 'NUEVO_RETIRO' ? 'Solicitud de Retiro' : (last.tipo === 'NUEVA_SOLICITUD' ? 'Nueva Solicitud de Crédito' : 'Nuevo Login'),
+            message: last.mensaje,
+            type: 'info'
+          });
+          this.websocketService.marcarComoLeida(last.id);
+        }
+      }
+    });
+  }
+
+  ngOnInit() {
+    const rol = this.authService.currentUserData()?.rol;
+    if (rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR') {
+      this.websocketService.connect();
+    }
+  }
+
+  ngOnDestroy() {
+    this.websocketService.disconnect();
+  }
 
   toggleDarkMode() {
     this.themeService.toggleDarkMode();
