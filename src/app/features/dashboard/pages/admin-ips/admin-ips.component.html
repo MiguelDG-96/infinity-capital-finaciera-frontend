@@ -175,13 +175,14 @@
                 <th class="font-bold">Usuario / Intentos</th>
                 <th class="font-bold">Dispositivo</th>
                 <th class="font-bold text-right">Fecha</th>
+                <th class="font-bold text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
               @if (cargando()) {
-                <tr><td colspan="5" class="text-center py-8"><span class="loading loading-spinner"></span></td></tr>
+                <tr><td colspan="6" class="text-center py-8"><span class="loading loading-spinner"></span></td></tr>
               } @else if (historial().length === 0) {
-                <tr><td colspan="5" class="text-center py-8 text-base-content/50">No hay registros de conexión.</td></tr>
+                <tr><td colspan="6" class="text-center py-8 text-base-content/50">No hay registros de conexión.</td></tr>
               } @else {
                 @for (evt of historial(); track evt.fechaUltimaConexion + evt.ip) {
                   <tr class="hover">
@@ -214,6 +215,13 @@
                     </td>
                     <td class="text-xs max-w-[200px] truncate" [title]="evt.dispositivo">{{ evt.dispositivo }}</td>
                     <td class="text-right whitespace-nowrap text-xs">{{ evt.fechaUltimaConexion | date:'medium' }}</td>
+                    <td class="text-right">
+                      @if (!evt.enListaBlanca) {
+                        <button class="btn btn-ghost btn-xs text-success" (click)="abrirModalBlancaDesdeHistorial(evt.ip)" title="Añadir a Lista Blanca">
+                          <lucide-icon name="shield-plus" class="w-4 h-4"></lucide-icon>
+                        </button>
+                      }
+                    </td>
                   </tr>
                 }
               }

@@ -66,6 +66,11 @@ export class AdminIpsComponent implements OnInit {
     this.mostrarModalBlanca.set(true);
   }
 
+  abrirModalBlancaDesdeHistorial(ip: string) {
+    this.formBlanca = { ip: ip, alias: '', notas: '' };
+    this.mostrarModalBlanca.set(true);
+  }
+
   guardarListaBlanca() {
     if (!this.formBlanca.ip || !this.formBlanca.alias) return;
     this.cargando.set(true);
