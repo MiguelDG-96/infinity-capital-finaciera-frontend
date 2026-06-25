@@ -88,7 +88,15 @@ export class DashboardSidebarComponent implements OnInit {
         });
         
 
-        
+        if (this.userData()?.rol === 'ROLE_ADMIN') {
+          items.push({
+            label: 'Control de IPs',
+            icon: 'shield-alert',
+            route: '/dashboard/admin/ips',
+            isReady: true
+          });
+        }
+
         this.dynamicMenuItems.set(items);
         this.isLoading.set(false);
       },

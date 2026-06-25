@@ -162,45 +162,88 @@
       </div>
     </div>
 
-    <!-- Seguridad -->
+    <!-- Seguridad y Accesos -->
     <div class="card bg-base-100 shadow-xl border border-base-content/5">
-      <div class="card-body p-6 space-y-4">
-        <div class="flex items-center gap-2 mb-2">
+      <div class="card-body p-6 space-y-6">
+        <div class="flex items-center gap-2 border-b border-base-content/10 pb-2">
           <div class="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center text-warning">
-            <lucide-icon name="lock" class="w-4 h-4"></lucide-icon>
+            <lucide-icon name="shield-check" class="w-4 h-4"></lucide-icon>
           </div>
-          <h3 class="font-bold text-base">Seguridad</h3>
+          <h3 class="font-bold text-base">Seguridad y Accesos</h3>
         </div>
 
-        @if (!resetEnviado()) {
-          <div class="bg-base-200/50 rounded-2xl p-4 border border-base-content/5">
-            <p class="text-sm text-base-content/70 leading-relaxed">
-              Para cambiar tu contraseña te enviaremos un <span class="font-bold text-primary">código de verificación</span> a tu correo registrado.
-            </p>
-          </div>
-          <div class="form-control">
-            <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Tu correo</span></label>
-            <input type="email" [(ngModel)]="emailReset" [readonly]="true"
-              class="input input-bordered input-sm rounded-xl bg-base-200/50 w-full cursor-not-allowed opacity-70" />
-          </div>
-          <button class="btn btn-warning btn-sm w-full rounded-xl"
-            (click)="enviarResetContrasena()" [disabled]="enviandoReset()">
-            @if (enviandoReset()) {
-              <span class="loading loading-spinner loading-xs"></span>
-            } @else {
-              <lucide-icon name="mail" class="w-4 h-4 mr-1"></lucide-icon>
-            }
-            Enviar código por correo
-          </button>
-        } @else {
-          <div class="flex flex-col items-center justify-center py-6 gap-3 text-center">
-            <div class="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center text-success">
-              <lucide-icon name="mail-check" class="w-7 h-7"></lucide-icon>
+        <!-- Cambio de contraseña -->
+        <div class="space-y-3">
+          <h4 class="text-sm font-bold text-base-content/70">Contraseña</h4>
+          @if (!resetEnviado()) {
+            <p class="text-xs text-base-content/60">Enviaremos un enlace a tu correo para cambiarla.</p>
+            <button class="btn btn-warning btn-sm rounded-xl"
+              (click)="enviarResetContrasena()" [disabled]="enviandoReset()">
+              @if (enviandoReset()) { <span class="loading loading-spinner loading-xs"></span> } 
+              @else { <lucide-icon name="key" class="w-4 h-4 mr-1"></lucide-icon> }
+              Restablecer Contraseña
+            </button>
+          } @else {
+            <div class="text-success text-xs font-bold flex items-center gap-1">
+              <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon>
+              Código enviado a tu correo.
             </div>
-            <p class="font-bold text-base">¡Código enviado!</p>
-            <p class="text-sm text-base-content/60">Revisa tu correo <span class="font-semibold text-base-content/80">{{ emailReset }}</span> y sigue las instrucciones para cambiar tu contraseña.</p>
-          </div>
-        }
+          }
+        </div>
+
+        <!-- Biometría / Passkeys -->
+        <div class="space-y-3 pt-4 border-t border-base-content/5">
+          <h4 class="text-sm font-bold text-base-content/70">Biometría (Passkeys)</h4>
+          <p class="text-xs text-base-content/60">Inicia sesión usando tu huella dactilar, Face ID o llave física sin necesitar contraseña ni código 2FA.</p>
+          <button class="btn btn-outline btn-primary btn-sm rounded-xl" (click)="registrarPasskey()">
+            <lucide-icon name="fingerprint" class="w-4 h-4 mr-1"></lucide-icon>
+            Registrar Dispositivo Actual
+          </button>
+        </div>
+
+        <!-- Sesión Activa -->
+        <div class="space-y-3 pt-4 border-t border-base-content/5">
+          <h4 class="text-sm font-bold text-base-content/70">Sesión Actual</h4>
+          @if (cargandoSeguridad()) {
+            <span class="loading loading-dots loading-sm"></span>
+          } @else if (sesionActiva()) {
+            <div class="bg-base-200/50 p-3 rounded-lg text-xs space-y-1">
+              <div class="flex justify-between"><span class="font-bold">IP:</span> <span>{{ sesionActiva().ipDireccion }}</span></div>
+              <div class="flex justify-between"><span class="font-bold">Navegador:</span> <span class="truncate ml-2" [title]="sesionActiva().userAgent">{{ sesionActiva().userAgent }}</span></div>
+              <div class="flex justify-between"><span class="font-bold">Expira:</span> <span>{{ sesionActiva().fechaExpiracion | date:'medium' }}</span></div>
+            </div>
+          }
+        </div>
+
+        <!-- Dispositivos Confiables -->
+        <div class="space-y-3 pt-4 border-t border-base-content/5">
+          <h4 class="text-sm font-bold text-base-content/70 flex justify-between items-center">
+            Dispositivos Confiables
+            <span class="badge badge-sm">{{ dispositivos().length }}/3</span>
+          </h4>
+          <p class="text-xs text-base-content/60">Dispositivos donde no se pide código 2FA.</p>
+          
+          @if (cargandoSeguridad()) {
+            <span class="loading loading-dots loading-sm"></span>
+          } @else if (dispositivos().length === 0) {
+            <div class="text-xs text-base-content/40 text-center py-2">No tienes dispositivos confiables.</div>
+          } @else {
+            <div class="space-y-2">
+              @for (d of dispositivos(); track d.id) {
+                <div class="flex items-center justify-between bg-base-200/30 p-2 rounded-lg border border-base-content/5">
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-xs font-bold truncate">{{ d.userAgent }}</span>
+                    <span class="text-[10px] text-base-content/50">Agregado: {{ d.fechaCreacion | date:'shortDate' }}</span>
+                  </div>
+                  <button class="btn btn-ghost btn-xs text-error ml-2 px-2" (click)="revocarDispositivo(d.id)" title="Revocar acceso">
+                    <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
       </div>
     </div>
 

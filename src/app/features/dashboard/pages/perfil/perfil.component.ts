@@ -8,6 +8,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
 import { environment } from '../../../../../environments/environment';
+import { WebAuthnUtils } from '../../../../core/utils/webauthn.utils';
 import { Cliente } from '../../../../core/models/cliente.model';
 
 @Component({
@@ -49,6 +50,11 @@ export class PerfilComponent implements OnInit {
   };
   emailReset = '';
   resetEnviado = signal(false);
+
+  // Seguridad
+  dispositivos = signal<any[]>([]);
+  sesionActiva = signal<any>(null);
+  cargandoSeguridad = signal(false);
 
   get userData() { return this.authService.currentUserData(); }
   get userPhotoUrl(): string | null {
@@ -118,6 +124,55 @@ export class PerfilComponent implements OnInit {
       });
     }
 
+    this.cargarDatosSeguridad();
+  }
+
+  cargarDatosSeguridad() {
+    this.cargandoSeguridad.set(true);
+    this.authService.getSesionActiva().subscribe({
+      next: (s) => this.sesionActiva.set(s),
+      error: () => {}
+    });
+
+    this.authService.getDispositivosConfiables().subscribe({
+      next: (d) => {
+        this.dispositivos.set(d);
+        this.cargandoSeguridad.set(false);
+      },
+      error: () => this.cargandoSeguridad.set(false)
+    });
+  }
+
+  revocarDispositivo(id: number) {
+    if (!confirm('¿Estás seguro de revocar la confianza de este dispositivo? Se pedirá código 2FA la próxima vez.')) return;
+    this.authService.revocarDispositivo(id).subscribe({
+      next: () => {
+        this.cargarDatosSeguridad();
+        this.mensajeExito.set('Dispositivo revocado exitosamente.');
+      },
+      error: () => this.mensajeError.set('Error al revocar el dispositivo.')
+    });
+  }
+
+  async registrarPasskey() {
+    this.clearMessages();
+    try {
+      // 1. Get options
+      const optionsJson = await this.authService.getOpcionesRegistroPasskey().toPromise();
+      const options = WebAuthnUtils.parseCreationOptions(JSON.stringify(optionsJson));
+
+      // 2. Request creation
+      const credential = await navigator.credentials.create({ publicKey: options }) as PublicKeyCredential;
+
+      // 3. Verify
+      const responseJson = WebAuthnUtils.serializeRegistrationResponse(credential);
+      await this.authService.verificarRegistroPasskey(responseJson).toPromise();
+
+      this.mensajeExito.set('¡Dispositivo biométrico (Passkey) registrado correctamente!');
+    } catch (err) {
+      console.error(err);
+      this.mensajeError.set('No se pudo registrar el Passkey. Asegúrate de que tu dispositivo sea compatible y no hayas cancelado.');
+    }
   }
 
   guardarDatos() {

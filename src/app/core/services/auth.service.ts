@@ -48,6 +48,11 @@ export class AuthService {
   }
 
   login(credentials: AutenticacionRequestDto): Observable<AuthModel> {
+    const trustedToken = localStorage.getItem('infinity_trusted_device_token');
+    if (trustedToken) {
+      credentials.trustedDeviceToken = trustedToken;
+    }
+
     return this.http.post<AutenticacionResponseDto>(
       `${environment.apiUrl}/autenticacion/login`,
       credentials
@@ -61,10 +66,10 @@ export class AuthService {
     );
   }
 
-  login2FA(email: string, codigo: string): Observable<AuthModel> {
+  login2FA(email: string, codigo: string, recordarDispositivo: boolean = false): Observable<AuthModel> {
     return this.http.post<AutenticacionResponseDto>(
       `${environment.apiUrl}/autenticacion/login/2fa`,
-      { email, codigo }
+      { email, codigo, recordarDispositivo }
     ).pipe(
       map(response => AuthMapper.fromResponse(response)),
       tap(auth => {
@@ -116,6 +121,45 @@ export class AuthService {
     return this.http.get<any[]>(`${environment.apiUrl}/usuarios/me/modulos`);
   }
 
+  // --- Sesiones y Dispositivos Confiables ---
+  getSesionActiva(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/autenticacion/sesion-activa`);
+  }
+
+  getDispositivosConfiables(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/autenticacion/dispositivos-confiables`);
+  }
+
+  revocarDispositivo(id: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/autenticacion/dispositivos-confiables/${id}`);
+  }
+
+  // --- Passkeys / WebAuthn ---
+  getOpcionesRegistroPasskey(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/webauthn/registro/opciones`);
+  }
+
+  verificarRegistroPasskey(responseJson: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/webauthn/registro/verificar`, responseJson);
+  }
+
+  getOpcionesLoginPasskey(email: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/webauthn/login/opciones?email=${encodeURIComponent(email)}`);
+  }
+
+  verificarLoginPasskey(email: string, responseJson: string): Observable<AutenticacionResponseDto> {
+    return this.http.post<AutenticacionResponseDto>(
+      `${environment.apiUrl}/webauthn/login/verificar?email=${encodeURIComponent(email)}`,
+      responseJson
+    ).pipe(
+      tap(res => {
+        if (res.token) {
+          this.saveToStorage(AuthMapper.fromResponse(res));
+        }
+      })
+    );
+  }
+
   logout(): void {
     localStorage.removeItem('auth_token');
     this.status.set(null);
@@ -124,6 +168,9 @@ export class AuthService {
 
   private saveToStorage(auth: AuthModel): void {
     localStorage.setItem('auth_token', JSON.stringify(auth));
+    if (auth.trustedDeviceToken) {
+      localStorage.setItem('infinity_trusted_device_token', auth.trustedDeviceToken);
+    }
     this.status.set(auth);
   }
 

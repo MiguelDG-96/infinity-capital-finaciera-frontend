@@ -44,6 +44,7 @@ export const routes: Routes = [
       { path: 'admin/tasas', loadComponent: () => import('./features/dashboard/pages/gestion-tasas/gestion-tasas.component').then(m => m.GestionTasasComponent) },
       { path: 'admin/modulos', loadComponent: () => import('./features/dashboard/pages/admin-modulos/admin-modulos.component').then(m => m.AdminModulosComponent) },
       { path: 'admin/seguridad', loadComponent: () => import('./features/dashboard/pages/admin-seguridad/admin-seguridad.component').then(m => m.AdminSeguridadComponent) },
+      { path: 'admin/ips', loadComponent: () => import('./features/dashboard/pages/admin-ips/admin-ips.component').then(m => m.AdminIpsComponent) },
       { path: 'admin/personal', loadComponent: () => import('./features/dashboard/pages/admin-personal/admin-personal.component').then(m => m.AdminPersonalComponent) },
       { path: 'admin/tesoreria', loadComponent: () => import('./features/dashboard/pages/admin-tesoreria/admin-tesoreria.component').then(m => m.AdminTesoreriaComponent) },
       { path: 'admin/ayuda', loadComponent: () => import('./features/dashboard/pages/admin-ayuda/admin-ayuda').then(m => m.AdminAyuda) },

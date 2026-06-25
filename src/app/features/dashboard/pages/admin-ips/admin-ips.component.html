@@ -1,0 +1,265 @@
+<div class="p-4 md:p-8 space-y-6 animate-fade-in max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h1 class="text-2xl font-black text-base-content tracking-tight">Control de Accesos & IPs</h1>
+      <p class="text-sm text-base-content/60 mt-1">
+        Gestiona las direcciones IP con acceso directo, bloqueadas y monitorea el historial de conexiones.
+      </p>
+    </div>
+  </div>
+
+  @if (mensajeExito()) {
+    <div class="alert alert-success shadow-sm">
+      <lucide-icon name="check-circle" class="w-5 h-5"></lucide-icon>
+      <span class="text-sm font-medium">{{ mensajeExito() }}</span>
+    </div>
+  }
+  @if (mensajeError()) {
+    <div class="alert alert-error shadow-sm">
+      <lucide-icon name="alert-circle" class="w-5 h-5"></lucide-icon>
+      <span class="text-sm font-medium">{{ mensajeError() }}</span>
+    </div>
+  }
+
+  <!-- Tabs -->
+  <div class="tabs tabs-boxed bg-base-200/50 p-1 font-bold inline-flex">
+    <a class="tab transition-all" [class.tab-active]="activeTab() === 'blanca'" [class.bg-base-100]="activeTab() === 'blanca'" [class.shadow-sm]="activeTab() === 'blanca'" (click)="setTab('blanca')">
+      <lucide-icon name="shield-check" class="w-4 h-4 mr-2" [class.text-success]="activeTab() === 'blanca'"></lucide-icon>
+      Lista Blanca
+    </a>
+    <a class="tab transition-all" [class.tab-active]="activeTab() === 'negra'" [class.bg-base-100]="activeTab() === 'negra'" [class.shadow-sm]="activeTab() === 'negra'" (click)="setTab('negra')">
+      <lucide-icon name="shield-alert" class="w-4 h-4 mr-2" [class.text-error]="activeTab() === 'negra'"></lucide-icon>
+      Lista Negra
+    </a>
+    <a class="tab transition-all" [class.tab-active]="activeTab() === 'historial'" [class.bg-base-100]="activeTab() === 'historial'" [class.shadow-sm]="activeTab() === 'historial'" (click)="setTab('historial')">
+      <lucide-icon name="activity" class="w-4 h-4 mr-2" [class.text-primary]="activeTab() === 'historial'"></lucide-icon>
+      Historial
+    </a>
+  </div>
+
+  <!-- Content -->
+  <div class="card bg-base-100 shadow-xl border border-base-content/5">
+    <div class="card-body p-0">
+      
+      <!-- Lista Blanca -->
+      @if (activeTab() === 'blanca') {
+        <div class="p-6 border-b border-base-content/5 flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-lg flex items-center gap-2">
+              IPs de Confianza
+              <span class="badge badge-success badge-sm">{{ listaBlanca().length }}</span>
+            </h3>
+            <p class="text-xs text-base-content/60">Las IPs aquí listadas no requerirán código 2FA para iniciar sesión.</p>
+          </div>
+          <button class="btn btn-primary btn-sm rounded-xl shadow-lg shadow-primary/20" (click)="abrirModalBlanca()">
+            <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+            Agregar IP
+          </button>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr class="bg-base-200/30 text-base-content/70">
+                <th class="font-bold">IP</th>
+                <th class="font-bold">Alias / Oficina</th>
+                <th class="font-bold">Notas</th>
+                <th class="font-bold">Registrada por</th>
+                <th class="font-bold">Fecha</th>
+                <th class="text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (cargando()) {
+                <tr><td colspan="6" class="text-center py-8"><span class="loading loading-spinner"></span></td></tr>
+              } @else if (listaBlanca().length === 0) {
+                <tr><td colspan="6" class="text-center py-8 text-base-content/50">No hay IPs en lista blanca.</td></tr>
+              } @else {
+                @for (item of listaBlanca(); track item.id) {
+                  <tr class="hover">
+                    <td class="font-mono text-sm font-bold">{{ item.ipDireccion }}</td>
+                    <td><div class="badge badge-outline badge-sm">{{ item.aliasOficina }}</div></td>
+                    <td class="text-xs max-w-[200px] truncate" [title]="item.notas">{{ item.notas || '-' }}</td>
+                    <td class="text-xs">{{ item.adminRegistro }}</td>
+                    <td class="text-xs whitespace-nowrap">{{ item.fechaRegistro | date:'medium' }}</td>
+                    <td class="text-right">
+                      <button class="btn btn-ghost btn-xs text-error" (click)="eliminarDeListaBlanca(item.id)" title="Remover de lista blanca">
+                        <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <!-- Lista Negra -->
+      @if (activeTab() === 'negra') {
+        <div class="p-6 border-b border-base-content/5">
+          <h3 class="font-bold text-lg flex items-center gap-2">
+            IPs Bloqueadas
+            <span class="badge badge-error badge-sm">{{ listaNegra().length }}</span>
+          </h3>
+          <p class="text-xs text-base-content/60">IPs bloqueadas automáticamente por múltiples intentos fallidos o ataques.</p>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr class="bg-base-200/30 text-base-content/70">
+                <th class="font-bold">IP Bloqueada</th>
+                <th class="font-bold text-center">Intentos</th>
+                <th class="font-bold">Motivo</th>
+                <th class="font-bold">Fecha Bloqueo</th>
+                <th class="font-bold">Estado</th>
+                <th class="text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (cargando()) {
+                <tr><td colspan="6" class="text-center py-8"><span class="loading loading-spinner"></span></td></tr>
+              } @else if (listaNegra().length === 0) {
+                <tr><td colspan="6" class="text-center py-8 text-base-content/50">No hay IPs bloqueadas.</td></tr>
+              } @else {
+                @for (item of listaNegra(); track item.id) {
+                  <tr class="hover" [class.opacity-60]="item.desbloqueadaPor">
+                    <td class="font-mono text-sm font-bold text-error">{{ item.ipDireccion }}</td>
+                    <td class="text-center"><span class="badge badge-error badge-sm">{{ item.totalIntentos }}</span></td>
+                    <td class="text-xs text-base-content/80">{{ item.motivo }}</td>
+                    <td class="text-xs whitespace-nowrap">{{ item.fechaBloqueo | date:'medium' }}</td>
+                    <td>
+                      @if (item.desbloqueadaPor) {
+                        <span class="badge badge-success badge-sm badge-outline" [title]="'Desbloqueada por ' + item.desbloqueadaPor + ' el ' + (item.fechaDesbloqueo | date:'short')">
+                          Desbloqueada
+                        </span>
+                      } @else {
+                        <span class="badge badge-error badge-sm">Bloqueada</span>
+                      }
+                    </td>
+                    <td class="text-right">
+                      @if (!item.desbloqueadaPor) {
+                        <button class="btn btn-outline btn-success btn-xs" (click)="desbloquearIp(item.ipDireccion)" title="Forzar desbloqueo">
+                          <lucide-icon name="unlock" class="w-3 h-3 mr-1"></lucide-icon> Desbloquear
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <!-- Historial -->
+      @if (activeTab() === 'historial') {
+        <div class="p-6 border-b border-base-content/5 flex justify-between items-end">
+          <div>
+            <h3 class="font-bold text-lg flex items-center gap-2">
+              Historial de Conexiones
+              <span class="badge badge-primary badge-sm">{{ historial().length }}</span>
+            </h3>
+            <p class="text-xs text-base-content/60">Últimos eventos de sesión (Refresh Tokens) y auditorías de seguridad.</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" (click)="cargarDatosActuales()"><lucide-icon name="refresh-cw" class="w-4 h-4"></lucide-icon></button>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr class="bg-base-200/30 text-base-content/70">
+                <th class="font-bold">Estado</th>
+                <th class="font-bold">IP</th>
+                <th class="font-bold">Usuario / Intentos</th>
+                <th class="font-bold">Dispositivo</th>
+                <th class="font-bold text-right">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (cargando()) {
+                <tr><td colspan="5" class="text-center py-8"><span class="loading loading-spinner"></span></td></tr>
+              } @else if (historial().length === 0) {
+                <tr><td colspan="5" class="text-center py-8 text-base-content/50">No hay registros de conexión.</td></tr>
+              } @else {
+                @for (evt of historial(); track evt.fechaUltimaConexion + evt.ip) {
+                  <tr class="hover">
+                    <td>
+                      @if (evt.tipo === 'EXITOSO') {
+                        <div class="badge badge-success badge-sm gap-1 pl-1">
+                          <lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Éxito
+                        </div>
+                      } @else {
+                        <div class="badge badge-error badge-sm gap-1 pl-1">
+                          <lucide-icon name="x-circle" class="w-3 h-3"></lucide-icon> Fallo
+                        </div>
+                      }
+                    </td>
+                    <td>
+                      <div class="font-mono text-xs font-bold flex items-center gap-1">
+                        {{ evt.ip }}
+                        @if (evt.enListaBlanca) { <lucide-icon name="shield-check" class="w-3 h-3 text-success" title="En Lista Blanca"></lucide-icon> }
+                        @if (evt.enListaNegra) { <lucide-icon name="shield-alert" class="w-3 h-3 text-error" title="En Lista Negra"></lucide-icon> }
+                      </div>
+                      @if (evt.alias) { <div class="text-[10px] text-base-content/50 uppercase font-bold">{{ evt.alias }}</div> }
+                    </td>
+                    <td>
+                      @if (evt.tipo === 'EXITOSO') {
+                        <div class="text-sm font-medium">{{ evt.nombreCompleto || evt.usuario }}</div>
+                        <div class="text-xs text-base-content/60">{{ evt.usuario }}</div>
+                      } @else {
+                        <div class="text-sm font-bold text-error">{{ evt.totalFallos }} intentos fallidos</div>
+                      }
+                    </td>
+                    <td class="text-xs max-w-[200px] truncate" [title]="evt.dispositivo">{{ evt.dispositivo }}</td>
+                    <td class="text-right whitespace-nowrap text-xs">{{ evt.fechaUltimaConexion | date:'medium' }}</td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Lista Blanca -->
+<dialog class="modal" [class.modal-open]="mostrarModalBlanca()">
+  <div class="modal-box bg-base-100 border border-base-content/10 shadow-2xl rounded-2xl">
+    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="mostrarModalBlanca.set(false)">✕</button>
+    <h3 class="font-black text-lg flex items-center gap-2 mb-4">
+      <lucide-icon name="shield-plus" class="text-success"></lucide-icon>
+      Agregar IP de Confianza
+    </h3>
+    <p class="text-sm text-base-content/70 mb-4">
+      Las IPs agregadas no requerirán verificación de dos factores (2FA). Ideal para oficinas o sucursales.
+    </p>
+
+    <div class="space-y-4">
+      <div class="form-control">
+        <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Dirección IP</span></label>
+        <input type="text" [(ngModel)]="formBlanca.ip" class="input input-bordered input-sm rounded-xl focus:input-primary font-mono" placeholder="Ej: 192.168.1.100" />
+      </div>
+      <div class="form-control">
+        <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Alias / Sede</span></label>
+        <input type="text" [(ngModel)]="formBlanca.alias" class="input input-bordered input-sm rounded-xl focus:input-primary" placeholder="Ej: Oficina Principal - Lima" />
+      </div>
+      <div class="form-control">
+        <label class="label py-1"><span class="label-text text-xs font-bold uppercase text-base-content/50">Notas adicionales</span></label>
+        <textarea [(ngModel)]="formBlanca.notas" class="textarea textarea-bordered rounded-xl focus:textarea-primary text-sm" placeholder="Opcional..." rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-action">
+      <button class="btn btn-ghost rounded-xl" (click)="mostrarModalBlanca.set(false)">Cancelar</button>
+      <button class="btn btn-success text-white rounded-xl shadow-lg shadow-success/20" (click)="guardarListaBlanca()" [disabled]="!formBlanca.ip || !formBlanca.alias || cargando()">
+        @if (cargando()) { <span class="loading loading-spinner loading-sm"></span> }
+        Guardar IP
+      </button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop" (click)="mostrarModalBlanca.set(false)"><button>close</button></form>
+</dialog>

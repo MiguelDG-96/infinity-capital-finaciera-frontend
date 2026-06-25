@@ -5,6 +5,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { WebAuthnUtils } from '../../../core/utils/webauthn.utils';
 
 @Component({
   selector: 'app-login',
@@ -55,7 +56,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   otpForm = this.fb.group({
-    codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
+    codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+    recordarDispositivo: [false]
   });
 
   ngOnInit() {
@@ -151,8 +153,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.errorMessage.set(null);
 
       const codigo = this.otpForm.value.codigo!;
+      const recordar = !!this.otpForm.value.recordarDispositivo;
 
-      this.authService.login2FA(this.emailTemporal(), codigo).subscribe({
+      this.authService.login2FA(this.emailTemporal(), codigo, recordar).subscribe({
         next: () => {
           this.isLoading.set(false);
           // Guardar o eliminar el recordatorio de sesión
@@ -172,6 +175,38 @@ export class LoginComponent implements OnInit, OnDestroy {
           console.error('OTP error:', err);
         }
       });
+    }
+  }
+
+  async loginWithPasskey() {
+    const email = this.loginForm.value.email;
+    if (!email) {
+      this.errorMessage.set('Ingresa tu correo para iniciar sesión con Passkey.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    try {
+      // 1. Get options from backend
+      const optionsJson = await this.authService.getOpcionesLoginPasskey(email).toPromise();
+      const options = WebAuthnUtils.parseRequestOptions(JSON.stringify(optionsJson));
+
+      // 2. Request credential from browser
+      const assertion = await navigator.credentials.get({ publicKey: options }) as PublicKeyCredential;
+
+      // 3. Serialize and send to backend
+      const responseJson = WebAuthnUtils.serializeAssertionResponse(assertion);
+      await this.authService.verificarLoginPasskey(email, responseJson).toPromise();
+
+      this.isLoading.set(false);
+      this.router.navigate(['/dashboard']);
+
+    } catch (err: any) {
+      console.error('Passkey login error', err);
+      this.isLoading.set(false);
+      this.errorMessage.set('Fallo la autenticación con Passkey. Verifica tu dispositivo o usa tu contraseña.');
     }
   }
 }
