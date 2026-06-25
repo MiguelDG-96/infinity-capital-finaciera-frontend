@@ -44,11 +44,8 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
       if (notifs.length > 0) {
         const last = notifs[0];
         if (!last.leida) {
-          this.notificationService.addNotification({
-            title: last.tipo === 'NUEVO_RETIRO' ? 'Solicitud de Retiro' : (last.tipo === 'NUEVA_SOLICITUD' ? 'Nueva Solicitud de Crédito' : 'Nuevo Login'),
-            message: last.mensaje,
-            type: 'info'
-          });
+          // En vez de un toast, hacemos que el NotificationService actual recargue sus contadores
+          this.notificationService.recargar();
           this.websocketService.marcarComoLeida(last.id);
         }
       }

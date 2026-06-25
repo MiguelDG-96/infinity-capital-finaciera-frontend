@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
-import * as SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import { environment } from '../../../environments/environment';
 
 export interface AppNotification {
