@@ -53,7 +53,8 @@ export class WebAuthnUtils {
       response: {
         attestationObject: this.bufferToBase64URLString(response.attestationObject),
         clientDataJSON: this.bufferToBase64URLString(response.clientDataJSON)
-      }
+      },
+      clientExtensionResults: cred.getClientExtensionResults()
     };
     return JSON.stringify(result);
   }
@@ -86,7 +87,8 @@ export class WebAuthnUtils {
         clientDataJSON: this.bufferToBase64URLString(response.clientDataJSON),
         signature: this.bufferToBase64URLString(response.signature),
         userHandle: response.userHandle ? this.bufferToBase64URLString(response.userHandle) : null
-      }
+      },
+      clientExtensionResults: cred.getClientExtensionResults()
     };
     return JSON.stringify(result);
   }
