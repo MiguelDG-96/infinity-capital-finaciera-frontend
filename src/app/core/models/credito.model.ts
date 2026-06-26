@@ -124,7 +124,8 @@ export interface Cuota {
   penalidad?: number;
   comision?: number;
   seguro?: number;
-  estadoCuota: 'PENDIENTE' | 'PAGADO' | 'MORA' | 'PAGADO_PARCIAL' | 'POSTERGADA' | 'REVISION';
+  cargoRefinanciamiento?: number;
+  estadoCuota: 'PENDIENTE' | 'PAGADO' | 'MORA' | 'PAGADO_PARCIAL' | 'POSTERGADA' | 'REVISION' | 'REFINANCIADO';
   fechaPago?: Date;
   esGracia?: boolean;
   metodoPago?: string;
@@ -153,7 +154,7 @@ export interface Credito {
   documento?: string;
   plazoMeses: number;
   tasaAprobada?: number;
-  estado: EstadoCredito;
+  estado: EstadoCredito | 'REFINANCIADO';
   fechaDesembolso?: Date;
   fechaVencimiento?: Date;
   fechaInicio?: Date;
@@ -174,6 +175,7 @@ export interface Credito {
   cliente?: Cliente;
   garantes?: Garante[];
   motivoDescuentoTasa?: string;
+  creditoOrigenId?: number;
   analistaRegistro?: { id: number, nombreCompleto: string, email: string };
 }
 

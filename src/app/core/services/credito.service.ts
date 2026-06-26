@@ -223,4 +223,21 @@ export class CreditoService {
       formData
     );
   }
+
+  // ==========================================
+  // REFINANCIAMIENTO ENDPOINTS
+  // ==========================================
+
+  obtenerResumenRefinanciamiento(creditoId: number): Observable<{
+    capitalPendiente: number;
+    interesesVencidos: number;
+    moraTotal: number;
+    deudaTotalAProrratear: number;
+  }> {
+    return this.http.get<any>(`${this.apiUrl}/creditos/admin/${creditoId}/refinanciamiento-resumen`);
+  }
+
+  refinanciarCredito(creditoId: number, payload: { nuevaTasa: number, nuevoNumeroCuotas: number }): Observable<{ mensaje: string, nuevoCreditoId: number }> {
+    return this.http.post<any>(`${this.apiUrl}/creditos/admin/${creditoId}/refinanciar`, payload);
+  }
 }

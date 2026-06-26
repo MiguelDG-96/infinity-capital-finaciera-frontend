@@ -60,20 +60,35 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-base-content/5">
             <div class="p-6">
-                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Cuentas Banco (Yape/Transferencias)</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total (Yape/Transferencias)</p>
                 <p class="text-2xl font-black text-info">{{ reporteCaja.totalBanco | currency:'S/ ' }}</p>
             </div>
             <div class="p-6">
                 <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Caja Física (Efectivo)</p>
                 <p class="text-2xl font-black text-success">{{ reporteCaja.totalFisico | currency:'S/ ' }}</p>
             </div>
-            <div class="p-6">
-                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Ganancia/Pérdida por redondeos de caja</p>
-                <p class="text-2xl font-black" 
-                   [ngClass]="(reporteCaja.ajusteRedondeo || 0) > 0 ? 'text-success' : ((reporteCaja.ajusteRedondeo || 0) < 0 ? 'text-error' : 'text-base-content')">
-                    {{ (reporteCaja.ajusteRedondeo || 0) | currency:'S/ ' }}
-                </p>
-                <p class="text-xs opacity-50 mt-1 font-medium italic">(un margen de error contable totalmente legal y normal).</p>
+            <div class="p-6 flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-2">Redondeos de Caja (Efectivo)</p>
+                
+                <div class="flex items-center gap-4 mb-2">
+                    <div>
+                        <p class="text-[9px] font-bold uppercase opacity-50">Ganancia</p>
+                        <p class="text-lg font-black text-success">+{{ (reporteCaja.gananciaRedondeo || 0) | currency:'S/ ' }}</p>
+                    </div>
+                    <div class="h-6 w-px bg-base-content/10"></div>
+                    <div>
+                        <p class="text-[9px] font-bold uppercase opacity-50">Pérdida</p>
+                        <p class="text-lg font-black text-error">-{{ (reporteCaja.perdidaRedondeo || 0) | currency:'S/ ' }}</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1 pt-2 border-t border-base-content/5">
+                    <span class="text-[10px] font-bold uppercase opacity-50">Neto:</span>
+                    <span class="font-black text-sm" 
+                          [ngClass]="(reporteCaja.ajusteRedondeo || 0) > 0 ? 'text-success' : ((reporteCaja.ajusteRedondeo || 0) < 0 ? 'text-error' : 'text-base-content')">
+                        {{ (reporteCaja.ajusteRedondeo || 0) | currency:'S/ ' }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>

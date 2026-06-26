@@ -146,6 +146,7 @@ export interface CreditoDTOResponse {
   fechaSolicitud?: string; 
   garantes?: GaranteDTO[];
   descuentoRetencion?: number;
+  creditoOrigenId?: number;
 }
 
 export interface GaranteDTO {
@@ -170,6 +171,7 @@ export interface CuotaDTO {
   penalidad?: number;
   comision?: number;
   seguro?: number;
+  cargoRefinanciamiento?: number;
   estadoCuota: string;
   fechaPago?: string;
   esGracia?: boolean;

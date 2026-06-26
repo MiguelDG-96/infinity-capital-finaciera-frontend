@@ -2,7 +2,7 @@
 
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
@@ -21,6 +21,7 @@ import { PostergarCuotaModalComponent } from '../../components/postergar-cuota-m
 import { RenovarSoloInteresModalComponent } from '../../components/renovar-solo-interes-modal/renovar-solo-interes-modal.component';
 import { ResolverContratoModalComponent } from '../../components/resolver-contrato-modal/resolver-contrato-modal.component';
 import { PagoGlobalModalComponent } from '../../components/pago-global-modal/pago-global-modal.component';
+import { RefinanciamientoModalComponent } from '../../components/refinanciamiento-modal/refinanciamiento-modal.component';
 import { environment } from '../../../../../environments/environment';
 import { validateFileClientSide } from '../../../../core/utils/file-validator.util';
 import { ComprobantePagoComponent, ComprobanteData } from '../../../../shared/components/comprobante-pago/comprobante-pago';
@@ -28,12 +29,13 @@ import { ComprobantePagoComponent, ComprobanteData } from '../../../../shared/co
 @Component({
   selector: 'app-credito-detalle',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent, PagoGlobalModalComponent, ComprobantePagoComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink, PagoAnticipadoModalComponent, GaranteModalComponent, EditCuotaModalComponent, EditCreditoModalComponent, ClientePerfilModalComponent, PostergarCuotaModalComponent, RenovarSoloInteresModalComponent, ResolverContratoModalComponent, PagoGlobalModalComponent, ComprobantePagoComponent, RefinanciamientoModalComponent],
   templateUrl: './credito-detalle.component.html',
   styleUrl: './credito-detalle.component.css'
 })
 export class CreditoDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private creditoService = inject(CreditoService);
   private pdfService = inject(ContratoPdfService);
   private estadoCuentaPdfService = inject(EstadoCuentaPdfService);
@@ -44,6 +46,9 @@ export class CreditoDetalleComponent implements OnInit {
   readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   credito = signal<Credito | null>(null);
+  creditoOrigen = signal<Credito | null>(null); // Para ver el cronograma anterior
+  viendoCronogramaAnterior = signal<boolean>(false); // Tab state
+
   isAdminMode = signal<boolean>(false);
   cargando = signal<boolean>(true);
   error = signal<string | null>(null);
@@ -61,6 +66,7 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalRenovar = signal<boolean>(false);
   mostrarModalResolver = signal<boolean>(false);
   mostrarModalPagoGlobal = signal<boolean>(false);
+  mostrarModalRefinanciamiento = signal<boolean>(false);
   mostrarModalConfirmarCuotasHastaHoy = signal<boolean>(false);
   mostrarModalConfirmarCuotaVencida = signal<boolean>(false);
   mostrarModalCartaCobranza = signal<boolean>(false);
@@ -101,14 +107,18 @@ export class CreditoDetalleComponent implements OnInit {
   currentPage = signal<number>(1);
   pageSize = 10;
 
+  cuotasActivas = computed(() => {
+    return this.viendoCronogramaAnterior() && this.creditoOrigen() ? this.creditoOrigen()!.cuotas : (this.credito()?.cuotas || []);
+  });
+
   paginatedCuotas = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
     const end = start + this.pageSize;
-    return this.credito()?.cuotas.slice(start, end) || [];
+    return this.cuotasActivas().slice(start, end);
   });
 
   totalPages = computed(() => {
-    return Math.ceil((this.credito()?.cuotas.length || 0) / this.pageSize);
+    return Math.ceil((this.cuotasActivas().length || 0) / this.pageSize);
   });
 
   pagesArray = computed(() => {
@@ -117,10 +127,14 @@ export class CreditoDetalleComponent implements OnInit {
 
   ngOnInit() {
     this.isAdminMode.set(this.route.snapshot.url.some(segment => segment.path === 'admin'));
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.cargarDetalle(id);
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      if (id) {
+        this.viendoCronogramaAnterior.set(false);
+        this.creditoOrigen.set(null);
+        this.cargarDetalle(id);
+      }
+    });
   }
 
   cargarDetalle(id: number) {
@@ -133,7 +147,21 @@ export class CreditoDetalleComponent implements OnInit {
       next: (c) => {
         this.credito.set(c);
         this.cargando.set(false);
+        this.currentPage.set(1);
         
+        // Si el crédito tiene un origen (fue refinanciado de uno anterior), cargamos ese historial
+        if (c.creditoOrigenId) {
+           const obsOrigen = this.isAdminMode()
+             ? this.creditoService.obtenerCreditoPorIdAdmin(c.creditoOrigenId)
+             : this.creditoService.obtenerCreditoPorId(c.creditoOrigenId);
+             
+           obsOrigen.subscribe({
+             next: (origen) => {
+                this.creditoOrigen.set(origen);
+             }
+           });
+        }
+
         // Verificar si es cliente recurrente (más de un crédito)
         if (c.documento) {
           const obsCartera = this.isAdminMode() 
@@ -153,6 +181,22 @@ export class CreditoDetalleComponent implements OnInit {
         this.cargando.set(false);
       }
     });
+  }
+
+  obtenerNombreCorto(nombreCompleto?: string): string {
+    if (!nombreCompleto) return '';
+    const partes = nombreCompleto.trim().split(/\s+/);
+    if (partes.length >= 3) {
+      // Assuming layout is First Middle Last, or First Last1 Last2
+      // We will just take the first two parts to be safe (First Name + First Last Name)
+      return `${partes[0]} ${partes[partes.length > 2 ? 1 : 1]}`;
+    }
+    return nombreCompleto;
+  }
+
+  cambiarVistaCronograma(anterior: boolean) {
+    this.viendoCronogramaAnterior.set(anterior);
+    this.currentPage.set(1);
   }
 
   pagarCuota(cuota: Cuota) {
@@ -187,6 +231,12 @@ export class CreditoDetalleComponent implements OnInit {
     this.comprobantePreviewUrl.set(null);
     this.errorRegistrarPago.set(null);
     this.mostrarModalSubirComprobante.set(true);
+  }
+
+  onMetodoPagoChange() {
+    if (this.comprobanteForm.metodoPago === 'EFECTIVO') {
+      this.comprobanteForm.monto = Math.round(this.comprobanteForm.monto);
+    }
   }
 
   onFileSelected(event: Event) {
@@ -414,6 +464,21 @@ export class CreditoDetalleComponent implements OnInit {
   handleFotoActualizada() {
     this.mostrarModalClientePerfil.set(false);
     this.cargarDetalle(this.credito()!.id);
+  }
+
+  abrirModalRefinanciamiento() {
+    if (!this.isAdminMode() || this.procesando()) return;
+    this.mostrarModalRefinanciamiento.set(true);
+  }
+
+  handleRefinanciamientoExitoso(nuevoCreditoId: number) {
+    this.mostrarModalRefinanciamiento.set(false);
+    this.toastService.show('Crédito refinanciado exitosamente', 'success');
+    if (this.isAdminMode()) {
+      this.router.navigate(['/dashboard/admin/cartera', nuevoCreditoId]);
+    } else {
+      this.router.navigate(['/dashboard/creditos/mis-creditos', nuevoCreditoId]);
+    }
   }
 
   descargarContrato() {
@@ -722,15 +787,34 @@ export class CreditoDetalleComponent implements OnInit {
       case 'PAGADO_PARCIAL': return 'badge-warning text-warning-content';
       case 'RESUELTO': return 'badge-neutral opacity-50';
       case 'REVISION': return 'badge-info text-info-content';
+      case 'REFINANCIADO': return 'badge-primary text-primary-content';
       default: return 'badge-ghost opacity-60';
     }
   }
 
   getMoraVisual(cuota: Cuota): number {
     if (cuota.interesMora && cuota.interesMora > 0) return cuota.interesMora;
+    
+    // Si no hay interesMora explicito, la diferencia solo es mora si NO es credito refinanciado
+    if (this.credito()?.creditoOrigenId) return 0;
+
     const base = (cuota.capital || 0) + (cuota.interes || 0) + (cuota.seguro || 0) + (cuota.comision || 0);
-    const dif = (cuota.totalCuota || 0) - base - (cuota.penalidad || 0);
+    const dif = (cuota.totalCuota || 0) - base - (cuota.penalidad || 0) - (cuota.cargoRefinanciamiento || 0);
     return dif > 0.01 ? dif : 0;
+  }
+
+  getCargoRefinanciamientoVisual(cuota: Cuota): number {
+    if (cuota.cargoRefinanciamiento && cuota.cargoRefinanciamiento > 0) return cuota.cargoRefinanciamiento;
+    
+    // Si el backend remoto no envio cargoRefinanciamiento pero es un credito refinanciado
+    if (this.credito()?.creditoOrigenId) {
+      const base = (cuota.capital || 0) + (cuota.interes || 0) + (cuota.seguro || 0) + (cuota.comision || 0);
+      // Asumimos que cualquier diferencia (descontando mora real y penalidad) es cargo de refinanciamiento
+      const moraReal = (cuota.interesMora || 0);
+      const dif = (cuota.totalCuota || 0) - base - (cuota.penalidad || 0) - moraReal;
+      return dif > 0.01 ? dif : 0;
+    }
+    return 0;
   }
 
   getProximoVencimiento(): Date | null {
@@ -752,4 +836,4 @@ export class CreditoDetalleComponent implements OnInit {
     }
   }
 }
-// trigger recompile
+

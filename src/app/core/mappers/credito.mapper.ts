@@ -151,6 +151,7 @@ export class CreditoMapper {
       penalidad: dto.penalidad,
       comision: dto.comision,
       seguro: dto.seguro,
+      cargoRefinanciamiento: dto.cargoRefinanciamiento,
       estadoCuota: dto.estadoCuota as Cuota['estadoCuota'],
       fechaPago: dto.fechaPago ? this.parseLocalDate(dto.fechaPago) : undefined,
       esGracia: dto.esGracia,
@@ -191,6 +192,7 @@ export class CreditoMapper {
       bancoDesembolso: dto.bancoDesembolso,
       cuentaDesembolso: dto.cuentaDesembolso,
       tem: dto.tem || dto.tasaAprobada,
+      creditoOrigenId: dto.creditoOrigenId,
       fechaSolicitud: dto.fechaSolicitud ? this.parseLocalDate(dto.fechaSolicitud) : (dto.fechaInicio ? this.parseLocalDate(dto.fechaInicio) : new Date()),
       cliente: dto.cliente ? {
           // Spread ALL fields from the DTO client object so nothing is lost
