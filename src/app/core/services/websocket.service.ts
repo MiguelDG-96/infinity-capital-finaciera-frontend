@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
+import { Client, Message, IFrame } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { environment } from '../../../environments/environment';
 
@@ -33,7 +33,7 @@ export class WebsocketService {
       heartbeatOutgoing: 4000,
     });
 
-    this.client.onConnect = (frame) => {
+    this.client.onConnect = (frame: IFrame) => {
       console.log('✅ Conectado a WebSockets', frame);
       
       // Suscribirse al tópico de notificaciones para los administradores
@@ -45,7 +45,7 @@ export class WebsocketService {
       });
     };
 
-    this.client.onStompError = (frame) => {
+    this.client.onStompError = (frame: IFrame) => {
       console.error('❌ Broker reportó error: ' + frame.headers['message']);
       console.error('Detalles: ' + frame.body);
     };

@@ -285,7 +285,7 @@ export class CartaCobranzaPdfService {
       doc.addImage(selloFirmadoInfo.url, 'PNG', xCenter - targetWidth / 2, y - targetHeight, targetWidth, targetHeight);
     }
 
-    y += 15;
+    y += 2; // Reducido para acortar el espacio entre la firma y el logo rojo
 
     // Logo debajo de la firma
     const logoRojoUrl = await this.getSvgDataUrl('/logo/logo-red.svg');
