@@ -339,13 +339,12 @@ export class EstadoCuentaPdfService {
       cellText(this.fmtMoney(cuota.capital, ''), cols[2], rowH);
       // Interés
       cellText(this.fmtMoney(cuota.interes, ''), cols[3], rowH);
-      // Mora
-      const baseCuota = (cuota.capital || 0) + (cuota.interes || 0) + (cuota.seguro || 0) + (cuota.comision || 0);
-      const moraVisual = (cuota.interesMora && cuota.interesMora > 0) ? cuota.interesMora : Math.max(0, (cuota.totalCuota || 0) - baseCuota - (cuota.penalidad || 0));
+      // Mora (incluye penalidad y otros cargos extra para que la suma cuadre)
+      const moraYExtra = Math.max(0, (cuota.totalCuota || 0) - (cuota.capital || 0) - (cuota.interes || 0));
       
-      if (moraVisual > 0.01) {
+      if (moraYExtra > 0.01) {
         doc.setTextColor(...DRED);
-        cellText(this.fmtMoney(moraVisual, ''), cols[4], rowH);
+        cellText(this.fmtMoney(moraYExtra, ''), cols[4], rowH);
         doc.setTextColor(...DARK);
       } else {
         doc.text('—', cols[4].x + cols[4].w / 2, rowH, { align: 'center' });
@@ -374,7 +373,7 @@ export class EstadoCuentaPdfService {
     y += 4;
     const totalCapital = cuotas.reduce((s, c) => s + (c.capital || 0), 0);
     const totalInteres  = cuotas.reduce((s, c) => s + (c.interes || 0), 0);
-    const totalMora     = cuotas.reduce((s, c) => s + (c.interesMora || 0), 0);
+    const totalMora     = cuotas.reduce((s, c) => s + Math.max(0, (c.totalCuota || 0) - (c.capital || 0) - (c.interes || 0)), 0);
     const totalGeneral  = cuotas.reduce((s, c) => s + (c.totalCuota || 0), 0);
 
     doc.setFontSize(7.5);
