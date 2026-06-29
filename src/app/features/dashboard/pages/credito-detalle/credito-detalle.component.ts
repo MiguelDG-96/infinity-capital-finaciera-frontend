@@ -400,11 +400,21 @@ export class CreditoDetalleComponent implements OnInit {
     if ((cuota.seguro || 0) > 0) conceptos.push({ description: 'PAGO DE SEGURO', value: cuota.seguro || 0 });
     if ((cuota.comision || 0) > 0) conceptos.push({ description: 'COMISIONES', value: cuota.comision || 0 });
     if ((cuota.penalidad || 0) > 0) conceptos.push({ description: 'PENALIDAD', value: cuota.penalidad || 0 });
+    if ((cuota.cargoRefinanciamiento || 0) > 0) conceptos.push({ description: 'CARGO REFINANCIAMIENTO', value: cuota.cargoRefinanciamiento || 0 });
     const mora = this.getMoraVisual(cuota);
     if (mora > 0) conceptos.push({ description: 'PAGO DE MORA', value: mora });
 
     // Ajuste si hay monto pagado diferente al total (solo para que cuadre el recibo visual)
     const totalConceptos = conceptos.reduce((sum, item) => sum + item.value, 0);
+    const montoRealPagado = cuota.montoPagadoCliente || cuota.totalCuota;
+    const diferenciaRedondeo = Number((montoRealPagado - totalConceptos).toFixed(2));
+
+    if (Math.abs(diferenciaRedondeo) > 0) {
+      conceptos.push({ 
+        description: 'AJUSTE POR REDONDEO (EFECTIVO)', 
+        value: diferenciaRedondeo 
+      });
+    }
 
     const data: ComprobanteData = {
       customerName: cred.cliente?.usuario?.nombreCompleto || cred.nombreCliente || '',

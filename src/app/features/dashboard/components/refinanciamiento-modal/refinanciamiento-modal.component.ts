@@ -38,6 +38,7 @@ export class RefinanciamientoModalComponent {
   // Formulario
   nuevaTasa = signal<number>(10); // Valor por defecto
   nuevoNumeroCuotas = signal<number>(12); // Valor por defecto
+  fechaRefinanciamiento = signal<string>(new Date().toISOString().split('T')[0]);
   cuotaDeseada = signal<number | null>(null);
 
   // Calculadora
@@ -142,7 +143,8 @@ export class RefinanciamientoModalComponent {
     this.error.set(null);
     this.creditoService.refinanciarCredito(this._creditoId, {
         nuevaTasa: this.nuevaTasa(),
-        nuevoNumeroCuotas: this.nuevoNumeroCuotas()
+        nuevoNumeroCuotas: this.nuevoNumeroCuotas(),
+        fechaRefinanciamiento: this.fechaRefinanciamiento()
       }).subscribe({
         next: (resp) => {
           this.procesando.set(false);

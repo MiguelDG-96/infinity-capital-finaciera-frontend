@@ -82,6 +82,12 @@
             </label>
             <input type="number" class="input input-bordered w-full" [ngModel]="nuevoNumeroCuotas()" (ngModelChange)="nuevoNumeroCuotas.set($event)" min="1" max="60" />
           </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-medium">Fecha de Refinanciamiento</span>
+            </label>
+            <input type="date" class="input input-bordered w-full" [ngModel]="fechaRefinanciamiento()" (ngModelChange)="fechaRefinanciamiento.set($event)" />
+          </div>
         </div>
 
         <!-- Proyección -->

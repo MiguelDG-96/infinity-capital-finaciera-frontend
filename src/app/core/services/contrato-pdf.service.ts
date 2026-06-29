@@ -801,11 +801,23 @@ export class ContratoPdfService {
     
     // Calificación
     drawText(`S/ ${credito.montoAprobado || credito.montoCredito || ''}`, 'monto_solicitado', true);
+    // Obtener cargo por refinanciamiento si existe
+    let cargoRefinanciamiento = 0;
+    if (credito.cuotas && credito.cuotas.length > 0) {
+        cargoRefinanciamiento = credito.cuotas[0].cargoRefinanciamiento || 0;
+    }
+
     // calcular cuota si no hay
     let cuotaMs = '--';
     if (credito.montoAprobado && credito.plazoMeses) {
         const temAplicado = credito.tasaAprobada || credito.tem || 0;
-        const cuota = (credito.montoAprobado * (temAplicado/100)) / (1 - Math.pow(1 + (temAplicado/100), -credito.plazoMeses));
+        let cuota = 0;
+        if (temAplicado === 0) {
+            cuota = credito.montoAprobado / credito.plazoMeses;
+        } else {
+            cuota = (credito.montoAprobado * (temAplicado/100)) / (1 - Math.pow(1 + (temAplicado/100), -credito.plazoMeses));
+        }
+        cuota += cargoRefinanciamiento;
         cuotaMs = `S/ ${cuota.toFixed(2)}`;
     }
     drawText(cuotaMs, 'cuota_mensual', true);
@@ -975,6 +987,12 @@ export class ContratoPdfService {
         curX += cols[idx];
     });
 
+    // Obtener cargo por refinanciamiento si existe
+    let cargoRefinanciamiento = 0;
+    if (data.cuotas && data.cuotas.length > 0) {
+        cargoRefinanciamiento = data.cuotas[0].cargoRefinanciamiento || 0;
+    }
+
     // Filas — contenido centrado dentro de cada celda
     cuotas.forEach((c: any, idx: number) => {
         const y = tabT - ((idx + 1) * rowH);
@@ -988,15 +1006,17 @@ export class ContratoPdfService {
         page.drawRectangle({ x: tableX, y, width: TABLE_WIDTH, height: rowH, borderWidth: 0.5, borderColor: colorBorde });
 
         let rX = tableX;
+        
+        // El cargo por refinanciamiento se muestra en la columna de Comisiones
         const rowData = [
             String(c.numero),
             c.fecha.toLocaleDateString('es-PE'),
             "30",
             `S/ ${c.capital.toFixed(2)}`,
             `S/ ${c.interes.toFixed(2)}`,
+            `S/ ${cargoRefinanciamiento.toFixed(2)}`,
             "S/ 0.00",
-            "S/ 0.00",
-            `S/ ${c.total.toFixed(2)}`
+            `S/ ${(c.total + cargoRefinanciamiento).toFixed(2)}`
         ];
 
         rowData.forEach((val: string, j: number) => {
@@ -1011,7 +1031,7 @@ export class ContratoPdfService {
 
     // Resumen Total al final de la tabla (alineado al borde derecho de la tabla)
     const totalY = tabT - (cuotas.length * rowH) - 25;
-    const totalMonto = cuotas.reduce((acc: number, c: any) => acc + c.total, 0);
+    const totalMonto = cuotas.reduce((acc: number, c: any) => acc + c.total + cargoRefinanciamiento, 0);
     const totalBoxW = 170;
     const totalBoxX = tableX + TABLE_WIDTH - totalBoxW;
     page.drawRectangle({ x: totalBoxX, y: totalY, width: totalBoxW, height: 20, color: rgb(0.9, 0.9, 0.9), borderColor: colorBorde, borderWidth: 1 });

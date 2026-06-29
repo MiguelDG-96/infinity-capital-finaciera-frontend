@@ -261,47 +261,19 @@ export class CartaNoAdeudoPdfService {
 
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    const dots = '..................................................';
-    const dotsW = doc.getTextWidth(dots);
-    const xGerencia = W - contentMargin - dotsW;
 
-    // ── FIRMA ESCANEADA (Analista) ───────────────────────────────────────────
-    const firmaInfo = await this.getFirmaGerenteDataUrl(); // Usamos la del gerente aquí también
-    if (firmaInfo) {
-      const targetWidth = 35; // Mismo tamaño reducido que a la derecha
-      const targetHeight = targetWidth / firmaInfo.ratio;
-      // Centrado aproximado sobre la línea de analista
-      doc.addImage(firmaInfo.url, 'PNG', contentMargin + dotsW / 2 - targetWidth / 2, y - targetHeight + 25, targetWidth, targetHeight);
-    }
-    // ── SELLO Y FIRMA GERENCIA ──────────────────────────────────────────────
+    // ── SELLO Y FIRMA GERENCIA CENTRADO ─────────────────────────────────────
     const selloFirmadoInfo = await this.getSelloFirmadoDataUrl();
     if (selloFirmadoInfo) {
       const targetWidth = 55;
       const targetHeight = targetWidth / selloFirmadoInfo.ratio;
-      // Bajamos el sello sumándole a la posición Y para que su línea coincida con la firma
-      doc.addImage(selloFirmadoInfo.url, 'PNG', xGerencia + dotsW / 2 - targetWidth / 2, y - targetHeight + 35, targetWidth, targetHeight);
+      const centerX = (W - targetWidth) / 2;
+      
+      // Ajustamos un poco la posición Y para que se vea bien
+      doc.addImage(selloFirmadoInfo.url, 'PNG', centerX, y - targetHeight + 35, targetWidth, targetHeight);
     }
 
     y += 25;
-
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    
-    doc.text(dots, contentMargin, y);
-    
-    y += 6;
-    doc.text('ANALISTA INFINYCAPITAL', contentMargin, y);
-    
-    y += 6;
-    doc.setFont('helvetica', 'normal');
-    doc.text('Roider Maluquis Tapia', contentMargin, y);
-
-    y += 6;
-    doc.setFont('helvetica', 'bold');
-    doc.text('DNI: ', contentMargin, y);
-    const dniW = doc.getTextWidth('DNI: ');
-    // doc.setFont('helvetica', 'bold');
-    doc.text('76619340', contentMargin + dniW, y);
 
     // Guardar el PDF
     return doc.output('blob');
