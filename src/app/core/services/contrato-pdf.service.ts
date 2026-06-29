@@ -199,7 +199,7 @@ export class ContratoPdfService {
         "page": 0
     },
     "direccion": {
-        "x": 119,
+        "x": 76,
         "y": 560,
         "page": 0
     },

@@ -208,7 +208,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "direccion": {
-        "x": 119,
+        "x": 76,
         "y": 560,
         "page": 0
     },

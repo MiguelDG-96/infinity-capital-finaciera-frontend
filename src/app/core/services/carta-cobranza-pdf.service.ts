@@ -78,7 +78,11 @@ export class CartaCobranzaPdfService {
       destinatarioDistrito = '—'; // El DTO actual no tiene distrito detallado del garante
     }
 
-    const cuotasVencidas = cuotas.filter(c => c.estadoCuota === 'MORA' || (c.estadoCuota === 'PENDIENTE' && new Date(c.fechaVencimiento) < new Date()));
+    const cuotasVencidas = cuotas.filter(c => 
+      c.estadoCuota === 'MORA' || 
+      (c.estadoCuota === 'PENDIENTE' && new Date(c.fechaVencimiento) < new Date()) ||
+      (c.estadoCuota === 'PAGADO_PARCIAL' && new Date(c.fechaVencimiento) < new Date())
+    );
     
     // Calcular días de atraso
     let diasAtraso = 0;
@@ -91,8 +95,11 @@ export class CartaCobranzaPdfService {
 
     const moneda = credito.simboloMoneda || 'S/';
     
-    // Importe total adeudado a la fecha
-    const totalAdeudado = cuotasVencidas.reduce((sum, c) => sum + (c.totalCuota || 0), 0);
+    // Importe total adeudado a la fecha (descontando abonos parciales)
+    const totalAdeudado = cuotasVencidas.reduce((sum, c) => {
+      const pendiente = Math.max(0, (c.totalCuota || 0) - (c.montoPagadoCliente || 0));
+      return sum + pendiente;
+    }, 0);
 
     // @ts-ignore
     const doc = new jsPDF({ 
