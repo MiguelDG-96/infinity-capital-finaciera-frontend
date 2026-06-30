@@ -35,29 +35,29 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "dni_digits": {
-        "startX": 348,
+        "startX": 346,
         "y": 692,
         "spacing": 8.7,
         "page": 0
     },
     "apellido_paterno": {
-        "x": 107,
-        "y": 665,
+        "x": 87,
+        "y": 667,
         "page": 0
     },
     "apellido_materno": {
-        "x": 279,
-        "y": 665,
+        "x": 259,
+        "y": 667,
         "page": 0
     },
     "nombres": {
-        "x": 463,
-        "y": 665,
+        "x": 443,
+        "y": 667,
         "page": 0
     },
     "nacionalidad": {
         "x": 476,
-        "y": 650,
+        "y": 652,
         "page": 0
     },
     "check_secundaria": {
@@ -98,7 +98,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_soltero": {
-        "x": 79,
+        "x": 81,
         "y": 632,
         "page": 0
     },
@@ -123,12 +123,12 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "celular": {
-        "x": 523,
+        "x": 504,
         "y": 596,
         "page": 0
     },
     "correo_electronico": {
-        "x": 379,
+        "x": 321,
         "y": 596,
         "page": 0
     },
@@ -173,7 +173,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_exclusivo_si": {
-        "x": 115,
+        "x": 114,
         "y": 732,
         "page": 0
     },
@@ -183,8 +183,8 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 261,
-        "y": 730,
+        "x": 260,
+        "y": 732,
         "page": 0
     },
     "check_moneda_dolares": {
@@ -208,23 +208,23 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "direccion": {
-        "x": 76,
+        "x": 74,
         "y": 560,
         "page": 0
     },
     "urbanizacion": {
-        "x": 404,
+        "x": 384,
         "y": 561,
         "page": 0
     },
     "manzana": {
-        "x": 260,
+        "x": 279,
         "y": 561,
         "page": 0
     },
     "lote": {
-        "x": 308,
-        "y": 560,
+        "x": 304,
+        "y": 561,
         "page": 0
     },
     "codigo_postal": {
@@ -306,7 +306,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "conyuge_dni_digits": {
-        "startX": 329,
+        "startX": 340,
         "y": 227,
         "spacing": 9.7,
         "page": 0
@@ -458,7 +458,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     },
     "tasa": {
         "x": 250,
-        "y": 490,
+        "y": 487,
         "page": 1
     },
     "plazo_meses": {
@@ -467,8 +467,8 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 1
     },
     "correo_envio": {
-        "x": 169,
-        "y": 357,
+        "x": 83,
+        "y": 352,
         "page": 1
     },
     "firma_titular_nombre": {

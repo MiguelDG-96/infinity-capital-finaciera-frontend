@@ -26,29 +26,29 @@ export class ContratoPdfService {
         "page": 0
     },
     "dni_digits": {
-        "startX": 348,
+        "startX": 346,
         "y": 692,
         "spacing": 8.7,
         "page": 0
     },
     "apellido_paterno": {
-        "x": 107,
-        "y": 665,
+        "x": 87,
+        "y": 667,
         "page": 0
     },
     "apellido_materno": {
-        "x": 279,
-        "y": 665,
+        "x": 259,
+        "y": 667,
         "page": 0
     },
     "nombres": {
-        "x": 463,
-        "y": 665,
+        "x": 443,
+        "y": 667,
         "page": 0
     },
     "nacionalidad": {
         "x": 476,
-        "y": 650,
+        "y": 652,
         "page": 0
     },
     "check_secundaria": {
@@ -89,7 +89,7 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_soltero": {
-        "x": 79,
+        "x": 81,
         "y": 632,
         "page": 0
     },
@@ -114,12 +114,12 @@ export class ContratoPdfService {
         "page": 0
     },
     "celular": {
-        "x": 523,
+        "x": 504,
         "y": 596,
         "page": 0
     },
     "correo_electronico": {
-        "x": 379,
+        "x": 321,
         "y": 596,
         "page": 0
     },
@@ -164,7 +164,7 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_exclusivo_si": {
-        "x": 115,
+        "x": 114,
         "y": 732,
         "page": 0
     },
@@ -174,8 +174,8 @@ export class ContratoPdfService {
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 261,
-        "y": 730,
+        "x": 260,
+        "y": 732,
         "page": 0
     },
     "check_moneda_dolares": {
@@ -184,38 +184,38 @@ export class ContratoPdfService {
         "page": 0
     },
     "departamento": {
-        "x": 490,
+        "x": 443,
         "y": 538,
         "page": 0
     },
     "provincia": {
-        "x": 375,
+        "x": 327,
         "y": 538,
         "page": 0
     },
     "distrito": {
-        "x": 248,
+        "x": 183,
         "y": 538,
         "page": 0
     },
     "direccion": {
-        "x": 76,
+        "x": 74,
         "y": 560,
         "page": 0
     },
     "urbanizacion": {
-        "x": 404,
+        "x": 384,
         "y": 561,
         "page": 0
     },
     "manzana": {
-        "x": 260,
+        "x": 279,
         "y": 561,
         "page": 0
     },
     "lote": {
-        "x": 308,
-        "y": 560,
+        "x": 304,
+        "y": 561,
         "page": 0
     },
     "codigo_postal": {
@@ -297,7 +297,7 @@ export class ContratoPdfService {
         "page": 0
     },
     "conyuge_dni_digits": {
-        "startX": 329,
+        "startX": 340,
         "y": 227,
         "spacing": 9.7,
         "page": 0
@@ -449,7 +449,7 @@ export class ContratoPdfService {
     },
     "tasa": {
         "x": 250,
-        "y": 490,
+        "y": 487,
         "page": 1
     },
     "plazo_meses": {
@@ -458,8 +458,8 @@ export class ContratoPdfService {
         "page": 1
     },
     "correo_envio": {
-        "x": 169,
-        "y": 357,
+        "x": 83,
+        "y": 352,
         "page": 1
     },
     "firma_titular_nombre": {
@@ -526,12 +526,12 @@ export class ContratoPdfService {
     const black = rgb(0, 0, 0);
 
     // Helpers
-    const drawText = (val: any, coordKey: string, isBold = false) => {
+    const drawText = (val: any, coordKey: string, isBold = true) => {
       const coord = this.COORDS[coordKey];
       if (!val || !coord) return;
       pages[coord.page].drawText(String(val).toUpperCase(), {
         x: coord.x, y: coord.y - 4,
-        size: 9, font: isBold ? fontBold : font, color: black
+        size: 9, font: fontBold, color: black
       });
     };
 
@@ -554,11 +554,11 @@ export class ContratoPdfService {
       const startOffset = (digits.length - 1) / 2 * spacing;
 
       for (let i = 0; i < digits.length; i++) {
-        const charWidth = font.widthOfTextAtSize(digits[i], 10);
+        const charWidth = fontBold.widthOfTextAtSize(digits[i], 10);
         const x = centerX - startOffset + (i * spacing) - (charWidth / 2) + 0.7;
         pages[coord.page].drawText(digits[i], {
           x: x, y: coord.y - 3,
-          size: 10, font: font, color: black
+          size: 10, font: fontBold, color: black
         });
       }
     };
@@ -662,7 +662,7 @@ export class ContratoPdfService {
     // Datos de Contacto
     drawText(cliente.telefono || extra.telefono, 'telefono');
     drawText(cliente.celular || extra.celular, 'celular');
-    drawText(extra.correo || extra.email || (cliente as any).email || (cliente as any).correo, 'correo_electronico');
+    drawText(extra.correo || extra.email || (cliente as any).email || (cliente as any).correo || cliente.usuario?.email, 'correo_electronico');
 
     // Cliente Exclusivo
     if (isClienteRecurrente !== undefined) {
