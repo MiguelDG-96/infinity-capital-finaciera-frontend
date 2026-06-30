@@ -102,11 +102,19 @@ export class EstadoCuentaPdfService {
     const periodoLabel = this.datePipe.transform(new Date(), 'MMMM yyyy') || '';
 
     let deudaTotalPendiente = 0;
+    let deudaVencida = 0;
     for (const c of cuotas) {
       if (c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'MORA' || c.estadoCuota === 'POSTERGADA' || c.estadoCuota === 'REVISION') {
         deudaTotalPendiente += (c.totalCuota || 0);
       } else if (c.estadoCuota === 'PAGADO_PARCIAL') {
         deudaTotalPendiente += Math.max(0, (c.totalCuota || 0) - (c.montoPagadoCliente || 0));
+      }
+
+      // Cálculo de deuda vencida (incluyendo pagos parciales vencidos)
+      if (c.estadoCuota === 'MORA' || 
+          (c.estadoCuota === 'PENDIENTE' && new Date(c.fechaVencimiento) < new Date()) ||
+          (c.estadoCuota === 'PAGADO_PARCIAL' && new Date(c.fechaVencimiento) < new Date())) {
+        deudaVencida += Math.max(0, (c.totalCuota || 0) - (c.montoPagadoCliente || 0));
       }
     }
 
@@ -389,6 +397,21 @@ export class EstadoCuentaPdfService {
     doc.setTextColor(...RED);
     cellText(this.fmtMoney(totalGeneral, simbolo), cols[5], y + 1);
     y += 8;
+
+    // DEUDA VENCIDA (Solo si hay)
+    if (deudaVencida > 0) {
+      doc.setFillColor(254, 242, 242);
+      doc.rect(margin, y, W - margin * 2, 9, 'F');
+      doc.setDrawColor(...RED);
+      doc.rect(margin, y, W - margin * 2, 9, 'S');
+      doc.setTextColor(...RED);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`DEUDA VENCIDA (Cuotas y saldos atrasados que requieren pago inmediato):`, margin + 3, y + 6);
+      doc.setFontSize(9);
+      doc.text(this.fmtMoney(deudaVencida, simbolo), W - margin - 3, y + 6, { align: 'right' });
+      y += 12;
+    }
 
     // DEUDA TOTAL PENDIENTE
     doc.setFillColor(254, 242, 242);
