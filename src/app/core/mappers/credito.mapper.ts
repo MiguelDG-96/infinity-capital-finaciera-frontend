@@ -165,7 +165,7 @@ export class CreditoMapper {
   }
 
   static toCreditoDomain(dto: CreditoDTOResponse): Credito {
-    return {
+    const credito: Credito = {
       id: dto.id,
       montoCredito: dto.montoCredito ?? 0,
       montoAprobado: dto.montoAprobado,
@@ -204,10 +204,54 @@ export class CreditoMapper {
           numeroDocumento: dto.cliente.numeroDocumento,
           domicilio: (dto.cliente as any).domicilio || (dto.cliente as any).direccion || '',
           usuario: dto.cliente.usuario,
-          estado: (dto.cliente as any).estado || 'ACTIVO',
+      estado: (dto.cliente as any).estado || 'ACTIVO',
       } as any : undefined,
-      garantes: dto.garantes || []
+      garantes: dto.garantes || [],
+      diasAtraso: 0,
+      calificacionCrediticia: 'NORMAL' as any
     };
+
+    // Calcular días de atraso de manera precisa y dinámica (para no depender solo del cronjob del backend)
+    let maxDiasAtraso = 0;
+    if (dto.cuotas && dto.cuotas.length > 0) {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+
+      for (const cuota of dto.cuotas) {
+        if (cuota.estadoCuota === 'PENDIENTE' || cuota.estadoCuota === 'MORA' || cuota.estadoCuota === 'VENCIDO') {
+          const vencimiento = CreditoMapper.parseLocalDate(cuota.fechaVencimiento);
+          vencimiento.setHours(0, 0, 0, 0);
+          const diffTime = hoy.getTime() - vencimiento.getTime();
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays > maxDiasAtraso) {
+            maxDiasAtraso = diffDays;
+          }
+        }
+      }
+    }
+
+    // Usar el mayor entre lo que dice el backend y lo que calculamos nosotros
+    credito.diasAtraso = Math.max(dto.diasAtraso || 0, maxDiasAtraso);
+
+    // Calcular la calificación real solo para contratos activos
+    if (['ACTIVO', 'MORA', 'ATRASADO'].includes(credito.estado)) {
+      if (credito.diasAtraso <= 8) {
+        credito.calificacionCrediticia = 'NORMAL';
+      } else if (credito.diasAtraso <= 30) {
+        credito.calificacionCrediticia = 'PROBLEMAS_POTENCIALES';
+      } else if (credito.diasAtraso <= 60) {
+        credito.calificacionCrediticia = 'DEFICIENTE';
+      } else if (credito.diasAtraso <= 120) {
+        credito.calificacionCrediticia = 'DUDOSO';
+      } else {
+        credito.calificacionCrediticia = 'PERDIDA';
+      }
+    } else {
+      credito.calificacionCrediticia = undefined;
+    }
+
+    return credito;
   }
 
 

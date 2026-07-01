@@ -1,0 +1,97 @@
+<div class="gauge-container" [style.width.px]="size">
+  <div class="gauge-header">
+    <h4 class="gauge-title">Calificación Crediticia</h4>
+    <div class="gauge-value" [style.color]="currentColor">
+      {{ currentLabel }}
+    </div>
+  </div>
+
+    <div class="gauge-svg-wrapper">
+    <!-- viewBox ampliado para dar espacio a los textos exteriores -->
+    <svg viewBox="-20 -20 240 140" class="gauge-svg">
+      <defs>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1" />
+        </filter>
+        <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cbd5e1" />
+          <stop offset="100%" stop-color="#64748b" />
+        </linearGradient>
+      </defs>
+
+      <!-- Semicírculo gris central (Fondo interior) -->
+      <!-- Radio de 65, para que quede justo pegado o ligeramente dentro del arco de color -->
+      <path d="M 35 100 A 65 65 0 0 1 165 100 Z" fill="#e2e8f0" />
+
+      <!-- Segmento 1: Normal (180 a 216 deg) -->
+      <circle cx="100" cy="100" r="80" 
+              fill="none" stroke="#16a34a" stroke-width="25" 
+              stroke-dasharray="50.27 500"
+              transform="rotate(180 100 100)" />
+      
+      <!-- Segmento 2: Problemas potenciales (216 a 252 deg) -->
+      <circle cx="100" cy="100" r="80" 
+              fill="none" stroke="#84cc16" stroke-width="25" 
+              stroke-dasharray="50.27 500"
+              transform="rotate(216 100 100)" />
+              
+      <!-- Segmento 3: Deficiente (252 a 288 deg) -->
+      <circle cx="100" cy="100" r="80" 
+              fill="none" stroke="#eab308" stroke-width="25" 
+              stroke-dasharray="50.27 500"
+              transform="rotate(252 100 100)" />
+              
+      <!-- Segmento 4: Dudoso (288 a 324 deg) -->
+      <circle cx="100" cy="100" r="80" 
+              fill="none" stroke="#f97316" stroke-width="25" 
+              stroke-dasharray="50.27 500"
+              transform="rotate(288 100 100)" />
+              
+      <!-- Segmento 5: Pérdida (324 a 360 deg) -->
+      <circle cx="100" cy="100" r="80" 
+              fill="none" stroke="#ef4444" stroke-width="25" 
+              stroke-dasharray="50.27 500"
+              transform="rotate(324 100 100)" />
+
+      <!-- Textos SVG exactamente como la referencia -->
+      <!-- Normal (Izquierda Abajo) -->
+      <text x="-35" y="100" class="svg-label" text-anchor="start">Normal</text>
+      
+      <!-- Problemas Potenciales (Izquierda Arriba) -->
+      <text x="15" y="25" class="svg-label" text-anchor="middle">
+        <tspan x="15" dy="0">Problemas</tspan>
+        <tspan x="15" dy="12">potenciales</tspan>
+      </text>
+      
+      <!-- Deficiente (Centro Arriba) -->
+      <text x="100" y="-5" class="svg-label" text-anchor="middle">Deficiente</text>
+      
+      <!-- Dudoso (Derecha Arriba) -->
+      <text x="185" y="25" class="svg-label" text-anchor="middle">Dudoso</text>
+      
+      <!-- Pérdida (Derecha Abajo) -->
+      <text x="235" y="100" class="svg-label" text-anchor="end">Pérdida</text>
+
+      <!-- Aguja -->
+      <g #needle class="needle-group" style="transform-origin: 100px 100px;">
+        <g transform="rotate(180 100 100)">
+          <!-- Base central -->
+          <circle cx="100" cy="100" r="12" fill="url(#needleGradient)" filter="url(#shadow)" />
+          <circle cx="100" cy="100" r="5" fill="#334155" />
+          <!-- Polígono de la aguja, apunta hacia la derecha -->
+          <polygon points="100,94 100,106 170,100" fill="url(#needleGradient)" filter="url(#shadow)" />
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="gauge-footer">
+    <div class="legend">
+      <div class="legend-item"><div class="dot normal"></div>Pago puntual (0-8d)</div>
+      <div class="legend-item"><div class="dot problemas"></div>Atraso 9-30d</div>
+      <div class="legend-item"><div class="dot deficiente"></div>Atraso 31-60d</div>
+      <div class="legend-item"><div class="dot dudoso"></div>Atraso 61-120d</div>
+      <div class="legend-item"><div class="dot perdida"></div>Atraso >120d</div>
+    </div>
+  </div>
+</div>

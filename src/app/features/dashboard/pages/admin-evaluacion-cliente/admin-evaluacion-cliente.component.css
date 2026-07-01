@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+/* Animaciones suaves para la entrada de componentes */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Quitar spin buttons del input de DNI si fuera type="number" (lo dejé text, pero por si acaso) */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}

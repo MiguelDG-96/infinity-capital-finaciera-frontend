@@ -6,11 +6,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { SolicitudPendiente, EvaluacionCredito, Credito } from '../../../../core/models/credito.model';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { ContratoPdfService } from '../../../../core/services/contrato-pdf.service';
+import { CreditRatingGaugeComponent, CreditRating } from '../../../../shared/components/credit-rating-gauge/credit-rating-gauge.component';
 
 @Component({
   selector: 'app-evaluar-solicitud-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  // Forzando recompilación para que Angular detecte el HTML
+  imports: [CommonModule, ReactiveFormsModule, CreditRatingGaugeComponent],
   templateUrl: './evaluar-solicitud-modal.component.html',
   styleUrl: './evaluar-solicitud-modal.component.css'
 })
@@ -24,6 +26,7 @@ export class EvaluarSolicitudModalComponent implements OnInit {
   error = '';
   exito = false;
   requisitosActuales: string[] = [];
+  calificacionCliente: CreditRating = 'NORMAL'; // Valor mockeado, se conectará al backend luego.
 
   constructor(
     private fb: FormBuilder,
@@ -54,6 +57,11 @@ export class EvaluarSolicitudModalComponent implements OnInit {
         }
       }
     });
+
+    // Simular llamada al backend para obtener la calificación
+    setTimeout(() => {
+      this.calificacionCliente = 'PROBLEMAS_POTENCIALES';
+    }, 800);
   }
 
   isFieldInvalid(field: string): boolean {

@@ -105,10 +105,10 @@
         </div>
     } @else {
         <!-- Tabla de Cartera -->
-        <div class="card bg-base-100 shadow-xl border border-base-content/5 overflow-hidden rounded-3xl">
+        <div class="card bg-base-100 shadow-xl border border-base-content/5 rounded-3xl relative">
 
             <!-- ── Filament-style toolbar ── -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-5 py-4 border-b border-base-content/10 bg-base-200/40">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-5 py-4 border-b border-base-content/10 bg-base-200/40 rounded-t-3xl">
 
                 <!-- Sort toggle -->
                 <button
@@ -150,22 +150,22 @@
                         [ngClass]="tiposSeleccionados.size === 0 && estadosSeleccionados.size === 0 ? 'border-base-content/15 text-base-content/70' : ''">
                         <lucide-icon name="filter" class="w-4 h-4 shrink-0"></lucide-icon>
                         Filtros
-                        @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0) {
+                        @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0 || calificacionesSeleccionadas.size > 0) {
                             <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-content text-[10px] font-black leading-none">
-                                {{ tiposSeleccionados.size + estadosSeleccionados.size }}
+                                {{ tiposSeleccionados.size + estadosSeleccionados.size + calificacionesSeleccionadas.size }}
                             </span>
                         }
                     </button>
 
                     <!-- Dropdown panel -->
                     @if (filtroAbierto) {
-                        <div class="absolute right-0 top-full mt-2 z-50 w-72 rounded-2xl border border-base-content/10 bg-base-100 shadow-2xl shadow-black/15 overflow-hidden"
+                        <div class="absolute right-0 top-full mt-2 z-50 w-72 rounded-2xl border border-base-content/10 bg-base-100 shadow-2xl shadow-black/15 max-h-[60vh] overflow-y-auto overflow-x-hidden flex flex-col"
                              style="animation: fadeInDown 0.15s ease-out both;">
                             
                             <!-- Header Tipo -->
                             <div class="flex items-center justify-between px-4 py-3 border-b border-base-content/8 bg-base-200/60">
                                 <span class="text-[11px] font-black uppercase tracking-widest text-base-content/50">Tipo de Tasa</span>
-                                @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0) {
+                                @if (tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0 || calificacionesSeleccionadas.size > 0) {
                                     <button (click)="limpiarFiltros()" class="text-xs font-bold text-error hover:underline transition-colors">
                                         Limpiar todo
                                     </button>
@@ -173,7 +173,7 @@
                             </div>
 
                             <!-- Options list Tipo -->
-                            <ul class="py-1.5 max-h-48 overflow-y-auto">
+                            <ul class="py-1.5">
                                 @if (tiposFiltro.length === 0) {
                                     <li class="px-4 py-3 text-xs text-base-content/40 italic">Sin tipos disponibles</li>
                                 }
@@ -197,7 +197,7 @@
                             </div>
 
                             <!-- Options list Estado -->
-                            <ul class="py-1.5 max-h-48 overflow-y-auto">
+                            <ul class="py-1.5">
                                 @if (estadosFiltro.length === 0) {
                                     <li class="px-4 py-3 text-xs text-base-content/40 italic">Sin estados disponibles</li>
                                 }
@@ -210,6 +210,27 @@
                                                 [checked]="estadosSeleccionados.has(estado)"
                                                 (change)="toggleEstado(estado)" />
                                             <span class="text-sm font-medium text-base-content group-hover:text-primary transition-colors duration-100">{{ estado | titlecase }}</span>
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+
+                            <!-- Header Calificación -->
+                            <div class="flex items-center justify-between px-4 py-3 border-y border-base-content/8 bg-base-200/60">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-base-content/50">Calificación</span>
+                            </div>
+
+                            <!-- Options list Calificación -->
+                            <ul class="py-1.5">
+                                @for (calif of ['NORMAL', 'PROBLEMAS_POTENCIALES', 'DEFICIENTE', 'DUDOSO', 'PERDIDA']; track calif) {
+                                    <li>
+                                        <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-base-200/70 transition-colors duration-100 group">
+                                            <input
+                                                type="checkbox"
+                                                class="checkbox checkbox-primary checkbox-sm rounded-md shrink-0"
+                                                [checked]="calificacionesSeleccionadas.has(calif)"
+                                                (change)="toggleCalificacion(calif)" />
+                                            <span class="text-sm font-medium text-base-content group-hover:text-primary transition-colors duration-100">{{ getCalificacionLabel(calif) }}</span>
                                         </label>
                                     </li>
                                 }
@@ -228,7 +249,7 @@
             <!-- ── End toolbar ── -->
 
             <!-- Active filters -->
-            @if (searchTerm || tiposSeleccionados.size > 0) {
+            @if (searchTerm || tiposSeleccionados.size > 0 || estadosSeleccionados.size > 0 || calificacionesSeleccionadas.size > 0) {
                 <div class="flex items-center gap-4 px-5 py-2 border-b border-base-content/10 bg-base-100 text-sm overflow-x-auto min-h-[44px]">
                     <span class="text-base-content/60 font-medium whitespace-nowrap">Active filters</span>
                     <div class="flex flex-wrap gap-2 items-center">
@@ -244,6 +265,22 @@
                             <div class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs font-medium bg-base-200 text-base-content border border-base-content/10">
                                 <span>Tipo: {{ tipo }}</span>
                                 <button (click)="toggleTipo(tipo)" class="hover:bg-base-300 rounded-full p-0.5 transition-colors">
+                                    <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                                </button>
+                            </div>
+                        }
+                        @for (estado of estadosSeleccionados; track estado) {
+                            <div class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs font-medium bg-base-200 text-base-content border border-base-content/10">
+                                <span>Estado: {{ estado }}</span>
+                                <button (click)="toggleEstado(estado)" class="hover:bg-base-300 rounded-full p-0.5 transition-colors">
+                                    <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                                </button>
+                            </div>
+                        }
+                        @for (calif of calificacionesSeleccionadas; track calif) {
+                            <div class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs font-medium bg-base-200 text-base-content border border-base-content/10">
+                                <span>Clasif: {{ getCalificacionLabel(calif) }}</span>
+                                <button (click)="toggleCalificacion(calif)" class="hover:bg-base-300 rounded-full p-0.5 transition-colors">
                                     <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
                                 </button>
                             </div>
@@ -265,6 +302,10 @@
                             <th class="text-center">Tipo de tasa</th>
                             <th class="text-center">Monto Aprobado</th>
                             <th class="text-center">Monto a pagar</th>
+                            @if (calificacionesSeleccionadas.size > 0) {
+                                <th class="text-center">Días Atraso</th>
+                                <th class="text-center">Calificación</th>
+                            }
                             <th class="text-center">Estado</th>
                             <th class="text-center">Acciones</th>
                         </tr>
@@ -293,6 +334,16 @@
                                 <td class="text-center font-black text-xs text-primary">
                                     {{ (c.montoTotal || 0) | currency:'S/ ' }}
                                 </td>
+                                @if (calificacionesSeleccionadas.size > 0) {
+                                    <td class="text-center font-mono text-xs opacity-70">
+                                        {{ c.diasAtraso || 0 }} {{ (c.diasAtraso === 1) ? 'día' : 'días' }}
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="badge badge-sm font-bold border-transparent" [ngClass]="getCalificacionClase(c.calificacionCrediticia || 'NORMAL')">
+                                            {{ getCalificacionLabel(c.calificacionCrediticia || 'NORMAL') }}
+                                        </div>
+                                    </td>
+                                }
                                 <td class="text-center">
                                     <div class="badge badge-sm font-black whitespace-nowrap px-3 py-2 border-none" [ngClass]="getEstadoClase(c.estado)">
                                         {{ c.estado.replace('_', ' ') }}
@@ -355,7 +406,7 @@
                 </table>
             </div>
             <!-- Pagination -->
-            <div class="flex justify-between items-center px-6 py-4 bg-base-200/20 border-t border-base-content/5">
+            <div class="flex justify-between items-center px-6 py-4 bg-base-200/20 border-t border-base-content/5 rounded-b-3xl">
                 <div class="text-xs opacity-50 font-medium">
                     Mostrando {{ creditosPaginados.length }} de {{ creditosFiltrados.length }} contratos
                 </div>

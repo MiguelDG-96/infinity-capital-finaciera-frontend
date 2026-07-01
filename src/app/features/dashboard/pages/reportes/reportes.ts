@@ -61,17 +61,17 @@ export class Reportes implements OnInit {
           ]
         };
 
-        // 3. Semaforo Clientes
+        // 3. Clasificacion Clientes
         this.semaforoData = {
           ...this.semaforoData,
           datasets: [{
             ...this.semaforoData.datasets[0],
             data: [
-              data.clientesSemaforoVerde,
-              data.clientesSemaforoGris,
-              data.clientesSemaforoAmarillo,
-              data.clientesSemaforoRojo,
-              data.clientesSemaforoNegro
+              data.clientesNormal,
+              data.clientesProblemas,
+              data.clientesDeficiente,
+              data.clientesDudoso,
+              data.clientesPerdida
             ]
           }]
         };
@@ -147,16 +147,16 @@ export class Reportes implements OnInit {
     ]
   };
 
-  // 3. Semaforo
+  // 3. Clasificación de Clientes
   public semaforoOptions = computed<ChartConfiguration['options']>(() => ({
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'right', labels: { color: this.textColor() } }, title: { display: true, text: 'Clasificación de Clientes (Semáforo)', color: this.titleColor() } }
+    plugins: { legend: { position: 'right', labels: { color: this.textColor() } }, title: { display: true, text: 'Clasificación de Clientes (Riesgo)', color: this.titleColor() } }
   }));
   public semaforoData: ChartData<'doughnut'> = {
-    labels: ['Verde (Sin deudas)', 'Gris (No registra)', 'Amarillo (Poco atraso)', 'Rojo (Atraso signif.)', 'Negro (Judicial/Pérdida)'],
+    labels: ['Normal', 'Problemas Potenciales', 'Deficiente', 'Dudoso', 'Pérdida'],
     datasets: [{
       data: [],
-      backgroundColor: ['#10b981', '#94a3b8', '#facc15', '#ef4444', '#111827'],
+      backgroundColor: ['#10b981', '#eab308', '#f97316', '#ef4444', '#e11d48'],
       borderWidth: 0
     }]
   };

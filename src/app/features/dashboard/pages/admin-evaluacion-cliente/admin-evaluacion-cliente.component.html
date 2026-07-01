@@ -1,0 +1,142 @@
+<div class="space-y-4 animate-fade-in pb-4">
+  
+  <!-- Header & Search -->
+  <div class="bg-base-100 rounded-xl shadow-sm border border-base-200 p-4">
+    <div class="max-w-2xl mx-auto text-center space-y-2">
+      <h1 class="text-xl font-extrabold text-primary flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+        Evaluación de Riesgo Crediticio
+      </h1>
+      <p class="text-xs text-base-content/60">Consulta el historial y nivel de riesgo ingresando el DNI.</p>
+      
+      <form (ngSubmit)="buscarCliente()" class="pt-2 flex items-center justify-center gap-2">
+        <div class="join w-full max-w-sm shadow-md shadow-base-300/50">
+          <input type="text" 
+                 [(ngModel)]="searchDni" 
+                 name="searchDni"
+                 placeholder="Ej. 12345678" 
+                 class="input input-sm input-bordered join-item w-full font-mono text-center tracking-widest"
+                 maxlength="15" />
+          <button type="submit" class="btn btn-primary btn-sm join-item" [disabled]="buscando">
+            @if (buscando) {
+              <span class="loading loading-spinner loading-xs"></span>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            }
+          </button>
+        </div>
+      </form>
+      
+      @if (error) {
+        <div class="alert alert-error shadow-sm mt-2 inline-flex w-auto mx-auto py-1 px-3 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>{{ error }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  @if (cliente && !buscando) {
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
+      
+      <!-- Panel de Calificación (Medidor) -->
+      <div class="col-span-1 lg:col-span-6 bg-base-100 rounded-xl shadow-md border border-base-200 overflow-hidden flex flex-col justify-center items-center py-8 relative">
+        <div class="absolute top-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-secondary"></div>
+        <div class="text-center mb-4">
+          <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Dictamen del Sistema</p>
+          <h2 class="text-2xl font-extrabold">{{ cliente.nombre }}</h2>
+          <p class="font-mono text-sm mt-1 opacity-70">DNI: {{ cliente.dni }}</p>
+        </div>
+        
+        <div class="w-full flex justify-center px-2">
+          <app-credit-rating-gauge [rating]="cliente.calificacion" [size]="380"></app-credit-rating-gauge>
+        </div>
+      </div>
+
+      <!-- Panel de Datos Detallados -->
+      <div class="col-span-1 lg:col-span-6 flex flex-col gap-4">
+        
+        <!-- Tarjetas Superiores -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="stats shadow-sm border border-base-200 bg-base-100">
+            <div class="stat p-4">
+              <div class="stat-figure text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div class="stat-title font-bold text-xs">Capacidad de Pago</div>
+              <div class="stat-value text-primary text-xl">
+                {{ ((cliente.ingresoDeclarado - cliente.cuotasActuales) / cliente.ingresoDeclarado) | percent }}
+              </div>
+              <div class="stat-desc text-[10px] mt-1">Margen libre según ingresos</div>
+            </div>
+          </div>
+          
+          <div class="stats shadow-sm border border-base-200 bg-base-100">
+            <div class="stat p-4">
+              <div class="stat-figure text-error">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="stat-title font-bold text-xs">Máximo Atraso Histórico</div>
+              <div class="stat-value text-error text-xl">{{ cliente.maxDiasMora }} días</div>
+              <div class="stat-desc text-[10px] mt-1">En todos sus créditos previos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla Perfil Completo -->
+        <div class="bg-base-100 rounded-xl shadow-sm border border-base-200 p-5 flex-1">
+          <h3 class="font-bold text-sm border-b border-base-200 pb-2 mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            Perfil Completo
+          </h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 text-sm">
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Teléfono</p>
+              <p class="font-medium">{{ cliente.telefono }}</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Correo Electrónico</p>
+              <p class="font-medium">{{ cliente.correo }}</p>
+            </div>
+            
+            <div class="col-span-1 md:col-span-2 divider m-0 h-0"></div>
+            
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Créditos Activos</p>
+              <p class="font-medium text-base">{{ cliente.creditosActivos }}</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Créditos Cancelados</p>
+              <p class="font-medium text-base text-success">{{ cliente.creditosCancelados }}</p>
+            </div>
+            
+            <div class="col-span-1 md:col-span-2 divider m-0 h-0"></div>
+
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Ingresos Declarados</p>
+              <p class="font-bold text-base">S/ {{ cliente.ingresoDeclarado | number:'1.2-2' }}</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold opacity-50 uppercase tracking-wider mb-1">Cuotas Actuales</p>
+              <p class="font-bold text-base text-warning">S/ {{ cliente.cuotasActuales | number:'1.2-2' }}</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

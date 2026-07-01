@@ -177,6 +177,8 @@ export interface Credito {
   motivoDescuentoTasa?: string;
   creditoOrigenId?: number;
   analistaRegistro?: { id: number, nombreCompleto: string, email: string };
+  diasAtraso?: number;
+  calificacionCrediticia?: 'NORMAL' | 'PROBLEMAS_POTENCIALES' | 'DEFICIENTE' | 'DUDOSO' | 'PERDIDA';
 }
 
 export interface Garante {

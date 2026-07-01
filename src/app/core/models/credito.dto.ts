@@ -147,6 +147,8 @@ export interface CreditoDTOResponse {
   garantes?: GaranteDTO[];
   descuentoRetencion?: number;
   creditoOrigenId?: number;
+  diasAtraso?: number;
+  calificacionCrediticia?: string;
 }
 
 export interface GaranteDTO {

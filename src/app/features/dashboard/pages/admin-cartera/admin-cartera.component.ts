@@ -34,6 +34,7 @@ export class AdminCarteraComponent implements OnInit {
   tiposSeleccionados: Set<string> = new Set();
   estadosFiltro: string[] = [];
   estadosSeleccionados: Set<string> = new Set();
+  calificacionesSeleccionadas: Set<string> = new Set();
 
   paginaActual = 1;
   registrosPorPagina = 10;
@@ -64,6 +65,11 @@ export class AdminCarteraComponent implements OnInit {
     // Filtro por estado
     if (this.estadosSeleccionados.size > 0) {
       list = list.filter(c => this.estadosSeleccionados.has(c.estado || ''));
+    }
+
+    // Filtro por calificación crediticia
+    if (this.calificacionesSeleccionadas.size > 0) {
+      list = list.filter(c => c.calificacionCrediticia && this.calificacionesSeleccionadas.has(c.calificacionCrediticia));
     }
 
     // Ordenar por fecha de solicitud (todos los créditos siempre la tienen)
@@ -121,11 +127,25 @@ export class AdminCarteraComponent implements OnInit {
     this.paginaActual = 1;
   }
 
+  toggleCalificacion(calificacion: string): void {
+    const next = new Set(this.calificacionesSeleccionadas);
+    if (next.has(calificacion)) {
+      next.delete(calificacion);
+    } else {
+      next.add(calificacion);
+    }
+    this.calificacionesSeleccionadas = next;
+    sessionStorage.setItem('carteraCalificacionesFiltro', JSON.stringify(Array.from(this.calificacionesSeleccionadas)));
+    this.paginaActual = 1;
+  }
+
   limpiarFiltros(): void {
     this.tiposSeleccionados = new Set();
     this.estadosSeleccionados = new Set();
+    this.calificacionesSeleccionadas = new Set();
     sessionStorage.removeItem('carteraTiposFiltro');
     sessionStorage.removeItem('carteraEstadosFiltro');
+    sessionStorage.removeItem('carteraCalificacionesFiltro');
     this.paginaActual = 1;
     this.filtroAbierto = false;
   }
@@ -183,6 +203,12 @@ export class AdminCarteraComponent implements OnInit {
         this.estadosSeleccionados = new Set(JSON.parse(savedEstados));
       } catch (e) {}
     }
+    const savedCalificaciones = sessionStorage.getItem('carteraCalificacionesFiltro');
+    if (savedCalificaciones) {
+      try {
+        this.calificacionesSeleccionadas = new Set(JSON.parse(savedCalificaciones));
+      } catch (e) {}
+    }
     this.cargarCartera();
   }
 
@@ -203,8 +229,10 @@ export class AdminCarteraComponent implements OnInit {
     sessionStorage.removeItem('carteraSearchTerm');
     this.tiposSeleccionados = new Set();
     this.estadosSeleccionados = new Set();
+    this.calificacionesSeleccionadas = new Set();
     sessionStorage.removeItem('carteraTiposFiltro');
     sessionStorage.removeItem('carteraEstadosFiltro');
+    sessionStorage.removeItem('carteraCalificacionesFiltro');
     this.paginaActual = 1;
   }
 
@@ -379,6 +407,28 @@ export class AdminCarteraComponent implements OnInit {
       case 'PAGADO': return 'badge-neutral';
       case 'RESUELTO': return 'badge-ghost opacity-50';
       default: return 'badge-ghost';
+    }
+  }
+
+  getCalificacionClase(calificacion: string): string {
+    switch (calificacion) {
+      case 'NORMAL': return 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20';
+      case 'PROBLEMAS_POTENCIALES': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
+      case 'DEFICIENTE': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
+      case 'DUDOSO': return 'bg-red-500/10 text-red-600 border-red-500/20';
+      case 'PERDIDA': return 'bg-rose-600/10 text-rose-700 border-rose-600/20';
+      default: return 'bg-base-200 text-base-content/60 border-base-300';
+    }
+  }
+
+  getCalificacionLabel(calificacion: string): string {
+    switch (calificacion) {
+      case 'NORMAL': return 'Normal';
+      case 'PROBLEMAS_POTENCIALES': return 'Prob. Potenciales';
+      case 'DEFICIENTE': return 'Deficiente';
+      case 'DUDOSO': return 'Dudoso';
+      case 'PERDIDA': return 'Pérdida';
+      default: return '-';
     }
   }
 }

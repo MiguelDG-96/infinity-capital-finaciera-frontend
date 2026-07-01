@@ -90,6 +90,12 @@ export class DashboardSidebarComponent implements OnInit {
 
         if (this.userData()?.rol === 'ROLE_ADMIN') {
           items.push({
+            label: 'Evaluar Cliente',
+            icon: 'activity',
+            route: '/dashboard/admin/evaluacion',
+            isReady: true
+          });
+          items.push({
             label: 'Control de IPs',
             icon: 'shield-alert',
             route: '/dashboard/admin/ips',
