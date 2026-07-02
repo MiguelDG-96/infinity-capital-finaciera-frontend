@@ -10,6 +10,7 @@ import { CreditoService } from '../../../../core/services/credito.service';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { SolicitudCredito } from '../../../../core/models/credito.model';
 import { FinancieroHelper } from '../../../../core/utils/financiero.helper';
+import * as htmlToImage from 'html-to-image';
 
 @Component({
   selector: 'app-solicitar-credito',
@@ -52,6 +53,7 @@ export class SolicitarCreditoComponent implements OnInit {
   totalInteres = 0;
   totalPagar = 0;
   cronogramaSimulado: any[] = [];
+  generandoImagen = false;
 
   constructor(
     private fb: FormBuilder,
@@ -473,6 +475,62 @@ export class SolicitarCreditoComponent implements OnInit {
   cerrarModalCronograma() {
     const modal = document.getElementById('modal_cronograma_solicitante') as HTMLDialogElement;
     if (modal) modal.close();
+  }
+
+  private async capturarCronograma(): Promise<Blob | null> {
+    const elemento = document.getElementById('cronograma-content');
+    if (!elemento) return null;
+
+    this.generandoImagen = true;
+    this.cdr.detectChanges();
+
+    try {
+      const blob = await htmlToImage.toBlob(elemento, {
+        backgroundColor: '#ffffff',
+        pixelRatio: 2
+      });
+      return blob;
+    } catch (error) {
+      console.error('Error al capturar el cronograma', error);
+      return null;
+    } finally {
+      this.generandoImagen = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  async descargarImagen() {
+    const blob = await this.capturarCronograma();
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Simulacion_Cronograma_${new Date().getTime()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  async compartirImagen() {
+    const blob = await this.capturarCronograma();
+    if (blob) {
+      const file = new File([blob], 'Simulacion_Cronograma.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: 'Simulación de Cronograma',
+            text: 'Aquí está mi simulación de cronograma de INFINYCAPITAL.',
+            files: [file]
+          });
+        } catch (error) {
+          console.error('Error al compartir', error);
+        }
+      } else {
+        alert('La opción de compartir no está soportada en este navegador o dispositivo. Puedes descargar la imagen.');
+      }
+    }
   }
 
   getSimboloMoneda(): string {

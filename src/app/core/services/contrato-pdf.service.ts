@@ -585,6 +585,7 @@ export class ContratoPdfService {
             extra.total_activos = fm(patrimonioLive.totalActivos);
             extra.patrimonio_neto = fm(patrimonioLive.patrimonioNeto);
             extra.total_pasivos = fm(patrimonioLive.totalPasivos);
+            extra.lista_activos = patrimonioLive.activos;
 
             const findP = (tipo: string) => patrimonioLive.pasivos.find(p => p.tipo === tipo);
             const pT = findP('TARJETAS');
@@ -853,6 +854,10 @@ export class ContratoPdfService {
     const pAnexo = pdfDoc.addPage([595, 842]);
     this.drawAnexoDatos(pAnexo, cliente, credito, extra, font, fontBold);
 
+    // 6. Declaracion Jurada (Página Nueva)
+    const pDeclaracion = pdfDoc.addPage([595, 842]);
+    this.drawDeclaracionJurada(pDeclaracion, cliente, credito, extra, font, fontBold);
+
     const pdfBytes = await pdfDoc.save();
     return new Blob([pdfBytes as any], { type: 'application/pdf' });
   }
@@ -863,7 +868,8 @@ export class ContratoPdfService {
     const marginL = 50;
     
     page.drawText("ANEXO: DECLARACIÓN JURADA DE DATOS DEL CLIENTE", { x: marginL, y: headT, size: 14, font: fontBold });
-    page.drawText(`Documento generado el: ${new Date().toLocaleDateString('es-PE')}`, { x: marginL, y: headT - 20, size: 10, font });
+    const fechaAnexo = credito.fechaSolicitud ? new Date(credito.fechaSolicitud) : new Date();
+    page.drawText(`Fecha de solicitud: ${fechaAnexo.toLocaleDateString('es-PE')}`, { x: marginL, y: headT - 20, size: 10, font });
     
     let curY = headT - 50;
 
@@ -900,7 +906,13 @@ export class ContratoPdfService {
         "Nacionalidad": extra.nacionalidad,
         "Estado Civil": cliente.estadoCivil || extra.estadoCivil,
         "Grado Instruccion": extra.gradoInstruccion,
-        "Fecha Nacimiento": cliente.fechaNacimiento,
+        "Fecha Nacimiento": (() => {
+          const fn = cliente.fechaNacimiento;
+          if (!fn) return '';
+          const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+          const dt = Array.isArray(fn) ? new Date(fn[0], fn[1]-1, fn[2]) : new Date(fn);
+          return `${dt.getDate()} de ${meses[dt.getMonth()]} de ${dt.getFullYear()}`;
+        })(),
         "Email": cliente.usuario?.email,
         "Celular": cliente.celular || extra.celular
     });
@@ -1065,5 +1077,327 @@ export class ContratoPdfService {
     link.download = `Contrato_#${credito.id}.pdf`;
     link.click();
     URL.revokeObjectURL(url);
+  }
+
+  private drawDeclaracionJurada(page: any, cliente: any, credito: any, extra: any, font: any, fontBold: any) {
+    const PAGE_WIDTH = 595;
+    const margin = 50;
+    const rightMargin = PAGE_WIDTH - margin;
+    const textWidthLimit = PAGE_WIDTH - (margin * 2);
+    let curY = 780;
+
+    // Colores
+    const black = rgb(0, 0, 0);
+
+    // Header
+    const titleText = "DECLARACION JURADA DE BIENES";
+    const titleWidth = fontBold.widthOfTextAtSize(titleText, 14);
+    page.drawText(titleText, { x: (PAGE_WIDTH - titleWidth) / 2, y: curY, size: 14, font: fontBold, color: black });
+    page.drawLine({ start: { x: (PAGE_WIDTH - titleWidth) / 2, y: curY - 2 }, end: { x: (PAGE_WIDTH + titleWidth) / 2, y: curY - 2 }, thickness: 1, color: black });
+    
+    curY -= 40;
+
+    // Variables de datos
+    const nombreCompleto = cliente.usuario?.nombreCompleto || `${extra.nombres || cliente.nombres || ''} ${extra.apellidoPaterno || cliente.apellidoPaterno || ''} ${extra.apellidoMaterno || cliente.apellidoMaterno || ''}`.trim() || '___________________';
+    const dni = cliente.numeroDocumento || '______________';
+    const estadoCivil = cliente.estadoCivil || extra.estadoCivil || '______________';
+    const direccion = cliente.domicilio || cliente.direccion || extra.direccion || '_______________________________';
+    const distrito = cliente.distrito || extra.distrito || '________________';
+    const provincia = cliente.provincia || extra.provincia || '________________';
+    const departamento = cliente.departamento || extra.departamento || '________________';
+
+    const p1 = `Por el presente documento yo, ${nombreCompleto.toUpperCase()}, identificado con DNI N° ${dni} de estado civil ${estadoCivil.toUpperCase()} con domicilio en ${direccion.toUpperCase()} Distrito de ${distrito.toUpperCase()}, provincia de ${provincia.toUpperCase()}, Departamento de ${departamento.toUpperCase()}`;
+    
+    this.drawParagraph(page, p1, margin, curY, textWidthLimit, font, 11, 14, true);
+    curY -= this.getParagraphHeight(p1, textWidthLimit, font, 11, 14) + 15;
+
+    page.drawText("Presto lo siguiente:", { x: margin, y: curY, size: 11, font: font, color: black });
+    curY -= 30;
+
+    page.drawText("DECLARO:", { x: margin, y: curY, size: 11, font: font, color: black });
+    curY -= 20;
+
+    const p2Parts = [
+      { t: "Que toda la información proporcionada en mi calidad de cliente de ", b: false },
+      { t: "INFINYCAPITAL,", b: true },
+      { t: " sobre mis propiedades, ingresos, generales de ley; así como la documentación acompañada, que acredite mi situación económica y financiera es verdadera y conforme a la realidad. Por lo cual, en honor a las reglas de la buena fe y confianza en los negocios, me comprometo a cumplir puntualmente con todas y cada una de las cuotas que constituyen el préstamo que se me ha otorgado, hasta su cancelación.", b: false }
+    ];
+    const p2Text = "Que toda la información proporcionada en mi calidad de cliente de INFINYCAPITAL, sobre mis propiedades, ingresos, generales de ley; así como la documentación acompañada, que acredite mi situación económica y financiera es verdadera y conforme a la realidad. Por lo cual, en honor a las reglas de la buena fe y confianza en los negocios, me comprometo a cumplir puntualmente con todas y cada una de las cuotas que constituyen el préstamo que se me ha otorgado, hasta su cancelación.";
+
+    curY = this.drawMixedParagraph(page, p2Parts, margin, curY, textWidthLimit, font, fontBold, 11, 14, true);
+    curY -= 20;
+
+    let activos = [];
+    if (extra.lista_activos && extra.lista_activos.length > 0) {
+        activos = extra.lista_activos.map((a: any) => ({
+            desc: a.descripcion ? String(a.descripcion).toUpperCase() : String(a.tipo).toUpperCase(),
+            valor: a.valorEstimado != null ? `S/ ${a.valorEstimado.toLocaleString('es-PE', { minimumFractionDigits: 2 })}` : 'S/ 0.00'
+        }));
+    } else {
+        if (extra.activo_auto && extra.activo_auto.trim() !== '' && extra.activo_auto.trim() !== 'S/ 0.00' && extra.activo_auto.trim() !== '0') activos.push({ desc: "AUTO", valor: extra.activo_auto });
+        if (extra.activo_inmueble && extra.activo_inmueble.trim() !== '' && extra.activo_inmueble.trim() !== 'S/ 0.00' && extra.activo_inmueble.trim() !== '0') activos.push({ desc: "INMUEBLE", valor: extra.activo_inmueble });
+        if (extra.activo_ahorros && extra.activo_ahorros.trim() !== '' && extra.activo_ahorros.trim() !== 'S/ 0.00' && extra.activo_ahorros.trim() !== '0') activos.push({ desc: "AHORROS", valor: extra.activo_ahorros });
+        if (extra.activo_plazofijo && extra.activo_plazofijo.trim() !== '' && extra.activo_plazofijo.trim() !== 'S/ 0.00' && extra.activo_plazofijo.trim() !== '0') activos.push({ desc: "PLAZO FIJO", valor: extra.activo_plazofijo });
+        if (extra.activo_otros && extra.activo_otros.trim() !== '' && extra.activo_otros.trim() !== 'S/ 0.00' && extra.activo_otros.trim() !== '0') activos.push({ desc: "OTROS", valor: extra.activo_otros });
+    }
+
+    const numRows = Math.max(3, activos.length);
+    const tableH = (numRows + 1) * 20;
+    const tCol1 = 50;
+    const tCol2 = 350;
+    const tCol3 = 95;
+    
+    let tY = curY;
+    let totalValor = 0;
+    
+    // dibujar lineas de la tabla
+    for(let i=0; i<=numRows+1; i++){
+        page.drawLine({ start: { x: margin, y: tY - (i*20) }, end: { x: margin + tCol1 + tCol2 + tCol3, y: tY - (i*20) }, thickness: 1, color: black });
+    }
+    
+    // lineas verticales
+    page.drawLine({ start: { x: margin, y: tY }, end: { x: margin, y: tY - tableH }, thickness: 1, color: black });
+    page.drawLine({ start: { x: margin + tCol1, y: tY }, end: { x: margin + tCol1, y: tY - tableH }, thickness: 1, color: black });
+    page.drawLine({ start: { x: margin + tCol1 + tCol2, y: tY }, end: { x: margin + tCol1 + tCol2, y: tY - tableH }, thickness: 1, color: black });
+    page.drawLine({ start: { x: margin + tCol1 + tCol2 + tCol3, y: tY }, end: { x: margin + tCol1 + tCol2 + tCol3, y: tY - tableH }, thickness: 1, color: black });
+
+    for(let i=0; i<numRows; i++){
+        const isActivo = i < activos.length;
+        page.drawText(String(i+1).padStart(2, '0'), { x: margin + 10, y: tY - (i*20) - 14, size: 10, font: font, color: black });
+        if(isActivo) {
+            page.drawText(activos[i].desc, { x: margin + tCol1 + 10, y: tY - (i*20) - 14, size: 10, font: font, color: black });
+            page.drawText(String(activos[i].valor), { x: margin + tCol1 + tCol2 + 10, y: tY - (i*20) - 14, size: 10, font: font, color: black });
+            
+            let valNum = String(activos[i].valor).replace(/[^0-9.-]+/g,"");
+            totalValor += Number(valNum) || 0;
+        }
+    }
+    
+    // Fila total
+    page.drawText("TOTAL", { x: margin + tCol1 + 10, y: tY - (numRows*20) - 14, size: 10, font: font, color: black });
+    page.drawText(extra.total_activos && extra.total_activos.trim() !== '' && extra.total_activos.trim() !== '0' ? String(extra.total_activos) : (totalValor ? `S/. ${totalValor.toFixed(2)}` : 'S/.'), { x: margin + tCol1 + tCol2 + 10, y: tY - (numRows*20) - 14, size: 10, font: font, color: black });
+
+    curY = tY - tableH - 30;
+
+    const p3 = "Por lo tanto, expido la presente declaración de conformidad con el Art. 179 de ley N° 26702, concordante con los Arts .247° y 348° del Código Penal, asumiendo plena responsabilidad y sometiéndome a las sanciones de ley, en caso de falsedad.";
+    this.drawParagraph(page, p3, margin, curY, textWidthLimit, font, 11, 14, true);
+    curY -= this.getParagraphHeight(p3, textWidthLimit, font, 11, 14) + 50;
+
+    // Ciudad y Fecha (derecha)
+    const fechaDecl = credito.fechaSolicitud ? new Date(credito.fechaSolicitud) : new Date();
+    const fechaStr = `MOYOBAMBA, ${String(fechaDecl.getDate()).padStart(2, '0')}/${String(fechaDecl.getMonth()+1).padStart(2,'0')}/${fechaDecl.getFullYear()}`;
+    const fechaWidth = font.widthOfTextAtSize(fechaStr, 11);
+    page.drawText(fechaStr, { x: rightMargin - fechaWidth, y: curY, size: 11, font: font, color: black });
+
+    curY -= 70;
+
+    // Firma
+    page.drawLine({ start: { x: (PAGE_WIDTH/2) - 100, y: curY }, end: { x: (PAGE_WIDTH/2) + 100, y: curY }, thickness: 1, color: black });
+    curY -= 15;
+    
+    const textCliente = `CLIENTE: ${nombreCompleto.toUpperCase()}`;
+    const textClienteWidth = font.widthOfTextAtSize(textCliente, 11);
+    page.drawText(textCliente, { x: (PAGE_WIDTH - textClienteWidth)/2, y: curY, size: 11, font: font, color: black });
+    
+    curY -= 15;
+    const textDni = `DNI N° ${dni}`;
+    const textDniWidth = font.widthOfTextAtSize(textDni, 11);
+    page.drawText(textDni, { x: (PAGE_WIDTH - textDniWidth)/2, y: curY, size: 11, font: font, color: black });
+
+    curY -= 40;
+    
+    // Footers
+    const footerLineMargin = 50;
+    const footerMargin = 70;
+    const footerRightMargin = PAGE_WIDTH - footerMargin;
+    const footerTextWidth = PAGE_WIDTH - (footerMargin * 2);
+    page.drawLine({ start: { x: footerLineMargin, y: curY }, end: { x: PAGE_WIDTH - footerLineMargin, y: curY }, thickness: 1, color: black });
+    curY -= 20;
+
+    const f1Parts = [
+      { t: "(1) ", b: false },
+      { t: "Art. 179° 26702:", b: true },
+      { t: " Toda información proporcionada por el cliente a una empresa del sistema financiero ... tiene de carácter de declaración jurada. Quien, valiéndose de información o documentación falsa sobre su situación económica y financiera, obtiene de una empresa del sistema financiero, una o más operaciones de crédito, directas o indirectas ... queda sujeto a la sanción establecida en el primer párrafo del art. 247 ° del código penal.", b: false }
+    ];
+    const f2Parts = [
+      { t: "(2) ", b: false },
+      { t: "Art. 247°", b: true },
+      { t: ", Código Penal: El usuario de una institución bancaria, financiera u otra que proporcionando información o documentación falsa o mediante engaños obtiene créditos directos o indirecto u otro tipo de financiación, será reprimido con pena privativa de la libertad no menor de uno ni mayor de 4 años......", b: false }
+    ];
+    const f3Parts = [
+      { t: "(3) ", b: false },
+      { t: "Art.438°", b: true },
+      { t: ", Código Penal: El que comete falsedad simulando, suponiendo, alterando la verdad intencionalmente .....por palabras hechos, sera reprimido con pena privativa de libertad no menor de dos ni mayor de cuatro años.", b: false }
+    ];
+
+    curY = this.drawMixedParagraph(page, f1Parts, footerMargin, curY, footerTextWidth, font, fontBold, 8, 10, true);
+    curY -= 5;
+    curY = this.drawMixedParagraph(page, f2Parts, footerMargin, curY, footerTextWidth, font, fontBold, 8, 10, true);
+    curY -= 5;
+    curY = this.drawMixedParagraph(page, f3Parts, footerMargin, curY, footerTextWidth, font, fontBold, 8, 10, true);
+  }
+
+  // Utils para dibujar parrafos con formato mixto (justify=true para justificacion)
+  private drawMixedParagraph(page: any, parts: {t: string, b: boolean}[], x: number, y: number, maxWidth: number, fontNormal: any, fontBold: any, fontSize: number, lineHeight: number, justify = false) {
+    type CharStyle = { char: string, bold: boolean };
+    const chars: CharStyle[] = [];
+    for (const p of parts) {
+      for (const c of p.t) {
+        chars.push({ char: c, bold: p.b });
+      }
+    }
+
+    const createWordBlock = (charArray: CharStyle[]) => {
+      const segments: { t: string, b: boolean }[] = [];
+      let currentSeg = { t: '', b: charArray[0].bold };
+      let w = 0;
+      
+      for (const c of charArray) {
+        if (c.bold === currentSeg.b) {
+          currentSeg.t += c.char;
+        } else {
+          segments.push(currentSeg);
+          const f = currentSeg.b ? fontBold : fontNormal;
+          w += f.widthOfTextAtSize(currentSeg.t, fontSize);
+          currentSeg = { t: c.char, b: c.bold };
+        }
+      }
+      segments.push(currentSeg);
+      const f = currentSeg.b ? fontBold : fontNormal;
+      w += f.widthOfTextAtSize(currentSeg.t, fontSize);
+      
+      return { segments, w };
+    };
+
+    const wordBlocks: { segments: { t: string, b: boolean }[], w: number }[] = [];
+    let currentBlock: CharStyle[] = [];
+
+    for (const c of chars) {
+      if (c.char === ' ' || c.char === '\\n' || c.char === '\\t') {
+        if (currentBlock.length > 0) {
+          wordBlocks.push(createWordBlock(currentBlock));
+          currentBlock = [];
+        }
+      } else {
+        currentBlock.push(c);
+      }
+    }
+    if (currentBlock.length > 0) {
+      wordBlocks.push(createWordBlock(currentBlock));
+    }
+
+    let cy = y;
+    let currentLine: typeof wordBlocks = [];
+    let currentLineWidth = 0;
+    const standardSpaceW = fontNormal.widthOfTextAtSize(' ', fontSize);
+
+    // Acumular todas las líneas primero para poder saber cuál es la última
+    const allLines: (typeof wordBlocks)[] = [];
+    let currentLine2: typeof wordBlocks = [];
+    let currentLineWidth2 = 0;
+
+    for (let i = 0; i < wordBlocks.length; i++) {
+      const block = wordBlocks[i];
+      const testWidth = currentLineWidth2 + block.w + (currentLine2.length > 0 ? standardSpaceW : 0);
+      if (testWidth > maxWidth && currentLine2.length > 0) {
+        allLines.push(currentLine2);
+        currentLine2 = [block];
+        currentLineWidth2 = block.w;
+      } else {
+        currentLine2.push(block);
+        currentLineWidth2 += block.w + (currentLine2.length > 1 ? standardSpaceW : 0);
+      }
+    }
+    if (currentLine2.length > 0) allLines.push(currentLine2);
+
+    for (let li = 0; li < allLines.length; li++) {
+      const line = allLines[li];
+      const isLastLine = li === allLines.length - 1;
+      let cx = x;
+
+      if (justify && !isLastLine && line.length > 1) {
+        // Calcular ancho total de todas las palabras de esta línea
+        const totalWordsWidth = line.reduce((sum, blk) => sum + blk.w, 0);
+        const spaceW = (maxWidth - totalWordsWidth) / (line.length - 1);
+        for (const blk of line) {
+          for (const seg of blk.segments) {
+            const f = seg.b ? fontBold : fontNormal;
+            page.drawText(seg.t, { x: cx, y: cy, size: fontSize, font: f, color: rgb(0,0,0) });
+            cx += f.widthOfTextAtSize(seg.t, fontSize);
+          }
+          cx += spaceW;
+        }
+      } else {
+        for (const blk of line) {
+          for (const seg of blk.segments) {
+            const f = seg.b ? fontBold : fontNormal;
+            page.drawText(seg.t, { x: cx, y: cy, size: fontSize, font: f, color: rgb(0,0,0) });
+            cx += f.widthOfTextAtSize(seg.t, fontSize);
+          }
+          cx += standardSpaceW;
+        }
+      }
+      cy -= lineHeight;
+    }
+    return cy;
+  }
+
+  // Utils para dibujar parrafos simples (justify=true para justificacion completa)
+  private drawParagraph(page: any, text: string, x: number, y: number, maxWidth: number, font: any, fontSize: number, lineHeight: number, justify = false) {
+    const words = text.split(' ').filter(w => w !== '');
+    const lines: string[] = [];
+    let line = '';
+
+    for (let i = 0; i < words.length; i++) {
+        const testLine = line ? line + ' ' + words[i] : words[i];
+        const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+        if (testWidth > maxWidth && line !== '') {
+            lines.push(line);
+            line = words[i];
+        } else {
+            line = testLine;
+        }
+    }
+    if (line !== '') lines.push(line);
+
+    let currentY = y;
+    for (let li = 0; li < lines.length; li++) {
+        const isLastLine = li === lines.length - 1;
+        if (justify && !isLastLine) {
+            const lineWords = lines[li].split(' ').filter(w => w !== '');
+            if (lineWords.length > 1) {
+                const totalWordsWidth = lineWords.reduce((sum, w) => sum + font.widthOfTextAtSize(w, fontSize), 0);
+                const spaceW = (maxWidth - totalWordsWidth) / (lineWords.length - 1);
+                let cx = x;
+                for (const w of lineWords) {
+                    page.drawText(w, { x: cx, y: currentY, size: fontSize, font: font, color: rgb(0,0,0) });
+                    cx += font.widthOfTextAtSize(w, fontSize) + spaceW;
+                }
+            } else {
+                page.drawText(lines[li], { x: x, y: currentY, size: fontSize, font: font, color: rgb(0,0,0) });
+            }
+        } else {
+            page.drawText(lines[li], { x: x, y: currentY, size: fontSize, font: font, color: rgb(0,0,0) });
+        }
+        currentY -= lineHeight;
+    }
+  }
+
+  private getParagraphHeight(text: string, maxWidth: number, font: any, fontSize: number, lineHeight: number): number {
+    const words = text.split(' ');
+    let line = '';
+    let height = lineHeight;
+
+    for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+        if (testWidth > maxWidth && i > 0) {
+            line = words[i] + ' ';
+            height += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+    return height;
   }
 }

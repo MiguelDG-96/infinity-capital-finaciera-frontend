@@ -1142,53 +1142,66 @@
       <button class="btn btn-sm btn-circle btn-ghost" (click)="cerrarModalCronograma()">✕</button>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
-        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Monto a Pagar</span>
-        <span class="text-lg font-black text-primary">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span>
+    <div id="cronograma-content" class="bg-base-100 p-4 rounded-xl">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+          <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Monto a Pagar</span>
+          <span class="text-lg font-black text-primary">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span>
+        </div>
+        <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+          <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Interés Total</span>
+          <span class="text-lg font-black text-error">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
+        </div>
+        <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+          <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Tasa Mensual (TEM)</span>
+          <span class="text-lg font-black">{{ temSeleccionada }}%</span>
+        </div>
+        <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
+          <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Plazo</span>
+          <span class="text-lg font-black">{{ solicitudForm.get('plazoMeses')?.value }} meses</span>
+        </div>
       </div>
-      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
-        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Interés Total</span>
-        <span class="text-lg font-black text-error">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
-      </div>
-      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
-        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Tasa Mensual (TEM)</span>
-        <span class="text-lg font-black">{{ temSeleccionada }}%</span>
-      </div>
-      <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
-        <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Plazo</span>
-        <span class="text-lg font-black">{{ solicitudForm.get('plazoMeses')?.value }} meses</span>
+
+      <div class="overflow-x-auto rounded-xl border border-base-content/10 max-h-[60vh]">
+        <table class="table table-zebra table-pin-rows table-sm w-full bg-base-100">
+          <thead>
+            <tr class="bg-base-200 text-base-content">
+              <th class="font-bold">N°</th>
+              <th class="font-bold">Fecha</th>
+              <th class="font-bold text-right">Capital</th>
+              <th class="font-bold text-right">Interés</th>
+              <th class="font-bold text-right text-primary">Total Cuota</th>
+              <th class="font-bold text-right">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cuota of cronogramaSimulado; track cuota.numero) {
+            <tr class="hover:bg-base-200/50 transition-colors" [class.bg-warning]="cuota.esGracia" [class.bg-opacity-10]="cuota.esGracia">
+              <td class="font-medium">{{ cuota.numero }} <span *ngIf="cuota.esGracia" class="text-[10px] uppercase text-warning ml-1">(Gracia)</span></td>
+              <td>{{ cuota.fecha | date:'dd/MM/yyyy' }}</td>
+              <td class="text-right">{{ getSimboloMoneda() }} {{ cuota.capital | number:'1.2-2' }}</td>
+              <td class="text-right text-error/80">{{ getSimboloMoneda() }} {{ cuota.interes | number:'1.2-2' }}</td>
+              <td class="text-right font-bold text-primary">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}</td>
+              <td class="text-right text-base-content/70">{{ getSimboloMoneda() }} {{ cuota.saldo | number:'1.2-2' }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="overflow-x-auto rounded-xl border border-base-content/10 max-h-[60vh]">
-      <table class="table table-zebra table-pin-rows table-sm w-full">
-        <thead>
-          <tr class="bg-base-200 text-base-content">
-            <th class="font-bold">N°</th>
-            <th class="font-bold">Fecha</th>
-            <th class="font-bold text-right">Capital</th>
-            <th class="font-bold text-right">Interés</th>
-            <th class="font-bold text-right text-primary">Total Cuota</th>
-            <th class="font-bold text-right">Saldo</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (cuota of cronogramaSimulado; track cuota.numero) {
-          <tr class="hover:bg-base-200/50 transition-colors" [class.bg-warning]="cuota.esGracia" [class.bg-opacity-10]="cuota.esGracia">
-            <td class="font-medium">{{ cuota.numero }} <span *ngIf="cuota.esGracia" class="text-[10px] uppercase text-warning ml-1">(Gracia)</span></td>
-            <td>{{ cuota.fecha | date:'dd/MM/yyyy' }}</td>
-            <td class="text-right">{{ getSimboloMoneda() }} {{ cuota.capital | number:'1.2-2' }}</td>
-            <td class="text-right text-error/80">{{ getSimboloMoneda() }} {{ cuota.interes | number:'1.2-2' }}</td>
-            <td class="text-right font-bold text-primary">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}</td>
-            <td class="text-right text-base-content/70">{{ getSimboloMoneda() }} {{ cuota.saldo | number:'1.2-2' }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="modal-action mt-6 pt-4 border-t border-base-content/10">
+    <div class="modal-action mt-6 pt-4 border-t border-base-content/10 flex justify-between items-center">
+      <div class="flex gap-2">
+        <button class="btn btn-outline btn-sm" (click)="descargarImagen()" [disabled]="generandoImagen">
+          <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+          <span *ngIf="!generandoImagen">Descargar</span>
+          <span *ngIf="generandoImagen" class="loading loading-spinner loading-xs"></span>
+        </button>
+        <button class="btn btn-outline btn-sm" (click)="compartirImagen()" [disabled]="generandoImagen">
+          <lucide-icon name="share-2" class="w-4 h-4"></lucide-icon>
+          Compartir
+        </button>
+      </div>
       <button class="btn btn-primary" (click)="cerrarModalCronograma()">Entendido</button>
     </div>
   </div>

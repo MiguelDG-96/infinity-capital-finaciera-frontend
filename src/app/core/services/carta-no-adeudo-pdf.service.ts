@@ -133,12 +133,7 @@ export class CartaNoAdeudoPdfService {
     // @ts-ignore
     const doc = new jsPDF({ 
       unit: 'mm', 
-      format: 'a4',
-      encryption: {
-        userPassword: dni,
-        ownerPassword: dni,
-        userPermissions: ['print']
-      }
+      format: 'a4'
     });
 
     const W = 210;
@@ -192,28 +187,109 @@ export class CartaNoAdeudoPdfService {
     doc.setFont('helvetica', 'normal');
     y += 15;
 
-    doc.text('HACE CONSTAR:', contentMargin, y);
-    y += 10;
-
-    // Texto legal
-    const printMixedText = (docObj: any, parts: {t: string, b: boolean}[], x: number, startY: number, maxWidth: number) => {
-      let cx = x;
-      let cy = startY;
+    const printJustifiedMixedText = (docObj: any, parts: {t: string, b: boolean}[], x: number, startY: number, maxWidth: number) => {
+      type CharStyle = { char: string, bold: boolean };
+      const chars: CharStyle[] = [];
       for (const p of parts) {
-        docObj.setFont('helvetica', p.b ? 'bold' : 'normal');
-        const words = p.t.split(/(\s+)/);
-        for (const word of words) {
-          if (!word) continue;
-          const wWidth = docObj.getTextWidth(word);
-          if (!word.match(/^\s+$/) && cx + wWidth > x + maxWidth) {
-             cx = x;
-             cy += 6;
-          }
-          if (word.match(/^\s+$/) && cx === x) continue;
-          docObj.text(word, cx, cy);
-          cx += wWidth;
+        for (const c of p.t) {
+          chars.push({ char: c, bold: p.b });
         }
       }
+
+      const createWordBlock = (charArray: CharStyle[]) => {
+        const segments: { t: string, b: boolean }[] = [];
+        let currentSeg = { t: '', b: charArray[0].bold };
+        let w = 0;
+        
+        for (const c of charArray) {
+          if (c.bold === currentSeg.b) {
+            currentSeg.t += c.char;
+          } else {
+            segments.push(currentSeg);
+            docObj.setFont('helvetica', currentSeg.b ? 'bold' : 'normal');
+            w += docObj.getTextWidth(currentSeg.t);
+            currentSeg = { t: c.char, b: c.bold };
+          }
+        }
+        segments.push(currentSeg);
+        docObj.setFont('helvetica', currentSeg.b ? 'bold' : 'normal');
+        w += docObj.getTextWidth(currentSeg.t);
+        
+        return { segments, w };
+      };
+
+      const wordBlocks: { segments: { t: string, b: boolean }[], w: number }[] = [];
+      let currentBlock: CharStyle[] = [];
+
+      for (const c of chars) {
+        if (c.char === ' ' || c.char === '\\n' || c.char === '\\t') {
+          if (currentBlock.length > 0) {
+            wordBlocks.push(createWordBlock(currentBlock));
+            currentBlock = [];
+          }
+        } else {
+          currentBlock.push(c);
+        }
+      }
+      if (currentBlock.length > 0) {
+        wordBlocks.push(createWordBlock(currentBlock));
+      }
+
+      let cy = startY;
+      let currentLine: typeof wordBlocks = [];
+      let currentLineWidth = 0;
+      docObj.setFont('helvetica', 'normal');
+      const standardSpaceWidth = docObj.getTextWidth(' ');
+
+      const printLine = (line: typeof wordBlocks, yPos: number, isLastLine: boolean) => {
+        if (line.length === 0) return;
+        
+        let cx = x;
+        if (isLastLine || line.length === 1) {
+          for (const block of line) {
+            for (const seg of block.segments) {
+              docObj.setFont('helvetica', seg.b ? 'bold' : 'normal');
+              docObj.text(seg.t, cx, yPos);
+              cx += docObj.getTextWidth(seg.t);
+            }
+            cx += standardSpaceWidth;
+          }
+        } else {
+          const totalWordsWidth = line.reduce((sum, block) => sum + block.w, 0);
+          const spaceWidth = (maxWidth - totalWordsWidth) / (line.length - 1);
+          
+          for (let i = 0; i < line.length; i++) {
+            const block = line[i];
+            for (const seg of block.segments) {
+              docObj.setFont('helvetica', seg.b ? 'bold' : 'normal');
+              docObj.text(seg.t, cx, yPos);
+              cx += docObj.getTextWidth(seg.t);
+            }
+            cx += spaceWidth;
+          }
+        }
+      };
+
+      for (let i = 0; i < wordBlocks.length; i++) {
+        const block = wordBlocks[i];
+        const testWidth = currentLineWidth + block.w + (currentLine.length > 0 ? standardSpaceWidth : 0);
+        
+        if (testWidth > maxWidth && currentLine.length > 0) {
+          printLine(currentLine, cy, false);
+          cy += 6;
+          currentLine = [block];
+          currentLineWidth = block.w;
+        } else {
+          currentLine.push(block);
+          currentLineWidth += block.w + (currentLine.length > 1 ? standardSpaceWidth : 0);
+        }
+      }
+      
+      if (currentLine.length > 0) {
+        printLine(currentLine, cy, true);
+        cy += 6;
+      }
+      
       return cy;
     };
 
@@ -237,7 +313,7 @@ export class CartaNoAdeudoPdfService {
       { t: ' que le fue otorgado a su favor.', b: false }
     ];
 
-    y = printMixedText(doc, cuerpoParts, contentMargin, y, W - contentMargin * 2);
+    y = printJustifiedMixedText(doc, cuerpoParts, contentMargin, y, W - contentMargin * 2);
     y += 10;
 
     const cierreParts = [
@@ -246,7 +322,7 @@ export class CartaNoAdeudoPdfService {
       { t: ', en su calidad de titular.', b: false }
     ];
 
-    y = printMixedText(doc, cierreParts, contentMargin, y, W - contentMargin * 2);
+    y = printJustifiedMixedText(doc, cierreParts, contentMargin, y, W - contentMargin * 2);
 
     y += 15;
 
