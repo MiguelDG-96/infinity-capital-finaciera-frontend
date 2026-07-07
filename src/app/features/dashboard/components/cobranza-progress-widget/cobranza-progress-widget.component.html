@@ -1,0 +1,213 @@
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- BURBUJA MINIMIZADA (top-right flotante)                      -->
+<!-- ──────────────────────────────────────────────────────────── -->
+@if (cobranzaService.isVisible()) {
+  @if (cobranzaService.isMinimized()) {
+    <button
+      class="minimized-bubble"
+      (click)="cobranzaService.expandir()"
+      title="Ver progreso de envíos"
+    >
+      <div class="bubble-icon-wrap">
+        @if (cobranzaService.todosCompletados()) {
+          <lucide-icon name="check-circle-2" size="18" class="text-success"></lucide-icon>
+        } @else {
+          <lucide-icon name="mail" size="18" class="text-primary animate-pulse"></lucide-icon>
+        }
+      </div>
+      <div class="bubble-info">
+        <p class="bubble-title">Envío de Cartas</p>
+        @if (!cobranzaService.todosCompletados()) {
+          <div class="bubble-bar-wrap">
+            <div class="bubble-bar" [style.width.%]="cobranzaService.porcentajeGlobal()"></div>
+          </div>
+          <p class="bubble-pct">{{ cobranzaService.porcentajeGlobal() }}%</p>
+        } @else {
+          <p class="bubble-done">{{ cobranzaService.totalExitos() }} enviados ✓</p>
+        }
+      </div>
+    </button>
+  }
+
+  <!-- ──────────────────────────────────────────────────────────── -->
+  <!-- PANEL EXPANDIDO                                              -->
+  <!-- ──────────────────────────────────────────────────────────── -->
+  @if (!cobranzaService.isMinimized()) {
+    <!-- Overlay oscuro solo en confirmacion -->
+    @if (cobranzaService.state().estado === 'confirmando') {
+      <div class="widget-backdrop" (click)="cobranzaService.cancelar()"></div>
+    }
+
+    <div class="widget-panel" [class.is-confirming]="cobranzaService.state().estado === 'confirmando'">
+
+      <!-- Header -->
+      <div class="widget-header">
+        <div class="flex items-center gap-2">
+          @if (cobranzaService.todosCompletados()) {
+            <lucide-icon name="check-circle-2" size="16" class="text-success"></lucide-icon>
+          } @else if (cobranzaService.state().estado === 'confirmando') {
+            <lucide-icon name="mail-question" size="16" class="text-warning"></lucide-icon>
+          } @else {
+            <lucide-icon name="send" size="16" class="text-primary animate-pulse"></lucide-icon>
+          }
+          <span class="widget-header-title">
+            @if (cobranzaService.state().estado === 'confirmando') {
+              Cartas de Cobranza Pendientes
+            } @else if (cobranzaService.todosCompletados()) {
+              Envío Completado
+            } @else {
+              Enviando Cartas de Cobranza
+            }
+          </span>
+        </div>
+        <div class="flex items-center gap-1">
+          @if (cobranzaService.state().estado === 'enviando' || cobranzaService.state().estado === 'completado') {
+            <button class="widget-btn-icon" (click)="cobranzaService.minimizar()" title="Minimizar">
+              <lucide-icon name="minus" size="14"></lucide-icon>
+            </button>
+          }
+          @if (cobranzaService.state().estado === 'confirmando' || cobranzaService.state().estado === 'completado') {
+            <button class="widget-btn-icon" (click)="cobranzaService.cerrar()" title="Cerrar">
+              <lucide-icon name="x" size="14"></lucide-icon>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- ── MODO CONFIRMACIÓN ── -->
+      @if (cobranzaService.state().estado === 'confirmando') {
+        <div class="widget-body">
+          <div class="confirm-icon-wrap">
+            <lucide-icon name="mail-warning" size="32" class="text-warning"></lucide-icon>
+          </div>
+          <p class="confirm-title">Clientes con cartas pendientes</p>
+          <p class="confirm-desc">
+            Se enviarán cartas de cobranza de forma secuencial: primero Nivel 1, luego Nivel 2 y finalmente Nivel 3.
+          </p>
+
+          <!-- Resumen por nivel -->
+          <div class="confirm-levels">
+            @for (n of cobranzaService.state().niveles; track n.nivel) {
+              @if (n.total > 0) {
+                <div class="confirm-level-row">
+                  <div class="confirm-level-dot" [class]="'dot-' + n.nivel"></div>
+                  <span class="confirm-level-label">{{ n.label }}</span>
+                  <span class="confirm-level-count">{{ n.total }} {{ n.total === 1 ? 'cliente' : 'clientes' }}</span>
+                </div>
+              }
+            }
+          </div>
+
+          <div class="confirm-actions">
+            <button class="btn-cancel" (click)="cobranzaService.cancelar()">Ahora no</button>
+            <button class="btn-confirm" (click)="cobranzaService.confirmar()">
+              <lucide-icon name="send" size="14"></lucide-icon>
+              Enviar ahora
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- ── MODO ENVIANDO / COMPLETADO ── -->
+      @if (cobranzaService.state().estado === 'enviando' || cobranzaService.state().estado === 'completado') {
+        <div class="widget-body">
+
+          <!-- Barra de progreso global -->
+          <div class="global-progress-wrap">
+            <div class="global-bar-track">
+              <div
+                class="global-bar-fill"
+                [class.done]="cobranzaService.todosCompletados()"
+                [style.width.%]="cobranzaService.porcentajeGlobal()"
+              ></div>
+            </div>
+            <span class="global-pct">{{ cobranzaService.porcentajeGlobal() }}%</span>
+          </div>
+
+          <!-- Niveles -->
+          <div class="levels-list">
+            @for (nivel of cobranzaService.state().niveles; track nivel.nivel) {
+              <div class="nivel-row" [class.active]="nivel.activo" [class.done]="nivel.completado">
+                <!-- Ícono de estado -->
+                <div class="nivel-status-icon">
+                  @if (nivel.completado) {
+                    <lucide-icon name="check-circle-2" size="14" class="text-success"></lucide-icon>
+                  } @else if (nivel.activo) {
+                    <lucide-icon name="loader-circle" size="14" class="text-primary animate-spin"></lucide-icon>
+                  } @else {
+                    <lucide-icon name="circle-dashed" size="14" class="text-base-content/30"></lucide-icon>
+                  }
+                </div>
+
+                <!-- Info del nivel -->
+                <div class="nivel-info">
+                  <div class="nivel-top-row">
+                    <span class="nivel-label">{{ nivel.label }}</span>
+                    @if (nivel.total > 0) {
+                      <span class="nivel-counter">
+                        {{ nivel.actual }}/{{ nivel.total }}
+                      </span>
+                    } @else {
+                      <span class="nivel-empty">Sin clientes</span>
+                    }
+                  </div>
+
+                  @if (nivel.total > 0) {
+                    <!-- Barra del nivel -->
+                    <div class="nivel-bar-track">
+                      <div
+                        class="nivel-bar-fill"
+                        [class.done]="nivel.completado"
+                        [class.active]="nivel.activo"
+                        [style.width.%]="nivel.total > 0 ? (nivel.actual / nivel.total) * 100 : 0"
+                      ></div>
+                    </div>
+
+                    <!-- Estadísticas -->
+                    @if (nivel.exitos > 0 || nivel.fallos > 0) {
+                      <div class="nivel-stats">
+                        @if (nivel.exitos > 0) {
+                          <span class="stat-ok">✓ {{ nivel.exitos }}</span>
+                        }
+                        @if (nivel.fallos > 0) {
+                          <span class="stat-err">✗ {{ nivel.fallos }}</span>
+                        }
+                      </div>
+                    }
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Log actual -->
+          @if (cobranzaService.state().logActual && !cobranzaService.todosCompletados()) {
+            <p class="log-actual">
+              <lucide-icon name="activity" size="10"></lucide-icon>
+              {{ cobranzaService.state().logActual }}
+            </p>
+          }
+
+          <!-- Resumen final -->
+          @if (cobranzaService.todosCompletados()) {
+            <div class="final-summary">
+              <lucide-icon name="party-popper" size="20" class="text-success"></lucide-icon>
+              <div>
+                <p class="final-title">¡Envíos completados!</p>
+                <p class="final-detail">
+                  <span class="text-success font-bold">{{ cobranzaService.totalExitos() }} exitosos</span>
+                  @if (cobranzaService.totalFallos() > 0) {
+                    · <span class="text-error font-bold">{{ cobranzaService.totalFallos() }} fallidos</span>
+                  }
+                </p>
+              </div>
+            </div>
+            <button class="btn-cerrar-final" (click)="cobranzaService.cerrar()">Cerrar</button>
+          }
+
+        </div>
+      }
+
+    </div>
+  }
+}

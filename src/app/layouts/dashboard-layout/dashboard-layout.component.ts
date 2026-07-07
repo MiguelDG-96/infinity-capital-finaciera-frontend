@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { DashboardNavbarComponent } from '../../features/dashboard/components/dashboard-navbar/dashboard-navbar.component';
 import { DashboardSidebarComponent } from '../../features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
 import { NotificationDrawerComponent } from '../../features/dashboard/components/notification-drawer/notification-drawer.component';
+import { CobranzaProgressWidgetComponent } from '../../features/dashboard/components/cobranza-progress-widget/cobranza-progress-widget.component';
 import { ThemeService } from '../../core/services/theme.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { CobranzaAutoService } from '../../core/services/cobranza-auto.service';
 
 import { AuthService } from '../../core/services/auth.service';
 import { WebsocketService } from '../../core/services/websocket.service';
@@ -20,7 +22,8 @@ import { Router } from '@angular/router';
     CommonModule, 
     DashboardNavbarComponent, 
     DashboardSidebarComponent,
-    NotificationDrawerComponent
+    NotificationDrawerComponent,
+    CobranzaProgressWidgetComponent
   ],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css',
@@ -34,6 +37,7 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
   constructor(
     public themeService: ThemeService,
     public notificationService: NotificationService,
+    public cobranzaAutoService: CobranzaAutoService,
     private authService: AuthService,
     private websocketService: WebsocketService,
     private router: Router
@@ -44,7 +48,6 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
       if (notifs.length > 0) {
         const last = notifs[0];
         if (!last.leida) {
-          // En vez de un toast, hacemos que el NotificationService actual recargue sus contadores
           this.notificationService.recargar();
           this.websocketService.marcarComoLeida(last.id);
         }
@@ -56,7 +59,22 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     const rol = this.authService.currentUserData()?.rol;
     if (rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR') {
       this.websocketService.connect();
+      this.notificationService.iniciarPolling();
+      // Mostrar alerta de cobranza pendiente — esperar a que el polling tenga datos (máx 10s)
+      this.esperarYMostrarCobranza();
     }
+  }
+
+  private esperarYMostrarCobranza(intentos = 0) {
+    if (intentos > 10) return; // máx 10s de espera
+    setTimeout(() => {
+      const pendientes = this.notificationService.pendientesCobranza();
+      if (pendientes.length > 0) {
+        this.cobranzaAutoService.mostrarConfirmacion();
+      } else if (intentos < 10) {
+        this.esperarYMostrarCobranza(intentos + 1);
+      }
+    }, 1000);
   }
 
   ngOnDestroy() {
