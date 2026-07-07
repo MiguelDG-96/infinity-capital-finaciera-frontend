@@ -1,0 +1,4384 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.2
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: localhost:3306
+-- Tiempo de generación: 06-07-2026 a las 10:46:01
+-- Versión del servidor: 10.11.18-MariaDB
+-- Versión de PHP: 8.4.21
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `infiny_capital`
+--
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+$$
+
+$$
+
+$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `activos`
+--
+
+CREATE TABLE `activos` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `observacion` varchar(255) DEFAULT NULL,
+  `tipo` varchar(255) NOT NULL,
+  `valor_estimado` double DEFAULT NULL,
+  `cliente_id` bigint(20) NOT NULL,
+  `doc_url` text DEFAULT NULL COMMENT 'URL relativa del documento de respaldo (imagen o PDF)'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `activos`
+--
+
+INSERT INTO `activos` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `descripcion`, `observacion`, `tipo`, `valor_estimado`, `cliente_id`, `doc_url`) VALUES
+(3, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-01 15:54:21.000000', '2026-06-01 15:54:20.000000', 'Auto Rojo ', NULL, 'AUTO', 15000, 24, '/uploads/user-45718155/Patrimonio/1780329261331_activo_3.pdf'),
+(4, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:52:22.000000', '2026-07-02 10:42:56.000000', 'TERRENO EN DOÑE', NULL, 'INMUEBLE', 5000, 70, NULL),
+(5, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:45:40.000000', '2026-07-02 10:45:40.000000', 'MOTO LINEAL', NULL, 'INMUEBLE', 4000, 70, NULL),
+(6, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:46:22.000000', '2026-07-02 10:46:22.000000', 'BICICLETA', NULL, 'AUTO', 350, 70, NULL),
+(7, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:46:49.000000', '2026-07-02 10:46:49.000000', 'TERRENO EN INDAÑE', NULL, 'INMUEBLE', 50000, 70, NULL),
+(8, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:49:27.000000', '2026-07-02 10:49:27.000000', 'MOTOKAR HONDA', NULL, 'AUTO', 3500, 70, NULL),
+(9, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-02 12:59:24.000000', '2026-07-02 12:59:23.000000', 'FERRETERIA', NULL, 'OTRO', 50000, 116, '/uploads/user-60314620/Patrimonio/1783015164704_activo_9.jpeg');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `clientes`
+--
+
+CREATE TABLE `clientes` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `canal_estado_cuenta` varchar(255) DEFAULT NULL,
+  `cargo_ocupacion` varchar(255) DEFAULT NULL,
+  `celular` varchar(255) DEFAULT NULL,
+  `datos_solicitud` text DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `direccion_empresa` text DEFAULT NULL,
+  `domicilio` text DEFAULT NULL,
+  `empresa` varchar(255) DEFAULT NULL,
+  `estado` varchar(20) DEFAULT 'ACTIVO',
+  `estado_civil` varchar(255) DEFAULT NULL,
+  `fecha_nacimiento` date DEFAULT NULL,
+  `ingreso_mensual` decimal(38,2) DEFAULT NULL,
+  `limite_credito` decimal(38,2) DEFAULT NULL,
+  `numero_documento` varchar(255) DEFAULT NULL,
+  `referencia` text DEFAULT NULL,
+  `ruc_empresa` varchar(255) DEFAULT NULL,
+  `situacion_laboral` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  `telefono_empresa` varchar(255) DEFAULT NULL,
+  `tipo_documento` varchar(255) DEFAULT NULL,
+  `tipo_persona` varchar(255) DEFAULT NULL,
+  `usuario_id` bigint(20) NOT NULL,
+  `foto_url` varchar(255) DEFAULT NULL,
+  `contacto_familiar_celular` varchar(255) DEFAULT NULL,
+  `contacto_familiar_nombre` varchar(255) DEFAULT NULL,
+  `vive_casa_propia` bit(1) DEFAULT NULL,
+  `sexo` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `canal_estado_cuenta`, `cargo_ocupacion`, `celular`, `datos_solicitud`, `direccion`, `direccion_empresa`, `domicilio`, `empresa`, `estado`, `estado_civil`, `fecha_nacimiento`, `ingreso_mensual`, `limite_credito`, `numero_documento`, `referencia`, `ruc_empresa`, `situacion_laboral`, `telefono`, `telefono_empresa`, `tipo_documento`, `tipo_persona`, `usuario_id`, `foto_url`, `contacto_familiar_celular`, `contacto_familiar_nombre`, `vive_casa_propia`, `sexo`) VALUES
+(6, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 06:12:01.000000', '2026-05-27 05:34:17.000000', NULL, 'desarrollador', '934243434', '{\"apellidoPaterno\":\"Dolic\",\"gradoInstruccion\":\"universitario\",\"distrito\":\"Moyobamba\",\"departamento\":\"San martín\",\"provincia\":\"Moyobamba\",\"nombres\":\"Miguel Angel \",\"apellidoMaterno\":\"Grandez\",\"nacionalidad\":\"peruana\"}', 'AH TUPAC AMARU MZ. B LT.9', NULL, NULL, 'arqui-design', 'ACTIVO', 'SOLTERO', '1996-09-29', 1000.00, NULL, '75776104', NULL, NULL, NULL, NULL, NULL, 'DNI', NULL, 114, '/uploads/user-75776104/Fotos/1779862321567_foto_perfil.JPG', NULL, NULL, NULL, NULL),
+(7, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 06:18:17.000000', '2026-05-27 06:18:17.000000', 'EMAIL', 'desarrollador', '935123123', '{\"manzana\":\"B\",\"apellidoPaterno\":\"dolic\",\"gradoInstruccion\":\"universitaria\",\"distrito\":\"Moyobamba\",\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":2,\"lote\":\"9\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Moyobamba \",\"nombres\":\"juan\",\"apellidoMaterno\":\"Grandez\",\"nacionalidad\":\"peruana\",\"fechaIngresoLaboral\":\"2026-01-01\",\"urbanizacion\":\"Tupac Amaru\",\"departamento\":\"San Martin \",\"rucJuridico\":\"\"}', 'AH TUPAC AMARU MZ. B LT.9', 'el dorado 301', NULL, 'arqui-design', 'ACTIVO', 'SOLTERO', '1996-09-29', 1000.00, NULL, '76123123', 'entrando a la escuelita de la tupac amaru', '20123443421', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 115, NULL, NULL, NULL, NULL, NULL),
+(8, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 07:25:59.000000', '2026-05-27 06:51:32.000000', 'EMAIL', 'ingeniero', '943243234', '{\"manzana\":\"b\",\"apellidoPaterno\":\"dolic \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"Moyobamba\",\"ingresoBrutoMensual\":2499,\"rucPropio\":\"\",\"codigoPostal\":\"321323\",\"numeroDependientes\":2,\"lote\":\"9\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Moyobamba\",\"nombres\":\"gilmer \",\"apellidoMaterno\":\"grandez\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2026-01-01\",\"urbanizacion\":\"santa anita\",\"departamento\":\"San Martin\",\"rucJuridico\":\"\"}', 'ASOC. LOS PORTALES DE SANTA ANITA MZ-A16 LT.7', 'el dorado', 'ASOC. LOS PORTALES DE SANTA ANITA MZ-A16 LT.7', 'arqui-desing', 'ACTIVO', 'SOLTERO', '1990-08-16', 1000.00, NULL, '43243243', 'cerca al parque de santa anita', '343243243', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 116, '/uploads/user-43243243/Fotos/1779866759725_foto_perfil.jpg', NULL, NULL, NULL, NULL),
+(9, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 16:03:15.000000', '2026-05-27 15:48:10.000000', 'EMAIL', 'Gerente', '945963452', '{\"manzana\":\"B\",\"apellidoPaterno\":\"Malquiz\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"Moyobamba\",\"ingresoBrutoMensual\":700,\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":2,\"lote\":\"9\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Moyobamba\",\"nombres\":\"Mari licha\",\"apellidoMaterno\":\"Tapia\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2026-05-01\",\"urbanizacion\":\"Sol de Indañe\",\"departamento\":\"San Martín\",\"rucJuridico\":\"\"}', 'AH TUPAC AMARU MZ. B LT.9', 'Nuevo Indañe Mz b lt 9', 'AH TUPAC AMARU MZ. B LT.9', 'licha sac', 'ACTIVO', 'SOLTERO', '1996-09-29', 49999.00, NULL, '86894523', 'cerca a la losa deportiva', '20255312314', 'INDEPENDIENTE', '0', NULL, 'DNI', 'NATURAL', 117, NULL, NULL, NULL, NULL, NULL),
+(11, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-27 22:50:30.000000', '2026-05-27 22:48:57.000000', 'EMAIL', 'soldador', '934343223', '{\"manzana\":\"B\",\"apellidoPaterno\":\"cardenaz\",\"gradoInstruccion\":\"Universitaria\",\"distrito\":\"Guabal\",\"ingresoBrutoMensual\":2499,\"rucPropio\":\"\",\"codigoPostal\":\"22000\",\"numeroDependientes\":0,\"lote\":\"4\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Celendin\",\"nombres\":\"maira\",\"apellidoMaterno\":\"vasquez\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2025-02-01\",\"urbanizacion\":\"San hilarion\",\"departamento\":\"Cajamarca\",\"rucJuridico\":\"\"}', 'AH TUPAC AMARU MZ. B LT.9', 'sin numero ASOC. LOS PORTALES DE SANTA ANITA MZ-A16 LT.7', 'AH TUPAC AMARU MZ. B LT.9', 'guabal sac', 'ACTIVO', 'SOLTERO', '1996-09-20', 2000.00, 1500.00, '78432423', 'cerca al colegio de monjitas', '201234342321', 'DEPENDIENTE', '935530977', NULL, 'DNI', 'NATURAL', 120, NULL, NULL, NULL, NULL, NULL),
+(12, 'SISTEMA', 'SISTEMA', '2026-05-28 20:48:08.000000', '2026-05-28 20:48:08.000000', NULL, NULL, NULL, '{\"apellidoPaterno\":\"PEREZ \",\"nombres\":\"JUAN PABLO II\",\"apellidoMaterno\":\"SILVA\"}', NULL, NULL, NULL, NULL, 'ACTIVO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '987456157', NULL, NULL, NULL, 121, NULL, NULL, NULL, NULL, NULL),
+(13, 'SISTEMA', 'SISTEMA', '2026-05-28 21:33:47.000000', '2026-05-28 21:33:47.000000', NULL, NULL, NULL, '{\"apellidoPaterno\":\"PEREZ\",\"nombres\":\"JUAN PABLO TERCERO\",\"apellidoMaterno\":\"SILVA\"}', NULL, NULL, NULL, NULL, 'ACTIVO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '963258459', NULL, NULL, NULL, 122, NULL, NULL, NULL, NULL, NULL),
+(21, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-29 03:41:06.000000', '2026-05-29 03:41:06.000000', 'EMAIL', 'gerente de la empresa', '934378432', '{\"manzana\":\"K\",\"apellidoPaterno\":\"beltran\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"Moyobamba\",\"ingresoBrutoMensual\":500,\"rucPropio\":\"20123123211\",\"codigoPostal\":\"22001\",\"numeroDependientes\":0,\"lote\":\"7\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Moyobamba\",\"nombres\":\"gustavo\",\"apellidoMaterno\":\"sunday\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2024-01-01\",\"urbanizacion\":\"los jardines\",\"departamento\":\"San Martín \",\"rucJuridico\":\"\"}', 'sin numero ASOC. LOS PORTALES DE SANTA ANITA MZ-A16 LT.7', '', 'sin numero ASOC. LOS PORTALES DE SANTA ANITA MZ-A16 LT.7', '', 'ACTIVO', 'SOLTERO', '1989-07-29', 5000.00, NULL, '72651348', 'cerca al parque tamaulipas', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 130, NULL, NULL, NULL, NULL, NULL),
+(22, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-29 15:46:57.000000', '2026-05-29 15:46:57.000000', 'EMAIL', 'vendedor de lote', '935123965', '{\"manzana\":\"L\",\"apellidoPaterno\":\"HERRERA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"JAZAN \",\"ingresoBrutoMensual\":500,\"rucPropio\":\"\",\"codigoPostal\":\"20253\",\"numeroDependientes\":0,\"lote\":\"10\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"BONGARA\",\"nombres\":\"NIXON\",\"apellidoMaterno\":\"FERNANDEZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2026-01-01\",\"urbanizacion\":\"los robles\",\"departamento\":\"AMAZONAS\",\"rucJuridico\":\"\"}', 'Parque de la 2 de junio', 'el dorado 202', 'Parque de la 2 de junio', 'arqui-design', 'ACTIVO', 'SOLTERO', '1995-09-29', 2000.00, NULL, '89456321', 'cerca a la casa del maestro', '20231546812', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 132, NULL, NULL, NULL, NULL, NULL),
+(23, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-01 04:48:56.000000', '2026-06-01 04:48:56.000000', 'EMAIL', 'gerente', '923123212', '{\"manzana\":\"B\",\"apellidoPaterno\":\"neyra \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"Santa Anita\",\"ingresoBrutoMensual\":499,\"rucPropio\":\"\",\"codigoPostal\":\"20210\",\"numeroDependientes\":0,\"lote\":\"6\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"Lima\",\"nombres\":\"neiler lix\",\"apellidoMaterno\":\"ocupa\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2017-05-01\",\"urbanizacion\":\"las rosas\",\"departamento\":\"Lima\",\"rucJuridico\":\"\"}', 'Parque de la 2 de junio', 'ovalo santa anita', 'Parque de la 2 de junio', 'rustica', 'ACTIVO', 'SOLTERO', '1998-03-15', 1800.00, NULL, '72343232', 'cerca a un parque', '202312321321', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 133, NULL, NULL, NULL, NULL, NULL),
+(24, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-02 10:19:16.000000', '2026-06-01 15:49:49.000000', 'EMAIL', 'CHEF  ASISTENTE COCINA ', '925434813', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"YANTALO\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"RAY LIONEL \",\"apellidoPaterno\":\"AGUIRRE\",\"apellidoMaterno\":\"AGUILAR \",\"ingresoBrutoMensual\":200,\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"2024-02-20\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR MIGUEL GRAU 528 ', '', 'JR MIGUEL GRAU 528 ', '', 'ACTIVO', 'SOLTERO', '1989-04-03', 1200.00, NULL, '45718155', '   	 JR MIGUEL GRAU 528 CEVICHERIA CANGREJITO ', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 134, '/uploads/user-45718155/Fotos/1780329544482_foto_perfil.png', NULL, NULL, NULL, 'MASCULINO'),
+(25, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 17:39:09.000000', '2026-06-02 16:15:30.000000', 'EMAIL', 'ASISTENTE ADMINISTRATIVO ', '939798198', '{\"manzana\":\"\",\"apellidoPaterno\":\"LINARES\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"LIYANCI\",\"apellidoMaterno\":\"SANCHES \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR SAN CARLOS 217', '', 'JR SAN CARLOS 217', '', 'ACTIVO', 'CASADO', '1988-09-25', NULL, NULL, '45433072', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 135, NULL, NULL, NULL, NULL, NULL),
+(26, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-03 15:26:08.000000', '2026-06-02 16:29:36.000000', 'EMAIL', 'VENDEDOR', '910355310', '{\"manzana\":\"\",\"apellidoPaterno\":\"HUAMAN\",\"gradoInstruccion\":\"TECNICO\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"484\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"JIMY LUIS\",\"apellidoMaterno\":\"LIZANA73469643\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\",\"ingresoBrutoMensual\":1200}', 'JR CORONEL BARDALEZ 484', 'JR MANUEL DEL AGUILA', 'JR CORONEL BARDALEZ 484', 'PRECIO UNO', 'ACTIVO', 'SOLTERO', '1996-10-16', 1200.00, NULL, '73461167', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 136, NULL, NULL, NULL, NULL, NULL),
+(27, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-02 17:53:50.000000', '2026-06-02 17:53:50.000000', 'EMAIL', 'CONSTRUCCIÓN', '993147719', '{\"manzana\":\"\",\"apellidoPaterno\":\"AGUILAR \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"REINERIO\",\"apellidoMaterno\":\"GALLEGO\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR. LOS LAS FLORES S/N', '', 'JR. LOS LAS FLORES S/N', '', 'ACTIVO', 'CASADO', '1990-10-16', 1800.00, NULL, '47828561', 'ORQUIDEARIO ', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 137, NULL, NULL, NULL, NULL, NULL),
+(28, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:23:50.000000', '2026-06-03 15:13:21.000000', 'EMAIL', 'TÉCNICO INFORMATICO', '950785746', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\" 240\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', 'JR VARCADILLO', '', 'ACTIVO', 'CASADO', '1999-05-21', NULL, NULL, '74220152', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 139, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(30, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-07-01 01:42:47.000000', '2026-06-04 16:12:40.000000', 'EMAIL', 'VENDEDOR', '910355310', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"JIMY LUIS\",\"apellidoPaterno\":\"HUAMAN \",\"apellidoMaterno\":\"LIZANA\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', '', 'JR MANUEL DEL AGUILA', 'JR CORONEL BARDALEZ 484', 'PRECIO UNO ', 'ACTIVO', 'SOLTERO', '1996-10-16', 1200.00, NULL, '73469743', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 140, '/uploads/user-73469743/Fotos/1782888167064_foto_perfil.jpeg', NULL, NULL, NULL, NULL),
+(32, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-04 16:49:18.000000', '2026-06-04 16:49:18.000000', 'EMAIL', '', '902707556', '{\"manzana\":\"\",\"apellidoPaterno\":\"ARCE\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"1730\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ABEL\",\"apellidoMaterno\":\"GARCIA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR ALONSO DE ALVARADO 1730', '', 'JR ALONSO DE ALVARADO 1730', '', 'ACTIVO', 'SOLTERO', '1970-10-01', NULL, NULL, '00823013', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 142, NULL, NULL, NULL, NULL, NULL),
+(34, 'SISTEMA', 'aquijesluis93@gmail.com', '2026-06-20 00:05:00.000000', '2026-06-04 12:42:32.000000', 'EMAIL', 'ADMINISTRACIÓN  PPROYECTOS', '989425945', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"120\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TECNICA \",\"nombres\":\"JEFERSON \",\"apellidoPaterno\":\"GONGORA\",\"apellidoMaterno\":\"ZUTA \",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"2021-01-03\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0,\"ingresoBrutoMensual\":800}', 'JR MIRAFLORES ', '', 'JR MIRAFLORES ', 'INMOBILIARIA A&J ECO HUASU S.A.C ', 'MOROSO', 'SOLTERO', '2001-01-19', 1500.00, NULL, '76694544', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 144, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(36, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:33:35.000000', '2026-06-05 12:33:54.000000', 'EMAIL', '', '907245544', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"GRECIA NICOLE\",\"apellidoPaterno\":\"VENTURA\",\"apellidoMaterno\":\"RODRIGUEZ\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR PASCACIO NORIEGA 696', 'JR PEDRO CANGA 354 - PODER JUDICIAL ', 'JR PASCACIO NORIEGA 696', 'PODER JUDICIAL', 'ACTIVO', 'CASADO', '1993-06-25', NULL, NULL, '72760897', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 146, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(37, 'mdolicg@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 17:01:02.000000', '2026-06-05 12:36:09.000000', 'EMAIL', 'VENTA DE JUGOS ', '918680100', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"5 DE DICIEMBRE\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"A ESPALDAS DE  LA BODEGA MIS PEQUEÑAS\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR LOS JAZMINES', '', 'JR LOS JAZMINES', '', 'ACTIVO', 'SOLTERO', '1991-10-24', 1.00, NULL, '47377181', 'A ESPALDAS DE  LA BODEGA MIS PEQUEÑAS', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 147, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(38, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:21:32.000000', '2026-06-05 12:50:56.000000', 'EMAIL', '', '921868349', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TECNICO\",\"nombres\":\"PERSIN\",\"apellidoPaterno\":\"CHUMBE\",\"apellidoMaterno\":\"RUIZ\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR MALECON SAN JUAN 175', '', 'JR MALECON SAN JUAN 175', '', 'ACTIVO', 'SOLTERO', '1967-04-03', NULL, NULL, '10491297', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 148, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(39, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 17:20:10.000000', '2026-06-05 12:57:39.000000', 'EMAIL', 'INGENIERO CIVIL ', '934415809', '{\"manzana\":\"\",\"apellidoPaterno\":\"URRUTIA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"ingresoBrutoMensual\":100,\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ANDER JHOEL \",\"apellidoMaterno\":\"DELGADO\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"SOL DE INDAÑE\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'CARRETERA BAÑOS TERMALES', '', 'CARRETERA BAÑOS TERMALES', '', 'ACTIVO', 'SOLTERO', '2001-05-06', 1700.00, NULL, '76793461', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 149, NULL, NULL, NULL, NULL, NULL),
+(40, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:15:07.000000', '2026-06-05 16:32:29.000000', 'EMAIL', '', '973437191', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"S/N \",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR MANGUAL ', '', 'JR MANGUAL ', '', 'ACTIVO', 'SOLTERO', '1996-03-24', NULL, NULL, '76159434', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 150, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(41, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:36:14.000000', '2026-06-05 16:40:23.000000', 'EMAIL', 'DOCENTE ', '981627554', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"281\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"UNIVERSATARIA \",\"nombres\":\"EMILIO\",\"apellidoPaterno\":\"DAZA\",\"apellidoMaterno\":\"VELA\",\"ingresoBrutoMensual\":100,\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR TRUJILLO', '', 'JR TRUJILLO', '', 'ACTIVO', 'SOLTERO', '1987-06-27', 1500.00, NULL, '44331755', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 151, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(42, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:56:52.000000', '2026-06-05 16:43:54.000000', 'EMAIL', 'NEGOCIO PROPIO ', '916650107', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'URB LOS ALGARROBOS ', 'JR CALLAO MERCADO CENTRAL 411', 'URB LOS ALGARROBOS ', 'ZAPATERIA', 'ACTIVO', 'SOLTERO', '1996-11-10', 3500.00, NULL, '74031552', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 152, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(43, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-16 09:36:09.000000', '2026-06-05 16:47:34.000000', 'EMAIL', 'GENERACIÓN Y CONTROL DE TEMPERATURA INDUSTRIAL ', '940977302', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"ZARAGOZA\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"POR EL ESTADIO IPD\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"PAULO CESAR\",\"apellidoPaterno\":\"LOPEZ\",\"apellidoMaterno\":\"APUELA\",\"rucPropio\":\"20607770621\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR INDEPENDENCIA 201', '', 'JR INDEPENDENCIA 201', '', 'ACTIVO', 'SOLTERO', '1992-06-19', NULL, NULL, '47227656', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 153, '/uploads/user-47227656/Fotos/1781558993821_foto_perfil.jpeg', NULL, NULL, NULL, 'MASCULINO'),
+(44, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:04:52.000000', '2026-06-05 16:52:13.000000', 'EMAIL', '', '900262478', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOTOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JIRÓN ARICA 575 ', '', 'JIRÓN ARICA 575 ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '73072288', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 154, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(45, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 16:56:15.000000', '2026-06-05 16:56:14.000000', 'EMAIL', '', '', '{\"manzana\":\"\",\"apellidoPaterno\":\"REQUEJO\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"\",\"nombres\":\"CRISTIAN JHOEL\",\"apellidoMaterno\":\"LINARES\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"\",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', '2003-09-08', NULL, NULL, '73590999', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 155, NULL, NULL, NULL, NULL, NULL),
+(46, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:05:59.000000', '2026-06-05 17:14:09.000000', 'EMAIL', '', '', '{\"departamento\":\"\",\"provincia\":\"\",\"distrito\":\"\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', '', '', 'ACTIVO', 'SOLTERO', '1977-08-05', NULL, NULL, '40462337', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 156, NULL, NULL, NULL, NULL, NULL),
+(47, 'SISTEMA', 'aquijesluis93@gmail.com', '2026-06-09 00:05:00.000000', '2026-06-05 17:23:36.000000', 'EMAIL', '', '965414511', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TÉCNICA\"}', 'JR INDEPENDENCIA (COCOCHO)', '', 'PROLONGACIÓN  OSCAR BENAVIDES ', 'PROGRAMA JUNTOS', 'MOROSO', 'SOLTERO', '1988-08-25', 2500.00, NULL, '45271821', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 157, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(48, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:30:51.000000', '2026-06-05 17:26:35.000000', 'EMAIL', '', '923532833', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"COCOCHO\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"NANCY\",\"apellidoPaterno\":\"MARINA\",\"apellidoMaterno\":\"VILLACORA\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR INDEPENDENCIA', '', 'JR INDEPENDENCIA', '', 'ACTIVO', 'SOLTERO', '1976-02-13', NULL, NULL, '00831340', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 158, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(49, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:59:59.000000', '2026-06-05 17:31:51.000000', 'EMAIL', 'ASISTENTE ADMINISTRATIVA', '956557664', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"LOS ALGARROBOS\",\"manzana\":\"26\",\"lote\":\"1\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR LOS ALGARROBOS', '', 'JR LOS ALGARROBOS', 'CORTE JUDICIAL', 'ACTIVO', 'SOLTERO', '2005-03-13', 900.00, NULL, '71213900', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 159, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(50, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:58:28.000000', '2026-06-05 17:35:06.000000', 'EMAIL', 'DOCENTE  DE PRIMARIA ', '989613182', '{\"departamento\":\"SAN   MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR LOS GERANIOS SECTOR PUNTA DE DOÑE ', 'JR ALONSO DE ALVARADO ', 'JR LOS GERANIOS SECTOR PUNTA DE DOÑE ', 'UGEL MOYOBAMBA ', 'ACTIVO', 'CASADO', '1976-02-04', 3500.00, NULL, '00968958', '', 'BARRANQUITA ', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 160, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(51, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:25:45.000000', '2026-06-05 17:37:23.000000', 'EMAIL', '', '985366149', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"A\",\"lote\":\"1\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"UNIVERSITARIO\",\"nombres\":\"   \\t ELDER EDINSON\",\"apellidoPaterno\":\"ZEALDA \",\"apellidoMaterno\":\"ABANTO \",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'AAHH LA PRIMAVERA', '', 'AAHH LA PRIMAVERA', '', 'ACTIVO', 'SOLTERO', '1997-02-27', NULL, NULL, '76868795', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 161, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(52, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:42:53.000000', '2026-06-05 17:42:53.000000', 'EMAIL', '', '', '{\"manzana\":\"\",\"apellidoPaterno\":\"QUISPE\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"JUANA CARMEN\",\"apellidoMaterno\":\"LOPEZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'AL COSTADO DE LA PLAZA', '', 'AL COSTADO DE LA PLAZA', '', 'ACTIVO', 'SOLTERO', '1992-11-15', NULL, NULL, '734483224', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 162, NULL, NULL, NULL, NULL, NULL),
+(53, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:59:11.000000', '2026-06-05 17:55:51.000000', 'EMAIL', '', '979816415', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'PROLONGACION MANUEL DEL AGUILA CDRA 6', '', 'PROLONGACION MANUEL DEL AGUILA CDRA 6', 'COMERCIAL CHACHA', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '73011811', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 163, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(54, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-06-30 12:57:29.000000', '2026-06-05 18:10:29.000000', 'EMAIL', 'AMA DE CASA', '997902059', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"SANTA ROSA DE COCOCHO\",\"manzana\":\"MZ.D\",\"lote\":\"L.05\",\"codigoPostal\":\"22001\",\"referencia\":\"FRENTE A UNA CANCHA DE FUTBOL\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"RUBI LINDZAY\",\"apellidoPaterno\":\"TAAN\",\"apellidoMaterno\":\"YAMPIS\"}', 'SANTA ROSA DE COCOCHO S/N', '', 'SANTA ROSA DE COCOCHO S/N', '', 'ACTIVO', 'SOLTERO', '2004-12-30', 1600.00, NULL, '75742096', 'FRENTE A UNA CANCHA DE FUTBOL', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 164, NULL, '929838712', 'CONYUGUE', NULL, 'FEMENINO'),
+(55, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:57:49.000000', '2026-06-05 18:22:43.000000', 'EMAIL', 'GESTIÓN DE COBRANZA', '949473012', '{\"departamento\":\"SAN  MARTIN \",\"provincia\":\"MOYOBMABA \",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"509\",\"codigoPostal\":\"22001\",\"referencia\":\"COSTADO DE LA OLLA DE BARRO\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"UNIVERSITARIA \"}', 'JR PEDRO CANGA', 'JR EL DORADO 301', 'JR PEDRO CANGA', 'INFINYCAPITAL', 'ACTIVO', 'SOLTERO', '1993-09-26', 1000.00, NULL, '72715712', 'COSTADO DE LA OLLA DE BARRO', '2061450993', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 165, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(56, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:56:14.000000', '2026-06-05 18:49:24.000000', 'EMAIL', 'TÉCNICO ADMINISTRATIVO ', '955541820', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"PUNTA DE DOÑE\",\"manzana\":\"\",\"lote\":\"S/N\",\"codigoPostal\":\"22001\",\"referencia\":\"PISO 1 \",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TÉCNICA COMPLETO \"}', 'JR MANUEL DEL AGUILA ', 'CALLE ALONSO  DE ALVARADO ', 'JR MANUEL DEL AGUILA ', ' DRE SAN MARTIN UGEL MOYOBAMBA', 'ACTIVO', 'SOLTERO', '1978-09-05', 1380.00, NULL, '40155022', 'PISO 1 ', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 166, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(57, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 12:55:06.000000', '2026-06-06 10:00:17.000000', 'EMAIL', 'TRABAJO EN MOVISTAR ', '930779034', '{\"departamento\":\"SAN  MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"1\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TECNICA \",\"nombres\":\"ROCIO DEL PILAR \",\"apellidoPaterno\":\"SANTILLAN\",\"apellidoMaterno\":\"MARINA \",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR INDEPENDENCIA  ( COCOCHO)', '', 'JR INDEPENDENCIA  ( COCOCHO)', '', 'ACTIVO', 'SOLTERO', '1993-08-13', NULL, NULL, '70415059', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 167, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(58, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 13:01:45.000000', '2026-06-06 10:12:48.000000', 'EMAIL', '', '941808537', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"I\",\"lote\":\"4\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'ASOC. DE VIVIENDA LOS ALGARROBOS', '', 'ASOC. DE VIVIENDA LOS ALGARROBOS', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '74211105', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 168, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(59, 'SISTEMA', 'angelicaurquiayshuiza@gmail.com', '2026-06-24 00:05:00.000000', '2026-06-06 10:26:51.000000', 'EMAIL', 'TOPÓGRAFO', '950064063', '{\"departamento\":\"SAN MARTIAN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"314\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"TÉCNICA \",\"nombres\":\"ISIDRO IVAN \",\"apellidoPaterno\":\"SOTO \",\"apellidoMaterno\":\"MUNDACA\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR ANDALUCIA ', '', 'JR ANDALUCIA ', '', 'MOROSO', 'SOLTERO', '1984-05-15', NULL, NULL, '42601139', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 169, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(60, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 13:02:13.000000', '2026-06-06 10:34:14.000000', 'EMAIL', '', '920234773', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR LIBERTAD CUADRA 2', '', 'JR LIBERTAD CUADRA 2', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '09907161', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 170, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(61, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 10:25:11.000000', '2026-06-06 10:45:35.000000', 'EMAIL', 'FUNCIONARIA ', '919715070', '{\"departamento\":\"\",\"provincia\":\"\",\"distrito\":\"\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"DE LA PLAZA ENTRANDO A LA SEGUNDA CALLE PASANDO UNA 3 CUDRAS MAS, EN UNA CASA DE UN PISO. \",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"NOEMI\",\"apellidoPaterno\":\"MONSALVE \",\"apellidoMaterno\":\"HUAMANCHARI \",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', '', 'JR. SAN MARTIN ', 'ASOCIACIÓN LOS ALGARROBOS ', 'MI BANCO ', 'ACTIVO', 'SOLTERO', '1996-04-10', 4200.00, 0.00, '75698113', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 171, '/uploads/user-75698113/Fotos/1781108636335_foto_perfil.jpeg', NULL, NULL, NULL, 'FEMENINO'),
+(62, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 11:58:58.000000', '2026-06-06 10:45:37.000000', 'EMAIL', '', '912690408', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"ZOILA\",\"apellidoPaterno\":\"GÓMEZ\",\"apellidoMaterno\":\"HUAMAN\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR LOS TULIPANES PUNTA DE DOÑE ', '', 'JR LOS TULIPANES PUNTA DE DOÑE ', '', 'ACTIVO', 'SOLTERO', '1978-10-24', NULL, NULL, '80291009', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 172, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(63, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-07-01 00:49:26.000000', '2026-06-06 10:48:02.000000', 'EMAIL', 'PRESTACIÓN DE SERVICIOS ', '973623357', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"HALY DANIELA\",\"apellidoPaterno\":\"MENDOZA\",\"apellidoMaterno\":\"AGUILAR\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR.VECENTE NAJAR #228', '', 'JR.VECENTE NAJAR #228', '', 'ACTIVO', 'SOLTERO', '2005-05-28', 800.00, NULL, '72279538', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 173, '/uploads/user-72279538/Fotos/1782884966431_foto_perfil.jpeg', NULL, NULL, NULL, 'FEMENINO'),
+(64, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:29:02.000000', '2026-06-06 10:50:42.000000', 'EMAIL', '', '', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', '', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72138883', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 174, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(65, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 11:50:35.000000', '2026-06-06 10:51:55.000000', 'EMAIL', '', '980858438', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"KENY\",\"apellidoPaterno\":\"BABILONIA\",\"apellidoMaterno\":\"CASIQUE\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JEPELACIO JIRON MIRAFLORES ', '', 'JEPELACIO JIRON MIRAFLORES ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '73737034', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 175, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(66, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:33:38.000000', '2026-06-06 10:57:14.000000', 'EMAIL', '', '954853288', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', 'JR. LAS ORQUIDEAS LOTE 05- PUNTA DE DOÑE', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '01147773', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 176, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(67, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:36:02.000000', '2026-06-06 11:03:34.000000', 'EMAIL', '', '945283035', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR CALLAO 11', '', 'JR CALLAO 11', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '76066497', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 177, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(68, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:39:42.000000', '2026-06-06 11:06:20.000000', 'EMAIL', '', '928555353', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR 28 DE JULIO CDRA 2', '', 'JR 28 DE JULIO CDRA 2', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '43255009', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 178, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(69, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:41:07.000000', '2026-06-06 11:08:48.000000', 'EMAIL', '', '', '{\"departamento\":\"\",\"provincia\":\"\",\"distrito\":\"\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', '', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '44107542', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 179, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(70, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-07-02 10:56:23.000000', '2026-06-06 11:16:01.000000', 'EMAIL', 'CHOFER', '', '{\"departamento\":\"LIMA\",\"provincia\":\"LIMA\",\"distrito\":\"SAN ANITA\",\"urbanizacion\":\"LOS CEDROS\",\"manzana\":\"B\",\"lote\":\"9\",\"codigoPostal\":\"\",\"referencia\":\"A LA ESCUELITA DE LA TUPAC\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"GILMER\",\"apellidoPaterno\":\"DOLIC\",\"apellidoMaterno\":\"GRANDEZ\"}', '', '', 'AH TUPAC AMARU', '', 'MOROSO', 'SOLTERO', '1990-08-15', 2800.00, NULL, '47486883', 'A LA ESCUELITA DE LA TUPAC', '324', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 180, '/uploads/user-47486883/Fotos/1780937844522_foto_perfil.jpeg', NULL, NULL, NULL, 'MASCULINO'),
+(71, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-10 09:45:57.000000', '2026-06-06 11:16:38.000000', 'EMAIL', '', '900262478', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"JUANA CARMEN \",\"apellidoPaterno\":\"QUISPE\",\"apellidoMaterno\":\"LOPEZ\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'VALLE VERDE AL COSTADO DEL COLEGIO SERAFIN FILOMENO MOYOBAMBA', '', 'VALLE VERDE AL COSTADO DEL COLEGIO SERAFIN FILOMENO MOYOBAMBA', '', 'ACTIVO', 'SOLTERO', '1992-11-15', NULL, NULL, '73483224', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 181, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(72, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:43:07.000000', '2026-06-06 11:19:58.000000', 'EMAIL', '', '958467582', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', '', '', '', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '00817771', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 182, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(73, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 15:43:29.000000', '2026-06-06 11:22:21.000000', 'EMAIL', '', '980583205', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'PUNTA DE DOÑE AL COSTADO DEL LOCAL DE LA PUNTA DE. DOÑE', '', 'PUNTA DE DOÑE AL COSTADO DEL LOCAL DE LA PUNTA DE. DOÑE', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '40738751', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 183, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(74, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:24:33.000000', '2026-06-06 11:24:33.000000', 'EMAIL', '', '990140035', '{\"manzana\":\"\",\"apellidoPaterno\":\"SÁNCHEZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"IVAN CHALLTO \",\"apellidoMaterno\":\"CANAYI\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR APURÍMAC S/N', '', 'JR APURÍMAC S/N', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72741090', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 184, NULL, NULL, NULL, NULL, NULL),
+(75, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-06 08:50:11.000000', '2026-06-06 11:29:41.000000', 'EMAIL', '', '', '{\"manzana\":\"\",\"apellidoPaterno\":\"ARBILDO \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"\",\"nombres\":\"KELVIN\",\"apellidoMaterno\":\"CERNA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"\",\"rucJuridico\":\"\"}', '', '', 'JIRON CORONEL SECADA 110 ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '75713652', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 185, NULL, NULL, NULL, NULL, NULL),
+(76, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 08:26:42.000000', '2026-06-06 11:44:29.000000', 'EMAIL', '', '933049049', '{\"manzana\":\"\",\"apellidoPaterno\":\"JIMENEZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"\",\"nombres\":\"WILLIAM\",\"apellidoMaterno\":\"ALVARADO\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"\",\"rucJuridico\":\"\"}', '', '', 'PASAJE MIRADOR MZ B LOTE 7', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '73498987', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 186, NULL, NULL, NULL, NULL, NULL),
+(77, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:19:07.000000', '2026-06-06 11:48:41.000000', 'EMAIL', '', '970040068', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR. ALONSO DE ALVARADO 1182', '', 'JR. ALONSO DE ALVARADO 1182', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '43768619', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 187, NULL, NULL, NULL, NULL, 'MASCULINO'),
+(78, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 12:01:07.000000', '2026-06-06 11:52:24.000000', 'EMAIL', '', '976015869', '{\"manzana\":\"\",\"apellidoPaterno\":\"HERNANDEZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"HILDA ICELA\",\"apellidoMaterno\":\"MEDINA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR ALONSO DE ALVARADO 1182', '', 'JR ALONSO DE ALVARADO 1182', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '42895875', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 188, NULL, NULL, NULL, NULL, NULL),
+(79, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:54:43.000000', '2026-06-06 11:54:43.000000', 'EMAIL', '', '925761211', '{\"manzana\":\"\",\"apellidoPaterno\":\"DIAZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"MARGARITA\",\"apellidoMaterno\":\"OLORTEGUI\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'ZARAGOZA CUADRA 3 SIN NUMERO', '', 'ZARAGOZA CUADRA 3 SIN NUMERO', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '47511385', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 189, NULL, NULL, NULL, NULL, NULL),
+(80, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 11:56:31.000000', '2026-06-06 11:55:42.000000', 'EMAIL', 'SERVICIOS ATENCIÓN (COCINA)', '927279327', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"CDA\",\"lote\":\"02\",\"codigoPostal\":\"22001\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"\"}', 'JR. SARGENTO TEJADA ', '', 'JR. SARGENTO TEJADA ', 'MERCADO CENTRAL ', 'ACTIVO', 'SOLTERO', '2004-07-02', 1440.00, NULL, '77534803', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 190, NULL, NULL, NULL, NULL, 'MASCULINO');
+INSERT INTO `clientes` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `canal_estado_cuenta`, `cargo_ocupacion`, `celular`, `datos_solicitud`, `direccion`, `direccion_empresa`, `domicilio`, `empresa`, `estado`, `estado_civil`, `fecha_nacimiento`, `ingreso_mensual`, `limite_credito`, `numero_documento`, `referencia`, `ruc_empresa`, `situacion_laboral`, `telefono`, `telefono_empresa`, `tipo_documento`, `tipo_persona`, `usuario_id`, `foto_url`, `contacto_familiar_celular`, `contacto_familiar_nombre`, `vive_casa_propia`, `sexo`) VALUES
+(81, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 10:17:29.000000', '2026-06-06 12:00:42.000000', 'EMAIL', '', '968213801', '{\"manzana\":\"\",\"apellidoPaterno\":\"RAFAEL \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"GABRIELA \",\"apellidoMaterno\":\"LA MADRID \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR MIRAFLORES S/N NÚMERO ', '', 'JR MIRAFLORES S/N NÚMERO ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72789374', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 191, NULL, NULL, NULL, NULL, NULL),
+(82, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:05:08.000000', '2026-06-06 12:05:08.000000', 'EMAIL', '', '918647907', '{\"manzana\":\"\",\"apellidoPaterno\":\"CORONEL\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ANI MAYORELI\",\"apellidoMaterno\":\"CAHUAZA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'URBANIZACIÓN LOS ALGARROBOS ', '', 'URBANIZACIÓN LOS ALGARROBOS ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '75181789', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 192, NULL, NULL, NULL, NULL, NULL),
+(83, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 17:51:58.000000', '2026-06-06 12:47:37.000000', 'EMAIL', 'MAESTRO DE CONSTRUCCIÓN ', '936144112', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"YANTALO\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"ESPALDAS DE LA MUNICIPALIDAD DE YANTALO \",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"WALTER\",\"apellidoPaterno\":\"VILLACORTA\",\"apellidoMaterno\":\"LABAJOS\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR BUENOS AIRES', '', 'JR BUENOS AIRES', '', 'ACTIVO', 'CASADO', '1980-01-09', 2880.00, NULL, '42154165', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 193, NULL, '918437489', 'ESPOSA ', b'1', 'MASCULINO'),
+(84, 'SISTEMA', 'SISTEMA', '2026-06-06 12:50:23.000000', '2026-06-06 12:50:23.000000', NULL, NULL, NULL, '{\"apellidoPaterno\":\"MALUQUIZ\",\"nombres\":\"ROIDER TRUPM \",\"apellidoMaterno\":\"TAP\"}', NULL, NULL, NULL, NULL, 'ACTIVO', NULL, NULL, NULL, NULL, '76619340', NULL, NULL, NULL, '900568473', NULL, 'DNI', NULL, 194, NULL, NULL, NULL, NULL, NULL),
+(85, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 17:55:29.000000', '2026-06-06 15:17:09.000000', 'EMAIL', '', '910588896', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"UNIVERSITARIO\",\"nombres\":\"KARLA SOFIA\",\"apellidoPaterno\":\"BERNALES\",\"apellidoMaterno\":\"MENDOZA\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR ALONSO DE ALVARADO 1322', '', 'JR ALONSO DE ALVARADO 1322', '', 'ACTIVO', 'SOLTERO', '1997-02-14', NULL, NULL, '70760323', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 195, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(86, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:42:59.000000', '2026-06-06 18:42:59.000000', 'EMAIL', '', '901412352', '{\"manzana\":\"\",\"apellidoPaterno\":\"VERA \",\"gradoInstruccion\":\"UNIVERSITARIA\",\"distrito\":\"YANTALO (PACASMAYO)\",\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"CHRISTIAN LINCOLL\",\"apellidoMaterno\":\"CRUZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', '2002-03-14', NULL, NULL, '77439438', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 196, NULL, NULL, NULL, NULL, NULL),
+(87, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 10:20:00.000000', '2026-06-08 10:18:29.000000', 'EMAIL', 'VENDEDOR COMERCIANTE ', '918437489', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"YANTALÓ \",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"S/N \",\"codigoPostal\":\"22001\",\"referencia\":\"ESPALDAS DE LA MUNICIPALIDAD  -  YANTALO \",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR BUENOS AIRES  ', '', 'JR BUENOS AIRES  ', 'SU CASA', 'ACTIVO', 'CASADO', '1982-11-22', 1200.00, NULL, '41578354', 'ESPALDAS DE LA MUNICIPALIDAD  -  YANTALO ', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 197, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(88, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 10:40:43.000000', '2026-06-08 10:40:43.000000', 'EMAIL', '', '', '{\"manzana\":\"\",\"apellidoPaterno\":\"MARICHIN\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ROSARIO\",\"apellidoMaterno\":\"CHAVEZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR. PEDRO PASCASIO 188 ', '', 'JR. PEDRO PASCASIO 188 ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '42549403', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 198, NULL, NULL, NULL, NULL, NULL),
+(89, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 10:44:33.000000', '2026-06-08 10:44:33.000000', 'EMAIL', '', '', '{\"manzana\":\"B\",\"apellidoPaterno\":\"PEÑA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ALI SINCLAIR\",\"apellidoMaterno\":\"SILUPU\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR LOS JAZMINES 16 ', '', 'JR LOS JAZMINES 16 ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '43732117', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 199, NULL, NULL, NULL, NULL, NULL),
+(95, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 11:48:41.000000', '2026-06-08 11:48:40.000000', 'EMAIL', '', '934396442', '{\"manzana\":\"\",\"apellidoPaterno\":\"FACHIN\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"MARIA FERNADA\",\"apellidoMaterno\":\"GARCIA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'MIGUEL GRAU #525', '', 'MIGUEL GRAU #525', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '76521199', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 205, NULL, NULL, NULL, NULL, NULL),
+(96, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:42:44.000000', '2026-06-08 17:42:44.000000', 'EMAIL', '', '917775843', '{\"manzana\":\"\",\"apellidoPaterno\":\"ENTSAKUA\",\"gradoInstruccion\":\"TECNICO\",\"distrito\":\"MOYOBAMBA\",\"ingresoBrutoMensual\":200,\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"EMIR\",\"apellidoMaterno\":\"ALLUY\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"AZUNGUE\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR 8 DE FEBRERO 114', '', 'JR 8 DE FEBRERO 114', '', 'ACTIVO', 'SOLTERO', '1995-10-04', 1120.00, NULL, '76665395', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 206, NULL, NULL, NULL, NULL, NULL),
+(97, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:45:59.000000', '2026-06-08 17:45:59.000000', 'EMAIL', 'VENDEDORA', '923755973', '{\"manzana\":\"\",\"apellidoPaterno\":\"HUARANGA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"ingresoBrutoMensual\":200,\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"JULIA HERMELINDA\",\"apellidoMaterno\":\"DIAZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"BODEGA DON JULIO\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR DORADO 286', '', 'JR DORADO 286', 'BODEGA DON JULIO', 'ACTIVO', 'SOLTERO', '1981-09-29', 800.00, NULL, '41960369', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 207, NULL, NULL, NULL, NULL, NULL),
+(98, 'SISTEMA', 'SISTEMA', '2026-06-08 17:51:49.000000', '2026-06-08 17:51:49.000000', NULL, NULL, NULL, '{\"apellidoPaterno\":\"MALUQUIZ \",\"nombres\":\"ROIDER TRUPM \",\"apellidoMaterno\":\"TAP\"}', NULL, NULL, NULL, NULL, 'ACTIVO', NULL, NULL, NULL, NULL, '76619341', NULL, NULL, NULL, '900568473', NULL, 'DNI', NULL, 208, NULL, NULL, NULL, NULL, NULL),
+(99, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 10:34:41.000000', '2026-06-10 10:34:41.000000', 'EMAIL', '', '921559506', '{\"manzana\":\"\",\"apellidoPaterno\":\"PÉREZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"ALEX NORBIL \",\"apellidoMaterno\":\"MOZOMBITE \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR. REYES GUERRA CDRA. 9 ZARAGOZA ', '', 'JR. REYES GUERRA CDRA. 9 ZARAGOZA ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72676487', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 210, NULL, NULL, NULL, NULL, NULL),
+(100, 'mdolicg@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-18 12:19:01.000000', '2026-06-10 10:48:12.000000', 'EMAIL', '', '935413891', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA \",\"urbanizacion\":\"\",\"manzana\":\"B\",\"lote\":\"9\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\",\"nombres\":\"EDWIN VLADIMIR \",\"apellidoPaterno\":\"CARRASCO \",\"apellidoMaterno\":\"DEL ROSARIO\"}', '', '', 'LOS JAZMINES', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '48076516', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 211, NULL, NULL, NULL, NULL, NULL),
+(101, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 10:59:23.000000', '2026-06-10 10:59:23.000000', 'EMAIL', '', '928950356', '{\"manzana\":\"\",\"apellidoPaterno\":\"CHAVEZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"ETHEL SARITHS \",\"apellidoMaterno\":\"ALAVA \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR. CALLAO FRENTE AL MERCADO ', '', 'JR. CALLAO FRENTE AL MERCADO ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72951522', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 212, NULL, NULL, NULL, NULL, NULL),
+(102, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 11:06:13.000000', '2026-06-10 11:06:13.000000', 'EMAIL', '', '925910580', '{\"manzana\":\"\",\"apellidoPaterno\":\"LOPEZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBMABA \",\"nombres\":\"JORGE ARMANDO\",\"apellidoMaterno\":\"GARATE\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '45439008', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 213, NULL, NULL, NULL, NULL, NULL),
+(103, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 11:12:32.000000', '2026-06-10 11:12:32.000000', 'EMAIL', '', '985386612', '{\"manzana\":\"\",\"apellidoPaterno\":\"ROJAS\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"\",\"nombres\":\" MARÍA GUADALUPE \",\"apellidoMaterno\":\" CASIQUE\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"\",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '76164774', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 214, NULL, NULL, NULL, NULL, NULL),
+(104, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 12:02:02.000000', '2026-06-10 12:02:02.000000', 'EMAIL', '', '970295594', '{\"manzana\":\"\",\"apellidoPaterno\":\"HERMITAÑO \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"SHIRLEY ASTRID \",\"apellidoMaterno\":\"GONZALES \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'LOS ALGARROBOS ', '', 'LOS ALGARROBOS ', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '48683961', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 215, NULL, NULL, NULL, NULL, NULL),
+(105, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-12 12:13:24.000000', '2026-06-10 12:17:15.000000', 'EMAIL', '', '927255457', '{\"departamento\":\"SAN MARTIN \",\"provincia\":\"MOYOBAMBA \",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"referencia\":\"\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SECUNDARIA\"}', 'JR. 20 DE ABRIL 2009', '', 'JR. 20 DE ABRIL 2009', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '70421079', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 216, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(106, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 08:36:47.000000', '2026-06-11 08:36:47.000000', 'EMAIL', '', '971120685', '{\"manzana\":\"\",\"apellidoPaterno\":\" GARCIA \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"\",\"nombres\":\"JHOANA IVETH\",\"apellidoMaterno\":\"CHAMBA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"\",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '75887715', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 217, NULL, NULL, NULL, NULL, NULL),
+(107, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 09:35:01.000000', '2026-06-11 09:35:01.000000', 'EMAIL', '', '924398840', '{\"manzana\":\"\",\"apellidoPaterno\":\" PINEDO \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"LENER  \",\"apellidoMaterno\":\" ASPAJO\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR LIBERTAD141', '', 'JR LIBERTAD141', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '46175121', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 218, NULL, NULL, NULL, NULL, NULL),
+(108, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 09:45:54.000000', '2026-06-11 09:45:54.000000', 'EMAIL', '', '903439842', '{\"manzana\":\"\",\"apellidoPaterno\":\"TUESTA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"NORKA JARUMI\",\"apellidoMaterno\":\"ORIZOLA\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR COCOCHO SANTA ROSA MZ C LOTE 7', '', 'JR COCOCHO SANTA ROSA MZ C LOTE 7', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '74433064', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 219, NULL, NULL, NULL, NULL, NULL),
+(109, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 11:49:57.000000', '2026-06-11 11:49:57.000000', 'EMAIL', '', '952129089', '{\"manzana\":\"\",\"apellidoPaterno\":\"LOZANO \",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"EFRAIN\",\"apellidoMaterno\":\"SALAS \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR CAJAMARCA - CUADRA 1', '', 'JR CAJAMARCA - CUADRA 1', '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '75958326', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 220, NULL, NULL, NULL, NULL, NULL),
+(110, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 12:11:10.000000', '2026-06-13 12:11:10.000000', 'EMAIL', '', '962132992', '{\"manzana\":\"\",\"apellidoPaterno\":\" VILELA\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"KATHERINE NICOLL \",\"apellidoMaterno\":\"TICLLA \",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', '', '', NULL, '', 'ACTIVO', 'SOLTERO', NULL, NULL, NULL, '72245175', '', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 221, NULL, NULL, NULL, NULL, NULL),
+(111, 'aquijesluis93@gmail.com', 'SISTEMA', '2026-06-16 15:41:50.000000', '2026-06-16 10:57:17.000000', 'EMAIL', '', '972118262', '{\"apellidoPaterno\":\"CARO\",\"nombres\":\"CELIA\",\"apellidoMaterno\":\"PIÑARRETA\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"UNIVERSITARIA\",\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"\",\"rucPropio\":\"\",\"fechaIngresoLaboral\":\"\",\"razonSocialJuridica\":\"\",\"rucJuridico\":\"\",\"representanteLegal\":\"\",\"numeroDependientes\":0}', 'JR BENAVIDES SN', '', 'JR BENAVIDES SN', '', 'ACTIVO', 'SOLTERO', '1985-09-19', NULL, NULL, '43184161', 'ATRAS DE PRECIO 1', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 222, NULL, NULL, NULL, NULL, NULL),
+(112, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-18 17:28:10.000000', '2026-06-18 17:28:10.000000', 'EMAIL', 'DISTRIBUIDOR', '934425215', '{\"manzana\":\"A\",\"apellidoPaterno\":\"DIAZ\",\"gradoInstruccion\":\"SECUNDARIA\",\"distrito\":\"MOYOBAMBA\",\"rucPropio\":\"\",\"codigoPostal\":\"\",\"numeroDependientes\":0,\"lote\":\"4\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA\",\"nombres\":\"ESTEBAN\",\"apellidoMaterno\":\"BUSTAMANTE\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'AV. LAS AMERICAS', 'JR 20 DE ABRIL', 'AV. LAS AMERICAS', 'DISTRIBUIDORA SANTA MONICA SAC', 'ACTIVO', 'SOLTERO', '1973-11-14', NULL, NULL, '00861271', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 223, NULL, NULL, NULL, NULL, NULL),
+(114, 'SISTEMA', 'SISTEMA', '2026-06-29 16:54:11.000000', '2026-06-29 16:54:11.000000', NULL, NULL, NULL, '{\"apellidoPaterno\":\"Aspajo\",\"nombres\":\"Luis Fernando\",\"apellidoMaterno\":\"Pozo\"}', NULL, NULL, NULL, NULL, 'ACTIVO', NULL, NULL, NULL, NULL, '41876618', NULL, NULL, NULL, '987955675', NULL, 'DNI', NULL, 227, NULL, NULL, NULL, NULL, NULL),
+(115, 'roidertapia2000@gmail.com', 'jhony.elamante@gmail.com', '2026-07-01 21:32:33.000000', '2026-07-01 12:14:14.000000', 'EMAIL', 'GERENTE ', '987099626', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"RIOJA\",\"distrito\":\"RIOJA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22041\",\"referencia\":\"CRUCE DEL JR. TEOBALDO LOPEZ CON RAMON CASTILLA\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"PRIMARIA\",\"nombres\":\"ZOILA LUCECITA\",\"apellidoPaterno\":\"FATAMA\",\"apellidoMaterno\":\"PACAYA\"}', 'JR.RAMON CASTILLA #323', '', 'JR.RAMON CASTILLA #323', '', 'ACTIVO', 'SOLTERO', '1999-01-24', 5400.00, NULL, '76036306', 'CRUCE DEL JR. TEOBALDO LOPEZ CON RAMON CASTILLA', '', 'INDEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 228, NULL, NULL, NULL, NULL, 'FEMENINO'),
+(116, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-02 12:52:14.000000', '2026-07-02 12:52:14.000000', 'EMAIL', 'GERENTE', '928136419', '{\"manzana\":\"\",\"apellidoPaterno\":\"MENDOZA\",\"gradoInstruccion\":\"SUPERIOR\",\"distrito\":\"RIOJA\",\"ingresoBrutoMensual\":2000,\"rucPropio\":\"20614995191\",\"codigoPostal\":\"22290\",\"numeroDependientes\":1,\"lote\":\"\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"RIOJA\",\"nombres\":\"LLONI\",\"apellidoMaterno\":\"GUELAC\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"2024-01-01\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN\",\"rucJuridico\":\"\"}', 'JR. TUPAC AMARU 746', '', 'JR. TUPAC AMARU 746', '', 'ACTIVO', 'SOLTERO', '2025-03-14', 6000.00, NULL, '60314620', 'COSTADO DEL MINIMARKET CHEPENANITA', '', 'INDEPENDIENTE', '042601290', NULL, 'DNI', 'NATURAL', 229, NULL, NULL, NULL, NULL, NULL),
+(117, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-03 09:03:12.000000', '2026-07-03 09:03:12.000000', 'EMAIL', 'PROFESORA DE EDUCACIÓN INICIAL', '929534059', '{\"manzana\":\"\",\"apellidoPaterno\":\"  ALVAREZ \",\"gradoInstruccion\":\"TECNICA \",\"distrito\":\"MOYOBAMBA \",\"rucPropio\":\"\",\"codigoPostal\":\"22001\",\"numeroDependientes\":5,\"lote\":\"868\",\"razonSocialJuridica\":\"\",\"representanteLegal\":\"\",\"provincia\":\"MOYOBAMBA \",\"nombres\":\"ANITA MARIETTA\",\"apellidoMaterno\":\"RUIZ\",\"nacionalidad\":\"PERUANA\",\"fechaIngresoLaboral\":\"\",\"urbanizacion\":\"\",\"departamento\":\"SAN MARTIN \",\"rucJuridico\":\"\"}', 'JR INDEPENDENCIA', '', 'JR INDEPENDENCIA', '', 'ACTIVO', 'CASADO', '1981-04-15', 30000.00, NULL, '40971636', '', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 230, NULL, NULL, NULL, NULL, NULL),
+(118, 'angelicaurquiayshuiza@gmail.com', 'jhony.elamante@gmail.com', '2026-07-04 18:17:22.000000', '2026-07-04 13:02:11.000000', 'EMAIL', 'GERENTE', '960630068', '{\"departamento\":\"SAN MARTIN\",\"provincia\":\"MOYOBAMBA\",\"distrito\":\"MOYOBAMBA\",\"urbanizacion\":\"\",\"manzana\":\"\",\"lote\":\"\",\"codigoPostal\":\"22001\",\"referencia\":\"A UNA CUADRA DE PINTURAS MESTANZA\",\"nacionalidad\":\"PERUANA\",\"gradoInstruccion\":\"SUPERIOR\",\"nombres\":\"SEGUNDO JORGE\",\"apellidoPaterno\":\"CHUQUIMANGO\",\"apellidoMaterno\":\"VEGA\"}', 'JR.LAS ORQUIDEAS #170', 'JR.LAS ORQUIDEAS ', 'JR.LAS ORQUIDEAS #170', 'SERVICIO DE TRANSPORTE', 'ACTIVO', 'SOLTERO', '1973-09-12', 1500.00, NULL, '00839206', 'A UNA CUADRA DE PINTURAS MESTANZA', '', 'DEPENDIENTE', '', NULL, 'DNI', 'NATURAL', 231, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `codigos_verificacion_temporal`
+--
+
+CREATE TABLE `codigos_verificacion_temporal` (
+  `id` bigint(20) NOT NULL,
+  `codigo` varchar(6) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `expira_en` datetime(6) NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `usado` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `codigos_verificacion_temporal`
+--
+
+INSERT INTO `codigos_verificacion_temporal` (`id`, `codigo`, `email`, `expira_en`, `tipo`, `usado`) VALUES
+(1, '495679', 'aquijesluis93@gmail.com', '2026-04-16 15:56:40.000000', 'WALLET_ADD_ACCOUNT', b'1'),
+(2, '930205', 'aquijesluis93@gmail.com', '2026-04-16 15:57:19.000000', 'WALLET_WITHDRAW', b'1'),
+(3, '587684', 'rmaluquist@alumno.unsm.edu.pe', '2026-05-19 15:49:33.000000', 'WALLET_ADD_ACCOUNT', b'1'),
+(4, '853760', 'rmaluquist@alumno.unsm.edu.pe', '2026-05-19 15:50:45.000000', 'WALLET_WITHDRAW', b'1'),
+(5, '542905', 'ceciacuario577@gmail.com', '2026-05-19 17:48:50.000000', 'WALLET_ADD_ACCOUNT', b'1'),
+(6, '950373', 'ceciacuario577@gmail.com', '2026-05-19 17:50:07.000000', 'WALLET_WITHDRAW', b'1'),
+(7, '185425', 'dolicmiki96@gmail.com', '2026-05-21 03:04:45.000000', 'WALLET_ADD_ACCOUNT', b'1'),
+(13, '533403', 'nixon25herrera@gmail.com', '2026-05-26 17:35:08.000000', '2FA', b'0'),
+(14, '263583', 'seroca2292@nriza.com', '2026-05-27 21:26:59.000000', 'PASSWORD_RESET', b'0'),
+(17, '881222', 'midolicg@alumno.unsm.edu.pe', '2026-06-04 17:13:05.000000', 'WALLET_WITHDRAW', b'1'),
+(18, '351100', 'dolicmiki96@gmail.com', '2026-06-06 12:25:42.000000', 'WALLET_WITHDRAW', b'1'),
+(19, '430680', 'rmaluquistapia@gmail.com', '2026-06-19 11:23:20.000000', 'PASSWORD_RESET', b'0'),
+(20, '719241', 'mdolicg@gmail.com', '2026-06-22 13:14:17.000000', 'PASSWORD_RESET', b'0'),
+(21, '239369', 'nixon25herrera@gmail.com', '2026-06-25 12:59:14.000000', 'PASSWORD_RESET', b'0');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `configuracion_sistema`
+--
+
+CREATE TABLE `configuracion_sistema` (
+  `id` bigint(20) NOT NULL,
+  `clave` varchar(255) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `valor` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `conyuges`
+--
+
+CREATE TABLE `conyuges` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `empresa` varchar(255) DEFAULT NULL,
+  `fecha_nacimiento` date DEFAULT NULL,
+  `ingresos_mensuales` decimal(38,2) DEFAULT NULL,
+  `nacionalidad` varchar(255) DEFAULT NULL,
+  `ocupacion` varchar(255) DEFAULT NULL,
+  `profesion` varchar(255) DEFAULT NULL,
+  `situacion_laboral` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  `cliente_id` bigint(20) NOT NULL,
+  `apellido_mat_conyuge` varchar(255) NOT NULL,
+  `apellido_pa_conyuge` varchar(255) NOT NULL,
+  `nombres_conyuge` varchar(255) NOT NULL,
+  `numero_documento` varchar(255) NOT NULL,
+  `tipo_documento` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `conyuges`
+--
+
+INSERT INTO `conyuges` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `direccion`, `empresa`, `fecha_nacimiento`, `ingresos_mensuales`, `nacionalidad`, `ocupacion`, `profesion`, `situacion_laboral`, `telefono`, `cliente_id`, `apellido_mat_conyuge`, `apellido_pa_conyuge`, `nombres_conyuge`, `numero_documento`, `tipo_documento`) VALUES
+(7, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-01 15:51:52.000000', '2026-06-01 15:51:52.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 24, '', '', '', '', 'DNI'),
+(8, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 12:42:00.000000', '2026-06-05 12:42:00.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 37, '', '', '', '', 'DNI'),
+(9, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-05 13:00:42.000000', '2026-06-05 13:00:42.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 36, '', '', '', '', 'DNI'),
+(10, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:06:02.000000', '2026-06-05 17:06:02.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 30, '', '', '', '', 'DNI'),
+(11, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 18:10:29.000000', '2026-06-05 18:10:29.000000', NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, 54, 'MAJUASH', 'BASHIAN', 'FRANK JATNIEL', '60131018', 'DNI'),
+(12, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:56:34.000000', '2026-06-05 18:56:34.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 56, '', '', '', '', 'DNI'),
+(13, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:57:49.000000', '2026-06-05 18:57:49.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 55, '', '', '', '', 'DNI'),
+(14, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 10:56:52.000000', '2026-06-06 10:56:52.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 42, '', '', '', '', 'DNI'),
+(15, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 11:01:43.000000', '2026-06-06 11:01:43.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 59, '', '', '', '', 'DNI'),
+(16, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 11:29:27.000000', '2026-06-06 11:29:27.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 63, '', '', '', '', 'DNI'),
+(17, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 11:56:31.000000', '2026-06-06 11:56:31.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80, '', '', '', '', 'DNI'),
+(18, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:00:09.000000', '2026-06-06 12:00:09.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 38, '', '', '', '', 'DNI'),
+(19, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:02:05.000000', '2026-06-06 12:02:05.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 41, '', '', '', '', 'DNI'),
+(20, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:04:52.000000', '2026-06-06 12:04:52.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 44, '', '', '', '', 'DNI'),
+(21, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:05:59.000000', '2026-06-06 12:05:59.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 46, '', '', '', '', 'DNI'),
+(22, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:10:40.000000', '2026-06-06 12:10:40.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 47, '', '', '', '', 'DNI'),
+(23, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:12:31.000000', '2026-06-06 12:12:31.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 48, '', '', '', '', 'DNI'),
+(24, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:14:10.000000', '2026-06-06 12:14:10.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 51, '', '', '', '', 'DNI'),
+(28, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:19:07.000000', '2026-06-06 12:19:07.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 77, '', '', '', '', 'DNI'),
+(29, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:49:21.000000', '2026-06-06 12:49:21.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 83, '', '', '', '', 'DNI'),
+(30, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:57:15.000000', '2026-06-06 12:57:15.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 57, '', '', '', '', 'DNI'),
+(31, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:58:28.000000', '2026-06-06 12:58:28.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, '', '', '', '', 'DNI'),
+(32, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:59:11.000000', '2026-06-06 12:59:11.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 53, '', '', '', '', 'DNI'),
+(33, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 12:59:59.000000', '2026-06-06 12:59:59.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 49, '', '', '', '', 'DNI'),
+(34, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 13:01:45.000000', '2026-06-06 13:01:45.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 58, '', '', '', '', 'DNI'),
+(35, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 13:02:13.000000', '2026-06-06 13:02:13.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 60, '', '', '', '', 'DNI'),
+(36, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:20:22.000000', '2026-06-06 15:20:22.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 61, '', '', '', '', 'DNI'),
+(37, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:20:56.000000', '2026-06-06 15:20:56.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 62, '', '', '', '', 'DNI'),
+(38, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:23:50.000000', '2026-06-06 15:23:50.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 28, '', '', '', '', 'DNI'),
+(42, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:29:02.000000', '2026-06-06 15:29:02.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 64, '', '', '', '', 'DNI'),
+(43, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:30:24.000000', '2026-06-06 15:30:24.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 65, '', '', '', '', 'DNI'),
+(44, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:31:20.000000', '2026-06-06 15:31:20.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 34, '', '', '', '', 'DNI'),
+(45, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:33:38.000000', '2026-06-06 15:33:38.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 66, '', '', '', '', 'DNI'),
+(46, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:36:02.000000', '2026-06-06 15:36:02.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 67, '', '', '', '', 'DNI'),
+(47, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:39:42.000000', '2026-06-06 15:39:42.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 68, '', '', '', '', 'DNI'),
+(48, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:41:07.000000', '2026-06-06 15:41:07.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 69, '', '', '', '', 'DNI'),
+(49, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:41:47.000000', '2026-06-06 15:41:47.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70, '', '', '', '', 'DNI'),
+(50, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:42:17.000000', '2026-06-06 15:42:17.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 71, '', '', '', '', 'DNI'),
+(51, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:43:07.000000', '2026-06-06 15:43:07.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 72, '', '', '', '', 'DNI'),
+(52, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 15:43:29.000000', '2026-06-06 15:43:29.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 73, '', '', '', '', 'DNI'),
+(53, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 16:29:40.000000', '2026-06-06 16:29:40.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 85, '', '', '', '', 'DNI'),
+(54, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:15:07.000000', '2026-06-06 18:15:07.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 40, '', '', '', '', 'DNI'),
+(55, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 10:20:00.000000', '2026-06-08 10:20:00.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 87, '', '', '', '', 'DNI'),
+(56, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-12 12:13:24.000000', '2026-06-12 12:13:24.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 105, '', '', '', '', 'DNI'),
+(57, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-15 16:23:33.000000', '2026-06-15 16:23:33.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 43, '', '', '', '', 'DNI'),
+(58, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-18 12:13:54.000000', '2026-06-18 12:13:54.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 100, '', '', '', '', 'DNI'),
+(59, 'roidertapia2000@gmail.com', 'roidertapia2000@gmail.com', '2026-07-01 21:32:33.000000', '2026-07-01 21:32:33.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 115, '', '', '', '', 'DNI'),
+(60, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-04 13:03:26.000000', '2026-07-04 13:03:26.000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 118, '', '', '', '', 'DNI');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `credenciales_webauthn`
+--
+
+CREATE TABLE `credenciales_webauthn` (
+  `id` bigint(20) NOT NULL,
+  `credential_id` tinyblob NOT NULL,
+  `fecha_creacion` datetime(6) NOT NULL,
+  `nombre_dispositivo` varchar(255) DEFAULT NULL,
+  `public_key_cose` tinyblob NOT NULL,
+  `sign_count` bigint(20) NOT NULL,
+  `usuario_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `credenciales_webauthn`
+--
+
+INSERT INTO `credenciales_webauthn` (`id`, `credential_id`, `fecha_creacion`, `nombre_dispositivo`, `public_key_cose`, `sign_count`, `usuario_id`) VALUES
+(1, 0x6451c6d6a6c79831c9bef9ce540cb5bd, '2026-06-25 15:46:09.000000', 'Passkey / Dispositivo Biométrico', 0xa50102032620012158204f1bc41be4602ecea2610a6ac03576dcafa1f94238644a177c03b010213e33c0225820235cb1dc5ec4a93362200c35a4ef938c26024a70da1bc6282973caa551612e8f, 0, 118);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `creditos`
+--
+
+CREATE TABLE `creditos` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `banco_desembolso` varchar(255) DEFAULT NULL,
+  `canal_estado_cuenta` varchar(255) DEFAULT NULL,
+  `cuenta_desembolso` varchar(255) DEFAULT NULL,
+  `cuota_mensual` decimal(38,2) DEFAULT NULL,
+  `cuotas_anuales` int(11) DEFAULT NULL,
+  `debe_actualidad` decimal(38,2) DEFAULT NULL,
+  `dia_pago_haberes` int(11) DEFAULT NULL,
+  `estado` varchar(20) DEFAULT 'SOLICITADO',
+  `evaluado_por` varchar(255) DEFAULT NULL,
+  `fecha_desembolso` date DEFAULT NULL,
+  `fecha_inicio` datetime(6) DEFAULT NULL,
+  `fecha_vencimiento` datetime(6) DEFAULT NULL,
+  `ganancia_interes` decimal(38,2) DEFAULT NULL,
+  `meses_gratificacion` varchar(255) DEFAULT NULL,
+  `monto_aprobado` decimal(38,2) DEFAULT NULL,
+  `monto_credito` decimal(38,2) DEFAULT NULL,
+  `monto_total` decimal(38,2) DEFAULT NULL,
+  `numero_cuotas_aprobado` int(11) DEFAULT NULL,
+  `observacion_evaluador` text DEFAULT NULL,
+  `periodo_gracia` int(11) DEFAULT NULL,
+  `plazo_meses` int(11) DEFAULT NULL,
+  `renovaciones` int(11) DEFAULT NULL,
+  `tasa_aprobada` decimal(38,2) DEFAULT NULL,
+  `tem` decimal(38,2) DEFAULT NULL,
+  `cliente_id` bigint(20) NOT NULL,
+  `moneda_id` bigint(20) DEFAULT NULL,
+  `tipo_credito_id` bigint(20) DEFAULT NULL,
+  `descuento_retencion` decimal(38,2) DEFAULT NULL,
+  `exento_mora_automatica` bit(1) DEFAULT NULL,
+  `motivo_descuento_tasa` text DEFAULT NULL,
+  `analista_registro_id` bigint(20) DEFAULT NULL,
+  `credito_origen_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `creditos`
+--
+
+INSERT INTO `creditos` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `banco_desembolso`, `canal_estado_cuenta`, `cuenta_desembolso`, `cuota_mensual`, `cuotas_anuales`, `debe_actualidad`, `dia_pago_haberes`, `estado`, `evaluado_por`, `fecha_desembolso`, `fecha_inicio`, `fecha_vencimiento`, `ganancia_interes`, `meses_gratificacion`, `monto_aprobado`, `monto_credito`, `monto_total`, `numero_cuotas_aprobado`, `observacion_evaluador`, `periodo_gracia`, `plazo_meses`, `renovaciones`, `tasa_aprobada`, `tem`, `cliente_id`, `moneda_id`, `tipo_credito_id`, `descuento_retencion`, `exento_mora_automatica`, `motivo_descuento_tasa`, `analista_registro_id`, `credito_origen_id`) VALUES
+(21, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-01 17:24:27.000000', '2026-06-02 16:29:36.000000', 'YAPE', 'EMAIL', '43826366644', 146.76, NULL, 639.21, NULL, 'ACTIVO', NULL, '2025-12-31', '2025-12-31 05:00:00.000000', '2026-12-31 05:00:00.000000', 761.19, NULL, 1000.00, 1000.00, 1761.19, NULL, NULL, 0, 12, 0, 10.00, 10.00, 26, 4, 14, 0.00, b'1', NULL, NULL, NULL),
+(22, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-01 17:16:33.000000', '2026-06-02 17:53:50.000000', 'YAPE', 'EMAIL', '4656655662', 312.09, NULL, 1213.91, NULL, 'ACTIVO', NULL, '2026-05-29', '2026-05-29 05:00:00.000000', '2026-11-29 05:00:00.000000', 472.53, NULL, 1400.00, 1400.00, 1872.53, NULL, NULL, 0, 6, 0, 9.00, 9.00, 27, 4, 4, 0.00, b'1', NULL, NULL, NULL),
+(23, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 12:48:47.000000', '2026-06-03 15:13:21.000000', 'YAPE', 'EMAIL', '43292299772', 111.72, NULL, 562.29, NULL, 'ACTIVO', NULL, '2025-12-04', '2025-12-04 05:00:00.000000', '2026-12-04 05:00:00.000000', 540.67, NULL, 800.00, 800.00, 1340.67, NULL, NULL, 0, 12, 0, 9.00, 9.00, 28, 4, 4, 0.00, b'1', NULL, NULL, NULL),
+(25, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-25 08:39:08.000000', '2026-06-04 16:12:40.000000', 'BCP', 'EMAIL', '910355310', 213.40, NULL, 1879.37, NULL, 'ACTIVO', NULL, '2025-08-28', '2025-08-28 05:00:00.000000', '2027-02-28 05:00:00.000000', 1841.49, NULL, 2000.00, 2000.00, 3841.53, NULL, NULL, 0, 18, 0, 8.00, 9.00, 30, 4, 4, 0.00, b'1', 'CLIENTE CON CONTRATO INDETERMINADO', 138, NULL),
+(26, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-06 09:25:27.000000', '2026-06-04 16:49:18.000000', 'BCP', 'EMAIL', '902707556', 180.67, NULL, 1001.00, NULL, 'ACTIVO', NULL, '2025-11-17', '2025-11-17 05:00:00.000000', '2026-07-17 05:00:00.000000', 446.00, NULL, 1000.00, 1000.00, 1447.00, NULL, NULL, 0, 8, 0, 9.00, 9.00, 32, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(27, 'roidertapia2000@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-02 11:38:05.000000', '2026-06-04 17:11:25.000000', 'YAPE', 'EMAIL', '939798198', 105.08, NULL, 0.00, NULL, 'PAGADO', NULL, '2026-01-02', '2026-01-02 05:00:00.000000', '2026-09-02 05:00:00.000000', 182.53, NULL, 300.00, 239.00, 413.44, NULL, NULL, 0, 4, 0, 15.00, 15.00, 25, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(28, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-23 11:12:02.000000', '2026-06-04 12:42:32.000000', 'YAPE', 'EMAIL', '989425945', 553.14, NULL, 4371.57, NULL, 'ACTIVO', NULL, '2025-10-20', '2025-10-20 00:00:00.000000', '2027-04-20 00:00:00.000000', 4772.94, NULL, 5184.00, 5184.00, 9956.56, NULL, NULL, 0, 18, 0, 8.00, 8.00, 34, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(30, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:47:47.000000', '2026-06-05 12:33:54.000000', 'YAPE', 'EMAIL', '', 492.09, NULL, 800.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-03-19', '2025-03-19 00:00:00.000000', '2025-05-19 00:00:00.000000', 184.19, NULL, 800.00, 800.00, 984.19, NULL, NULL, 0, 2, 0, 15.00, 15.00, 36, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(31, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-20 11:43:48.000000', '2026-06-05 12:36:09.000000', 'YAPE', 'EMAIL', '918680100', 222.92, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-11', '2025-11-11 00:00:00.000000', '2026-05-11 00:00:00.000000', 337.53, NULL, 1000.00, 1000.00, 1337.53, NULL, NULL, 0, 6, 0, 9.00, 9.00, 37, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(32, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 10:59:33.000000', '2026-06-05 12:50:56.000000', 'YAPE', 'EMAIL', '', 218.99, NULL, 500.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-03-31', '2025-03-31 00:00:00.000000', '2025-06-30 00:00:00.000000', 156.96, NULL, 500.00, 500.00, 656.96, NULL, NULL, 0, 3, 0, 15.00, 15.00, 38, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(33, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-20 18:01:41.000000', '2026-06-05 12:57:39.000000', 'YAPE', 'EMAIL', '934415809', 114.80, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-10-27', '2025-10-27 00:00:00.000000', '2026-05-27 00:00:00.000000', 224.83, NULL, 500.00, 500.00, 724.83, NULL, NULL, 0, 6, 0, 10.00, 12.00, 39, 4, 4, 0.00, b'1', 'TASA ANTIGUA ', 95, NULL),
+(34, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:48:07.000000', '2026-06-05 13:02:42.000000', 'YAPE', 'EMAIL', '', 402.11, NULL, 1000.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-05-20', '2025-05-20 00:00:00.000000', '2025-08-20 00:00:00.000000', 206.35, NULL, 1000.00, 1000.00, 1206.35, NULL, NULL, 0, 3, 0, 10.00, 10.00, 36, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(35, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-20 11:37:36.000000', '2026-06-05 16:21:03.000000', 'YAPE', 'EMAIL', '', 263.80, NULL, 1000.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-06-26', '2025-06-26 00:00:00.000000', '2025-11-26 00:00:00.000000', 318.98, NULL, 1000.00, 1000.00, 1318.98, NULL, NULL, 0, 5, 0, 10.00, 10.00, 24, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(36, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-29 18:18:34.000000', '2026-06-05 16:32:29.000000', 'YAPE', 'EMAIL', '973437191', 146.76, NULL, 901.80, NULL, 'ACTIVO', 'Angelica Rocio', '2026-04-28', '2026-04-28 00:00:00.000000', '2027-04-28 00:00:00.000000', 761.19, NULL, 1000.00, 1000.00, 1761.19, NULL, NULL, 0, 12, 0, 10.00, 10.00, 40, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(37, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 10:26:56.000000', '2026-06-05 16:40:23.000000', 'YAPE', 'EMAIL', '', 210.16, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-09', '2025-07-09 00:00:00.000000', '2025-11-09 00:00:00.000000', 240.64, NULL, 600.00, 600.00, 840.64, NULL, NULL, 0, 4, 0, 15.00, 15.00, 41, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(38, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 11:50:33.000000', '2026-06-05 16:43:54.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-17', '2025-07-17 00:00:00.000000', '2025-08-17 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 42, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(39, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:44:49.000000', '2026-06-05 16:47:34.000000', 'YAPE', 'EMAIL', '940977302', 448.00, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2026-03-20', '2026-03-20 00:00:00.000000', '2026-04-20 00:00:00.000000', 48.00, NULL, 400.00, 400.00, 448.00, NULL, NULL, 0, 1, 0, 12.00, 12.00, 43, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(40, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 17:08:04.000000', '2026-06-05 16:48:33.000000', 'YAPE', 'EMAIL', '', 281.17, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-18', '2025-07-18 00:00:00.000000', '2026-03-18 00:00:00.000000', 749.30, NULL, 1500.00, 1500.00, 2118.30, NULL, NULL, 0, 8, 0, 10.00, 10.00, 36, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(41, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 10:59:52.000000', '2026-06-05 16:50:03.000000', 'YAPE', 'EMAIL', '', 211.39, NULL, 800.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-18', '2025-07-18 00:00:00.000000', '2026-01-18 00:00:00.000000', 468.34, NULL, 800.00, 800.00, 1268.34, NULL, NULL, 0, 6, 0, 15.00, 15.00, 38, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(42, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-20 18:33:21.000000', '2026-06-05 16:52:13.000000', 'YAPE', 'EMAIL', '', 158.54, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-24', '2025-07-24 00:00:00.000000', '2026-01-24 00:00:00.000000', 351.26, NULL, 600.00, 600.00, 951.26, NULL, NULL, 0, 6, 0, 15.00, 15.00, 44, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(43, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 17:02:23.000000', '2026-06-05 16:56:15.000000', 'YAPE', 'EMAIL', '', 70.05, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-31', '2025-07-31 00:00:00.000000', '2025-11-30 00:00:00.000000', 80.21, NULL, 200.00, 200.00, 280.21, NULL, NULL, 0, 4, 0, 15.00, 15.00, 45, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(44, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:44:12.000000', '2026-06-05 17:06:28.000000', 'YAPE', 'EMAIL', '940977302', 672.00, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2026-05-05', '2026-05-05 00:00:00.000000', '2026-06-05 00:00:00.000000', 72.00, NULL, 600.00, 600.00, 672.00, NULL, NULL, 0, 1, 0, 12.00, 12.00, 43, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(45, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-29 08:47:22.000000', '2026-06-05 17:07:19.000000', 'YAPE', 'EMAIL', '', 187.44, NULL, 1000.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-07-31', '2025-07-31 00:00:00.000000', '2026-03-31 00:00:00.000000', 499.59, NULL, 1000.00, 1000.00, 1499.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 30, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(46, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-04 16:50:31.000000', '2026-06-05 17:14:09.000000', 'YAPE', 'EMAIL', '', 229.61, NULL, 181.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-08-05', '2025-08-05 00:00:00.000000', '2026-07-05 00:00:00.000000', 557.00, NULL, 1000.00, 1000.00, 1531.00, NULL, NULL, 0, 6, 0, 10.00, 10.00, 46, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(47, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:33:46.000000', '2026-06-05 17:17:06.000000', 'YAPE', 'EMAIL', '', 132.12, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-08-07', '2025-08-07 00:00:00.000000', '2026-02-07 00:00:00.000000', 292.71, NULL, 500.00, 500.00, 792.71, NULL, NULL, 0, 6, 0, 15.00, 15.00, 40, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(48, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-20 18:03:05.000000', '2026-06-05 17:20:10.000000', 'YAPE', 'EMAIL', '', 131.39, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-08-07', '2025-08-07 00:00:00.000000', '2025-11-07 00:00:00.000000', 94.18, NULL, 300.00, 300.00, 394.18, NULL, NULL, 0, 3, 0, 15.00, 15.00, 39, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(49, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-06-10 10:30:24.000000', '2026-06-05 17:23:36.000000', 'YAPE', 'EMAIL', '', 131.39, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-08-09', '2025-08-09 00:00:00.000000', '2025-11-09 00:00:00.000000', 94.18, NULL, 300.00, 300.00, 394.18, NULL, NULL, 0, 3, 0, 15.00, 15.00, 47, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(50, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 10:42:07.000000', '2026-06-05 17:26:35.000000', 'YAPE', 'EMAIL', '', 229.61, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-08-26', '2025-08-26 00:00:00.000000', '2026-02-26 00:00:00.000000', 377.64, NULL, 1000.00, 1000.00, 1377.64, NULL, NULL, 0, 6, 0, 10.00, 10.00, 48, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(51, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:31:51.000000', '2026-06-05 17:31:51.000000', 'YAPE', 'EMAIL', '', 124.90, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-08-30', '2025-08-30 00:00:00.000000', '2025-11-30 00:00:00.000000', 74.71, NULL, 300.00, 300.00, 374.71, NULL, NULL, 0, 3, 0, 12.00, 12.00, 49, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(52, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 11:25:40.000000', '2026-06-05 17:35:06.000000', 'YAPE', 'EMAIL', '989613182', 98.77, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2026-01-03', '2026-01-03 00:00:00.000000', '2026-05-03 00:00:00.000000', 95.08, NULL, 300.00, 300.00, 395.08, NULL, NULL, 0, 4, 0, 12.00, 12.00, 50, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(53, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:03:01.000000', '2026-06-05 17:37:23.000000', 'YAPE', 'EMAIL', '', 98.77, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-09-10', '2025-09-10 00:00:00.000000', '2026-01-10 00:00:00.000000', 95.08, NULL, 300.00, 300.00, 395.08, NULL, NULL, 0, 4, 0, 12.00, 12.00, 51, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(54, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:39:37.000000', '2026-06-05 17:42:53.000000', 'YAPE', 'EMAIL', '', 98.77, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-09-17', '2025-09-17 00:00:00.000000', '2026-01-17 00:00:00.000000', 95.08, NULL, 300.00, 300.00, 395.08, NULL, NULL, 0, 4, 0, 12.00, 12.00, 52, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(55, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-07-01 09:04:44.000000', '2026-06-05 17:55:51.000000', 'YAPE', 'EMAIL', '', 181.55, NULL, 459.49, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-10-01', '2025-10-01 00:00:00.000000', '2026-10-01 00:00:00.000000', 878.51, NULL, 1300.00, 1300.00, 2178.51, NULL, NULL, 0, 12, 0, 9.00, 9.00, 53, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(56, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 11:27:19.000000', '2026-06-05 18:06:56.000000', 'YAPE', 'EMAIL', '989613182', 117.41, NULL, 762.59, NULL, 'ACTIVO', 'Angelica Rocio', '2026-05-19', '2026-05-19 00:00:00.000000', '2027-05-19 00:00:00.000000', 608.95, NULL, 800.00, 800.00, 1408.95, NULL, NULL, 0, 12, 0, 10.00, 12.00, 50, 4, 4, 0.00, b'1', 'TASA ANTIGUA', 95, NULL),
+(57, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 18:30:37.000000', '2026-06-05 18:10:29.000000', 'YAPE', 'EMAIL', '', 164.62, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-10-11', '2025-10-11 00:00:00.000000', '2026-02-11 00:00:00.000000', 158.48, NULL, 500.00, 500.00, 658.48, NULL, NULL, 0, 4, 0, 12.00, 12.00, 54, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(58, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:45:56.000000', '2026-06-05 18:22:43.000000', 'YAPE', 'EMAIL', '949473012', 124.90, NULL, 111.53, NULL, 'ACTIVO', 'Angelica Rocio', '2026-04-07', '2026-04-07 00:00:00.000000', '2026-07-07 00:00:00.000000', 74.71, NULL, 300.00, 300.00, 374.71, NULL, NULL, 0, 3, 0, 12.00, 12.00, 55, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(59, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-04 15:46:32.000000', '2026-06-05 18:49:24.000000', 'YAPE', 'EMAIL', '955541820', 209.48, NULL, 1255.85, NULL, 'ACTIVO', 'Angelica Rocio', '2026-04-04', '2026-04-04 00:00:00.000000', '2027-04-04 00:00:00.000000', 1013.69, NULL, 1500.00, 1500.00, 2513.69, NULL, NULL, 0, 12, 0, 9.00, 9.00, 56, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(60, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 11:21:03.000000', '2026-06-06 10:00:17.000000', 'YAPE', 'EMAIL', '923532833', 344.41, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-05-08', '2025-05-08 00:00:00.000000', '2025-11-08 00:00:00.000000', 566.46, NULL, 1500.00, 1500.00, 2066.46, NULL, NULL, 0, 6, 0, 10.00, 9.00, 57, 4, 4, 0.00, b'1', 'TASA ANTIGUA', 95, NULL),
+(61, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-06-10 10:31:47.000000', '2026-06-06 10:04:01.000000', '', 'EMAIL', '', 197.54, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-10-18', '2025-10-18 00:00:00.000000', '2026-02-18 00:00:00.000000', 190.17, NULL, 600.00, 600.00, 790.17, NULL, NULL, 0, 4, 0, 12.00, 12.00, 47, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(63, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 12:16:26.000000', '2026-06-06 10:09:52.000000', 'YAPE', 'EMAIL', '900262478', 89.49, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-05-08', '2025-05-08 00:00:00.000000', '2025-10-08 00:00:00.000000', 147.49, NULL, 300.00, 300.00, 447.49, NULL, NULL, 0, 5, 0, 15.00, 15.00, 44, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(64, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 08:38:16.000000', '2026-06-06 10:12:48.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-08-21', '2025-08-21 00:00:00.000000', '2026-07-21 00:00:00.000000', 495.00, NULL, 300.00, 300.00, 795.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 58, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(65, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 16:53:10.000000', '2026-06-06 10:26:51.000000', 'YAPE', 'EMAIL', '950064063', 158.54, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-05-10', '2025-05-10 00:00:00.000000', '2025-11-10 00:00:00.000000', 351.26, NULL, 600.00, 600.00, 951.26, NULL, NULL, 0, 6, 0, 15.00, 15.00, 59, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(66, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-23 11:03:48.000000', '2026-06-06 10:34:14.000000', 'YAPE', 'EMAIL', '', 609.65, NULL, 4085.12, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-03-17', '2025-03-17 00:00:00.000000', '2026-09-17 00:00:00.000000', 5972.89, NULL, 5000.00, 5000.00, 10775.53, NULL, NULL, 0, 18, 0, 10.00, 10.00, 60, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(67, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 10:40:33.000000', '2026-06-06 10:40:53.000000', 'YAPE', 'EMAIL', '', 229.61, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-03-17', '2025-03-17 00:00:00.000000', '2025-09-17 00:00:00.000000', 377.64, NULL, 1000.00, 1000.00, 1377.64, NULL, NULL, 0, 6, 0, 10.00, 10.00, 48, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(68, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-02 09:11:19.000000', '2026-06-06 10:45:35.000000', 'YAPE', 'EMAIL', '', 667.80, NULL, 5932.20, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-03-05', '2025-03-05 00:00:00.000000', '2027-03-05 00:00:00.000000', 10027.16, NULL, 6000.00, 6000.00, 16027.16, NULL, NULL, 0, 24, 0, 10.00, 10.00, 61, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(69, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 10:51:51.000000', '2026-06-06 10:45:37.000000', 'YAPE', 'EMAIL', '912690408', 187.44, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-05-02', '2025-05-02 00:00:00.000000', '2026-01-02 00:00:00.000000', 499.59, NULL, 1000.00, 1000.00, 1499.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 62, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(70, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 10:01:13.000000', '2026-06-06 10:48:02.000000', 'YAPE', 'EMAIL', '', 131.39, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2026-06-06', '2026-06-06 10:48:02.000000', '2026-09-06 10:48:02.000000', 94.18, NULL, 300.00, 300.00, 394.18, NULL, NULL, 0, 3, 0, 15.00, 15.00, 63, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(71, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-23 12:20:14.000000', '2026-06-06 10:49:24.000000', 'YAPE', 'EMAIL', '', 55.34, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-03-04', '2025-03-04 00:00:00.000000', '2026-03-04 00:00:00.000000', 364.27, NULL, 300.00, 300.00, 664.27, NULL, NULL, 0, 12, 0, 15.00, 15.00, 28, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(72, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:50:42.000000', '2026-06-06 10:50:42.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-12-28', '2024-12-28 00:00:00.000000', '2025-02-28 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 64, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(73, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:51:56.000000', '2026-06-06 10:51:55.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-12-21', '2024-12-21 00:00:00.000000', '2025-02-21 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 65, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(74, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 12:13:14.000000', '2026-06-06 10:54:03.000000', '', 'EMAIL', '', 295.85, NULL, 500.00, NULL, 'ACTIVO', 'Angelica Rocio', '2025-10-27', '2025-10-27 00:00:00.000000', '2026-06-27 00:00:00.000000', 452.00, NULL, 500.00, 500.00, 952.00, NULL, NULL, 0, 2, 0, 12.00, 12.00, 42, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(75, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-06-24 19:15:11.000000', '2026-06-06 10:55:45.000000', 'YAPE', 'EMAIL', '', 132.12, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-12-20', '2024-12-20 00:00:00.000000', '2025-06-20 00:00:00.000000', 292.71, NULL, 500.00, 500.00, 792.71, NULL, NULL, 0, 6, 0, 15.00, 15.00, 34, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(76, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 16:47:43.000000', '2026-06-06 10:57:14.000000', 'YAPE', 'EMAIL', '', 175.13, NULL, 500.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-06-23', '2025-06-23 00:00:00.000000', '2025-10-23 00:00:00.000000', 200.54, NULL, 500.00, 500.00, 700.54, NULL, NULL, 0, 4, 0, 15.00, 15.00, 66, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(77, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:03:34.000000', '2026-06-06 11:03:34.000000', 'YAPE', 'EMAIL', '', 211.39, NULL, 800.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-06-03', '2025-06-03 00:00:00.000000', '2025-12-03 00:00:00.000000', 468.34, NULL, 800.00, 800.00, 1268.34, NULL, NULL, 0, 6, 0, 15.00, 15.00, 67, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(78, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-13 16:06:39.000000', '2026-06-06 11:06:20.000000', 'YAPE', 'EMAIL', '', 229.61, NULL, 727.82, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-05-27', '2025-05-27 00:00:00.000000', '2025-11-27 00:00:00.000000', 377.64, NULL, 1000.00, 1000.00, 1377.64, NULL, NULL, 0, 6, 0, 10.00, 10.00, 68, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(79, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-04 11:22:54.000000', '2026-06-06 11:08:48.000000', 'YAPE', 'EMAIL', '', 575.00, NULL, 400.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-05-27', '2025-05-27 00:00:00.000000', '2026-07-27 00:00:00.000000', 1050.00, NULL, 500.00, 500.00, 1450.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 69, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(80, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 09:59:38.000000', '2026-06-06 11:11:12.000000', 'YAPE', 'EMAIL', '', 132.12, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-05-22', '2025-05-22 00:00:00.000000', '2025-11-22 00:00:00.000000', 292.71, NULL, 500.00, 500.00, 792.71, NULL, NULL, 0, 6, 0, 15.00, 15.00, 63, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(81, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 10:33:17.000000', '2026-06-06 11:14:22.000000', 'YAPE', 'EMAIL', '', 187.44, NULL, 1000.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-05-02', '2025-05-02 00:00:00.000000', '2026-01-02 00:00:00.000000', 499.59, NULL, 1000.00, 1000.00, 1499.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 62, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(82, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-26 15:56:13.000000', '2026-06-06 11:16:01.000000', 'YAPE', 'EMAIL', '934634772', 121.61, NULL, 0.00, NULL, 'REFINANCIADO', 'Mari licha Malquiz Tapia', '2026-06-06', '2026-06-06 00:00:00.000000', '2026-12-06 00:00:00.000000', 237.09, NULL, 500.00, 500.00, 798.70, NULL, NULL, 0, 6, 0, 12.00, 12.00, 70, 4, 4, 0.00, b'1', NULL, 117, NULL),
+(83, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:38:41.000000', '2026-06-06 11:16:38.000000', 'YAPE', 'EMAIL', '', 105.08, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-05-21', '2025-05-21 00:00:00.000000', '2025-09-21 00:00:00.000000', 120.32, NULL, 300.00, 300.00, 420.32, NULL, NULL, 0, 4, 0, 15.00, 15.00, 71, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(84, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:37:04.000000', '2026-06-06 11:18:33.000000', 'YAPE', 'EMAIL', '', 92.27, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-04-19', '2025-04-19 00:00:00.000000', '2025-06-19 00:00:00.000000', 34.53, NULL, 150.00, 150.00, 184.53, NULL, NULL, 0, 2, 0, 15.00, 15.00, 71, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(85, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:19:58.000000', '2026-06-06 11:19:58.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-11-06', '2024-11-06 00:00:00.000000', '2024-12-06 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 72, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(86, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:22:21.000000', '2026-06-06 11:22:21.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-10-29', '2024-10-29 00:00:00.000000', '2024-11-29 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 73, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(87, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 18:33:24.000000', '2026-06-06 11:24:33.000000', 'YAPE', 'EMAIL', '', 131.39, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-10-16', '2024-10-16 00:00:00.000000', '2025-01-16 00:00:00.000000', 94.18, NULL, 300.00, 300.00, 394.18, NULL, NULL, 0, 3, 0, 15.00, 15.00, 74, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(88, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-20 11:38:04.000000', '2026-06-06 11:26:08.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 300.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-09-24', '2024-09-24 00:00:00.000000', '2024-11-24 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 24, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(89, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-30 16:42:17.000000', '2026-06-06 11:26:48.000000', 'YAPE', 'EMAIL', '973623357', 161.04, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-10-30', '2025-10-30 00:00:00.000000', '2026-06-30 00:00:00.000000', 488.35, NULL, 800.00, 800.00, 1288.35, NULL, NULL, 0, 8, 0, 12.00, 12.00, 63, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(90, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:29:41.000000', '2026-06-06 11:29:41.000000', 'YAPE', 'EMAIL', '', 105.08, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-10-14', '2025-10-14 00:00:00.000000', '2026-02-14 00:00:00.000000', 120.32, NULL, 300.00, 300.00, 420.32, NULL, NULL, 0, 4, 0, 15.00, 15.00, 75, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(91, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-16 12:05:45.000000', '2026-06-06 11:39:37.000000', 'YAPE', 'EMAIL', '934634772', 72.97, NULL, 0.00, NULL, 'PAGADO', 'Mari licha Malquiz Tapia', '2026-06-06', '2026-06-06 00:00:00.000000', '2026-12-06 00:00:00.000000', 137.80, NULL, 300.00, 300.00, 437.80, NULL, NULL, 0, 6, 0, 12.00, 12.00, 70, 4, 4, 0.00, b'0', NULL, 117, NULL),
+(92, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 12:29:51.000000', '2026-06-06 11:44:29.000000', 'YAPE', 'EMAIL', '', 105.08, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-09-09', '2024-09-09 00:00:00.000000', '2025-01-09 00:00:00.000000', 120.32, NULL, 300.00, 300.00, 420.32, NULL, NULL, 0, 4, 0, 15.00, 15.00, 76, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(93, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 09:36:25.000000', '2026-06-06 11:48:41.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-08-29', '2024-08-29 00:00:00.000000', '2026-05-28 00:00:00.000000', 990.00, NULL, 300.00, 300.00, 1290.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 77, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(94, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 12:14:10.000000', '2026-06-06 11:50:10.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-02-28', '2025-02-28 00:00:00.000000', '2025-03-28 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 60, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(95, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 16:39:23.000000', '2026-06-06 11:52:24.000000', 'YAPE', 'EMAIL', '', 218.99, NULL, 500.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-08-22', '2024-08-22 00:00:00.000000', '2024-11-22 00:00:00.000000', 156.96, NULL, 500.00, 500.00, 656.96, NULL, NULL, 0, 3, 0, 15.00, 15.00, 78, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(96, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 09:46:33.000000', '2026-06-06 11:54:43.000000', 'YAPE', 'EMAIL', '', 149.16, NULL, 125.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-09-28', '2024-09-28 00:00:00.000000', '2026-06-28 00:00:00.000000', 1444.96, NULL, 500.00, 500.00, 1827.48, NULL, NULL, 0, 5, 0, 15.00, 15.00, 79, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(97, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 18:44:05.000000', '2026-06-06 11:55:42.000000', 'YAPE', 'EMAIL', '927279327', 177.51, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-12', '2025-11-12 00:00:00.000000', '2026-01-12 00:00:00.000000', 55.02, NULL, 300.00, 300.00, 355.02, NULL, NULL, 0, 2, 0, 12.00, 12.00, 80, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(98, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 16:43:00.000000', '2026-06-06 11:56:39.000000', 'YAPE', 'EMAIL', '', 147.58, NULL, 772.42, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-06-09', '2025-06-09 00:00:00.000000', '2026-06-09 00:00:00.000000', 971.10, NULL, 800.00, 800.00, 1771.10, NULL, NULL, 0, 12, 0, 15.00, 15.00, 34, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(99, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 11:45:37.000000', '2026-06-06 12:00:42.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-03-09', '2024-03-09 00:00:00.000000', '2024-05-09 00:00:00.000000', 90.00, NULL, 300.00, 300.00, 390.00, NULL, NULL, 0, 2, 0, 15.00, 15.00, 81, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(100, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-06-23 16:50:35.000000', '2026-06-06 12:05:08.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-03-05', '2024-03-05 00:00:00.000000', '2024-04-05 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 82, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(101, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:47:09.000000', '2026-06-06 12:07:49.000000', 'YAPE', 'EMAIL', '', 307.56, NULL, 500.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-02-27', '2025-02-27 00:00:00.000000', '2025-04-27 00:00:00.000000', 115.12, NULL, 500.00, 500.00, 615.12, NULL, NULL, 0, 2, 0, 15.00, 15.00, 36, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(102, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 10:50:52.000000', '2026-06-06 12:36:14.000000', 'YAPE', 'EMAIL', '981627554', 222.92, NULL, 426.15, NULL, 'ACTIVO', 'Angelica Rocio', '2025-11-13', '2025-11-13 00:00:00.000000', '2026-05-13 00:00:00.000000', 337.74, NULL, 1000.00, 1000.00, 1337.61, NULL, NULL, 0, 6, 0, 9.00, 9.00, 41, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(103, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 11:04:04.000000', '2026-06-06 12:47:37.000000', 'YAPE', 'EMAIL', '936144112', 222.92, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-12', '2025-11-12 00:00:00.000000', '2026-05-12 00:00:00.000000', 337.53, NULL, 1000.00, 1000.00, 1337.53, NULL, NULL, 0, 6, 0, 9.00, 9.00, 83, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(104, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-17 18:06:40.000000', '2026-06-06 15:17:09.000000', 'YAPE', 'EMAIL', '910588896', 164.62, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-12-12', '2025-12-12 00:00:00.000000', '2026-04-12 00:00:00.000000', 158.48, NULL, 500.00, 500.00, 658.48, NULL, NULL, 0, 4, 0, 12.00, 12.00, 85, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(105, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:18:32.000000', '2026-06-06 16:43:03.000000', 'YAPE', 'EMAIL', '985366149', 295.85, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-18', '2025-11-18 00:00:00.000000', '2026-01-18 00:00:00.000000', 91.70, NULL, 500.00, 500.00, 591.70, NULL, NULL, 0, 2, 0, 12.00, 12.00, 51, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(106, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 16:58:15.000000', '2026-06-06 17:04:25.000000', 'YAPE', 'EMAIL', '950064063', 222.92, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-17', '2025-11-17 00:00:00.000000', '2026-05-17 00:00:00.000000', 337.53, NULL, 1000.00, 1000.00, 1337.53, NULL, NULL, 0, 6, 0, 9.00, 9.00, 59, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(107, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-20 11:37:09.000000', '2026-06-06 17:43:22.000000', 'YAPE', 'EMAIL', '925434813', 334.38, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-11-01', '2025-11-01 00:00:00.000000', '2026-05-01 00:00:00.000000', 561.89, NULL, 1500.00, 1500.00, 2061.51, NULL, NULL, 0, 6, 0, 9.00, 9.00, 24, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(108, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:41:27.000000', '2026-06-06 17:58:47.000000', 'YAPE', 'EMAIL', '900262478', 100.65, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-12-01', '2025-12-01 00:00:00.000000', '2026-08-01 00:00:00.000000', 305.22, NULL, 500.00, 500.00, 805.22, NULL, NULL, 0, 8, 0, 12.00, 12.00, 71, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(109, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 12:35:41.000000', '2026-06-06 18:14:30.000000', 'YAPE', 'EMAIL', '973437191', 194.58, NULL, 0.00, NULL, 'PAGADO', 'Angelica Rocio', '2025-12-13', '2025-12-13 00:00:00.000000', '2026-06-13 00:00:00.000000', 367.48, NULL, 800.00, 800.00, 1167.48, NULL, NULL, 0, 6, 0, 12.00, 12.00, 40, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(110, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:28:33.000000', '2026-06-06 18:28:33.000000', 'YAPE', 'EMAIL', '912690408', 181.55, NULL, 1300.00, NULL, 'ACTIVO', 'Angelica Rocio', '2025-12-01', '2025-12-01 00:00:00.000000', '2026-12-01 00:00:00.000000', 878.51, NULL, 1300.00, 1300.00, 2178.51, NULL, NULL, 0, 12, 0, 9.00, 9.00, 62, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(111, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 12:22:29.000000', '2026-06-06 18:42:59.000000', 'YAPE', 'EMAIL', '901412352', 139.65, NULL, 837.24, NULL, 'ACTIVO', 'Angelica Rocio', '2025-12-31', '2025-12-31 00:00:00.000000', '2026-12-31 00:00:00.000000', 675.81, NULL, 1000.00, 1000.00, 1675.81, NULL, NULL, 0, 12, 0, 9.00, 10.00, 86, 4, 14, 0.00, b'1', 'TASA ANTIGUA', 95, NULL),
+(112, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-25 11:24:23.000000', '2026-06-08 10:18:29.000000', 'YAPE', 'EMAIL', '918437489', 139.65, NULL, 626.46, NULL, 'ACTIVO', 'Angelica Rocio', '2025-12-24', '2025-12-24 00:00:00.000000', '2026-12-24 00:00:00.000000', 675.81, NULL, 1000.00, 1000.00, 1675.81, NULL, NULL, 0, 12, 0, 9.00, 9.00, 87, 4, 4, 0.00, b'1', NULL, 95, NULL),
+(113, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 10:40:43.000000', '2026-06-08 10:40:43.000000', 'YAPE', 'EMAIL', '', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2024-11-02', '2024-11-02 00:00:00.000000', '2024-12-02 00:00:00.000000', 45.00, NULL, 300.00, 300.00, 345.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 88, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(114, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 11:12:58.000000', '2026-06-08 10:44:33.000000', 'YAPE', 'EMAIL', '', 178.28, NULL, 800.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-02-21', '2025-02-21 00:00:00.000000', '2026-07-21 00:00:00.000000', 1586.26, NULL, 800.00, 800.00, 2386.26, NULL, NULL, 0, 8, 0, 15.00, 15.00, 89, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(115, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-20 12:26:12.000000', '2026-06-08 11:48:40.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2024-09-10', '2024-09-10 00:00:00.000000', '2024-11-10 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 95, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(116, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 11:50:35.000000', '2026-06-08 11:50:35.000000', 'YAPE', 'EMAIL', '', 218.99, NULL, 500.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2025-02-20', '2025-02-20 00:00:00.000000', '2025-05-20 00:00:00.000000', 156.96, NULL, 500.00, 500.00, 656.96, NULL, NULL, 0, 3, 0, 15.00, 15.00, 65, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(117, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 10:59:06.000000', '2026-06-08 11:53:39.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 300.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-02-15', '2025-02-15 00:00:00.000000', '2025-04-15 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 38, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(118, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:46:53.000000', '2026-06-08 11:58:03.000000', 'YAPE', 'EMAIL', '', 184.53, NULL, 300.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-02-07', '2025-02-07 00:00:00.000000', '2025-04-07 00:00:00.000000', 69.07, NULL, 300.00, 300.00, 369.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 36, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(119, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-23 12:39:53.000000', '2026-06-08 11:58:58.000000', 'YAPE', 'EMAIL', '', 218.99, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2025-02-04', '2025-02-04 00:00:00.000000', '2025-05-04 00:00:00.000000', 156.96, NULL, 500.00, 500.00, 656.96, NULL, NULL, 0, 3, 0, 15.00, 15.00, 62, 4, 14, 0.00, b'1', NULL, 138, NULL),
+(120, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-22 11:53:35.000000', '2026-06-08 12:34:26.000000', 'YAPE', 'EMAIL', '965414511', 180.67, NULL, 457.37, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2026-01-05', '2026-01-05 00:00:00.000000', '2026-09-05 00:00:00.000000', 445.41, NULL, 1000.00, 1000.00, 1445.41, NULL, NULL, 0, 8, 0, 9.00, 9.00, 47, 4, 4, 0.00, b'0', NULL, 95, NULL),
+(121, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-02 09:18:53.000000', '2026-06-08 12:55:06.000000', 'YAPE', 'EMAIL', '930779034', 293.53, NULL, 1278.36, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2025-12-31', '2025-12-31 00:00:00.000000', '2026-12-31 00:00:00.000000', 1522.30, NULL, 2000.00, 2000.00, 3522.30, NULL, NULL, 0, 12, 0, 10.00, 10.00, 57, 4, 14, NULL, b'1', NULL, 95, NULL),
+(122, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 11:04:02.000000', '2026-06-08 17:21:32.000000', 'YAPE', 'EMAIL', '', 148.48, NULL, 1111.60, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-01-12', '2026-01-12 00:00:00.000000', '2027-07-12 00:00:00.000000', 1372.44, NULL, 1300.00, 1300.00, 2672.44, NULL, NULL, 0, 18, 0, 9.00, 9.00, 38, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(123, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:30:53.000000', '2026-06-08 17:25:45.000000', 'YAPE', 'EMAIL', '', 181.17, NULL, 435.17, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-01-12', '2026-01-12 00:00:00.000000', '2026-09-12 00:00:00.000000', 549.41, NULL, 900.00, 900.00, 1449.41, NULL, NULL, 0, 8, 0, 12.00, 12.00, 51, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(124, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-27 16:55:18.000000', '2026-06-08 17:27:32.000000', 'YAPE', 'EMAIL', '', 164.62, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2026-01-23', '2026-01-23 00:00:00.000000', '2026-05-23 00:00:00.000000', 158.48, NULL, 500.00, 500.00, 658.48, NULL, NULL, 0, 4, 0, 12.00, 12.00, 59, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(125, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-07-06 08:15:16.000000', '2026-06-08 17:30:51.000000', 'YAPE', 'EMAIL', '', 279.30, NULL, 1405.71, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-02-03', '2026-02-03 00:00:00.000000', '2027-02-03 00:00:00.000000', 1351.60, NULL, 2000.00, 2000.00, 3351.60, NULL, NULL, 0, 12, 0, 9.00, 9.00, 48, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(126, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 12:49:04.000000', '2026-06-08 17:33:35.000000', 'YAPE', 'EMAIL', '', 209.48, NULL, 1344.34, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-02-24', '2026-02-24 00:00:00.000000', '2027-02-24 00:00:00.000000', 1013.69, NULL, 1500.00, 1500.00, 2513.69, NULL, NULL, 0, 12, 0, 9.00, 9.00, 36, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(127, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-25 12:59:03.000000', '2026-06-08 17:42:44.000000', 'YAPE', 'EMAIL', '', 164.62, NULL, 395.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-03-06', '2026-03-06 00:00:00.000000', '2026-07-06 00:00:00.000000', 158.00, NULL, 500.00, 500.00, 658.00, NULL, NULL, 0, 4, 0, 12.00, 12.00, 96, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(128, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-22 11:59:43.000000', '2026-06-08 17:45:59.000000', 'YAPE', 'EMAIL', '', 180.67, NULL, 317.86, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-03-12', '2026-03-12 00:00:00.000000', '2026-11-12 00:00:00.000000', 445.41, NULL, 1000.00, 1000.00, 1445.41, NULL, NULL, 0, 8, 0, 9.00, 9.00, 97, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(129, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-26 09:26:37.000000', '2026-06-08 17:51:58.000000', 'YAPE', 'EMAIL', '', 250.20, NULL, 1259.23, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-04-22', '2026-04-22 00:00:00.000000', '2027-01-22 00:00:00.000000', 751.78, NULL, 1500.00, 1500.00, 2251.78, NULL, NULL, 0, 9, 0, 9.00, 9.00, 83, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(130, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:55:29.000000', '2026-06-08 17:55:29.000000', 'YAPE', 'EMAIL', '', 194.58, NULL, 800.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-03-14', '2026-03-14 00:00:00.000000', '2026-09-14 00:00:00.000000', 367.48, NULL, 800.00, 800.00, 1167.48, NULL, NULL, 0, 6, 0, 12.00, 12.00, 85, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(131, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-10 09:45:57.000000', '2026-06-10 09:45:57.000000', 'YAPE', 'EMAIL', '', 141.59, NULL, 800.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-04-04', '2026-04-04 00:00:00.000000', '2027-02-04 00:00:00.000000', 615.83, NULL, 800.00, 800.00, 1415.83, NULL, NULL, 0, 10, 0, 12.00, 12.00, 71, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(132, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 09:14:09.000000', '2026-06-10 10:34:41.000000', 'YAPE', 'EMAIL', '921559506', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-02-05', '2024-02-05 00:00:00.000000', '2026-07-05 00:00:00.000000', 1305.00, NULL, 300.00, 300.00, 1605.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 99, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(133, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-15 11:41:15.000000', '2026-06-10 10:48:12.000000', 'YAPE', 'EMAIL', '935413891', 575.00, NULL, 500.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-03-29', '2024-03-29 00:00:00.000000', '2026-06-29 00:00:00.000000', 2025.00, NULL, 500.00, 500.00, 2525.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 100, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(134, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 09:25:40.000000', '2026-06-10 10:59:23.000000', 'YAPE', 'EMAIL', '928950356', 3300.00, NULL, 3000.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-03-19', '2024-03-19 00:00:00.000000', '2026-07-19 00:00:00.000000', 8400.00, NULL, 3000.00, 3000.00, 11400.00, NULL, NULL, 0, 1, 0, 10.00, 10.00, 101, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(135, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-20 16:03:27.000000', '2026-06-10 11:06:13.000000', 'YAPE', 'EMAIL', '925910580', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-05-21', '2024-05-21 00:00:00.000000', '2026-06-21 00:00:00.000000', 1125.00, NULL, 300.00, 300.00, 1425.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 102, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(136, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-15 12:47:30.000000', '2026-06-10 11:12:32.000000', 'YAPE', 'EMAIL', '985386612', 920.00, NULL, 800.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-05-01', '2024-05-01 00:00:00.000000', '2026-07-01 00:00:00.000000', 3120.00, NULL, 800.00, 800.00, 3920.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 103, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(137, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-19 09:48:22.000000', '2026-06-10 12:02:02.000000', 'YAPE', 'EMAIL', '970295594', 1150.00, NULL, 0.00, NULL, 'PAGADO', 'Angélica Rocio Urquia Yshuiza ', '2024-06-09', '2024-06-09 00:00:00.000000', '2026-06-09 00:00:00.000000', 2400.00, NULL, 1000.00, 1000.00, 3400.00, NULL, NULL, 0, 1, 0, 15.00, 10.00, 104, 4, 14, 0.00, b'1', 'TASA ANTIGUA', 95, NULL),
+(138, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-23 09:41:07.000000', '2026-06-10 12:17:15.000000', 'YAPE', 'EMAIL', '927255457', 1100.00, NULL, 1000.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-12-21', '2024-12-21 00:00:00.000000', '2026-07-21 00:00:00.000000', 1900.00, NULL, 1000.00, 1000.00, 2900.00, NULL, NULL, 0, 1, 0, 10.00, 10.00, 105, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(139, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-20 16:27:00.000000', '2026-06-11 08:26:42.000000', 'YAPE', 'EMAIL', '933049049', 211.39, NULL, 0.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-11-30', '2024-11-30 00:00:00.000000', '2026-06-28 00:00:00.000000', 1331.02, NULL, 800.00, 800.00, 1787.36, NULL, NULL, 0, 6, 0, 15.00, 15.00, 76, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(140, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 16:29:16.000000', '2026-06-11 08:36:47.000000', 'YAPE', 'EMAIL', '971120685', 187.44, NULL, 1000.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-07-01', '2024-07-01 00:00:00.000000', '2026-07-01 00:00:00.000000', 2099.59, NULL, 1000.00, 1000.00, 3099.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 106, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(141, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 17:18:23.000000', '2026-06-11 09:35:01.000000', 'YAPE', 'EMAIL', '924398840', 345.00, NULL, 300.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-07-03', '2024-07-03 00:00:00.000000', '2026-07-03 00:00:00.000000', 1080.00, NULL, 300.00, 300.00, 1380.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 107, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(142, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 17:44:01.000000', '2026-06-11 09:45:54.000000', 'YAPE', 'EMAIL', '903439842', 184.53, NULL, 460.47, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-07-25', '2024-07-25 00:00:00.000000', '2026-06-25 00:00:00.000000', 1014.07, NULL, 300.00, 300.00, 1614.07, NULL, NULL, 0, 2, 0, 15.00, 15.00, 108, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(143, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-29 15:25:27.000000', '2026-06-11 10:17:29.000000', 'YAPE', 'EMAIL', '968213801', 220.14, NULL, 0.00, NULL, 'PAGADO', 'Angélica Rocio Urquia Yshuiza ', '2024-11-01', '2024-11-01 00:00:00.000000', '2025-11-01 00:00:00.000000', 1141.79, NULL, 1500.00, 1500.00, 2557.06, NULL, NULL, 0, 12, 0, 10.00, 10.00, 81, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(144, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 10:27:04.000000', '2026-06-11 10:25:11.000000', 'YAPE', 'EMAIL', '919715070', 587.05, NULL, 2851.93, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-11-15', '2024-11-15 00:00:00.000000', '2026-07-15 00:00:00.000000', 5331.46, NULL, 4000.00, 4000.00, 9133.89, NULL, NULL, 0, 12, 0, 10.00, 10.00, 61, 4, 14, 0.00, b'1', NULL, 95, NULL);
+INSERT INTO `creditos` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `banco_desembolso`, `canal_estado_cuenta`, `cuenta_desembolso`, `cuota_mensual`, `cuotas_anuales`, `debe_actualidad`, `dia_pago_haberes`, `estado`, `evaluado_por`, `fecha_desembolso`, `fecha_inicio`, `fecha_vencimiento`, `ganancia_interes`, `meses_gratificacion`, `monto_aprobado`, `monto_credito`, `monto_total`, `numero_cuotas_aprobado`, `observacion_evaluador`, `periodo_gracia`, `plazo_meses`, `renovaciones`, `tasa_aprobada`, `tem`, `cliente_id`, `moneda_id`, `tipo_credito_id`, `descuento_retencion`, `exento_mora_automatica`, `motivo_descuento_tasa`, `analista_registro_id`, `credito_origen_id`) VALUES
+(145, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-26 08:20:54.000000', '2026-06-11 11:49:57.000000', 'YAPE', 'EMAIL', '952129089', 230.00, NULL, 200.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2024-12-24', '2024-12-24 00:00:00.000000', '2026-07-24 00:00:00.000000', 570.00, NULL, 200.00, 200.00, 770.00, NULL, NULL, 0, 1, 0, 15.00, 15.00, 109, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(146, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-15 10:23:49.000000', '2026-06-11 12:01:07.000000', 'YAPE', 'EMAIL', '976015869', 374.89, NULL, 2000.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2025-01-04', '2025-01-04 00:00:00.000000', '2026-07-04 00:00:00.000000', 2799.09, NULL, 2000.00, 2000.00, 4799.09, NULL, NULL, 0, 8, 0, 10.00, 10.00, 78, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(147, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 17:39:09.000000', '2026-06-11 17:39:09.000000', 'YAPE', 'EMAIL', '', 141.59, NULL, 800.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-06-11', '2026-06-11 00:00:00.000000', '2027-04-11 00:00:00.000000', 615.83, NULL, 800.00, 800.00, 1415.83, NULL, NULL, 0, 10, 0, 12.00, 12.00, 25, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(148, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 16:43:58.000000', '2026-06-12 10:02:57.000000', 'YAPE', 'EMAIL', '931280424', 162.75, NULL, 839.84, NULL, 'PAGADO', 'Angélica Rocio Urquia Yshuiza ', '2025-03-30', '2025-03-30 00:00:00.000000', '2026-01-30 00:00:00.000000', 627.44, NULL, 1000.00, 1000.00, 1627.44, NULL, NULL, 0, 10, 0, 10.00, 10.00, 34, 4, 14, 0.00, b'0', NULL, 95, NULL),
+(150, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 17:00:17.000000', '2026-06-13 09:54:08.000000', 'YAPE', 'EMAIL', '950064063', 1417.00, NULL, 1300.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza ', '2026-02-23', '2026-02-23 00:00:00.000000', '2026-07-23 00:00:00.000000', 800.00, NULL, 1300.00, 1300.00, 2100.00, NULL, NULL, 0, 1, 0, 9.00, 10.00, 59, 4, 14, 0.00, b'0', 'TASA ANTIGUA', 95, NULL),
+(151, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 11:30:03.000000', '2026-06-13 12:11:10.000000', 'YAPE', 'EMAIL', '962132992', 1430.00, NULL, 0.00, NULL, 'REFINANCIADO', 'Angélica Rocio Urquia Yshuiza ', '2025-02-22', '2025-02-22 00:00:00.000000', '2026-05-22 00:00:00.000000', 1950.00, NULL, 1300.00, 1300.00, 3250.00, NULL, NULL, 0, 1, 0, 10.00, 10.00, 110, 4, 14, 0.00, b'1', NULL, 95, NULL),
+(152, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-16 09:36:09.000000', '2026-06-16 09:36:09.000000', 'YAPE', 'EMAIL', '', 208.17, NULL, 500.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-06-16', '2026-06-16 00:00:00.000000', '2026-09-16 00:00:00.000000', 124.53, NULL, 500.00, 500.00, 624.53, NULL, NULL, 0, 3, 0, 12.00, 12.00, 43, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(153, 'roidertapia2000@gmail.com', 'aquijesluis93@gmail.com', '2026-07-01 21:35:30.000000', '2026-06-16 15:41:50.000000', 'YAPE', 'EMAIL', '', 112.00, NULL, 0.00, NULL, 'PAGADO', 'Luis  Eduardo Aquijes Canales', '2026-06-16', '2026-06-16 00:00:00.000000', '2026-07-16 00:00:00.000000', 12.00, NULL, 100.00, 100.00, 112.00, NULL, NULL, 0, 1, 0, 12.00, 12.00, 111, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(154, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-18 17:28:10.000000', '2026-06-18 17:28:10.000000', 'YAPE', 'EMAIL', '', 164.62, NULL, 500.00, NULL, 'ACTIVO', 'Luis  Eduardo Aquijes Canales', '2026-06-18', '2026-06-18 00:00:00.000000', '2026-10-18 00:00:00.000000', 158.48, NULL, 500.00, 500.00, 658.48, NULL, NULL, 0, 4, 0, 12.00, 12.00, 112, 4, 4, 0.00, b'1', NULL, 138, NULL),
+(155, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-26 15:31:09.000000', '2026-06-26 14:41:55.000000', '', 'EMAIL', '', 187.44, NULL, 0.00, NULL, 'REFINANCIADO', 'Miguel A. Dolic Grandez', '2025-05-02', '2025-05-02 00:00:00.000000', '2026-01-02 00:00:00.000000', 499.59, NULL, 1000.00, 1000.00, 1499.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 70, 4, 14, 0.00, b'0', NULL, 117, NULL),
+(156, 'angelicaurquiayshuiza@gmail.com', 'mdolicg@gmail.com', '2026-06-29 11:05:16.000000', '2026-06-26 15:31:09.000000', NULL, NULL, NULL, 82.98, NULL, 532.54, NULL, 'ACTIVO', NULL, '2026-06-26', '2026-06-26 15:31:09.000000', NULL, 401.58, NULL, 594.20, 594.20, 995.78, NULL, NULL, 0, 12, 0, NULL, 9.00, 70, 4, 14, NULL, NULL, NULL, 117, 155),
+(157, 'angelicaurquiayshuiza@gmail.com', 'mdolicg@gmail.com', '2026-06-27 11:24:06.000000', '2026-06-26 15:56:13.000000', NULL, NULL, NULL, 80.72, NULL, 388.14, NULL, 'ACTIVO', NULL, '2026-06-26', '2026-06-26 15:56:13.000000', NULL, 418.66, NULL, 550.00, 550.00, 968.66, NULL, NULL, 0, 12, 0, NULL, 10.00, 70, 4, 4, NULL, NULL, NULL, 117, 82),
+(158, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-27 11:33:08.000000', '2026-06-27 11:30:03.000000', NULL, NULL, NULL, 118.90, NULL, 1298.10, NULL, 'ACTIVO', NULL, '2026-04-22', '2026-04-22 11:30:03.000000', NULL, 4407.15, NULL, 1300.00, 1300.00, 5707.15, NULL, NULL, 0, 48, 0, NULL, 9.00, 110, 4, 14, NULL, NULL, NULL, 95, 151),
+(161, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-29 11:46:15.000000', '2026-06-29 11:42:08.000000', 'YAPE', 'EMAIL', '', 187.44, NULL, 0.00, NULL, 'REFINANCIADO', 'Miguel A. Dolic Grandez', '2025-05-02', '2025-05-02 00:00:00.000000', '2026-01-02 00:00:00.000000', 499.59, NULL, 1000.00, 1000.00, 1499.59, NULL, NULL, 0, 8, 0, 10.00, 10.00, 70, 4, 14, 0.00, b'0', NULL, 117, NULL),
+(162, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-29 11:46:15.000000', '2026-06-29 11:46:15.000000', NULL, NULL, NULL, 103.02, NULL, 1000.00, NULL, 'ACTIVO', NULL, '2026-04-22', '2026-04-22 00:00:00.000000', NULL, 1472.65, NULL, 1000.00, 1000.00, 2472.65, NULL, NULL, 0, 24, 0, NULL, 9.00, 70, 4, 14, NULL, NULL, NULL, 117, 161),
+(163, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-06-30 09:19:18.000000', '2026-06-30 09:19:18.000000', 'YAPE', 'EMAIL', '', 194.58, NULL, 800.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-06-30', '2026-06-30 00:00:00.000000', '2026-12-30 00:00:00.000000', 367.48, NULL, 800.00, 800.00, 1167.48, NULL, NULL, 0, 6, 0, 12.00, 12.00, 54, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(164, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-06-30 18:16:02.000000', '2026-06-30 18:15:26.000000', 'YAPE', 'EMAIL', '973623357', 155.82, NULL, 1000.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-06-30', '2026-06-30 00:00:00.000000', '2027-04-30 00:00:00.000000', 558.21, NULL, 1000.00, 1000.00, 1558.21, NULL, NULL, 0, 10, 0, 9.00, 9.00, 63, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(165, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-01 12:31:36.000000', '2026-07-01 12:14:14.000000', 'YAPE', 'EMAIL', '', 141.59, NULL, 800.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-07-01', '2026-07-01 00:00:00.000000', '2027-05-01 00:00:00.000000', 615.83, NULL, 800.00, 800.00, 1415.83, NULL, NULL, 0, 10, 0, 12.00, 12.00, 115, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(166, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-02 10:19:16.000000', '2026-07-02 10:19:16.000000', 'YAPE', 'EMAIL', '', 279.30, NULL, 2000.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-07-03', '2026-07-03 00:00:00.000000', '2027-07-03 00:00:00.000000', 1351.60, NULL, 2000.00, 2000.00, 3351.60, NULL, NULL, 0, 12, 0, 9.00, 9.00, 24, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(167, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-02 12:52:14.000000', '2026-07-02 12:52:14.000000', '', 'EMAIL', '', 263.39, NULL, 800.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-07-02', '2026-07-02 12:52:14.000000', '2026-11-02 12:52:14.000000', 253.55, NULL, 800.00, 800.00, 1053.55, NULL, NULL, 0, 4, 0, 12.00, 12.00, 116, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(168, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-03 09:03:12.000000', '2026-07-03 09:03:12.000000', 'YAPE', 'EMAIL', '929534059', 141.59, NULL, 800.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza', '2026-07-03', '2026-07-03 00:00:00.000000', '2027-05-03 00:00:00.000000', 615.83, NULL, 800.00, 800.00, 1415.83, NULL, NULL, 0, 10, 0, 12.00, 12.00, 117, 4, 4, 0.00, b'0', NULL, 95, NULL),
+(169, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-04 13:02:11.000000', '2026-07-04 13:02:11.000000', 'YAPE', 'EMAIL', '', 141.59, NULL, 800.00, NULL, 'ACTIVO', 'JHONY MOLOCHO TRUJILLO ', '2026-07-04', '2026-07-04 00:00:00.000000', '2027-05-04 00:00:00.000000', 615.83, NULL, 800.00, 800.00, 1415.83, NULL, NULL, 0, 10, 0, 12.00, 12.00, 118, 4, 4, 0.00, b'0', NULL, 224, NULL),
+(170, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-06 08:50:11.000000', '2026-07-06 08:50:11.000000', 'YAPE', 'EMAIL', '', 105.08, NULL, 300.00, NULL, 'ACTIVO', 'Angélica Rocio Urquia Yshuiza', '2024-10-14', '2024-10-14 00:00:00.000000', '2025-02-14 00:00:00.000000', 120.32, NULL, 300.00, 300.00, 420.32, NULL, NULL, 0, 4, 0, 15.00, 12.00, 75, 4, 4, 0.00, b'1', 'TASA ANTIGUA', 95, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cuentas_bancarias`
+--
+
+CREATE TABLE `cuentas_bancarias` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `banco` varchar(100) NOT NULL,
+  `cci` varchar(50) DEFAULT NULL,
+  `estado` varchar(20) DEFAULT NULL,
+  `numero_cuenta` varchar(50) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `cuentas_bancarias`
+--
+
+INSERT INTO `cuentas_bancarias` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `banco`, `cci`, `estado`, `numero_cuenta`, `cliente_id`) VALUES
+(8, 'dolicmiki96@gmail.com', 'dolicmiki96@gmail.com', '2026-06-06 12:15:17.000000', '2026-06-06 12:15:17.000000', 'YAPE', NULL, 'ACTIVA', '934634772', 70);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cuentas_virtuales`
+--
+
+CREATE TABLE `cuentas_virtuales` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `estado` varchar(20) NOT NULL,
+  `moneda` varchar(10) NOT NULL,
+  `numero_cuenta` varchar(50) NOT NULL,
+  `saldo` decimal(38,2) NOT NULL,
+  `saldo_congelado` decimal(38,2) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `cuentas_virtuales`
+--
+
+INSERT INTO `cuentas_virtuales` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `estado`, `moneda`, `numero_cuenta`, `saldo`, `saldo_congelado`, `cliente_id`) VALUES
+(10, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 05:34:17.000000', '2026-05-27 05:34:17.000000', 'ACTIVA', 'PEN', 'INF-6-1263', 500.00, 0.00, 6),
+(11, 'mdolicg@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 22:24:59.000000', '2026-05-27 06:18:17.000000', 'ACTIVA', 'PEN', 'INF-7-4007', 500.00, 0.00, 7),
+(12, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 06:51:32.000000', '2026-05-27 06:51:32.000000', 'ACTIVA', 'PEN', 'INF-8-6951', 300.00, 0.00, 8),
+(13, 'nixon25herrera@gmail.com', 'nixon25herrera@gmail.com', '2026-05-27 15:48:11.000000', '2026-05-27 15:48:10.000000', 'ACTIVA', 'PEN', 'INF-9-3405', 300.00, 0.00, 9),
+(15, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-27 22:48:57.000000', '2026-05-27 22:48:57.000000', 'ACTIVA', 'PEN', 'INF-11-6011', 500.00, 0.00, 11),
+(16, 'careta1582@ifcoat.com', 'careta1582@ifcoat.com', '2026-05-28 20:48:28.000000', '2026-05-28 20:48:28.000000', 'ACTIVA', 'PEN', 'INF-12-6534', 0.00, 0.00, 12),
+(17, 'roziguz73@xelvo.me', 'roziguz73@xelvo.me', '2026-05-28 21:34:29.000000', '2026-05-28 21:34:29.000000', 'ACTIVA', 'PEN', 'INF-13-2841', 0.00, 0.00, 13),
+(25, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-29 03:41:06.000000', '2026-05-29 03:41:06.000000', 'ACTIVA', 'PEN', 'INF-21-6124', 500.00, 0.00, 21),
+(26, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-29 15:46:57.000000', '2026-05-29 15:46:57.000000', 'ACTIVA', 'PEN', 'INF-22-1332', 1200.00, 0.00, 22),
+(27, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-01 04:48:56.000000', '2026-06-01 04:48:56.000000', 'ACTIVA', 'PEN', 'INF-23-6273', 500.00, 0.00, 23),
+(28, 'jhony.elamante@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-02 10:19:16.000000', '2026-06-01 15:49:49.000000', 'ACTIVA', 'PEN', 'INF-24-8243', 9800.00, 0.00, 24),
+(29, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 17:39:09.000000', '2026-06-02 16:15:30.000000', 'ACTIVA', 'PEN', 'INF-25-4504', 2039.00, 0.00, 25),
+(30, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-03 15:26:08.000000', '2026-06-02 16:29:36.000000', 'ACTIVA', 'PEN', 'INF-26-5454', 3000.00, 0.00, 26),
+(31, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-02 17:53:50.000000', '2026-06-02 17:53:50.000000', 'ACTIVA', 'PEN', 'INF-27-6151', 1400.00, 0.00, 27),
+(32, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 10:49:24.000000', '2026-06-03 15:13:21.000000', 'ACTIVA', 'PEN', 'INF-28-4831', 1100.00, 0.00, 28),
+(33, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:07:19.000000', '2026-06-04 16:12:40.000000', 'ACTIVA', 'PEN', 'INF-30-9171', 3000.00, 0.00, 30),
+(35, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-04 16:49:18.000000', '2026-06-04 16:49:18.000000', 'ACTIVA', 'PEN', 'INF-32-2631', 1000.00, 0.00, 32),
+(37, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-19 11:14:01.000000', '2026-06-04 12:42:32.000000', 'ACTIVA', 'PEN', 'INF-34-3049', 12668.00, 0.00, 34),
+(39, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:33:35.000000', '2026-06-05 12:33:54.000000', 'ACTIVA', 'PEN', 'INF-36-5933', 5600.00, 0.00, 36),
+(40, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 12:36:09.000000', '2026-06-05 12:36:09.000000', 'ACTIVA', 'PEN', 'INF-37-8184', 1000.00, 0.00, 37),
+(41, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-12 11:50:16.000000', '2026-06-05 12:50:56.000000', 'ACTIVA', 'PEN', 'INF-38-9055', 2900.00, 0.00, 38),
+(42, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 17:20:10.000000', '2026-06-05 12:57:39.000000', 'ACTIVA', 'PEN', 'INF-39-7896', 800.00, 0.00, 39),
+(43, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:14:30.000000', '2026-06-05 16:32:29.000000', 'ACTIVA', 'PEN', 'INF-40-4145', 2300.00, 0.00, 40),
+(44, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:36:14.000000', '2026-06-05 16:40:23.000000', 'ACTIVA', 'PEN', 'INF-41-4426', 1600.00, 0.00, 41),
+(45, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:54:03.000000', '2026-06-05 16:43:54.000000', 'ACTIVA', 'PEN', 'INF-42-5919', 1300.00, 0.00, 42),
+(46, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-16 09:36:09.000000', '2026-06-05 16:47:34.000000', 'ACTIVA', 'PEN', 'INF-43-6134', 1500.00, 0.00, 43),
+(47, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:09:52.000000', '2026-06-05 16:52:13.000000', 'ACTIVA', 'PEN', 'INF-44-1031', 900.00, 0.00, 44),
+(48, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 16:56:15.000000', '2026-06-05 16:56:14.000000', 'ACTIVA', 'PEN', 'INF-45-9470', 200.00, 0.00, 45),
+(49, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:14:09.000000', '2026-06-05 17:14:09.000000', 'ACTIVA', 'PEN', 'INF-46-5938', 1000.00, 0.00, 46),
+(50, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 12:43:39.000000', '2026-06-05 17:23:36.000000', 'ACTIVA', 'PEN', 'INF-47-3226', 1900.00, 0.00, 47),
+(51, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:30:51.000000', '2026-06-05 17:26:35.000000', 'ACTIVA', 'PEN', 'INF-48-9173', 4000.00, 0.00, 48),
+(52, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:31:51.000000', '2026-06-05 17:31:51.000000', 'ACTIVA', 'PEN', 'INF-49-5080', 300.00, 0.00, 49),
+(53, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:06:56.000000', '2026-06-05 17:35:06.000000', 'ACTIVA', 'PEN', 'INF-50-5164', 1100.00, 0.00, 50),
+(54, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:25:45.000000', '2026-06-05 17:37:23.000000', 'ACTIVA', 'PEN', 'INF-51-4820', 1700.00, 0.00, 51),
+(55, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:42:53.000000', '2026-06-05 17:42:53.000000', 'ACTIVA', 'PEN', 'INF-52-5163', 300.00, 0.00, 52),
+(56, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-05 17:55:51.000000', '2026-06-05 17:55:51.000000', 'ACTIVA', 'PEN', 'INF-53-8829', 1300.00, 0.00, 53),
+(57, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-06-30 09:19:18.000000', '2026-06-05 18:10:29.000000', 'ACTIVA', 'PEN', 'INF-54-8940', 4100.00, 0.00, 54),
+(58, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:22:43.000000', '2026-06-05 18:22:43.000000', 'ACTIVA', 'PEN', 'INF-55-4503', 300.00, 0.00, 55),
+(59, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-05 18:49:25.000000', '2026-06-05 18:49:24.000000', 'ACTIVA', 'PEN', 'INF-56-7333', 1500.00, 0.00, 56),
+(60, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 12:55:06.000000', '2026-06-06 10:00:17.000000', 'ACTIVA', 'PEN', 'INF-57-7766', 3500.00, 0.00, 57),
+(61, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:12:48.000000', '2026-06-06 10:12:48.000000', 'ACTIVA', 'PEN', 'INF-58-3676', 300.00, 0.00, 58),
+(62, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 09:58:13.000000', '2026-06-06 10:26:51.000000', 'ACTIVA', 'PEN', 'INF-59-7022', 3400.00, 0.00, 59),
+(63, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:50:10.000000', '2026-06-06 10:34:14.000000', 'ACTIVA', 'PEN', 'INF-60-8299', 5300.00, 0.00, 60),
+(64, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 10:25:11.000000', '2026-06-06 10:45:35.000000', 'ACTIVA', 'PEN', 'INF-61-1368', 10000.00, 0.00, 61),
+(65, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 11:58:58.000000', '2026-06-06 10:45:37.000000', 'ACTIVA', 'PEN', 'INF-62-9748', 3800.00, 0.00, 62),
+(66, 'jhony.elamante@gmail.com', 'aquijesluis93@gmail.com', '2026-06-30 18:16:02.000000', '2026-06-06 10:48:02.000000', 'ACTIVA', 'PEN', 'INF-63-8445', 2600.00, 0.00, 63),
+(67, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:50:42.000000', '2026-06-06 10:50:42.000000', 'ACTIVA', 'PEN', 'INF-64-8101', 300.00, 0.00, 64),
+(68, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 11:50:35.000000', '2026-06-06 10:51:55.000000', 'ACTIVA', 'PEN', 'INF-65-7374', 800.00, 0.00, 65),
+(69, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 10:57:14.000000', '2026-06-06 10:57:14.000000', 'ACTIVA', 'PEN', 'INF-66-4375', 500.00, 0.00, 66),
+(70, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:03:34.000000', '2026-06-06 11:03:34.000000', 'ACTIVA', 'PEN', 'INF-67-9330', 800.00, 0.00, 67),
+(71, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:06:20.000000', '2026-06-06 11:06:20.000000', 'ACTIVA', 'PEN', 'INF-68-2189', 1000.00, 0.00, 68),
+(72, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:08:48.000000', '2026-06-06 11:08:48.000000', 'ACTIVA', 'PEN', 'INF-69-4035', 500.00, 0.00, 69),
+(73, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-29 11:42:08.000000', '2026-06-06 11:16:01.000000', 'ACTIVA', 'PEN', 'INF-70-7162', 2500.00, 0.00, 70),
+(74, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-10 09:45:57.000000', '2026-06-06 11:16:38.000000', 'ACTIVA', 'PEN', 'INF-71-9970', 1750.00, 0.00, 71),
+(75, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:19:58.000000', '2026-06-06 11:19:58.000000', 'ACTIVA', 'PEN', 'INF-72-7380', 300.00, 0.00, 72),
+(76, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:22:21.000000', '2026-06-06 11:22:21.000000', 'ACTIVA', 'PEN', 'INF-73-9260', 300.00, 0.00, 73),
+(77, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:24:33.000000', '2026-06-06 11:24:33.000000', 'ACTIVA', 'PEN', 'INF-74-8116', 300.00, 0.00, 74),
+(78, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-07-06 08:50:11.000000', '2026-06-06 11:29:41.000000', 'ACTIVA', 'PEN', 'INF-75-6644', 600.00, 0.00, 75),
+(79, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 08:26:42.000000', '2026-06-06 11:44:29.000000', 'ACTIVA', 'PEN', 'INF-76-5988', 1100.00, 0.00, 76),
+(80, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:48:41.000000', '2026-06-06 11:48:41.000000', 'ACTIVA', 'PEN', 'INF-77-7272', 300.00, 0.00, 77),
+(81, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 12:01:07.000000', '2026-06-06 11:52:24.000000', 'ACTIVA', 'PEN', 'INF-78-1290', 2500.00, 0.00, 78),
+(82, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 11:54:43.000000', '2026-06-06 11:54:43.000000', 'ACTIVA', 'PEN', 'INF-79-7296', 500.00, 0.00, 79),
+(83, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 11:55:42.000000', '2026-06-06 11:55:42.000000', 'ACTIVA', 'PEN', 'INF-80-3062', 300.00, 0.00, 80),
+(84, 'angelicaurquiayshuiza@gmail.com', 'aquijesluis93@gmail.com', '2026-06-11 10:17:29.000000', '2026-06-06 12:00:42.000000', 'ACTIVA', 'PEN', 'INF-81-3925', 1800.00, 0.00, 81),
+(85, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-06 12:05:08.000000', '2026-06-06 12:05:08.000000', 'ACTIVA', 'PEN', 'INF-82-1269', 300.00, 0.00, 82),
+(86, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 17:51:58.000000', '2026-06-06 12:47:37.000000', 'ACTIVA', 'PEN', 'INF-83-9697', 2500.00, 0.00, 83),
+(87, 'aquijesluis93@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 17:55:29.000000', '2026-06-06 15:17:09.000000', 'ACTIVA', 'PEN', 'INF-85-5053', 1300.00, 0.00, 85),
+(88, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-06 18:42:59.000000', '2026-06-06 18:42:59.000000', 'ACTIVA', 'PEN', 'INF-86-2880', 1000.00, 0.00, 86),
+(89, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 10:18:29.000000', '2026-06-08 10:18:29.000000', 'ACTIVA', 'PEN', 'INF-87-5828', 1000.00, 0.00, 87),
+(90, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 10:40:43.000000', '2026-06-08 10:40:43.000000', 'ACTIVA', 'PEN', 'INF-88-1939', 300.00, 0.00, 88),
+(91, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 10:44:33.000000', '2026-06-08 10:44:33.000000', 'ACTIVA', 'PEN', 'INF-89-2336', 800.00, 0.00, 89),
+(97, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 11:48:41.000000', '2026-06-08 11:48:40.000000', 'ACTIVA', 'PEN', 'INF-95-4012', 300.00, 0.00, 95),
+(98, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:42:44.000000', '2026-06-08 17:42:44.000000', 'ACTIVA', 'PEN', 'INF-96-9787', 500.00, 0.00, 96),
+(99, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-08 17:45:59.000000', '2026-06-08 17:45:59.000000', 'ACTIVA', 'PEN', 'INF-97-7745', 1000.00, 0.00, 97),
+(100, 'rmaluquistapia@gmail.com', 'rmaluquistapia@gmail.com', '2026-06-08 17:52:34.000000', '2026-06-08 17:52:34.000000', 'ACTIVA', 'PEN', 'INF-98-1710', 0.00, 0.00, 98),
+(101, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 10:34:41.000000', '2026-06-10 10:34:41.000000', 'ACTIVA', 'PEN', 'INF-99-4418', 300.00, 0.00, 99),
+(102, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 10:48:12.000000', '2026-06-10 10:48:12.000000', 'ACTIVA', 'PEN', 'INF-100-9069', 500.00, 0.00, 100),
+(103, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 10:59:23.000000', '2026-06-10 10:59:23.000000', 'ACTIVA', 'PEN', 'INF-101-5235', 3000.00, 0.00, 101),
+(104, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 11:06:13.000000', '2026-06-10 11:06:13.000000', 'ACTIVA', 'PEN', 'INF-102-8977', 300.00, 0.00, 102),
+(105, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 11:12:32.000000', '2026-06-10 11:12:32.000000', 'ACTIVA', 'PEN', 'INF-103-3390', 800.00, 0.00, 103),
+(106, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 12:02:02.000000', '2026-06-10 12:02:02.000000', 'ACTIVA', 'PEN', 'INF-104-2645', 1000.00, 0.00, 104),
+(107, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-10 12:17:15.000000', '2026-06-10 12:17:15.000000', 'ACTIVA', 'PEN', 'INF-105-5053', 1000.00, 0.00, 105),
+(108, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 08:36:47.000000', '2026-06-11 08:36:47.000000', 'ACTIVA', 'PEN', 'INF-106-7347', 1000.00, 0.00, 106),
+(109, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 09:35:01.000000', '2026-06-11 09:35:01.000000', 'ACTIVA', 'PEN', 'INF-107-5959', 300.00, 0.00, 107),
+(110, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 09:45:54.000000', '2026-06-11 09:45:54.000000', 'ACTIVA', 'PEN', 'INF-108-6291', 300.00, 0.00, 108),
+(111, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-11 11:49:57.000000', '2026-06-11 11:49:57.000000', 'ACTIVA', 'PEN', 'INF-109-3241', 200.00, 0.00, 109),
+(112, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-13 12:11:10.000000', '2026-06-13 12:11:10.000000', 'ACTIVA', 'PEN', 'INF-110-1471', 1300.00, 0.00, 110),
+(113, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-16 15:41:50.000000', '2026-06-16 15:41:50.000000', 'ACTIVA', 'PEN', 'INF-111-6160', 100.00, 0.00, 111),
+(114, 'aquijesluis93@gmail.com', 'aquijesluis93@gmail.com', '2026-06-18 17:28:10.000000', '2026-06-18 17:28:10.000000', 'ACTIVA', 'PEN', 'INF-112-5035', 500.00, 0.00, 112),
+(115, 'aspajopozo@yahoo.com', 'aspajopozo@yahoo.com', '2026-06-29 16:56:02.000000', '2026-06-29 16:56:02.000000', 'ACTIVA', 'PEN', 'INF-114-9817', 0.00, 0.00, 114),
+(116, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-01 12:31:36.000000', '2026-07-01 12:14:14.000000', 'ACTIVA', 'PEN', 'INF-115-9775', 800.00, 0.00, 115),
+(117, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-02 12:52:14.000000', '2026-07-02 12:52:14.000000', 'ACTIVA', 'PEN', 'INF-116-2567', 800.00, 0.00, 116),
+(118, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-07-03 09:03:12.000000', '2026-07-03 09:03:12.000000', 'ACTIVA', 'PEN', 'INF-117-6460', 800.00, 0.00, 117),
+(119, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-04 13:02:11.000000', '2026-07-04 13:02:11.000000', 'ACTIVA', 'PEN', 'INF-118-3576', 800.00, 0.00, 118);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cuotas`
+--
+
+CREATE TABLE `cuotas` (
+  `id` bigint(20) NOT NULL,
+  `capital` decimal(38,2) DEFAULT NULL,
+  `comision` decimal(38,2) DEFAULT NULL,
+  `dias_atraso` int(11) DEFAULT NULL,
+  `es_gracia` bit(1) DEFAULT NULL,
+  `estado_cuota` varchar(20) DEFAULT 'PENDIENTE',
+  `fecha_pago` date DEFAULT NULL,
+  `fecha_vencimiento` date DEFAULT NULL,
+  `interes` decimal(38,2) DEFAULT NULL,
+  `interes_mora` decimal(38,2) DEFAULT NULL,
+  `metodo_pago` varchar(255) DEFAULT NULL,
+  `numero_comprobante` varchar(255) DEFAULT NULL,
+  `numero_cuota` int(11) DEFAULT NULL,
+  `observacion` varchar(255) DEFAULT NULL,
+  `penalidad` decimal(38,2) DEFAULT NULL,
+  `saldo_restante` decimal(38,2) DEFAULT NULL,
+  `seguro` decimal(38,2) DEFAULT NULL,
+  `total_cuota` decimal(38,2) DEFAULT NULL,
+  `credito_id` bigint(20) NOT NULL,
+  `cuota_siguiente_id` bigint(20) DEFAULT NULL,
+  `comentario_rechazo` varchar(255) DEFAULT NULL,
+  `imagen_comprobante` varchar(255) DEFAULT NULL,
+  `monto_pagado_cliente` decimal(38,2) DEFAULT NULL,
+  `cargo_refinanciamiento` decimal(38,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `cuotas`
+--
+
+INSERT INTO `cuotas` (`id`, `capital`, `comision`, `dias_atraso`, `es_gracia`, `estado_cuota`, `fecha_pago`, `fecha_vencimiento`, `interes`, `interes_mora`, `metodo_pago`, `numero_comprobante`, `numero_cuota`, `observacion`, `penalidad`, `saldo_restante`, `seguro`, `total_cuota`, `credito_id`, `cuota_siguiente_id`, `comentario_rechazo`, `imagen_comprobante`, `monto_pagado_cliente`, `cargo_refinanciamiento`) VALUES
+(153, 46.76, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-31', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-962509', 1, NULL, 0.00, 953.24, 0.00, 146.76, 21, NULL, NULL, NULL, 146.76, NULL),
+(154, 51.44, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-28', 95.32, 0.00, 'EFECTIVO', 'EFECTIVO-974093', 2, NULL, 0.00, 901.80, 0.00, 146.76, 21, NULL, NULL, NULL, 146.76, NULL),
+(155, 56.58, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-31', 90.18, 0.00, 'EFECTIVO', 'EFECTIVO-985669', 3, NULL, 0.00, 845.22, 0.00, 146.76, 21, NULL, NULL, NULL, 146.76, NULL),
+(156, 62.24, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-30', 84.52, 0.00, 'EFECTIVO', 'EFECTIVO-011878', 4, NULL, 0.00, 782.98, 0.00, 146.76, 21, NULL, NULL, NULL, 146.76, NULL),
+(157, 68.46, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-31', 78.30, 0.00, 'EFECTIVO', 'EFECTIVO-023492', 5, NULL, 0.00, 714.52, 0.00, 146.76, 21, NULL, NULL, NULL, 146.76, NULL),
+(158, 75.31, 0.00, 0, b'0', 'PAGADO', '2026-07-01', '2026-06-30', 71.45, 0.00, 'YAPE', '13591252', 6, NULL, 0.00, 639.21, 0.00, 146.76, 21, NULL, NULL, '/uploads/user-73461167/comprobantes/1782944653084_WhatsApp_Image_2026-07-01_at_12_29_37_PM.jpeg', 146.76, NULL),
+(159, 82.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-31', 63.92, 0.00, NULL, NULL, 7, NULL, 0.00, 556.37, 0.00, 146.76, 21, NULL, NULL, NULL, NULL, NULL),
+(160, 91.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-31', 55.64, 0.00, NULL, NULL, 8, NULL, 0.00, 465.25, 0.00, 146.76, 21, NULL, NULL, NULL, NULL, NULL),
+(161, 100.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-30', 46.53, 0.00, NULL, NULL, 9, NULL, 0.00, 365.02, 0.00, 146.76, 21, NULL, NULL, NULL, NULL, NULL),
+(162, 110.26, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-31', 36.50, 0.00, NULL, NULL, 10, NULL, 0.00, 254.76, 0.00, 146.76, 21, NULL, NULL, NULL, NULL, NULL),
+(163, 121.28, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-30', 25.48, 0.00, NULL, NULL, 11, NULL, 0.00, 133.48, 0.00, 146.76, 21, NULL, NULL, NULL, NULL, NULL),
+(164, 133.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-31', 13.35, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 146.83, 21, NULL, NULL, NULL, NULL, NULL),
+(165, 186.09, 0.00, 0, b'0', 'PAGADO', '2026-07-01', '2026-06-29', 126.00, 0.00, 'YAPE', '5527261', 1, NULL, 0.00, 1213.91, 0.00, 312.09, 22, NULL, NULL, '/uploads/user-47828561/comprobantes/1782944187270_WhatsApp_Image_2026-07-01_at_3_11_44_PM.jpeg', 312.09, NULL),
+(166, 202.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-29', 109.25, 0.00, NULL, NULL, 2, NULL, 0.00, 1011.07, 0.00, 312.09, 22, NULL, NULL, NULL, NULL, NULL),
+(167, 221.09, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-29', 91.00, 0.00, NULL, NULL, 3, NULL, 0.00, 789.98, 0.00, 312.09, 22, NULL, NULL, NULL, NULL, NULL),
+(168, 240.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-29', 71.10, 0.00, NULL, NULL, 4, NULL, 0.00, 548.99, 0.00, 312.09, 22, NULL, NULL, NULL, NULL, NULL),
+(169, 262.68, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-29', 49.41, 0.00, NULL, NULL, 5, NULL, 0.00, 286.31, 0.00, 312.09, 22, NULL, NULL, NULL, NULL, NULL),
+(170, 286.31, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-29', 25.77, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 312.08, 22, NULL, NULL, NULL, NULL, NULL),
+(201, 53.40, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-28', 160.00, 0.00, 'EFECTIVO', 'EFECTIVO-135028', 1, NULL, 0.00, 1946.60, 0.00, 213.40, 25, NULL, NULL, NULL, 213.40, NULL),
+(202, 58.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2025-10-28', 156.00, 0.00, 'EFECTIVO', 'EFECTIVO-692938', 2, NULL, 100.00, 1888.93, 0.00, 314.00, 25, NULL, NULL, NULL, 213.00, NULL),
+(203, 62.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2025-11-28', 151.00, 0.00, 'EFECTIVO', 'EFECTIVO-761483', 3, NULL, 0.00, 1826.64, 0.00, 327.00, 25, NULL, NULL, NULL, 213.00, NULL),
+(204, 67.27, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-28', 146.13, 0.00, NULL, NULL, 4, NULL, 0.00, 1759.37, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(205, 72.65, 0.00, 0, b'0', 'MORA', NULL, '2026-01-28', 140.75, 0.00, NULL, NULL, 5, NULL, 105.00, 1686.72, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(206, 78.46, 0.00, 0, b'0', 'MORA', NULL, '2026-02-28', 134.94, 0.00, NULL, NULL, 6, NULL, 105.00, 1608.26, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(207, 84.74, 0.00, 0, b'0', 'MORA', NULL, '2026-03-28', 128.66, 0.00, NULL, NULL, 7, NULL, 105.00, 1523.52, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(208, 91.52, 0.00, 0, b'0', 'MORA', NULL, '2026-04-28', 121.88, 0.00, NULL, NULL, 8, NULL, 105.00, 1432.00, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(209, 98.84, 0.00, 0, b'0', 'MORA', NULL, '2026-05-28', 114.56, 0.00, NULL, NULL, 9, NULL, 105.00, 1333.16, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(210, 106.75, 0.00, 0, b'0', 'MORA', NULL, '2026-06-28', 106.65, 0.00, NULL, NULL, 10, NULL, 105.00, 1226.41, 0.00, 318.40, 25, NULL, NULL, NULL, NULL, NULL),
+(211, 115.29, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-28', 98.11, 0.00, NULL, NULL, 11, NULL, 0.00, 1111.12, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(212, 124.51, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-28', 88.89, 0.00, NULL, NULL, 12, NULL, 0.00, 986.61, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(213, 134.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-28', 78.93, 0.00, NULL, NULL, 13, NULL, 0.00, 852.14, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(214, 145.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-28', 68.17, 0.00, NULL, NULL, 14, NULL, 0.00, 706.91, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(215, 156.85, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-28', 56.55, 0.00, NULL, NULL, 15, NULL, 0.00, 550.06, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(216, 169.40, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-28', 44.00, 0.00, NULL, NULL, 16, NULL, 0.00, 380.66, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(217, 182.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-28', 30.45, 0.00, NULL, NULL, 17, NULL, 0.00, 197.71, 0.00, 213.40, 25, NULL, NULL, NULL, NULL, NULL),
+(218, 197.71, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-28', 15.82, 0.00, NULL, NULL, 18, NULL, 0.00, 0.00, 0.00, 213.53, 25, NULL, NULL, NULL, NULL, NULL),
+(219, 91.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-07-06', '2025-12-17', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-768857', 1, NULL, 41.00, 909.33, 0.00, 222.00, 26, NULL, NULL, NULL, 181.00, NULL),
+(220, 99.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-17', 82.00, 0.00, NULL, NULL, 2, NULL, 54.60, 810.50, 0.00, 235.60, 26, NULL, NULL, NULL, NULL, NULL),
+(221, 108.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-17', 73.00, 0.00, NULL, NULL, 3, NULL, 54.60, 702.78, 0.00, 235.60, 26, NULL, NULL, NULL, NULL, NULL),
+(222, 117.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-17', 63.00, 0.00, NULL, NULL, 4, NULL, 54.60, 585.36, 0.00, 234.60, 26, NULL, NULL, NULL, NULL, NULL),
+(223, 128.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-17', 53.00, 0.00, NULL, NULL, 5, NULL, 54.60, 457.37, 0.00, 235.60, 26, NULL, NULL, NULL, NULL, NULL),
+(224, 140.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-17', 41.00, 0.00, NULL, NULL, 6, NULL, 54.60, 317.86, 0.00, 235.60, 26, NULL, NULL, NULL, NULL, NULL),
+(225, 152.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-17', 29.00, 0.00, NULL, NULL, 7, NULL, 54.60, 165.80, 0.00, 235.60, 26, NULL, NULL, NULL, NULL, NULL),
+(226, 166.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-17', 15.00, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 181.00, 26, NULL, NULL, NULL, NULL, NULL),
+(243, 60.08, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-02-02', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-057501', 1, NULL, 0.00, 239.92, 0.00, 123.08, 27, NULL, NULL, NULL, 141.08, NULL),
+(244, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-03-02', 98.20, 0.00, 'EFECTIVO', 'EFECTIVO-207649', 2, NULL, 0.00, 170.83, 0.00, 112.54, 27, NULL, NULL, NULL, 126.88, NULL),
+(245, 79.46, 0.00, 0, b'0', 'PAGADO', '2026-07-02', '2026-04-02', 25.62, 0.00, 'EFECTIVO', 'EFECTIVO-224045', 3, NULL, 0.00, 91.37, 0.00, 105.08, 27, NULL, NULL, NULL, 105.00, NULL),
+(246, 91.37, 0.00, 0, b'0', 'PAGADO', '2026-07-02', '2026-05-02', 13.71, 0.00, 'EFECTIVO', 'EFECTIVO-279173', 4, NULL, 0.00, 0.00, 0.00, 105.08, 27, NULL, NULL, NULL, 105.00, NULL),
+(247, 138.42, 0.00, 0, b'0', 'PAGADO', NULL, '2025-11-20', 414.72, 0.00, NULL, NULL, 1, NULL, 0.00, 5045.58, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(248, 149.49, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-20', 403.65, 0.00, 'EFECTIVO', 'EFECTIVO-444159', 2, NULL, 0.00, 4896.09, 0.00, 553.14, 28, NULL, NULL, NULL, 553.14, NULL),
+(249, 161.45, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-01-20', 391.69, 0.00, 'EFECTIVO', 'EFECTIVO-478320', 3, NULL, 0.00, 4734.64, 0.00, 553.14, 28, NULL, NULL, NULL, 553.14, NULL),
+(250, 174.37, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-02-20', 378.77, 0.00, 'EFECTIVO', 'EFECTIVO-513591', 4, NULL, 0.00, 4560.27, 0.00, 553.14, 28, NULL, NULL, NULL, 553.14, NULL),
+(251, 188.32, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-03-20', 364.82, 0.00, 'EFECTIVO', 'EFECTIVO-545704', 5, NULL, 0.00, 4371.95, 0.00, 553.14, 28, NULL, NULL, NULL, 553.14, NULL),
+(252, 203.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-23', '2026-04-20', 350.00, 0.00, 'EFECTIVO', 'EFECTIVO-139100', 6, NULL, 0.00, 4168.57, 0.00, 815.00, 28, NULL, NULL, NULL, 553.00, NULL),
+(253, 219.65, 0.00, 0, b'0', 'MORA', NULL, '2026-05-20', 333.49, 0.00, NULL, NULL, 7, NULL, 262.00, 3948.92, 0.00, 815.14, 28, NULL, NULL, NULL, NULL, NULL),
+(254, 237.23, 0.00, 0, b'0', 'MORA', NULL, '2026-06-20', 315.91, 0.00, NULL, NULL, 8, NULL, 262.00, 3711.69, 0.00, 815.14, 28, NULL, NULL, NULL, NULL, NULL),
+(255, 256.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-20', 296.94, 0.00, NULL, NULL, 9, NULL, 0.00, 3455.49, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(256, 276.70, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-20', 276.44, 0.00, NULL, NULL, 10, NULL, 0.00, 3178.79, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(257, 298.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-20', 254.30, 0.00, NULL, NULL, 11, NULL, 0.00, 2879.95, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(258, 322.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-20', 230.40, 0.00, NULL, NULL, 12, NULL, 0.00, 2557.21, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(259, 348.56, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-20', 204.58, 0.00, NULL, NULL, 13, NULL, 0.00, 2208.65, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(260, 376.45, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-20', 176.69, 0.00, NULL, NULL, 14, NULL, 0.00, 1832.20, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(261, 406.56, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-20', 146.58, 0.00, NULL, NULL, 15, NULL, 0.00, 1425.64, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(262, 439.09, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-20', 114.05, 0.00, NULL, NULL, 16, NULL, 0.00, 986.55, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(263, 474.22, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-20', 78.92, 0.00, NULL, NULL, 17, NULL, 0.00, 512.33, 0.00, 553.14, 28, NULL, NULL, NULL, NULL, NULL),
+(264, 512.33, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-20', 40.99, 0.00, NULL, NULL, 18, NULL, 0.00, 0.00, 0.00, 553.32, 28, NULL, NULL, NULL, NULL, NULL),
+(269, 372.09, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-19', 120.00, 0.00, NULL, NULL, 1, NULL, 0.00, 427.91, 0.00, 492.09, 30, NULL, NULL, NULL, NULL, NULL),
+(270, 427.91, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-05-19', 64.19, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 492.10, 30, NULL, NULL, NULL, NULL, NULL),
+(271, 132.92, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-11', 90.00, 0.00, NULL, NULL, 1, NULL, 0.00, 867.08, 0.00, 222.92, 31, NULL, NULL, NULL, NULL, NULL),
+(272, 144.88, 0.00, 0, b'0', 'PAGADO', NULL, '2026-01-11', 78.04, 0.00, NULL, NULL, 2, NULL, 0.00, 722.20, 0.00, 222.92, 31, NULL, NULL, NULL, NULL, NULL),
+(273, 157.92, 0.00, 0, b'0', 'PAGADO', NULL, '2026-02-11', 65.00, 0.00, NULL, NULL, 3, NULL, 43.38, 564.28, 0.00, 266.30, 31, NULL, NULL, NULL, NULL, NULL),
+(274, 172.13, 0.00, 0, b'0', 'PAGADO', NULL, '2026-03-11', 50.79, 0.00, NULL, NULL, 4, NULL, 33.90, 392.15, 0.00, 256.82, 31, NULL, NULL, NULL, NULL, NULL),
+(275, 187.63, 0.00, 0, b'0', 'PAGADO', NULL, '2026-04-11', 35.29, 0.00, NULL, NULL, 5, NULL, 23.60, 204.52, 0.00, 246.52, 31, NULL, NULL, NULL, NULL, NULL),
+(276, 204.52, 0.00, 0, b'0', 'PAGADO', NULL, '2026-05-11', 18.41, 0.00, NULL, NULL, 6, NULL, 12.30, 0.00, 0.00, 235.23, 31, NULL, NULL, NULL, NULL, NULL),
+(277, 143.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-30', 75.00, 0.00, NULL, NULL, 1, NULL, 0.00, 356.01, 0.00, 218.99, 32, NULL, NULL, NULL, NULL, NULL),
+(278, 165.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-05-31', 53.40, 0.00, NULL, NULL, 2, NULL, 0.00, 190.42, 0.00, 218.99, 32, NULL, NULL, NULL, NULL, NULL),
+(279, 190.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-06-30', 28.56, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 218.98, 32, NULL, NULL, NULL, NULL, NULL),
+(280, 64.80, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-27', 50.00, 0.00, 'EFECTIVO', 'EFECTIVO-343267', 1, NULL, 0.00, 435.20, 0.00, 114.80, 33, NULL, NULL, NULL, 114.80, NULL),
+(281, 71.28, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-27', 43.52, 0.00, 'EFECTIVO', 'EFECTIVO-398859', 2, NULL, 0.00, 363.92, 0.00, 114.80, 33, NULL, NULL, NULL, 114.80, NULL),
+(282, 78.41, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-01-27', 36.39, 0.00, 'EFECTIVO', 'EFECTIVO-437787', 3, NULL, 0.00, 285.51, 0.00, 136.64, 33, NULL, NULL, NULL, 158.48, NULL),
+(283, 86.25, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-02-27', 28.55, 0.00, 'EFECTIVO', 'EFECTIVO-452212', 4, NULL, 0.00, 199.26, 0.00, 136.60, 33, NULL, NULL, NULL, 158.40, NULL),
+(284, 94.87, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-03-27', 19.93, 0.00, 'EFECTIVO', 'EFECTIVO-466723', 5, NULL, 0.00, 104.39, 0.00, 136.60, 33, NULL, NULL, NULL, 158.40, NULL),
+(285, 104.39, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-04-27', 10.44, 0.00, 'EFECTIVO', 'EFECTIVO-479836', 6, NULL, 0.00, 0.00, 0.00, 136.63, 33, NULL, NULL, NULL, 158.43, NULL),
+(286, 302.11, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-06-20', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 697.89, 0.00, 402.11, 34, NULL, NULL, NULL, NULL, NULL),
+(287, 332.32, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-07-20', 69.79, 0.00, NULL, NULL, 2, NULL, 0.00, 365.57, 0.00, 402.11, 34, NULL, NULL, NULL, NULL, NULL),
+(288, 365.57, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-20', 36.56, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 402.13, 34, NULL, NULL, NULL, NULL, NULL),
+(289, 163.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-07-26', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 836.20, 0.00, 263.80, 35, NULL, NULL, NULL, NULL, NULL),
+(290, 180.18, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-26', 83.62, 0.00, NULL, NULL, 2, NULL, 0.00, 656.02, 0.00, 263.80, 35, NULL, NULL, NULL, NULL, NULL),
+(291, 198.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-26', 65.60, 0.00, NULL, NULL, 3, NULL, 0.00, 457.82, 0.00, 263.80, 35, NULL, NULL, NULL, NULL, NULL),
+(292, 218.02, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-26', 45.78, 0.00, NULL, NULL, 4, NULL, 0.00, 239.80, 0.00, 263.80, 35, NULL, NULL, NULL, NULL, NULL),
+(293, 239.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-26', 23.98, 0.00, NULL, NULL, 5, NULL, 0.00, 0.00, 0.00, 263.78, 35, NULL, NULL, NULL, NULL, NULL),
+(294, 46.76, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-28', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-767435', 1, NULL, 0.00, 953.24, 0.00, 146.76, 36, NULL, NULL, NULL, 146.76, NULL),
+(295, 51.44, 0.00, 1, b'0', 'PAGADO', NULL, '2026-06-28', 95.32, 0.00, 'EFECTIVO', 'EFECTIVO-950258', 2, NULL, 0.00, 901.80, 0.00, 146.76, 36, NULL, 'fff', NULL, 147.00, NULL),
+(296, 56.58, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-28', 90.18, 0.00, NULL, NULL, 3, NULL, 0.00, 845.22, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(297, 62.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-28', 84.52, 0.00, NULL, NULL, 4, NULL, 0.00, 782.98, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(298, 68.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-28', 78.30, 0.00, NULL, NULL, 5, NULL, 0.00, 714.52, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(299, 75.31, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-28', 71.45, 0.00, NULL, NULL, 6, NULL, 0.00, 639.21, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(300, 82.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-28', 63.92, 0.00, NULL, NULL, 7, NULL, 0.00, 556.37, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(301, 91.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-28', 55.64, 0.00, NULL, NULL, 8, NULL, 0.00, 465.25, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(302, 100.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-28', 46.53, 0.00, NULL, NULL, 9, NULL, 0.00, 365.02, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(303, 110.26, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-28', 36.50, 0.00, NULL, NULL, 10, NULL, 0.00, 254.76, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(304, 121.28, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-28', 25.48, 0.00, NULL, NULL, 11, NULL, 0.00, 133.48, 0.00, 146.76, 36, NULL, NULL, NULL, NULL, NULL),
+(305, 133.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-28', 13.35, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 146.83, 36, NULL, NULL, NULL, NULL, NULL),
+(306, 120.16, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-09', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-971638', 1, NULL, 0.00, 479.84, 0.00, 210.16, 37, NULL, NULL, NULL, 210.16, NULL),
+(307, 138.18, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-09', 71.98, 0.00, 'EFECTIVO', 'EFECTIVO-984717', 2, NULL, 0.00, 341.66, 0.00, 210.16, 37, NULL, NULL, NULL, 210.16, NULL),
+(308, 158.91, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-09', 51.25, 0.00, 'EFECTIVO', 'EFECTIVO-996709', 3, NULL, 0.00, 182.75, 0.00, 210.16, 37, NULL, NULL, NULL, 210.16, NULL),
+(309, 182.75, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-09', 27.41, 0.00, 'EFECTIVO', 'EFECTIVO-010045', 4, NULL, 0.00, 0.00, 0.00, 210.16, 37, NULL, NULL, NULL, 210.16, NULL),
+(310, 300.00, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-08-17', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-027728', 1, NULL, 0.00, 0.00, 0.00, 345.00, 38, NULL, NULL, NULL, 345.00, NULL),
+(311, 400.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-20', 48.00, 0.00, 'EFECTIVO', 'EFECTIVO-279948', 1, NULL, 0.00, 0.00, 0.00, 448.00, 39, NULL, NULL, NULL, 448.00, NULL),
+(312, 0.17, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-08-18', 150.00, 0.00, 'EFECTIVO', 'EFECTIVO-075134', 1, NULL, 0.00, 1368.83, 0.00, 150.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(313, 144.29, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-09-18', 136.88, 0.00, 'EFECTIVO', 'EFECTIVO-894411', 2, NULL, 0.00, 1224.54, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(314, 158.72, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-10-18', 122.45, 0.00, 'EFECTIVO', 'EFECTIVO-917912', 3, NULL, 0.00, 1065.82, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(315, 174.59, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-11-18', 106.58, 0.00, 'EFECTIVO', 'EFECTIVO-944193', 4, NULL, 0.00, 891.23, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(316, 192.05, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-12-18', 89.12, 0.00, 'EFECTIVO', 'EFECTIVO-967685', 5, NULL, 0.00, 699.18, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(317, 211.25, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-01-18', 69.92, 0.00, 'EFECTIVO', 'EFECTIVO-990231', 6, NULL, 0.00, 487.93, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(318, 232.38, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-02-18', 48.79, 0.00, 'EFECTIVO', 'EFECTIVO-011643', 7, NULL, 0.00, 255.55, 0.00, 281.17, 40, NULL, NULL, NULL, 281.17, NULL),
+(319, 255.55, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-03-18', 25.56, 0.00, 'EFECTIVO', 'EFECTIVO-871644', 8, NULL, 0.00, 0.00, 0.00, 281.11, 40, NULL, NULL, NULL, 281.11, NULL),
+(320, 91.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-18', 120.00, 0.00, NULL, NULL, 1, NULL, 0.00, 708.61, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(321, 105.10, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-18', 106.29, 0.00, NULL, NULL, 2, NULL, 0.00, 603.51, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(322, 120.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-18', 90.53, 0.00, NULL, NULL, 3, NULL, 0.00, 482.65, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(323, 138.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-18', 72.40, 0.00, NULL, NULL, 4, NULL, 0.00, 343.66, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(324, 159.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-12-18', 51.55, 0.00, NULL, NULL, 5, NULL, 0.00, 183.82, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(325, 183.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-01-18', 27.57, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 211.39, 41, NULL, NULL, NULL, NULL, NULL),
+(326, 68.54, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-08-24', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-255387', 1, NULL, 0.00, 531.46, 0.00, 194.60, 42, NULL, NULL, NULL, 230.66, NULL),
+(327, 78.82, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-24', 79.72, 0.00, 'EFECTIVO', 'EFECTIVO-332691', 2, NULL, 0.00, 452.64, 0.00, 190.46, 42, NULL, NULL, NULL, 222.38, NULL),
+(328, 90.64, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-24', 67.90, 0.00, 'EFECTIVO', 'EFECTIVO-350362', 3, NULL, 0.00, 362.00, 0.00, 185.72, 42, NULL, NULL, NULL, 212.90, NULL),
+(329, 104.24, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-24', 54.30, 0.00, 'EFECTIVO', 'EFECTIVO-365282', 4, NULL, 0.00, 257.76, 0.00, 180.26, 42, NULL, NULL, NULL, 201.98, NULL),
+(330, 119.88, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-24', 38.66, 0.00, 'EFECTIVO', 'EFECTIVO-379499', 5, NULL, 0.00, 137.88, 0.00, 174.02, 42, NULL, NULL, NULL, 189.50, NULL),
+(331, 137.88, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-01-24', 20.68, 0.00, 'EFECTIVO', 'EFECTIVO-392571', 6, NULL, 0.00, 0.00, 0.00, 158.56, 42, NULL, NULL, NULL, 158.56, NULL),
+(332, 40.05, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-08-31', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-684635', 1, NULL, 0.00, 159.95, 0.00, 70.05, 43, NULL, NULL, NULL, 70.00, NULL),
+(333, 46.06, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-09-30', 23.99, 0.00, 'EFECTIVO', 'EFECTIVO-700396', 2, NULL, 0.00, 113.89, 0.00, 70.05, 43, NULL, NULL, NULL, 70.00, NULL),
+(334, 52.97, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-10-31', 17.08, 0.00, 'EFECTIVO', 'EFECTIVO-715596', 3, NULL, 0.00, 60.92, 0.00, 70.05, 43, NULL, NULL, NULL, 70.00, NULL),
+(335, 60.92, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-11-30', 9.14, 0.00, 'EFECTIVO', 'EFECTIVO-734644', 4, NULL, 0.00, 0.00, 0.00, 70.06, 43, NULL, NULL, NULL, 70.00, NULL),
+(336, 600.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-05', 72.00, 0.00, 'EFECTIVO', 'EFECTIVO-246747', 1, NULL, 0.00, 0.00, 0.00, 672.00, 44, NULL, NULL, NULL, 672.00, NULL),
+(337, 87.44, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-31', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 912.56, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(338, 96.18, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-30', 91.26, 0.00, NULL, NULL, 2, NULL, 0.00, 816.38, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(339, 105.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-31', 81.64, 0.00, NULL, NULL, 3, NULL, 0.00, 710.58, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(340, 116.38, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-30', 71.06, 0.00, NULL, NULL, 4, NULL, 0.00, 594.20, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(341, 128.02, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-12-31', 59.42, 0.00, NULL, NULL, 5, NULL, 0.00, 466.18, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(342, 140.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-01-31', 46.62, 0.00, NULL, NULL, 6, NULL, 0.00, 325.36, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(343, 154.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-02-28', 32.54, 0.00, NULL, NULL, 7, NULL, 0.00, 170.46, 0.00, 187.44, 45, NULL, NULL, NULL, NULL, NULL),
+(344, 170.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-03-31', 17.05, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 187.51, 45, NULL, NULL, NULL, NULL, NULL),
+(345, 130.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-05', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-827427', 1, NULL, 0.00, 870.39, 0.00, 230.00, 46, NULL, NULL, NULL, 230.00, NULL),
+(346, 143.00, 0.00, 0, b'0', 'PAGADO', '2026-07-04', '2025-10-05', 87.00, 0.00, 'EFECTIVO', 'EFECTIVO-587337', 2, NULL, 0.00, 727.82, 0.00, 282.32, 46, NULL, NULL, NULL, 282.32, NULL),
+(347, 157.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-05', 73.00, 0.00, 'EFECTIVO', 'EFECTIVO-864787', 3, NULL, 0.00, 570.99, 0.00, 230.00, 46, NULL, NULL, NULL, 230.00, NULL),
+(348, 173.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-05', 57.00, 0.00, 'EFECTIVO', 'EFECTIVO-890675', 4, NULL, 0.00, 398.48, 0.00, 230.00, 46, NULL, NULL, NULL, 230.00, NULL),
+(349, 190.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-01-05', 40.00, 0.00, 'EFECTIVO', 'EFECTIVO-919547', 5, NULL, 0.00, 208.72, 0.00, 254.00, 46, NULL, NULL, NULL, 278.00, NULL),
+(350, 181.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-05', 0.00, 0.00, NULL, NULL, 6, NULL, 24.00, 0.00, 0.00, 205.00, 46, NULL, NULL, NULL, NULL, NULL),
+(351, 57.12, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-07', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-562925', 1, NULL, 0.00, 442.88, 0.00, 132.12, 47, NULL, NULL, NULL, 132.12, NULL),
+(352, 65.69, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-07', 66.43, 0.00, 'EFECTIVO', 'EFECTIVO-575052', 2, NULL, 0.00, 377.19, 0.00, 132.12, 47, NULL, NULL, NULL, 132.12, NULL),
+(353, 75.54, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-07', 56.58, 0.00, 'EFECTIVO', 'EFECTIVO-587172', 3, NULL, 0.00, 301.65, 0.00, 132.12, 47, NULL, NULL, NULL, 132.12, NULL),
+(354, 86.87, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-07', 45.25, 0.00, 'EFECTIVO', 'EFECTIVO-599437', 4, NULL, 0.00, 214.78, 0.00, 132.12, 47, NULL, NULL, NULL, 132.12, NULL),
+(355, 99.90, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-07', 32.22, 0.00, 'EFECTIVO', 'EFECTIVO-609676', 5, NULL, 0.00, 114.88, 0.00, 132.12, 47, NULL, NULL, NULL, 132.12, NULL),
+(356, 114.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-07', 17.23, 0.00, 'EFECTIVO', 'EFECTIVO-620604', 6, NULL, 0.00, 0.00, 0.00, 132.11, 47, NULL, NULL, NULL, 132.11, NULL),
+(357, 86.39, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-07', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-567804', 1, NULL, 0.00, 213.61, 0.00, 131.39, 48, NULL, NULL, NULL, 131.39, NULL),
+(358, 99.35, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-07', 32.04, 0.00, 'EFECTIVO', 'EFECTIVO-578260', 2, NULL, 0.00, 114.26, 0.00, 131.39, 48, NULL, NULL, NULL, 131.39, NULL),
+(359, 114.26, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-07', 17.14, 0.00, 'EFECTIVO', 'EFECTIVO-554731', 3, NULL, 0.00, 0.00, 0.00, 131.40, 48, NULL, NULL, NULL, 131.40, NULL),
+(360, 86.39, 0.00, 0, b'0', 'PAGADO', NULL, '2025-09-09', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 213.61, 0.00, 131.39, 49, NULL, NULL, NULL, NULL, NULL),
+(361, 99.35, 0.00, 0, b'0', 'PAGADO', NULL, '2025-10-09', 32.04, 0.00, NULL, NULL, 2, NULL, 0.00, 114.26, 0.00, 131.39, 49, NULL, NULL, NULL, NULL, NULL),
+(362, 114.26, 0.00, 0, b'0', 'PAGADO', NULL, '2025-11-09', 17.14, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 131.40, 49, NULL, NULL, NULL, NULL, NULL),
+(363, 129.61, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-26', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-873286', 1, NULL, 0.00, 870.39, 0.00, 229.61, 50, NULL, NULL, NULL, 229.61, NULL),
+(364, 142.57, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-26', 87.04, 0.00, 'EFECTIVO', 'EFECTIVO-884829', 2, NULL, 0.00, 727.82, 0.00, 229.61, 50, NULL, NULL, NULL, 229.61, NULL),
+(365, 156.83, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-26', 72.78, 0.00, 'EFECTIVO', 'EFECTIVO-895214', 3, NULL, 0.00, 570.99, 0.00, 229.61, 50, NULL, NULL, NULL, 229.61, NULL),
+(366, 172.51, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-26', 57.10, 0.00, 'EFECTIVO', 'EFECTIVO-906765', 4, NULL, 0.00, 398.48, 0.00, 229.61, 50, NULL, NULL, NULL, 229.61, NULL),
+(367, 189.76, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-26', 39.85, 0.00, 'EFECTIVO', 'EFECTIVO-921807', 5, NULL, 0.00, 208.72, 0.00, 229.61, 50, NULL, NULL, NULL, 229.61, NULL),
+(368, 208.72, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-26', 20.87, 0.00, 'EFECTIVO', 'EFECTIVO-859598', 6, NULL, 0.00, 0.00, 0.00, 229.59, 50, NULL, NULL, NULL, 229.59, NULL),
+(369, 88.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-30', 36.00, 0.00, NULL, NULL, 1, NULL, 0.00, 211.10, 0.00, 124.90, 51, NULL, NULL, NULL, NULL, NULL),
+(370, 99.57, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-30', 25.33, 0.00, NULL, NULL, 2, NULL, 0.00, 111.53, 0.00, 124.90, 51, NULL, NULL, NULL, NULL, NULL),
+(371, 111.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-30', 13.38, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 124.91, 51, NULL, NULL, NULL, NULL, NULL),
+(372, 62.77, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-03', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-498925', 1, NULL, 0.00, 237.23, 0.00, 98.77, 52, NULL, NULL, NULL, 98.77, NULL),
+(373, 70.30, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-03', 28.47, 0.00, 'EFECTIVO', 'EFECTIVO-512541', 2, NULL, 0.00, 166.93, 0.00, 98.77, 52, NULL, NULL, NULL, 98.77, NULL),
+(374, 78.74, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-03', 20.03, 0.00, 'EFECTIVO', 'EFECTIVO-523677', 3, NULL, 0.00, 88.19, 0.00, 98.77, 52, NULL, NULL, NULL, 98.77, NULL),
+(375, 88.19, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-03', 10.58, 0.00, 'EFECTIVO', 'EFECTIVO-533917', 4, NULL, 0.00, 0.00, 0.00, 98.77, 52, NULL, NULL, NULL, 98.77, NULL),
+(376, 62.77, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-10', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-739725', 1, NULL, 0.00, 237.23, 0.00, 98.77, 53, NULL, NULL, NULL, 98.77, NULL),
+(377, 70.30, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-10', 28.47, 0.00, 'EFECTIVO', 'EFECTIVO-752044', 2, NULL, 0.00, 166.93, 0.00, 98.77, 53, NULL, NULL, NULL, 98.77, NULL),
+(378, 78.74, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-10', 20.03, 0.00, 'EFECTIVO', 'EFECTIVO-763469', 3, NULL, 0.00, 88.19, 0.00, 98.77, 53, NULL, NULL, NULL, 98.77, NULL),
+(379, 88.19, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-10', 10.58, 0.00, 'EFECTIVO', 'EFECTIVO-774821', 4, NULL, 0.00, 0.00, 0.00, 98.77, 53, NULL, NULL, NULL, 98.77, NULL),
+(380, 62.77, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-17', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-934732', 1, NULL, 0.00, 237.23, 0.00, 98.77, 54, NULL, NULL, NULL, 98.77, NULL),
+(381, 70.30, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-17', 28.47, 0.00, 'EFECTIVO', 'EFECTIVO-945595', 2, NULL, 0.00, 166.93, 0.00, 98.77, 54, NULL, NULL, NULL, 98.77, NULL),
+(382, 78.74, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-17', 20.03, 0.00, 'EFECTIVO', 'EFECTIVO-957244', 3, NULL, 0.00, 88.19, 0.00, 98.77, 54, NULL, NULL, NULL, 98.77, NULL),
+(383, 88.19, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-17', 10.58, 0.00, 'EFECTIVO', 'EFECTIVO-970028', 4, NULL, 0.00, 0.00, 0.00, 98.77, 54, NULL, NULL, NULL, 98.77, NULL),
+(384, 64.55, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-01', 117.00, 0.00, 'EFECTIVO', 'EFECTIVO-499925', 1, NULL, 0.00, 1235.45, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(385, 70.36, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-01', 111.19, 0.00, 'EFECTIVO', 'EFECTIVO-511293', 2, NULL, 0.00, 1165.09, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(386, 76.69, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-01', 104.86, 0.00, 'EFECTIVO', 'EFECTIVO-526061', 3, NULL, 0.00, 1088.40, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(387, 83.59, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-01', 97.96, 0.00, 'EFECTIVO', 'EFECTIVO-538134', 4, NULL, 0.00, 1004.81, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(388, 91.12, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-01', 90.43, 0.00, 'EFECTIVO', 'EFECTIVO-550789', 5, NULL, 0.00, 913.69, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(389, 99.32, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-01', 82.23, 0.00, 'EFECTIVO', 'EFECTIVO-564365', 6, NULL, 0.00, 814.37, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(390, 108.26, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-01', 73.29, 0.00, 'EFECTIVO', 'EFECTIVO-488077', 7, NULL, 0.00, 706.11, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(391, 118.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-01', 63.55, 0.00, 'EFECTIVO', 'EFECTIVO-332158', 8, NULL, 0.00, 588.11, 0.00, 181.55, 55, NULL, NULL, NULL, 181.55, NULL),
+(392, 128.62, 0.00, 0, b'0', 'PAGADO', '2026-07-01', '2026-07-01', 52.93, 0.00, 'YAPE', '28247755', 9, NULL, 0.00, 459.49, 0.00, 181.55, 55, NULL, NULL, '/uploads/user-73011811/comprobantes/1782914673263_WhatsApp_Image_2026-06-30_at_7_16_58_PM.jpeg', 181.55, NULL),
+(393, 140.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-01', 41.35, 0.00, NULL, NULL, 10, NULL, 0.00, 319.29, 0.00, 181.55, 55, NULL, NULL, NULL, NULL, NULL),
+(394, 152.81, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-01', 28.74, 0.00, NULL, NULL, 11, NULL, 0.00, 166.48, 0.00, 181.55, 55, NULL, NULL, NULL, NULL, NULL),
+(395, 166.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-01', 14.98, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 181.46, 55, NULL, NULL, NULL, NULL, NULL),
+(396, 37.41, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-19', 80.00, 0.00, 'YAPE', '27669955', 1, NULL, 0.00, 762.59, 0.00, 117.41, 56, NULL, NULL, '/uploads/user-00968958/comprobantes/1782145632034_WhatsApp_Image_2026-06-19_at_8_19_15_PM__1_.jpeg', 117.41, NULL),
+(397, 41.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-19', 76.26, 0.00, NULL, NULL, 2, NULL, 0.00, 721.44, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(398, 45.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-19', 72.14, 0.00, NULL, NULL, 3, NULL, 0.00, 676.17, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(399, 49.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-19', 67.62, 0.00, NULL, NULL, 4, NULL, 0.00, 626.38, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(400, 54.77, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-19', 62.64, 0.00, NULL, NULL, 5, NULL, 0.00, 571.61, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(401, 60.25, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-19', 57.16, 0.00, NULL, NULL, 6, NULL, 0.00, 511.36, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(402, 66.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-19', 51.14, 0.00, NULL, NULL, 7, NULL, 0.00, 445.09, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(403, 72.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-19', 44.51, 0.00, NULL, NULL, 8, NULL, 0.00, 372.19, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(404, 80.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-19', 37.22, 0.00, NULL, NULL, 9, NULL, 0.00, 292.00, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(405, 88.21, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-19', 29.20, 0.00, NULL, NULL, 10, NULL, 0.00, 203.79, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(406, 97.03, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-19', 20.38, 0.00, NULL, NULL, 11, NULL, 0.00, 106.76, 0.00, 117.41, 56, NULL, NULL, NULL, NULL, NULL),
+(407, 106.76, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-19', 10.68, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 117.44, 56, NULL, NULL, NULL, NULL, NULL),
+(408, 104.62, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-11-11', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-968770', 1, NULL, 0.00, 395.38, 0.00, 164.62, 57, NULL, NULL, NULL, 165.00, NULL),
+(409, 117.17, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-12-11', 47.45, 0.00, 'EFECTIVO', 'EFECTIVO-985633', 2, NULL, 0.00, 278.21, 0.00, 164.62, 57, NULL, NULL, NULL, 165.00, NULL),
+(410, 131.23, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-01-11', 33.39, 0.00, 'EFECTIVO', 'EFECTIVO-004786', 3, NULL, 0.00, 146.98, 0.00, 164.62, 57, NULL, NULL, NULL, 165.00, NULL),
+(411, 146.98, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-02-11', 17.64, 0.00, 'EFECTIVO', 'EFECTIVO-025311', 4, NULL, 0.00, 0.00, 0.00, 164.62, 57, NULL, NULL, NULL, 165.00, NULL),
+(412, 88.90, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-07', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-337860', 1, NULL, 0.00, 211.10, 0.00, 124.90, 58, NULL, NULL, NULL, 124.90, NULL),
+(413, 99.57, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-07', 25.33, 0.00, 'EFECTIVO', 'EFECTIVO-351420', 2, NULL, 0.00, 111.53, 0.00, 124.90, 58, NULL, NULL, NULL, 124.90, NULL),
+(414, 111.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-07', 13.38, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 124.91, 58, NULL, NULL, NULL, NULL, NULL),
+(415, 74.48, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-04', 135.00, 0.00, 'EFECTIVO', 'EFECTIVO-152228', 1, NULL, 0.00, 1425.52, 0.00, 209.48, 59, NULL, NULL, NULL, 209.48, NULL),
+(416, 81.18, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-04', 128.30, 0.00, 'EFECTIVO', 'EFECTIVO-164835', 2, NULL, 0.00, 1344.34, 0.00, 209.48, 59, NULL, NULL, NULL, 209.48, NULL),
+(417, 88.49, 0.00, 0, b'0', 'PAGADO', '2026-07-04', '2026-07-04', 120.99, 0.00, 'YAPE', '19552546', 3, NULL, 0.00, 1255.85, 0.00, 209.48, 59, NULL, NULL, '/uploads/user-40155022/comprobantes/1783197982031_WhatsApp_Image_2026-07-04_at_3_27_29_PM__1_.jpeg', 209.48, NULL),
+(418, 96.45, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-04', 113.03, 0.00, NULL, NULL, 4, NULL, 0.00, 1159.40, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(419, 105.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-04', 104.35, 0.00, NULL, NULL, 5, NULL, 0.00, 1054.27, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(420, 114.60, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-04', 94.88, 0.00, NULL, NULL, 6, NULL, 0.00, 939.67, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(421, 124.91, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-04', 84.57, 0.00, NULL, NULL, 7, NULL, 0.00, 814.76, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(422, 136.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-04', 73.33, 0.00, NULL, NULL, 8, NULL, 0.00, 678.61, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(423, 148.41, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-04', 61.07, 0.00, NULL, NULL, 9, NULL, 0.00, 530.20, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(424, 161.76, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-04', 47.72, 0.00, NULL, NULL, 10, NULL, 0.00, 368.44, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(425, 176.32, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-04', 33.16, 0.00, NULL, NULL, 11, NULL, 0.00, 192.12, 0.00, 209.48, 59, NULL, NULL, NULL, NULL, NULL),
+(426, 192.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-04', 17.29, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 209.41, 59, NULL, NULL, NULL, NULL, NULL),
+(427, 194.41, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-08', 150.00, 0.00, 'EFECTIVO', 'EFECTIVO-194277', 1, NULL, 0.00, 1305.59, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(428, 213.85, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-07-08', 130.56, 0.00, 'EFECTIVO', 'EFECTIVO-204708', 2, NULL, 0.00, 1091.74, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(429, 235.24, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-08', 109.17, 0.00, 'EFECTIVO', 'EFECTIVO-215141', 3, NULL, 0.00, 856.50, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(430, 258.76, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-08', 85.65, 0.00, 'EFECTIVO', 'EFECTIVO-228773', 4, NULL, 0.00, 597.74, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(431, 284.64, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-08', 59.77, 0.00, 'EFECTIVO', 'EFECTIVO-240261', 5, NULL, 0.00, 313.10, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(432, 313.10, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-08', 31.31, 0.00, 'EFECTIVO', 'EFECTIVO-255157', 6, NULL, 0.00, 0.00, 0.00, 344.41, 60, NULL, NULL, NULL, 344.41, NULL),
+(433, 125.54, 0.00, 0, b'0', 'PAGADO', NULL, '2025-11-18', 72.00, 0.00, NULL, NULL, 1, NULL, 0.00, 474.46, 0.00, 197.54, 61, NULL, NULL, NULL, NULL, NULL),
+(434, 140.60, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-18', 56.94, 0.00, NULL, NULL, 2, NULL, 0.00, 333.86, 0.00, 197.54, 61, NULL, NULL, NULL, NULL, NULL),
+(435, 157.48, 0.00, 0, b'0', 'PAGADO', NULL, '2026-01-18', 40.06, 0.00, NULL, NULL, 3, NULL, 0.00, 176.38, 0.00, 197.54, 61, NULL, NULL, NULL, NULL, NULL),
+(436, 176.38, 0.00, 0, b'0', 'PAGADO', NULL, '2026-02-18', 21.17, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 197.55, 61, NULL, NULL, NULL, NULL, NULL),
+(438, 44.49, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-06-08', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-142503', 1, NULL, 0.00, 255.51, 0.00, 89.49, 63, NULL, NULL, NULL, 89.49, NULL),
+(439, 51.16, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-07-08', 38.33, 0.00, 'EFECTIVO', 'EFECTIVO-154463', 2, NULL, 0.00, 204.35, 0.00, 89.49, 63, NULL, NULL, NULL, 89.49, NULL),
+(440, 58.84, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-08-08', 30.65, 0.00, 'EFECTIVO', 'EFECTIVO-168839', 3, NULL, 0.00, 145.51, 0.00, 89.49, 63, NULL, NULL, NULL, 89.49, NULL),
+(441, 67.66, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-09-08', 21.83, 0.00, 'EFECTIVO', 'EFECTIVO-180247', 4, NULL, 0.00, 77.85, 0.00, 89.49, 63, NULL, NULL, NULL, 89.49, NULL),
+(442, 77.85, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-10-08', 11.68, 0.00, 'EFECTIVO', 'EFECTIVO-130303', 5, NULL, 0.00, 0.00, 0.00, 89.53, 63, NULL, NULL, NULL, 89.53, NULL),
+(443, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-249860', 1, NULL, 0.00, 0.00, 0.00, 45.00, 64, NULL, NULL, NULL, 45.00, NULL),
+(444, 68.54, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-06-10', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-086314', 1, NULL, 0.00, 531.46, 0.00, 158.54, 65, NULL, NULL, NULL, 159.00, NULL),
+(445, 78.82, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-07-10', 79.72, 0.00, 'EFECTIVO', 'EFECTIVO-101354', 2, NULL, 0.00, 452.64, 0.00, 158.54, 65, NULL, NULL, NULL, 159.00, NULL),
+(446, 90.64, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-08-10', 67.90, 0.00, 'EFECTIVO', 'EFECTIVO-133186', 3, NULL, 0.00, 362.00, 0.00, 158.54, 65, NULL, NULL, NULL, 159.00, NULL),
+(447, 104.24, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-09-10', 54.30, 0.00, 'EFECTIVO', 'EFECTIVO-148626', 4, NULL, 0.00, 257.76, 0.00, 158.54, 65, NULL, NULL, NULL, 159.00, NULL),
+(448, 119.88, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-10-10', 38.66, 0.00, 'EFECTIVO', 'EFECTIVO-163514', 5, NULL, 0.00, 137.88, 0.00, 158.54, 65, NULL, NULL, NULL, 159.00, NULL),
+(449, 137.88, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-11-10', 20.68, 0.00, 'EFECTIVO', 'EFECTIVO-182018', 6, NULL, 0.00, 0.00, 0.00, 158.56, 65, NULL, NULL, NULL, 159.00, NULL),
+(450, 110.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-23', '2025-04-17', 500.00, 0.00, 'EFECTIVO', 'EFECTIVO-649333', 1, NULL, 0.00, 4890.35, 0.00, 910.00, 66, NULL, NULL, NULL, 450.00, NULL),
+(451, 120.61, 0.00, 0, b'0', 'MORA', NULL, '2025-05-17', 489.04, 0.00, NULL, NULL, 2, NULL, 300.00, 4769.74, 0.00, 909.65, 66, NULL, NULL, NULL, NULL, NULL),
+(452, 133.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-06-17', 477.00, 0.00, 'EFECTIVO', 'EFECTIVO-882195', 3, NULL, 0.00, 4637.06, 0.00, 610.00, 66, NULL, NULL, NULL, 610.00, NULL),
+(453, 146.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-23', '2025-07-17', 463.00, 0.00, 'EFECTIVO', 'EFECTIVO-876796', 4, NULL, 0.00, 4491.12, 0.00, 872.00, 66, NULL, NULL, NULL, 610.00, NULL),
+(454, 161.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-23', '2025-08-17', 449.00, 0.00, 'EFECTIVO', 'EFECTIVO-573430', 5, NULL, 0.00, 4330.58, 0.00, 879.00, 66, NULL, NULL, NULL, 10.00, NULL),
+(455, 176.59, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-17', 433.06, 0.00, 'EFECTIVO', 'EFECTIVO-585925', 6, NULL, 0.00, 4153.99, 0.00, 609.65, 66, NULL, NULL, NULL, 609.65, NULL),
+(456, 194.25, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-17', 415.40, 0.00, 'EFECTIVO', 'EFECTIVO-618573', 7, NULL, 0.00, 3959.74, 0.00, 609.65, 66, NULL, NULL, NULL, 609.65, NULL),
+(457, 213.68, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-17', 395.97, 0.00, 'EFECTIVO', 'EFECTIVO-547222', 8, NULL, 0.00, 3746.06, 0.00, 609.65, 66, NULL, NULL, NULL, 609.65, NULL),
+(458, 235.04, 0.00, 0, b'0', 'MORA', NULL, '2025-12-17', 374.61, 0.00, NULL, NULL, 9, NULL, 224.00, 3511.02, 0.00, 833.65, 66, NULL, NULL, NULL, NULL, NULL),
+(459, 60.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-23', '2026-01-17', 351.00, 0.00, 'EFECTIVO', 'EFECTIVO-441181', 10, NULL, 0.00, 3252.47, 0.00, 610.00, 66, NULL, NULL, NULL, 550.00, NULL),
+(460, 284.40, 0.00, 0, b'0', 'MORA', NULL, '2026-02-17', 325.25, 0.00, NULL, NULL, 11, NULL, 195.00, 2968.07, 0.00, 804.65, 66, NULL, NULL, NULL, NULL, NULL),
+(461, 312.84, 0.00, 0, b'0', 'MORA', NULL, '2026-03-17', 296.81, 0.00, NULL, NULL, 12, NULL, 195.00, 2655.23, 0.00, 804.65, 66, NULL, NULL, NULL, NULL, NULL),
+(462, 344.13, 0.00, 0, b'0', 'MORA', NULL, '2026-04-17', 265.52, 0.00, NULL, NULL, 13, NULL, 195.00, 2311.10, 0.00, 804.65, 66, NULL, NULL, NULL, NULL, NULL),
+(463, 378.54, 0.00, 0, b'0', 'MORA', NULL, '2026-05-17', 231.11, 0.00, NULL, NULL, 14, NULL, 195.00, 1932.56, 0.00, 804.65, 66, NULL, NULL, NULL, NULL, NULL),
+(464, 416.39, 0.00, 0, b'0', 'MORA', NULL, '2026-06-17', 193.26, 0.00, NULL, NULL, 15, NULL, 195.00, 1516.17, 0.00, 804.65, 66, NULL, NULL, NULL, NULL, NULL),
+(465, 458.03, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-17', 151.62, 0.00, NULL, NULL, 16, NULL, 0.00, 1058.14, 0.00, 609.65, 66, NULL, NULL, NULL, NULL, NULL),
+(466, 503.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-17', 105.81, 0.00, NULL, NULL, 17, NULL, 0.00, 554.30, 0.00, 609.65, 66, NULL, NULL, NULL, NULL, NULL),
+(467, 554.30, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-17', 55.43, 0.00, NULL, NULL, 18, NULL, 0.00, 0.00, 0.00, 609.73, 66, NULL, NULL, NULL, NULL, NULL),
+(468, 129.61, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-04-17', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-726815', 1, NULL, 0.00, 870.39, 0.00, 229.61, 67, NULL, NULL, NULL, 229.61, NULL),
+(469, 142.57, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-05-17', 87.04, 0.00, 'EFECTIVO', 'EFECTIVO-759268', 2, NULL, 0.00, 727.82, 0.00, 229.61, 67, NULL, NULL, NULL, 229.61, NULL),
+(470, 156.83, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-17', 72.78, 0.00, 'EFECTIVO', 'EFECTIVO-789725', 3, NULL, 0.00, 570.99, 0.00, 229.61, 67, NULL, NULL, NULL, 229.61, NULL),
+(471, 172.51, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-07-17', 57.10, 0.00, 'EFECTIVO', 'EFECTIVO-815565', 4, NULL, 0.00, 398.48, 0.00, 229.61, 67, NULL, NULL, NULL, 229.61, NULL),
+(472, 189.76, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-17', 39.85, 0.00, 'EFECTIVO', 'EFECTIVO-827437', 5, NULL, 0.00, 208.72, 0.00, 229.61, 67, NULL, NULL, NULL, 229.61, NULL),
+(473, 208.72, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-17', 20.87, 0.00, 'EFECTIVO', 'EFECTIVO-741589', 6, NULL, 0.00, 0.00, 0.00, 229.59, 67, NULL, NULL, NULL, 229.59, NULL),
+(474, 67.80, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-04-05', 600.00, 0.00, 'EFECTIVO', 'EFECTIVO-921022', 1, NULL, 0.00, 5932.20, 0.00, 667.80, 68, NULL, NULL, NULL, 667.80, NULL),
+(475, 74.58, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-07-02', '2025-05-05', 593.22, 0.00, 'EFECTIVO', 'EFECTIVO-491614', 2, NULL, 0.00, 5857.62, 0.00, 1023.80, 68, NULL, NULL, NULL, 100.00, NULL),
+(476, 82.04, 0.00, 0, b'0', 'MORA', NULL, '2025-06-05', 585.76, 0.00, NULL, NULL, 3, NULL, 356.00, 5775.58, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(477, 90.24, 0.00, 0, b'0', 'MORA', NULL, '2025-07-05', 577.56, 0.00, NULL, NULL, 4, NULL, 356.00, 5685.34, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(478, 99.27, 0.00, 0, b'0', 'MORA', NULL, '2025-08-05', 568.53, 0.00, NULL, NULL, 5, NULL, 356.00, 5586.07, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(479, 109.19, 0.00, 0, b'0', 'MORA', NULL, '2025-09-05', 558.61, 0.00, NULL, NULL, 6, NULL, 356.00, 5476.88, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(480, 120.11, 0.00, 0, b'0', 'MORA', NULL, '2025-10-05', 547.69, 0.00, NULL, NULL, 7, NULL, 356.00, 5356.77, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(481, 132.12, 0.00, 0, b'0', 'MORA', NULL, '2025-11-05', 535.68, 0.00, NULL, NULL, 8, NULL, 356.00, 5224.65, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(482, 145.33, 0.00, 0, b'0', 'MORA', NULL, '2025-12-05', 522.47, 0.00, NULL, NULL, 9, NULL, 356.00, 5079.32, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(483, 159.87, 0.00, 0, b'0', 'MORA', NULL, '2026-01-05', 507.93, 0.00, NULL, NULL, 10, NULL, 356.00, 4919.45, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(484, 175.85, 0.00, 0, b'0', 'MORA', NULL, '2026-02-05', 491.95, 0.00, NULL, NULL, 11, NULL, 356.00, 4743.60, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(485, 193.44, 0.00, 0, b'0', 'MORA', NULL, '2026-03-05', 474.36, 0.00, NULL, NULL, 12, NULL, 356.00, 4550.16, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(486, 212.78, 0.00, 0, b'0', 'MORA', NULL, '2026-04-05', 455.02, 0.00, NULL, NULL, 13, NULL, 356.00, 4337.38, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(487, 234.06, 0.00, 0, b'0', 'MORA', NULL, '2026-05-05', 433.74, 0.00, NULL, NULL, 14, NULL, 356.00, 4103.32, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(488, 257.47, 0.00, 0, b'0', 'MORA', NULL, '2026-06-05', 410.33, 0.00, NULL, NULL, 15, NULL, 356.00, 3845.85, 0.00, 1023.80, 68, NULL, NULL, NULL, NULL, NULL),
+(489, 283.21, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-05', 384.59, 0.00, NULL, NULL, 16, NULL, 0.00, 3562.64, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(490, 311.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-05', 356.26, 0.00, NULL, NULL, 17, NULL, 0.00, 3251.10, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(491, 342.69, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-05', 325.11, 0.00, NULL, NULL, 18, NULL, 0.00, 2908.41, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(492, 376.96, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-05', 290.84, 0.00, NULL, NULL, 19, NULL, 0.00, 2531.45, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(493, 414.65, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-05', 253.15, 0.00, NULL, NULL, 20, NULL, 0.00, 2116.80, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cuotas` (`id`, `capital`, `comision`, `dias_atraso`, `es_gracia`, `estado_cuota`, `fecha_pago`, `fecha_vencimiento`, `interes`, `interes_mora`, `metodo_pago`, `numero_comprobante`, `numero_cuota`, `observacion`, `penalidad`, `saldo_restante`, `seguro`, `total_cuota`, `credito_id`, `cuota_siguiente_id`, `comentario_rechazo`, `imagen_comprobante`, `monto_pagado_cliente`, `cargo_refinanciamiento`) VALUES
+(494, 456.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-05', 211.68, 0.00, NULL, NULL, 21, NULL, 0.00, 1660.68, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(495, 501.73, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-05', 166.07, 0.00, NULL, NULL, 22, NULL, 0.00, 1158.95, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(496, 551.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-05', 115.90, 0.00, NULL, NULL, 23, NULL, 0.00, 607.05, 0.00, 667.80, 68, NULL, NULL, NULL, NULL, NULL),
+(497, 607.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-05', 60.71, 0.00, NULL, NULL, 24, NULL, 0.00, 0.00, 0.00, 667.76, 68, NULL, NULL, NULL, NULL, NULL),
+(498, 0.44, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-06-02', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-162216', 1, NULL, 0.00, 912.56, 0.00, 187.44, 69, NULL, NULL, NULL, 187.00, NULL),
+(499, 96.18, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-07-02', 91.26, 0.00, 'EFECTIVO', 'EFECTIVO-236016', 2, NULL, 0.00, 816.38, 0.00, 187.44, 69, NULL, NULL, NULL, 187.44, NULL),
+(500, 0.44, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-08-02', 81.64, 0.00, 'EFECTIVO', 'EFECTIVO-423176', 3, NULL, 0.00, 710.58, 0.00, 187.44, 69, NULL, NULL, NULL, 187.00, NULL),
+(501, 0.44, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-09-02', 71.06, 0.00, 'EFECTIVO', 'EFECTIVO-462656', 4, NULL, 0.00, 594.20, 0.00, 187.44, 69, NULL, NULL, NULL, 187.00, NULL),
+(502, 128.02, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-10-02', 59.42, 0.00, 'EFECTIVO', 'EFECTIVO-481530', 5, NULL, 0.00, 466.18, 0.00, 187.44, 69, NULL, NULL, NULL, 187.44, NULL),
+(503, 140.82, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-11-02', 46.62, 0.00, 'EFECTIVO', 'EFECTIVO-504087', 6, NULL, 0.00, 325.36, 0.00, 187.44, 69, NULL, NULL, NULL, 187.44, NULL),
+(504, 0.44, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-12-02', 32.54, 0.00, 'EFECTIVO', 'EFECTIVO-218321', 7, NULL, 0.00, 170.46, 0.00, 187.44, 69, NULL, NULL, NULL, 187.00, NULL),
+(505, 170.46, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-01-02', 17.05, 0.00, 'EFECTIVO', 'EFECTIVO-176129', 8, NULL, 0.00, 0.00, 0.00, 187.51, 69, NULL, NULL, NULL, 188.00, NULL),
+(506, 86.39, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-07-06', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-441454', 1, NULL, 0.00, 213.61, 0.00, 131.39, 70, NULL, NULL, NULL, 131.39, NULL),
+(507, 99.35, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-08-06', 32.04, 0.00, 'EFECTIVO', 'EFECTIVO-455054', 2, NULL, 0.00, 114.26, 0.00, 131.39, 70, NULL, NULL, NULL, 131.39, NULL),
+(508, 114.26, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-09-06', 17.14, 0.00, 'EFECTIVO', 'EFECTIVO-467117', 3, NULL, 0.00, 0.00, 0.00, 131.40, 70, NULL, NULL, NULL, 131.40, NULL),
+(509, 10.34, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-04-04', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-844754', 1, NULL, 0.00, 289.66, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(510, 11.89, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-05-04', 43.45, 0.00, 'EFECTIVO', 'EFECTIVO-043906', 2, NULL, 0.00, 277.77, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(511, 13.67, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-06-04', 41.67, 0.00, 'EFECTIVO', 'EFECTIVO-058481', 3, NULL, 0.00, 264.10, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(512, 15.72, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-07-04', 39.62, 0.00, 'EFECTIVO', 'EFECTIVO-071666', 4, NULL, 0.00, 248.38, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(513, 18.08, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-08-04', 37.26, 0.00, 'EFECTIVO', 'EFECTIVO-093203', 5, NULL, 0.00, 230.30, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(514, 20.79, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-09-04', 34.55, 0.00, 'EFECTIVO', 'EFECTIVO-155738', 6, NULL, 0.00, 209.51, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(515, 23.91, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-10-04', 31.43, 0.00, 'EFECTIVO', 'EFECTIVO-167898', 7, NULL, 0.00, 185.60, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(516, 27.50, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-11-04', 27.84, 0.00, 'EFECTIVO', 'EFECTIVO-182019', 8, NULL, 0.00, 158.10, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(517, 31.62, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-12-04', 23.72, 0.00, 'EFECTIVO', 'EFECTIVO-194330', 9, NULL, 0.00, 126.48, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(518, 36.37, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2026-01-04', 18.97, 0.00, 'EFECTIVO', 'EFECTIVO-206459', 10, NULL, 0.00, 90.11, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(519, 41.82, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2026-02-04', 13.52, 0.00, 'EFECTIVO', 'EFECTIVO-876290', 11, NULL, 0.00, 48.29, 0.00, 55.34, 71, NULL, NULL, NULL, 55.34, NULL),
+(520, 48.29, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2026-03-04', 7.24, 0.00, 'EFECTIVO', 'EFECTIVO-861722', 12, NULL, 0.00, 0.00, 0.00, 55.53, 71, NULL, NULL, NULL, 55.53, NULL),
+(521, 139.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-01-28', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 72, NULL, NULL, NULL, NULL, NULL),
+(522, 160.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-02-28', 24.07, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 184.54, 72, NULL, NULL, NULL, NULL, NULL),
+(523, 139.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-01-21', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 73, NULL, NULL, NULL, NULL, NULL),
+(524, 160.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-02-21', 24.07, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 184.54, 73, NULL, NULL, NULL, NULL, NULL),
+(527, 57.12, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-01-20', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-439008', 1, NULL, 0.00, 442.88, 0.00, 132.12, 75, NULL, NULL, NULL, 132.12, NULL),
+(528, 65.69, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-02-20', 66.43, 0.00, 'EFECTIVO', 'EFECTIVO-455040', 2, NULL, 0.00, 377.19, 0.00, 132.12, 75, NULL, NULL, NULL, 132.12, NULL),
+(529, 75.54, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-03-20', 56.58, 0.00, 'EFECTIVO', 'EFECTIVO-468751', 3, NULL, 0.00, 301.65, 0.00, 132.12, 75, NULL, NULL, NULL, 132.12, NULL),
+(530, 86.87, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-04-20', 45.25, 0.00, 'EFECTIVO', 'EFECTIVO-482154', 4, NULL, 0.00, 214.78, 0.00, 132.12, 75, NULL, NULL, NULL, 132.12, NULL),
+(531, 99.90, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-05-20', 32.22, 0.00, 'EFECTIVO', 'EFECTIVO-493988', 5, NULL, 0.00, 114.88, 0.00, 132.12, 75, NULL, NULL, NULL, 132.12, NULL),
+(532, 114.88, 0.00, 0, b'0', 'PAGADO', '2026-06-24', '2025-06-20', 17.23, 0.00, 'EFECTIVO', 'EFECTIVO-505567', 6, NULL, 0.00, 0.00, 0.00, 132.11, 75, NULL, NULL, NULL, 132.11, NULL),
+(533, 100.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-07-23', 75.00, 0.00, NULL, NULL, 1, NULL, 0.00, 399.87, 0.00, 175.13, 76, NULL, NULL, NULL, NULL, NULL),
+(534, 115.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-23', 59.98, 0.00, NULL, NULL, 2, NULL, 0.00, 284.72, 0.00, 175.13, 76, NULL, NULL, NULL, NULL, NULL),
+(535, 132.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-23', 42.71, 0.00, NULL, NULL, 3, NULL, 0.00, 152.30, 0.00, 175.13, 76, NULL, NULL, NULL, NULL, NULL),
+(536, 152.30, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-23', 22.85, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 175.15, 76, NULL, NULL, NULL, NULL, NULL),
+(537, 91.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-07-03', 120.00, 0.00, NULL, NULL, 1, NULL, 0.00, 708.61, 0.00, 211.39, 77, NULL, NULL, NULL, NULL, NULL),
+(538, 105.10, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-03', 106.29, 0.00, NULL, NULL, 2, NULL, 0.00, 603.51, 0.00, 211.39, 77, NULL, NULL, NULL, NULL, NULL),
+(539, 120.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-03', 90.53, 0.00, NULL, NULL, 3, NULL, 0.00, 482.65, 0.00, 211.39, 77, NULL, NULL, NULL, NULL, NULL),
+(540, 138.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-03', 72.40, 0.00, NULL, NULL, 4, NULL, 0.00, 343.66, 0.00, 211.39, 77, NULL, NULL, NULL, NULL, NULL),
+(541, 159.84, 0.00, 0, b'0', 'MORA', NULL, '2025-11-03', 51.55, 0.00, NULL, NULL, 5, NULL, 42.54, 183.82, 0.00, 253.93, 77, NULL, NULL, NULL, NULL, NULL),
+(542, 183.82, 0.00, 0, b'0', 'MORA', NULL, '2025-12-03', 27.57, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 211.39, 77, NULL, NULL, NULL, NULL, NULL),
+(543, 129.61, 0.00, 0, b'0', 'PAGADO', NULL, '2025-06-27', 100.00, 0.00, NULL, NULL, 1, NULL, 60.00, 870.39, 0.00, 289.61, 78, NULL, NULL, NULL, NULL, NULL),
+(544, 142.57, 0.00, 0, b'0', 'PAGADO', NULL, '2025-07-27', 87.04, 0.00, NULL, NULL, 2, NULL, 0.00, 727.82, 0.00, 229.61, 78, NULL, NULL, NULL, NULL, NULL),
+(545, 156.83, 0.00, 0, b'0', 'MORA', NULL, '2025-08-27', 72.78, 0.00, NULL, NULL, 3, NULL, 43.75, 570.99, 0.00, 273.36, 78, NULL, NULL, NULL, NULL, NULL),
+(546, 172.51, 0.00, 0, b'0', 'MORA', NULL, '2025-09-27', 57.10, 0.00, NULL, NULL, 4, NULL, 43.75, 398.48, 0.00, 273.36, 78, NULL, NULL, NULL, NULL, NULL),
+(547, 189.76, 0.00, 0, b'0', 'MORA', NULL, '2025-10-27', 39.85, 0.00, NULL, NULL, 5, NULL, 43.75, 208.72, 0.00, 273.36, 78, NULL, NULL, NULL, NULL, NULL),
+(548, 208.72, 0.00, 0, b'0', 'MORA', NULL, '2025-11-27', 20.87, 0.00, NULL, NULL, 6, NULL, 43.75, 0.00, 0.00, 273.34, 78, NULL, NULL, NULL, NULL, NULL),
+(549, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-06-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-542151', 1, NULL, 0.00, 0.00, 0.00, 105.00, 79, 22906, NULL, NULL, 105.00, NULL),
+(550, 57.12, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-22', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-314846', 1, NULL, 0.00, 442.88, 0.00, 132.12, 80, NULL, NULL, NULL, 132.12, NULL),
+(551, 65.69, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-07-22', 66.43, 0.00, 'EFECTIVO', 'EFECTIVO-327366', 2, NULL, 0.00, 377.19, 0.00, 132.12, 80, NULL, NULL, NULL, 132.12, NULL),
+(552, 75.54, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-22', 56.58, 0.00, 'EFECTIVO', 'EFECTIVO-339087', 3, NULL, 0.00, 301.65, 0.00, 132.12, 80, NULL, NULL, NULL, 132.12, NULL),
+(553, 86.87, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-22', 45.25, 0.00, 'EFECTIVO', 'EFECTIVO-350798', 4, NULL, 0.00, 214.78, 0.00, 132.12, 80, NULL, NULL, NULL, 132.12, NULL),
+(554, 99.90, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-22', 32.22, 0.00, 'EFECTIVO', 'EFECTIVO-362086', 5, NULL, 0.00, 114.88, 0.00, 132.12, 80, NULL, NULL, NULL, 132.12, NULL),
+(555, 114.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-22', 17.23, 0.00, 'EFECTIVO', 'EFECTIVO-373767', 6, NULL, 0.00, 0.00, 0.00, 132.11, 80, NULL, NULL, NULL, 132.11, NULL),
+(556, 87.44, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-06-02', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 912.56, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(557, 96.18, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-07-02', 91.26, 0.00, NULL, NULL, 2, NULL, 0.00, 816.38, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(558, 105.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-02', 81.64, 0.00, NULL, NULL, 3, NULL, 0.00, 710.58, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(559, 116.38, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-02', 71.06, 0.00, NULL, NULL, 4, NULL, 0.00, 594.20, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(560, 128.02, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-02', 59.42, 0.00, NULL, NULL, 5, NULL, 0.00, 466.18, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(561, 140.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-02', 46.62, 0.00, NULL, NULL, 6, NULL, 0.00, 325.36, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(562, 154.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-12-02', 32.54, 0.00, NULL, NULL, 7, NULL, 0.00, 170.46, 0.00, 187.44, 81, NULL, NULL, NULL, NULL, NULL),
+(563, 170.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-01-02', 17.05, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 187.51, 81, NULL, NULL, NULL, NULL, NULL),
+(564, 50.00, 0.00, 0, b'0', 'REFINANCIADO', '2026-06-23', '2026-07-06', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-301565', 1, NULL, 0.00, 438.39, 0.00, 121.61, 82, 23174, NULL, NULL, 71.61, NULL),
+(565, 69.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-08-06', 52.61, 0.00, NULL, NULL, 2, NULL, 0.00, 369.39, 0.00, 121.61, 82, NULL, NULL, NULL, NULL, NULL),
+(566, 77.28, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-09-06', 44.33, 0.00, NULL, NULL, 3, NULL, 0.00, 292.11, 0.00, 121.61, 82, NULL, NULL, NULL, NULL, NULL),
+(567, 86.56, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-10-06', 35.05, 0.00, NULL, NULL, 4, NULL, 0.00, 205.55, 0.00, 121.61, 82, NULL, NULL, NULL, NULL, NULL),
+(568, 96.94, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-11-06', 24.67, 0.00, NULL, NULL, 5, NULL, 0.00, 108.61, 0.00, 121.61, 82, NULL, NULL, NULL, NULL, NULL),
+(569, 108.61, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-12-06', 13.03, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 121.64, 82, NULL, NULL, NULL, NULL, NULL),
+(570, 60.08, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-881828', 1, NULL, 0.00, 239.92, 0.00, 105.08, 83, NULL, NULL, NULL, 105.08, NULL),
+(571, 69.09, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-07-21', 35.99, 0.00, 'EFECTIVO', 'EFECTIVO-892804', 2, NULL, 0.00, 170.83, 0.00, 105.08, 83, NULL, NULL, NULL, 105.08, NULL),
+(572, 79.46, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-21', 25.62, 0.00, 'EFECTIVO', 'EFECTIVO-904492', 3, NULL, 0.00, 91.37, 0.00, 105.08, 83, NULL, NULL, NULL, 105.08, NULL),
+(573, 91.37, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-21', 13.71, 0.00, 'EFECTIVO', 'EFECTIVO-916396', 4, NULL, 0.00, 0.00, 0.00, 105.08, 83, NULL, NULL, NULL, 105.08, NULL),
+(574, 69.77, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-05-19', 22.50, 0.00, 'EFECTIVO', 'EFECTIVO-807620', 1, NULL, 0.00, 80.23, 0.00, 92.27, 84, NULL, NULL, NULL, 92.27, NULL),
+(575, 80.23, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-19', 12.03, 0.00, 'EFECTIVO', 'EFECTIVO-817548', 2, NULL, 0.00, 0.00, 0.00, 92.26, 84, NULL, NULL, NULL, 92.26, NULL),
+(576, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-12-06', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 0.00, 0.00, 345.00, 85, NULL, NULL, NULL, NULL, NULL),
+(577, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-11-29', 45.00, 0.00, NULL, NULL, 1, NULL, 18.00, 0.00, 0.00, 363.00, 86, NULL, NULL, NULL, NULL, NULL),
+(578, 0.39, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2024-11-16', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-140169', 1, NULL, 0.00, 213.61, 0.00, 131.39, 87, NULL, NULL, NULL, 131.39, NULL),
+(579, 99.35, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2024-12-16', 32.04, 0.00, 'EFECTIVO', 'EFECTIVO-164615', 2, NULL, 0.00, 114.26, 0.00, 131.39, 87, NULL, NULL, NULL, 131.39, NULL),
+(580, 114.26, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-01-16', 17.14, 0.00, 'EFECTIVO', 'EFECTIVO-189672', 3, NULL, 0.00, 0.00, 0.00, 131.40, 87, NULL, NULL, NULL, 131.40, NULL),
+(581, 139.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-10-24', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 88, NULL, NULL, NULL, NULL, NULL),
+(582, 160.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-11-24', 24.07, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 184.54, 88, NULL, NULL, NULL, NULL, NULL),
+(583, 65.04, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-30', 96.00, 0.00, 'EFECTIVO', 'EFECTIVO-653582', 1, NULL, 0.00, 734.96, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(584, 72.84, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-30', 88.20, 0.00, 'EFECTIVO', 'EFECTIVO-665318', 2, NULL, 0.00, 662.12, 0.00, 205.14, 89, NULL, NULL, NULL, 249.24, NULL),
+(585, 81.59, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-30', 79.45, 0.00, 'EFECTIVO', 'EFECTIVO-674958', 3, NULL, 0.00, 580.53, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(586, 91.38, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-28', 69.66, 0.00, 'EFECTIVO', 'EFECTIVO-686646', 4, NULL, 0.00, 489.15, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(587, 102.34, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-30', 58.70, 0.00, 'EFECTIVO', 'EFECTIVO-699014', 5, NULL, 0.00, 386.81, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(588, 114.62, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-30', 46.42, 0.00, 'EFECTIVO', 'EFECTIVO-711017', 6, NULL, 0.00, 272.19, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(589, 128.38, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-30', 32.66, 0.00, 'EFECTIVO', 'EFECTIVO-727046', 7, NULL, 0.00, 143.81, 0.00, 161.04, 89, NULL, NULL, NULL, 161.04, NULL),
+(590, 143.81, 0.00, 0, b'0', 'PAGADO', '2026-06-30', '2026-06-30', 17.26, 0.00, 'YAPE', '23915671', 8, NULL, 0.00, 0.00, 0.00, 161.07, 89, NULL, NULL, '/uploads/user-72279538/comprobantes/1782855687873_WhatsApp_Image_2026-06-30_at_4_36_39_PM.jpeg', 161.07, NULL),
+(591, 60.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-14', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 239.92, 0.00, 105.08, 90, NULL, NULL, NULL, NULL, NULL),
+(592, 69.09, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-12-14', 35.99, 0.00, NULL, NULL, 2, NULL, 0.00, 170.83, 0.00, 105.08, 90, NULL, NULL, NULL, NULL, NULL),
+(593, 79.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-01-14', 25.62, 0.00, NULL, NULL, 3, NULL, 0.00, 91.37, 0.00, 105.08, 90, NULL, NULL, NULL, NULL, NULL),
+(594, 91.37, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-02-14', 13.71, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 105.08, 90, NULL, NULL, NULL, NULL, NULL),
+(595, 36.97, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-07-06', 36.00, 0.00, 'EFECTIVO', '', 1, NULL, 0.00, 263.03, 0.00, 72.97, 91, NULL, NULL, NULL, NULL, NULL),
+(596, 41.41, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-08-06', 31.56, 0.00, 'EFECTIVO', '', 2, NULL, 0.00, 221.62, 0.00, 72.97, 91, NULL, NULL, NULL, NULL, NULL),
+(597, 46.38, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-09-06', 26.59, 0.00, 'EFECTIVO', '', 3, NULL, 0.00, 175.24, 0.00, 72.97, 91, NULL, NULL, NULL, NULL, NULL),
+(598, 51.94, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-10-06', 21.03, 0.00, 'EFECTIVO', '', 4, NULL, 0.00, 123.30, 0.00, 72.97, 91, NULL, NULL, NULL, NULL, NULL),
+(599, 58.17, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-11-06', 14.80, 0.00, 'EFECTIVO', '', 5, NULL, 0.00, 65.13, 0.00, 72.97, 91, NULL, NULL, NULL, NULL, NULL),
+(600, 65.13, 0.00, 0, b'0', 'PAGADO', '2026-06-16', '2026-12-06', 7.82, 0.00, 'EFECTIVO', '', 6, NULL, 0.00, 0.00, 0.00, 72.95, 91, NULL, NULL, NULL, NULL, NULL),
+(601, 60.08, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2024-10-09', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-351687', 1, NULL, 0.00, 239.92, 0.00, 105.08, 92, NULL, NULL, NULL, 105.00, NULL),
+(602, 69.09, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2024-11-09', 35.99, 0.00, 'EFECTIVO', 'EFECTIVO-357476', 2, NULL, 0.00, 170.83, 0.00, 105.08, 92, NULL, NULL, NULL, 105.00, NULL),
+(603, 79.46, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2024-12-09', 25.62, 0.00, 'EFECTIVO', 'EFECTIVO-365822', 3, NULL, 0.00, 91.37, 0.00, 105.08, 92, NULL, NULL, NULL, 105.00, NULL),
+(604, 91.37, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-01-09', 13.71, 0.00, 'EFECTIVO', 'EFECTIVO-372978', 4, NULL, 0.00, 0.00, 0.00, 105.08, 92, NULL, NULL, NULL, 105.00, NULL),
+(605, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-09-29', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-122403', 1, NULL, 0.00, 0.00, 0.00, 45.00, 93, 839, NULL, NULL, 45.00, NULL),
+(606, 300.00, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-03-28', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-044263', 1, NULL, 0.00, 0.00, 0.00, 345.00, 94, NULL, NULL, NULL, 345.00, NULL),
+(607, 143.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-09-22', 75.00, 0.00, NULL, NULL, 1, NULL, 0.00, 356.01, 0.00, 218.99, 95, NULL, NULL, NULL, NULL, NULL),
+(608, 165.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-10-22', 53.40, 0.00, NULL, NULL, 2, NULL, 0.00, 190.42, 0.00, 218.99, 95, NULL, NULL, NULL, NULL, NULL),
+(609, 190.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-11-22', 28.56, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 218.98, 95, NULL, NULL, NULL, NULL, NULL),
+(610, 74.16, 0.00, 0, b'0', 'PAGADO', NULL, '2024-10-28', 75.00, 0.00, NULL, NULL, 1, NULL, 10.00, 425.84, 0.00, 159.16, 96, NULL, NULL, NULL, NULL, NULL),
+(611, 85.28, 0.00, 0, b'0', 'PAGADO', NULL, '2024-11-28', 63.88, 0.00, NULL, NULL, 2, NULL, 30.00, 340.56, 0.00, 179.16, 96, NULL, NULL, NULL, NULL, NULL),
+(612, 98.08, 0.00, 0, b'0', 'PAGADO', NULL, '2024-12-28', 51.08, 0.00, NULL, NULL, 3, NULL, 30.00, 242.48, 0.00, 179.16, 96, NULL, NULL, NULL, NULL, NULL),
+(613, 46.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-01-28', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-065172', 4, NULL, 0.00, 129.69, 0.00, 179.00, 96, NULL, NULL, NULL, 133.00, NULL),
+(614, 79.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-02-28', 19.00, 0.00, 'EFECTIVO', 'EFECTIVO-147197', 5, NULL, 0.00, 0.00, 0.00, 179.00, 96, NULL, NULL, NULL, 100.00, NULL),
+(615, 141.51, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-12-12', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-798651', 1, NULL, 0.00, 158.49, 0.00, 177.51, 97, NULL, NULL, NULL, 177.51, NULL),
+(616, 158.49, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-01-12', 19.02, 0.00, 'EFECTIVO', 'EFECTIVO-831345', 2, NULL, 0.00, 0.00, 0.00, 177.51, 97, NULL, NULL, NULL, 177.51, NULL),
+(617, 27.58, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-07-09', 120.00, 0.00, 'EFECTIVO', 'EFECTIVO-561693', 1, NULL, 0.00, 772.42, 0.00, 147.58, 98, NULL, NULL, NULL, 148.00, NULL),
+(618, 31.72, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-08-09', 115.86, 0.00, NULL, NULL, 2, NULL, 0.00, 740.70, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(619, 36.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-09-09', 111.11, 0.00, NULL, NULL, 3, NULL, 0.00, 704.23, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(620, 41.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-10-09', 105.63, 0.00, NULL, NULL, 4, NULL, 0.00, 662.28, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(621, 48.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-11-09', 99.34, 0.00, NULL, NULL, 5, NULL, 0.00, 614.04, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(622, 55.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-12-09', 92.11, 0.00, NULL, NULL, 6, NULL, 0.00, 558.57, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(623, 63.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-01-09', 83.79, 0.00, NULL, NULL, 7, NULL, 0.00, 494.78, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(624, 73.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-02-09', 74.22, 0.00, NULL, NULL, 8, NULL, 0.00, 421.42, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(625, 84.37, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-03-09', 63.21, 0.00, NULL, NULL, 9, NULL, 0.00, 337.05, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(626, 97.02, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-04-09', 50.56, 0.00, NULL, NULL, 10, NULL, 0.00, 240.03, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(627, 111.58, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-05-09', 36.00, 0.00, NULL, NULL, 11, NULL, 0.00, 128.45, 0.00, 147.58, 98, NULL, NULL, NULL, NULL, NULL),
+(628, 128.45, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-09', 19.27, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 147.72, 98, NULL, NULL, NULL, NULL, NULL),
+(629, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2024-04-09', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-720237', 1, NULL, 0.00, 160.47, 0.00, 45.00, 99, NULL, NULL, NULL, 45.00, NULL),
+(630, 300.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2024-05-09', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-732910', 2, NULL, 0.00, 0.00, 0.00, 345.00, 99, NULL, NULL, NULL, 345.00, NULL),
+(631, 300.00, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2024-04-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-426095', 1, NULL, 0.00, 0.00, 0.00, 345.00, 100, NULL, NULL, NULL, 345.00, NULL),
+(632, 232.56, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-03-27', 75.00, 0.00, NULL, NULL, 1, NULL, 0.00, 267.44, 0.00, 307.56, 101, NULL, NULL, NULL, NULL, NULL),
+(633, 267.44, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-27', 40.12, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 307.56, 101, NULL, NULL, NULL, NULL, NULL),
+(634, 132.92, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-13', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-174310', 1, NULL, 0.00, 867.08, 0.00, 222.92, 102, NULL, NULL, NULL, 222.92, NULL),
+(635, 144.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-13', 78.04, 0.00, 'EFECTIVO', 'EFECTIVO-188277', 2, NULL, 0.00, 722.20, 0.00, 222.92, 102, NULL, NULL, NULL, 222.92, NULL),
+(636, 157.92, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-13', 65.00, 0.00, 'EFECTIVO', 'EFECTIVO-198949', 3, NULL, 0.00, 564.28, 0.00, 222.92, 102, NULL, NULL, NULL, 222.92, NULL),
+(637, 34.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2026-03-13', 51.00, 0.00, 'EFECTIVO', 'EFECTIVO-043337', 4, NULL, 0.00, 392.15, 0.00, 257.00, 102, NULL, NULL, NULL, 223.00, NULL),
+(638, 187.63, 0.00, 0, b'0', 'MORA', NULL, '2026-04-13', 35.29, 0.00, NULL, NULL, 5, NULL, 34.00, 204.52, 0.00, 256.92, 102, NULL, NULL, NULL, NULL, NULL),
+(639, 204.52, 0.00, 0, b'0', 'MORA', NULL, '2026-05-13', 18.41, 0.00, NULL, NULL, 6, NULL, 34.00, 0.00, 0.00, 256.93, 102, NULL, NULL, NULL, NULL, NULL),
+(640, 132.92, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-12', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-822333', 1, NULL, 0.00, 867.08, 0.00, 222.92, 103, NULL, NULL, NULL, 222.92, NULL),
+(641, 144.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-12', 78.04, 0.00, 'EFECTIVO', 'EFECTIVO-192949', 2, NULL, 0.00, 722.20, 0.00, 222.92, 103, NULL, NULL, NULL, 222.92, NULL),
+(642, 157.92, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-12', 65.00, 0.00, 'EFECTIVO', 'EFECTIVO-203813', 3, NULL, 0.00, 564.28, 0.00, 222.92, 103, NULL, NULL, NULL, 222.92, NULL),
+(643, 172.13, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-12', 50.79, 0.00, 'EFECTIVO', 'EFECTIVO-217565', 4, NULL, 0.00, 392.15, 0.00, 222.92, 103, NULL, NULL, NULL, 222.92, NULL),
+(644, 187.63, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-12', 35.29, 0.00, 'EFECTIVO', 'EFECTIVO-227453', 5, NULL, 0.00, 204.52, 0.00, 222.92, 103, NULL, NULL, NULL, 222.92, NULL),
+(645, 204.52, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-12', 18.41, 0.00, 'EFECTIVO', 'EFECTIVO-237877', 6, NULL, 0.00, 0.00, 0.00, 222.93, 103, NULL, NULL, NULL, 222.93, NULL),
+(650, 235.85, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-18', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-589596', 1, NULL, 0.00, 264.15, 0.00, 295.85, 105, NULL, NULL, NULL, 295.85, NULL),
+(651, 264.15, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-18', 31.70, 0.00, 'EFECTIVO', 'EFECTIVO-611564', 2, NULL, 0.00, 0.00, 0.00, 295.85, 105, NULL, NULL, NULL, 295.85, NULL),
+(652, 132.92, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2025-12-17', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-397451', 1, NULL, 0.00, 867.08, 0.00, 222.92, 106, NULL, NULL, NULL, 223.00, NULL),
+(653, 144.88, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-01-17', 78.04, 0.00, 'EFECTIVO', 'EFECTIVO-414579', 2, NULL, 0.00, 722.20, 0.00, 222.92, 106, NULL, NULL, NULL, 223.00, NULL),
+(654, 157.92, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-02-17', 65.00, 0.00, 'EFECTIVO', 'EFECTIVO-429667', 3, NULL, 0.00, 564.28, 0.00, 222.92, 106, NULL, NULL, NULL, 223.00, NULL),
+(655, 172.13, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-03-17', 50.79, 0.00, 'EFECTIVO', 'EFECTIVO-452603', 4, NULL, 0.00, 392.15, 0.00, 222.92, 106, NULL, NULL, NULL, 223.00, NULL),
+(656, 187.63, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-04-17', 35.29, 0.00, 'EFECTIVO', 'EFECTIVO-470819', 5, NULL, 0.00, 204.52, 0.00, 222.92, 106, NULL, NULL, NULL, 223.00, NULL),
+(657, 204.52, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-05-17', 18.41, 0.00, 'EFECTIVO', 'EFECTIVO-486362', 6, NULL, 0.00, 0.00, 0.00, 222.93, 106, NULL, NULL, NULL, 223.00, NULL),
+(658, 199.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-01', 190.60, 0.00, NULL, NULL, 1, NULL, 0.00, 1300.62, 0.00, 389.60, 107, NULL, NULL, NULL, NULL, NULL),
+(659, 217.32, 0.00, 0, b'0', 'PAGADO', NULL, '2026-01-01', 117.06, 0.00, NULL, NULL, 2, NULL, 0.00, 1083.30, 0.00, 334.38, 107, NULL, NULL, NULL, NULL, NULL),
+(660, 236.88, 0.00, 0, b'0', 'PAGADO', NULL, '2026-02-01', 97.50, 0.00, NULL, NULL, 3, NULL, 0.00, 846.42, 0.00, 334.38, 107, NULL, NULL, NULL, NULL, NULL),
+(661, 258.20, 0.00, 0, b'0', 'PAGADO', NULL, '2026-03-01', 76.18, 0.00, NULL, NULL, 4, NULL, 0.00, 588.22, 0.00, 334.38, 107, NULL, NULL, NULL, NULL, NULL),
+(662, 281.44, 0.00, 0, b'0', 'PAGADO', NULL, '2026-04-01', 52.94, 0.00, NULL, NULL, 5, NULL, 0.00, 306.78, 0.00, 334.38, 107, NULL, NULL, NULL, NULL, NULL),
+(663, 306.78, 0.00, 0, b'0', 'PAGADO', NULL, '2026-05-01', 27.61, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 334.39, 107, NULL, NULL, NULL, NULL, NULL),
+(664, 40.65, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-01', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-995389', 1, NULL, 0.00, 459.35, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(665, 45.53, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-01', 55.12, 0.00, 'EFECTIVO', 'EFECTIVO-006899', 2, NULL, 0.00, 413.82, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(666, 50.99, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-01', 49.66, 0.00, 'EFECTIVO', 'EFECTIVO-017092', 3, NULL, 0.00, 362.83, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(667, 57.11, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-01', 43.54, 0.00, 'EFECTIVO', 'EFECTIVO-028924', 4, NULL, 0.00, 305.72, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(668, 63.96, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-01', 36.69, 0.00, 'EFECTIVO', 'EFECTIVO-041740', 5, NULL, 0.00, 241.76, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(669, 71.64, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-01', 29.01, 0.00, 'EFECTIVO', 'EFECTIVO-055180', 6, NULL, 0.00, 170.12, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(670, 80.24, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-07-01', 20.41, 0.00, 'EFECTIVO', 'EFECTIVO-067676', 7, NULL, 0.00, 89.88, 0.00, 100.65, 108, NULL, NULL, NULL, 100.65, NULL),
+(671, 89.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-08-01', 10.79, 0.00, 'EFECTIVO', 'EFECTIVO-082004', 8, NULL, 0.00, 0.00, 0.00, 100.67, 108, NULL, NULL, NULL, 100.67, NULL),
+(672, 98.58, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-13', 96.00, 0.00, 'EFECTIVO', 'EFECTIVO-676148', 1, NULL, 0.00, 701.42, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(673, 110.41, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-13', 84.17, 0.00, 'EFECTIVO', 'EFECTIVO-691083', 2, NULL, 0.00, 591.01, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(674, 123.66, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-13', 70.92, 0.00, 'EFECTIVO', 'EFECTIVO-712212', 3, NULL, 0.00, 467.35, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(675, 138.50, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-13', 56.08, 0.00, 'EFECTIVO', 'EFECTIVO-723644', 4, NULL, 0.00, 328.85, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(676, 155.12, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-13', 39.46, 0.00, 'EFECTIVO', 'EFECTIVO-735572', 5, NULL, 0.00, 173.73, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(677, 173.73, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-13', 20.85, 0.00, 'EFECTIVO', 'EFECTIVO-661180', 6, NULL, 0.00, 0.00, 0.00, 194.58, 109, NULL, NULL, NULL, 194.58, NULL),
+(678, 64.55, 0.00, 0, b'0', 'MORA', NULL, '2026-01-01', 117.00, 0.00, NULL, NULL, 1, NULL, 78.00, 1235.45, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(679, 70.36, 0.00, 0, b'0', 'MORA', NULL, '2026-02-01', 111.19, 0.00, NULL, NULL, 2, NULL, 78.00, 1165.09, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(680, 76.69, 0.00, 0, b'0', 'MORA', NULL, '2026-03-01', 104.86, 0.00, NULL, NULL, 3, NULL, 78.00, 1088.40, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(681, 83.59, 0.00, 0, b'0', 'MORA', NULL, '2026-04-01', 97.96, 0.00, NULL, NULL, 4, NULL, 78.00, 1004.81, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(682, 91.12, 0.00, 0, b'0', 'MORA', NULL, '2026-05-01', 90.43, 0.00, NULL, NULL, 5, NULL, 78.00, 913.69, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(683, 99.32, 0.00, 0, b'0', 'MORA', NULL, '2026-06-01', 82.23, 0.00, NULL, NULL, 6, NULL, 78.00, 814.37, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(684, 108.26, 0.00, 0, b'0', 'MORA', NULL, '2026-07-01', 73.29, 0.00, NULL, NULL, 7, NULL, 78.00, 706.11, 0.00, 259.55, 110, NULL, NULL, NULL, NULL, NULL),
+(685, 118.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-01', 63.55, 0.00, NULL, NULL, 8, NULL, 0.00, 588.11, 0.00, 181.55, 110, NULL, NULL, NULL, NULL, NULL),
+(686, 128.62, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-01', 52.93, 0.00, NULL, NULL, 9, NULL, 0.00, 459.49, 0.00, 181.55, 110, NULL, NULL, NULL, NULL, NULL),
+(687, 140.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-01', 41.35, 0.00, NULL, NULL, 10, NULL, 0.00, 319.29, 0.00, 181.55, 110, NULL, NULL, NULL, NULL, NULL),
+(688, 152.81, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-01', 28.74, 0.00, NULL, NULL, 11, NULL, 0.00, 166.48, 0.00, 181.55, 110, NULL, NULL, NULL, NULL, NULL),
+(689, 166.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-01', 14.98, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 181.46, 110, NULL, NULL, NULL, NULL, NULL),
+(690, 49.65, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-01-31', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-428751', 1, NULL, 0.00, 950.35, 0.00, 199.65, 111, NULL, NULL, NULL, 199.65, NULL),
+(691, 54.12, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-02-28', 85.53, 0.00, 'EFECTIVO', 'EFECTIVO-488336', 2, NULL, 0.00, 896.23, 0.00, 196.65, 111, NULL, NULL, NULL, 196.65, NULL),
+(692, 58.99, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-03-31', 80.66, 0.00, 'EFECTIVO', 'EFECTIVO-543080', 3, NULL, 0.00, 837.24, 0.00, 193.65, 111, NULL, NULL, NULL, 193.65, NULL),
+(693, 64.30, 0.00, 0, b'0', 'MORA', NULL, '2026-04-30', 75.35, 0.00, NULL, NULL, 4, NULL, 50.00, 772.94, 0.00, 189.65, 111, NULL, NULL, NULL, NULL, NULL),
+(694, 70.09, 0.00, 0, b'0', 'MORA', NULL, '2026-05-31', 69.56, 0.00, NULL, NULL, 5, NULL, 50.00, 702.85, 0.00, 189.65, 111, NULL, NULL, NULL, NULL, NULL),
+(695, 76.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-30', 63.26, 0.00, NULL, NULL, 6, NULL, 0.00, 626.46, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(696, 83.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-31', 56.38, 0.00, NULL, NULL, 7, NULL, 0.00, 543.19, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(697, 90.76, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-31', 48.89, 0.00, NULL, NULL, 8, NULL, 0.00, 452.43, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(698, 98.93, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-30', 40.72, 0.00, NULL, NULL, 9, NULL, 0.00, 353.50, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(699, 107.83, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-31', 31.82, 0.00, NULL, NULL, 10, NULL, 0.00, 245.67, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(700, 117.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-30', 22.11, 0.00, NULL, NULL, 11, NULL, 0.00, 128.13, 0.00, 139.65, 111, NULL, NULL, NULL, NULL, NULL),
+(701, 128.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-31', 11.53, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 139.66, 111, NULL, NULL, NULL, NULL, NULL),
+(702, 49.65, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-24', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-533485', 1, NULL, 0.00, 950.35, 0.00, 139.65, 112, NULL, NULL, NULL, 139.65, NULL),
+(703, 54.12, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-24', 85.53, 0.00, 'EFECTIVO', 'EFECTIVO-545948', 2, NULL, 0.00, 896.23, 0.00, 139.65, 112, NULL, NULL, NULL, 139.65, NULL),
+(704, 58.99, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-24', 80.66, 0.00, 'EFECTIVO', 'EFECTIVO-556910', 3, NULL, 0.00, 837.24, 0.00, 139.65, 112, NULL, NULL, NULL, 139.65, NULL),
+(705, 64.30, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-24', 75.35, 0.00, 'EFECTIVO', 'EFECTIVO-569237', 4, NULL, 0.00, 772.94, 0.00, 139.65, 112, NULL, NULL, NULL, 139.65, NULL),
+(706, 70.09, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-24', 69.56, 0.00, 'EFECTIVO', 'EFECTIVO-581013', 5, NULL, 0.00, 702.85, 0.00, 139.65, 112, NULL, NULL, NULL, 139.65, NULL),
+(707, 76.39, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2026-06-24', 63.26, 0.00, 'YAPE', '10029929', 6, NULL, 0.00, 626.46, 0.00, 139.65, 112, NULL, NULL, '/uploads/user-41578354/comprobantes/1782404655329_WhatsApp_Image_2026-06-25_at_10_47_24_AM.jpeg', 139.65, NULL),
+(708, 83.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-24', 56.38, 0.00, NULL, NULL, 7, NULL, 0.00, 543.19, 0.00, 139.65, 112, NULL, NULL, NULL, NULL, NULL),
+(709, 90.76, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-24', 48.89, 0.00, NULL, NULL, 8, NULL, 0.00, 452.43, 0.00, 139.65, 112, NULL, NULL, NULL, NULL, NULL),
+(710, 98.93, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-24', 40.72, 0.00, NULL, NULL, 9, NULL, 0.00, 353.50, 0.00, 139.65, 112, NULL, NULL, NULL, NULL, NULL),
+(711, 107.83, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-24', 31.82, 0.00, NULL, NULL, 10, NULL, 0.00, 245.67, 0.00, 139.65, 112, NULL, NULL, NULL, NULL, NULL),
+(712, 117.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-24', 22.11, 0.00, NULL, NULL, 11, NULL, 0.00, 128.13, 0.00, 139.65, 112, NULL, NULL, NULL, NULL, NULL),
+(713, 128.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-24', 11.53, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 139.66, 112, NULL, NULL, NULL, NULL, NULL),
+(714, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-12-02', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 0.00, 0.00, 345.00, 113, NULL, NULL, NULL, NULL, NULL),
+(715, 58.28, 0.00, 0, b'0', 'MORA', NULL, '2025-03-21', 120.00, 0.00, NULL, NULL, 1, NULL, 48.00, 741.72, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(716, 67.02, 0.00, 0, b'0', 'MORA', NULL, '2025-04-21', 111.26, 0.00, NULL, NULL, 2, NULL, 48.00, 674.70, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(717, 77.07, 0.00, 0, b'0', 'MORA', NULL, '2025-05-21', 101.21, 0.00, NULL, NULL, 3, NULL, 48.00, 597.63, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(718, 88.64, 0.00, 0, b'0', 'MORA', NULL, '2025-06-21', 89.64, 0.00, NULL, NULL, 4, NULL, 48.00, 508.99, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(719, 101.93, 0.00, 0, b'0', 'MORA', NULL, '2025-07-21', 76.35, 0.00, NULL, NULL, 5, NULL, 48.00, 407.06, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(720, 117.22, 0.00, 0, b'0', 'MORA', NULL, '2025-08-21', 61.06, 0.00, NULL, NULL, 6, NULL, 48.00, 289.84, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(721, 134.80, 0.00, 0, b'0', 'MORA', NULL, '2025-09-21', 43.48, 0.00, NULL, NULL, 7, NULL, 48.00, 155.04, 0.00, 226.28, 114, NULL, NULL, NULL, NULL, NULL),
+(722, 155.04, 0.00, 0, b'0', 'MORA', NULL, '2025-10-21', 23.26, 0.00, NULL, NULL, 8, NULL, 48.00, 0.00, 0.00, 226.30, 114, NULL, NULL, NULL, NULL, NULL),
+(723, 139.53, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-10-10', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-345637', 1, NULL, 0.00, 160.47, 0.00, 184.53, 115, NULL, NULL, NULL, 184.53, NULL),
+(724, 160.47, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-11-10', 24.07, 0.00, 'EFECTIVO', 'EFECTIVO-364501', 2, NULL, 0.00, 0.00, 0.00, 184.54, 115, NULL, NULL, NULL, 184.54, NULL),
+(725, 143.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-03-20', 75.00, 0.00, NULL, NULL, 1, NULL, 0.00, 356.01, 0.00, 218.99, 116, NULL, NULL, NULL, NULL, NULL),
+(726, 165.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-20', 53.40, 0.00, NULL, NULL, 2, NULL, 0.00, 190.42, 0.00, 218.99, 116, NULL, NULL, NULL, NULL, NULL),
+(727, 190.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-05-20', 28.56, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 218.98, 116, NULL, NULL, NULL, NULL, NULL),
+(728, 139.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-03-15', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 117, NULL, NULL, NULL, NULL, NULL),
+(729, 160.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-15', 24.07, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 184.54, 117, NULL, NULL, NULL, NULL, NULL),
+(730, 139.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-03-07', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 118, NULL, NULL, NULL, NULL, NULL),
+(731, 160.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-04-07', 24.07, 0.00, NULL, NULL, 2, NULL, 0.00, 0.00, 0.00, 184.54, 118, NULL, NULL, NULL, NULL, NULL),
+(732, 143.99, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-03-04', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-353482', 1, NULL, 0.00, 356.01, 0.00, 218.99, 119, NULL, NULL, NULL, 218.99, NULL),
+(733, 165.59, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-04-04', 53.40, 0.00, 'EFECTIVO', 'EFECTIVO-368729', 2, NULL, 0.00, 190.42, 0.00, 218.99, 119, NULL, NULL, NULL, 218.99, NULL),
+(734, 190.42, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2025-05-04', 28.56, 0.00, 'EFECTIVO', 'EFECTIVO-384234', 3, NULL, 0.00, 0.00, 0.00, 218.98, 119, NULL, NULL, NULL, 218.98, NULL),
+(735, 90.67, 0.00, 124, b'0', 'PAGADO', '2026-06-22', '2026-02-05', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-186140', 1, NULL, 0.00, 909.33, 0.00, 180.67, 120, NULL, NULL, NULL, 180.67, NULL),
+(736, 98.83, 0.00, 96, b'0', 'PAGADO', '2026-06-22', '2026-03-05', 81.84, 0.00, 'EFECTIVO', 'EFECTIVO-197392', 2, NULL, 0.00, 810.50, 0.00, 180.67, 120, NULL, NULL, NULL, 180.67, NULL),
+(737, 107.72, 0.00, 65, b'0', 'PAGADO', '2026-06-22', '2026-04-05', 72.95, 0.00, 'EFECTIVO', 'EFECTIVO-210332', 3, NULL, 0.00, 702.78, 0.00, 180.67, 120, NULL, NULL, NULL, 180.67, NULL),
+(738, 117.42, 0.00, 35, b'0', 'PAGADO', '2026-06-22', '2026-05-05', 63.25, 0.00, 'EFECTIVO', 'EFECTIVO-175620', 4, NULL, 0.00, 585.36, 0.00, 180.67, 120, NULL, NULL, NULL, 180.67, NULL),
+(739, 127.99, 0.00, 4, b'0', 'PAGADO', '2026-06-22', '2026-06-05', 52.68, 0.00, 'EFECTIVO', 'EFECTIVO-162125', 5, NULL, 0.00, 457.37, 0.00, 180.67, 120, NULL, NULL, NULL, 180.67, NULL),
+(740, 139.51, 0.00, 1, b'0', 'MORA', NULL, '2026-07-05', 41.16, 0.00, NULL, NULL, 6, NULL, 0.00, 317.86, 0.00, 180.67, 120, NULL, NULL, NULL, NULL, NULL),
+(741, 152.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-05', 28.61, 0.00, NULL, NULL, 7, NULL, 0.00, 165.80, 0.00, 180.67, 120, NULL, NULL, NULL, NULL, NULL),
+(742, 165.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-05', 14.92, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 180.72, 120, NULL, NULL, NULL, NULL, NULL),
+(743, 93.53, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-31', 200.00, 0.00, 'EFECTIVO', 'EFECTIVO-367325', 1, NULL, 0.00, 1906.47, 0.00, 293.53, 121, NULL, NULL, NULL, 293.53, NULL),
+(744, 102.88, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-28', 190.65, 0.00, 'EFECTIVO', 'EFECTIVO-382860', 2, NULL, 0.00, 1803.59, 0.00, 293.53, 121, NULL, NULL, NULL, 293.53, NULL),
+(745, 113.17, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-31', 180.36, 0.00, 'EFECTIVO', 'EFECTIVO-392757', 3, NULL, 0.00, 1690.42, 0.00, 293.53, 121, NULL, NULL, NULL, 293.53, NULL),
+(746, 124.49, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-30', 169.04, 0.00, 'EFECTIVO', 'EFECTIVO-406012', 4, NULL, 0.00, 1565.93, 0.00, 293.53, 121, NULL, NULL, NULL, 293.53, NULL),
+(747, 136.94, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-31', 156.59, 0.00, 'EFECTIVO', 'EFECTIVO-418957', 5, NULL, 0.00, 1428.99, 0.00, 293.53, 121, NULL, NULL, NULL, 293.53, NULL),
+(748, 150.63, 0.00, 0, b'0', 'PAGADO', '2026-07-02', '2026-06-30', 142.90, 0.00, 'YAPE', '06903319', 6, NULL, 0.00, 1278.36, 0.00, 293.53, 121, NULL, NULL, '/uploads/user-70415059/comprobantes/1783001927770_WhatsApp_Image_2026-07-01_at_7_03_38_PM.jpeg', 293.53, NULL),
+(749, 165.69, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-31', 127.84, 0.00, NULL, NULL, 7, NULL, 0.00, 1112.67, 0.00, 293.53, 121, NULL, NULL, NULL, NULL, NULL),
+(750, 182.26, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-31', 111.27, 0.00, NULL, NULL, 8, NULL, 0.00, 930.41, 0.00, 293.53, 121, NULL, NULL, NULL, NULL, NULL),
+(751, 200.49, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-30', 93.04, 0.00, NULL, NULL, 9, NULL, 0.00, 729.92, 0.00, 293.53, 121, NULL, NULL, NULL, NULL, NULL),
+(752, 220.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-31', 72.99, 0.00, NULL, NULL, 10, NULL, 0.00, 509.38, 0.00, 293.53, 121, NULL, NULL, NULL, NULL, NULL),
+(753, 242.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-30', 50.94, 0.00, NULL, NULL, 11, NULL, 0.00, 266.79, 0.00, 293.53, 121, NULL, NULL, NULL, NULL, NULL),
+(754, 266.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-31', 26.68, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 293.47, 121, NULL, NULL, NULL, NULL, NULL),
+(755, 73.17, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-12', 108.00, 0.00, 'EFECTIVO', 'EFECTIVO-422819', 1, NULL, 0.00, 826.83, 0.00, 181.17, 123, NULL, NULL, NULL, 181.17, NULL),
+(756, 81.95, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-12', 99.22, 0.00, 'EFECTIVO', 'EFECTIVO-435756', 2, NULL, 0.00, 744.88, 0.00, 181.17, 123, NULL, NULL, NULL, 181.17, NULL),
+(757, 91.78, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-12', 89.39, 0.00, 'EFECTIVO', 'EFECTIVO-446196', 3, NULL, 0.00, 653.10, 0.00, 225.87, 123, NULL, NULL, NULL, 270.57, NULL),
+(758, 102.80, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-12', 78.37, 0.00, 'EFECTIVO', 'EFECTIVO-410036', 4, NULL, 0.00, 550.30, 0.00, 181.17, 123, NULL, NULL, NULL, 181.17, NULL),
+(759, 115.13, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-12', 66.04, 0.00, 'EFECTIVO', 'EFECTIVO-394460', 5, NULL, 0.00, 435.17, 0.00, 181.17, 123, NULL, NULL, NULL, 181.17, NULL),
+(760, 128.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-12', 52.22, 0.00, NULL, NULL, 6, NULL, 0.00, 306.22, 0.00, 181.17, 123, NULL, NULL, NULL, NULL, NULL),
+(761, 144.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-12', 36.75, 0.00, NULL, NULL, 7, NULL, 0.00, 161.80, 0.00, 181.17, 123, NULL, NULL, NULL, NULL, NULL),
+(762, 161.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-12', 19.42, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 181.22, 123, NULL, NULL, NULL, NULL, NULL),
+(763, 104.62, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-02-23', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-223196', 1, NULL, 0.00, 395.38, 0.00, 164.62, 124, NULL, NULL, NULL, 165.00, NULL),
+(764, 117.17, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-03-23', 47.45, 0.00, 'EFECTIVO', 'EFECTIVO-248690', 2, NULL, 0.00, 278.21, 0.00, 164.62, 124, NULL, NULL, NULL, 165.00, NULL),
+(765, 131.23, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-04-23', 33.39, 0.00, 'EFECTIVO', 'EFECTIVO-283738', 3, NULL, 0.00, 146.98, 0.00, 164.62, 124, NULL, NULL, NULL, 165.00, NULL),
+(766, 146.98, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-05-23', 17.64, 0.00, 'EFECTIVO', 'EFECTIVO-309714', 4, NULL, 0.00, 0.00, 0.00, 164.62, 124, NULL, NULL, NULL, 165.00, NULL),
+(779, 74.48, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-24', 135.00, 0.00, 'EFECTIVO', 'EFECTIVO-528564', 1, NULL, 0.00, 1425.52, 0.00, 299.48, 126, NULL, NULL, NULL, 389.48, NULL),
+(780, 81.18, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-24', 128.30, 0.00, 'EFECTIVO', 'EFECTIVO-539012', 2, NULL, 0.00, 1344.34, 0.00, 294.48, 126, NULL, NULL, NULL, 379.48, NULL),
+(781, 88.49, 0.00, 0, b'0', 'MORA', NULL, '2026-05-24', 120.99, 0.00, NULL, NULL, 3, NULL, 80.00, 1255.85, 0.00, 289.48, 126, NULL, NULL, NULL, NULL, NULL),
+(782, 96.45, 0.00, 0, b'0', 'MORA', NULL, '2026-06-24', 113.03, 0.00, NULL, NULL, 4, NULL, 80.00, 1159.40, 0.00, 289.48, 126, NULL, NULL, NULL, NULL, NULL),
+(783, 105.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-24', 104.35, 0.00, NULL, NULL, 5, NULL, 0.00, 1054.27, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(784, 114.60, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-24', 94.88, 0.00, NULL, NULL, 6, NULL, 0.00, 939.67, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(785, 124.91, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-24', 84.57, 0.00, NULL, NULL, 7, NULL, 0.00, 814.76, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(786, 136.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-24', 73.33, 0.00, NULL, NULL, 8, NULL, 0.00, 678.61, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(787, 148.41, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-24', 61.07, 0.00, NULL, NULL, 9, NULL, 0.00, 530.20, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(788, 161.76, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-24', 47.72, 0.00, NULL, NULL, 10, NULL, 0.00, 368.44, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(789, 176.32, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-24', 33.16, 0.00, NULL, NULL, 11, NULL, 0.00, 192.12, 0.00, 209.48, 126, NULL, NULL, NULL, NULL, NULL),
+(790, 192.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-24', 17.29, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 209.41, 126, NULL, NULL, NULL, NULL, NULL),
+(791, 105.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2026-04-06', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-920664', 1, NULL, 0.00, 395.38, 0.00, 165.00, 127, NULL, NULL, NULL, 165.00, NULL),
+(792, 117.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2026-05-06', 47.00, 0.00, 'EFECTIVO', 'EFECTIVO-977487', 2, NULL, 0.00, 278.21, 0.00, 187.70, 127, NULL, NULL, NULL, 70.00, NULL),
+(793, 131.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-06', 33.00, 0.00, NULL, NULL, 3, NULL, 23.70, 146.98, 0.00, 187.70, 127, NULL, NULL, NULL, NULL, NULL),
+(794, 147.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-06', 18.00, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 165.00, 127, NULL, NULL, NULL, NULL, NULL),
+(795, 90.67, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-12', 90.00, 0.00, 'EFECTIVO', 'EFECTIVO-523565', 1, NULL, 0.00, 909.33, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(796, 98.83, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-12', 81.84, 0.00, 'EFECTIVO', 'EFECTIVO-537884', 2, NULL, 0.00, 810.50, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(797, 107.72, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-12', 72.95, 0.00, 'EFECTIVO', 'EFECTIVO-551277', 3, NULL, 0.00, 702.78, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(798, 117.42, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-07-12', 63.25, 0.00, 'EFECTIVO', 'EFECTIVO-563588', 4, NULL, 0.00, 585.36, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(799, 127.99, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-08-12', 52.68, 0.00, 'EFECTIVO', 'EFECTIVO-576877', 5, NULL, 0.00, 457.37, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(800, 139.51, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-09-12', 41.16, 0.00, 'EFECTIVO', 'EFECTIVO-508212', 6, NULL, 0.00, 317.86, 0.00, 180.67, 128, NULL, NULL, NULL, 180.67, NULL),
+(801, 152.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-12', 28.61, 0.00, NULL, NULL, 7, NULL, 0.00, 165.80, 0.00, 180.67, 128, NULL, NULL, NULL, NULL, NULL),
+(802, 165.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-12', 14.92, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 180.72, 128, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cuotas` (`id`, `capital`, `comision`, `dias_atraso`, `es_gracia`, `estado_cuota`, `fecha_pago`, `fecha_vencimiento`, `interes`, `interes_mora`, `metodo_pago`, `numero_comprobante`, `numero_cuota`, `observacion`, `penalidad`, `saldo_restante`, `seguro`, `total_cuota`, `credito_id`, `cuota_siguiente_id`, `comentario_rechazo`, `imagen_comprobante`, `monto_pagado_cliente`, `cargo_refinanciamiento`) VALUES
+(803, 115.20, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-22', 135.00, 0.00, 'EFECTIVO', 'EFECTIVO-290621', 1, NULL, 0.00, 1384.80, 0.00, 250.20, 129, NULL, NULL, NULL, 250.20, NULL),
+(804, 125.57, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-06-22', 124.63, 0.00, 'EFECTIVO', 'EFECTIVO-574846', 2, NULL, 0.00, 1259.23, 0.00, 250.20, 129, NULL, NULL, NULL, 250.20, NULL),
+(805, 136.87, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-22', 113.33, 0.00, NULL, NULL, 3, NULL, 0.00, 1122.36, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(806, 149.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-22', 101.01, 0.00, NULL, NULL, 4, NULL, 0.00, 973.17, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(807, 162.61, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-22', 87.59, 0.00, NULL, NULL, 5, NULL, 0.00, 810.56, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(808, 177.25, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-22', 72.95, 0.00, NULL, NULL, 6, NULL, 0.00, 633.31, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(809, 193.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-22', 57.00, 0.00, NULL, NULL, 7, NULL, 0.00, 440.11, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(810, 210.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-22', 39.61, 0.00, NULL, NULL, 8, NULL, 0.00, 229.52, 0.00, 250.20, 129, NULL, NULL, NULL, NULL, NULL),
+(811, 229.52, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-22', 20.66, 0.00, NULL, NULL, 9, NULL, 0.00, 0.00, 0.00, 250.18, 129, NULL, NULL, NULL, NULL, NULL),
+(812, 98.58, 0.00, 0, b'0', 'MORA', NULL, '2026-04-14', 96.00, 0.00, NULL, NULL, 1, NULL, 48.00, 701.42, 0.00, 242.58, 130, NULL, NULL, NULL, NULL, NULL),
+(813, 110.41, 0.00, 0, b'0', 'MORA', NULL, '2026-05-14', 84.17, 0.00, NULL, NULL, 2, NULL, 48.00, 591.01, 0.00, 242.58, 130, NULL, NULL, NULL, NULL, NULL),
+(814, 123.66, 0.00, 0, b'0', 'MORA', NULL, '2026-06-14', 70.92, 0.00, NULL, NULL, 3, NULL, 48.00, 467.35, 0.00, 242.58, 130, NULL, NULL, NULL, NULL, NULL),
+(815, 138.50, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-14', 56.08, 0.00, NULL, NULL, 4, NULL, 0.00, 328.85, 0.00, 194.58, 130, NULL, NULL, NULL, NULL, NULL),
+(816, 155.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-14', 39.46, 0.00, NULL, NULL, 5, NULL, 0.00, 173.73, 0.00, 194.58, 130, NULL, NULL, NULL, NULL, NULL),
+(817, 173.73, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-14', 20.85, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 194.58, 130, NULL, NULL, NULL, NULL, NULL),
+(819, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-10-29', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-150712', 2, NULL, 0.00, 300.00, 0.00, 45.00, 93, NULL, NULL, NULL, 45.00, NULL),
+(820, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-11-29', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-169248', 3, NULL, 0.00, 300.00, 0.00, 45.00, 93, NULL, NULL, NULL, 45.00, NULL),
+(821, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2024-12-29', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-479469', 4, NULL, 0.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, 45.00, NULL),
+(822, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-01-29', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-518380', 5, NULL, 0.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, 45.00, NULL),
+(823, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-02-28', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-607621', 6, NULL, 0.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, 10.00, NULL),
+(824, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-28', 45.00, 0.00, NULL, NULL, 7, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(825, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-28', 45.00, 0.00, NULL, NULL, 8, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(826, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-28', 45.00, 0.00, NULL, NULL, 9, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(827, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-28', 45.00, 0.00, NULL, NULL, 10, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(828, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-28', 45.00, 0.00, NULL, NULL, 11, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(829, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-28', 45.00, 0.00, NULL, NULL, 12, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(830, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-28', 45.00, 0.00, NULL, NULL, 13, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(831, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-28', 45.00, 0.00, NULL, NULL, 14, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(832, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-28', 45.00, 0.00, NULL, NULL, 15, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(833, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-28', 45.00, 0.00, NULL, NULL, 16, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(834, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-28', 45.00, 0.00, NULL, NULL, 17, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(835, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-28', 45.00, 0.00, NULL, NULL, 18, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(836, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-28', 45.00, 0.00, NULL, NULL, 19, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(837, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-28', 45.00, 0.00, NULL, NULL, 20, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(838, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-28', 45.00, 0.00, NULL, NULL, 21, NULL, 10.00, 300.00, 0.00, 55.00, 93, NULL, NULL, NULL, NULL, NULL),
+(839, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-28', 45.00, 0.00, NULL, NULL, 22, NULL, 0.00, NULL, 0.00, 345.00, 93, NULL, NULL, NULL, NULL, NULL),
+(840, 45.59, 0.00, 0, b'0', 'MORA', NULL, '2026-05-04', 96.00, 0.00, NULL, NULL, 1, NULL, 48.00, 754.41, 0.00, 189.59, 131, NULL, NULL, NULL, NULL, NULL),
+(841, 51.06, 0.00, 0, b'0', 'MORA', NULL, '2026-06-04', 90.53, 0.00, NULL, NULL, 2, NULL, 48.00, 703.35, 0.00, 189.59, 131, NULL, NULL, NULL, NULL, NULL),
+(842, 57.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-04', 84.40, 0.00, NULL, NULL, 3, NULL, 0.00, 646.16, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(843, 64.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-04', 77.54, 0.00, NULL, NULL, 4, NULL, 0.00, 582.11, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(844, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-04', 69.85, 0.00, NULL, NULL, 5, NULL, 0.00, 510.37, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(845, 80.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-04', 61.24, 0.00, NULL, NULL, 6, NULL, 0.00, 430.02, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(846, 89.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-04', 51.60, 0.00, NULL, NULL, 7, NULL, 0.00, 340.03, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(847, 100.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-04', 40.80, 0.00, NULL, NULL, 8, NULL, 0.00, 239.24, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(848, 112.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-04', 28.71, 0.00, NULL, NULL, 9, NULL, 0.00, 126.36, 0.00, 141.59, 131, NULL, NULL, NULL, NULL, NULL),
+(849, 126.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-04', 15.16, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 141.52, 131, NULL, NULL, NULL, NULL, NULL),
+(850, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-03-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-110693', 1, NULL, 0.00, 0.00, 0.00, 45.00, 132, 22915, NULL, NULL, 45.00, NULL),
+(853, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-06-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-628594', 1, NULL, 0.00, 0.00, 0.00, 45.00, 135, NULL, NULL, NULL, 45.00, NULL),
+(854, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-06-01', 120.00, 0.00, NULL, NULL, 1, NULL, 0.00, 0.00, 0.00, 120.00, 136, NULL, NULL, NULL, NULL, NULL),
+(881, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-07-09', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 0.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(882, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-08-09', 100.00, 0.00, NULL, NULL, 2, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(883, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-09-09', 100.00, 0.00, NULL, NULL, 3, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(884, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-10-09', 100.00, 0.00, NULL, NULL, 4, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(885, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-11-09', 100.00, 0.00, NULL, NULL, 5, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(886, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-12-09', 100.00, 0.00, NULL, NULL, 6, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(887, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-01-09', 100.00, 0.00, NULL, NULL, 7, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(888, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-02-09', 100.00, 0.00, NULL, NULL, 8, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(889, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-03-09', 100.00, 0.00, NULL, NULL, 9, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(890, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-04-09', 100.00, 0.00, NULL, NULL, 10, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(891, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-05-09', 100.00, 0.00, NULL, NULL, 11, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(892, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-06-09', 100.00, 0.00, NULL, NULL, 12, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(893, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-07-09', 100.00, 0.00, NULL, NULL, 13, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(894, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-08-09', 100.00, 0.00, NULL, NULL, 14, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(895, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-09-09', 100.00, 0.00, NULL, NULL, 15, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(896, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-10-09', 100.00, 0.00, NULL, NULL, 16, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(897, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-11-09', 100.00, 0.00, NULL, NULL, 17, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(898, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-09', 100.00, 0.00, NULL, NULL, 18, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(899, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-01-09', 100.00, 0.00, NULL, NULL, 19, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(900, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-02-09', 100.00, 0.00, NULL, NULL, 20, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(901, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-03-09', 100.00, 0.00, NULL, NULL, 21, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(902, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-04-09', 100.00, 0.00, NULL, NULL, 22, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(903, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-05-09', 100.00, 0.00, NULL, NULL, 23, NULL, 0.00, 1000.00, 0.00, 100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(904, 1000.00, 0.00, 0, b'0', 'PAGADO', NULL, '2026-06-09', 100.00, 0.00, NULL, NULL, 24, NULL, 0.00, 1000.00, 0.00, 1100.00, 137, NULL, NULL, NULL, NULL, NULL),
+(905, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-01-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-856590', 1, NULL, 0.00, 0.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(906, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-05-27', 36.00, 0.00, 'EFECTIVO', 'EFECTIVO-494475', 7, NULL, 0.00, 104.39, 0.00, 36.00, 33, NULL, NULL, NULL, 36.00, NULL),
+(907, 91.39, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-12-30', 120.00, 0.00, 'EFECTIVO', 'EFECTIVO-536266', 1, NULL, 0.00, 708.61, 0.00, 211.39, 139, NULL, NULL, NULL, 211.39, NULL),
+(908, 105.10, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-01-30', 106.29, 0.00, 'EFECTIVO', 'EFECTIVO-564741', 2, NULL, 0.00, 603.51, 0.00, 259.39, 139, NULL, NULL, NULL, 307.39, NULL),
+(909, 120.86, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-02-28', 90.53, 0.00, 'EFECTIVO', 'EFECTIVO-625467', 3, NULL, 0.00, 482.65, 0.00, 259.39, 139, NULL, NULL, NULL, 307.39, NULL),
+(910, 138.99, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-03-30', 72.40, 0.00, 'EFECTIVO', 'EFECTIVO-674212', 4, NULL, 0.00, 343.66, 0.00, 259.39, 139, NULL, NULL, NULL, 307.39, NULL),
+(911, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-30', 0.00, 0.00, NULL, NULL, 5, NULL, 48.00, 183.82, 0.00, 48.00, 139, NULL, NULL, NULL, NULL, NULL),
+(912, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-30', 0.00, 0.00, NULL, NULL, 6, NULL, 48.00, 0.00, 0.00, 48.00, 139, NULL, NULL, NULL, NULL, NULL),
+(913, 87.44, 0.00, 0, b'0', 'MORA', NULL, '2024-08-01', 100.00, 0.00, NULL, NULL, 1, NULL, 30.00, 912.56, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(914, 96.18, 0.00, 0, b'0', 'MORA', NULL, '2024-09-01', 91.26, 0.00, NULL, NULL, 2, NULL, 30.00, 816.38, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(915, 105.80, 0.00, 0, b'0', 'MORA', NULL, '2024-10-01', 81.64, 0.00, NULL, NULL, 3, NULL, 30.00, 710.58, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(916, 116.38, 0.00, 0, b'0', 'MORA', NULL, '2024-11-01', 71.06, 0.00, NULL, NULL, 4, NULL, 30.00, 594.20, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(917, 128.02, 0.00, 0, b'0', 'MORA', NULL, '2024-12-01', 59.42, 0.00, NULL, NULL, 5, NULL, 30.00, 466.18, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(918, 140.82, 0.00, 0, b'0', 'MORA', NULL, '2025-01-01', 46.62, 0.00, NULL, NULL, 6, NULL, 30.00, 325.36, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(919, 154.90, 0.00, 0, b'0', 'MORA', NULL, '2025-02-01', 32.54, 0.00, NULL, NULL, 7, NULL, 30.00, 170.46, 0.00, 217.44, 140, NULL, NULL, NULL, NULL, NULL),
+(920, 170.46, 0.00, 0, b'0', 'MORA', NULL, '2025-03-01', 17.05, 0.00, NULL, NULL, 8, NULL, 30.00, 0.00, 0.00, 217.51, 140, NULL, NULL, NULL, NULL, NULL),
+(921, 0.00, 0.00, 0, b'0', 'PAGADO', NULL, '2024-08-03', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 0.00, 0.00, 45.00, 141, NULL, NULL, NULL, NULL, NULL),
+(922, 139.53, 0.00, 0, b'0', 'PAGADO', NULL, '2024-08-25', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 160.47, 0.00, 184.53, 142, NULL, NULL, NULL, NULL, NULL),
+(923, 160.47, 0.00, 0, b'0', 'MORA', NULL, '2024-09-25', 24.07, 0.00, NULL, NULL, 2, NULL, 10.00, 0.00, 0.00, 194.54, 142, NULL, NULL, NULL, NULL, NULL),
+(924, 70.14, 0.00, 0, b'0', 'PAGADO', NULL, '2024-12-01', 150.00, 0.00, NULL, NULL, 1, NULL, 90.00, 1429.86, 0.00, 310.14, 143, NULL, NULL, NULL, NULL, NULL),
+(925, 77.15, 0.00, 0, b'0', 'PAGADO', NULL, '2025-01-01', 142.99, 0.00, NULL, NULL, 2, NULL, 90.00, 1352.71, 0.00, 310.14, 143, NULL, NULL, NULL, NULL, NULL),
+(926, 0.14, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-02-01', 135.27, 0.00, 'EFECTIVO', 'EFECTIVO-452162', 3, NULL, 0.00, 1267.84, 0.00, 310.14, 143, NULL, NULL, NULL, 310.00, NULL),
+(927, 0.14, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-03-01', 126.78, 0.00, 'EFECTIVO', 'EFECTIVO-565667', 4, NULL, 0.00, 1174.48, 0.00, 310.14, 143, NULL, NULL, NULL, 310.00, NULL),
+(928, 0.14, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-04-01', 117.45, 0.00, 'EFECTIVO', 'EFECTIVO-610610', 5, NULL, 0.00, 1071.79, 0.00, 310.14, 143, NULL, NULL, NULL, 310.00, NULL),
+(929, 0.14, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-05-01', 107.18, 0.00, 'EFECTIVO', 'EFECTIVO-664610', 6, NULL, 0.00, 958.83, 0.00, 310.14, 143, NULL, NULL, NULL, 310.00, NULL),
+(930, 124.26, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-06-01', 95.88, 0.00, 'EFECTIVO', 'EFECTIVO-685419', 7, NULL, 0.00, 834.57, 0.00, 310.14, 143, NULL, NULL, NULL, 310.14, NULL),
+(931, 136.68, 0.00, 0, b'0', 'PAGADO', NULL, '2025-07-01', 83.46, 0.00, NULL, NULL, 8, NULL, 0.00, 697.89, 0.00, 220.14, 143, NULL, NULL, NULL, NULL, NULL),
+(932, 150.35, 0.00, 0, b'0', 'PAGADO', NULL, '2025-08-01', 69.79, 0.00, NULL, NULL, 9, NULL, 0.00, 547.54, 0.00, 220.14, 143, NULL, NULL, NULL, NULL, NULL),
+(933, 165.39, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-09-01', 54.75, 0.00, 'EFECTIVO', 'EFECTIVO-720034', 10, NULL, 0.00, 382.15, 0.00, 252.96, 143, NULL, NULL, NULL, 253.00, NULL),
+(934, 181.92, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-10-01', 38.22, 0.00, 'EFECTIVO', 'EFECTIVO-291626', 11, NULL, 0.00, 200.23, 0.00, 252.96, 143, NULL, NULL, NULL, 253.00, NULL),
+(935, 0.25, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2025-11-01', 20.02, 0.00, 'EFECTIVO', 'EFECTIVO-661307', 12, NULL, 0.00, 0.00, 0.00, 220.25, 143, NULL, NULL, NULL, 220.00, NULL),
+(936, 187.05, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-12-15', 400.00, 0.00, 'EFECTIVO', 'EFECTIVO-023509', 1, NULL, 0.00, 3812.95, 0.00, 587.05, 144, NULL, NULL, NULL, 587.05, NULL),
+(937, 205.75, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-01-15', 381.30, 0.00, 'EFECTIVO', 'EFECTIVO-038206', 2, NULL, 0.00, 3607.20, 0.00, 587.05, 144, NULL, NULL, NULL, 587.05, NULL),
+(938, 226.33, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-02-15', 360.72, 0.00, 'EFECTIVO', 'EFECTIVO-054758', 3, NULL, 0.00, 3380.87, 0.00, 587.05, 144, NULL, NULL, NULL, 587.05, NULL),
+(939, 150.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-03-15', 338.00, 0.00, 'EFECTIVO', 'EFECTIVO-937017', 4, NULL, 0.00, 3131.91, 0.00, 737.00, 144, NULL, NULL, NULL, 587.00, NULL),
+(940, 175.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-04-15', 313.00, 0.00, 'EFECTIVO', 'EFECTIVO-044537', 5, NULL, 0.00, 2858.05, 0.00, 762.00, 144, NULL, NULL, NULL, 587.00, NULL),
+(941, 301.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-05-15', 286.00, 0.00, 'EFECTIVO', 'EFECTIVO-180729', 6, NULL, 0.00, 2556.81, 0.00, 775.00, 144, NULL, NULL, NULL, 110.00, NULL),
+(942, 331.37, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-06-15', 255.68, 0.00, 'EFECTIVO', 'EFECTIVO-255430', 7, NULL, 0.00, 2225.44, 0.00, 587.05, 144, NULL, NULL, NULL, 587.05, NULL),
+(943, 365.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-07-15', 223.00, 0.00, 'EFECTIVO', 'EFECTIVO-331065', 8, NULL, 0.00, 1860.93, 0.00, 721.00, 144, NULL, NULL, NULL, 150.00, NULL),
+(944, 400.96, 0.00, 0, b'0', 'MORA', NULL, '2025-08-15', 186.09, 0.00, NULL, NULL, 9, NULL, 0.00, 1459.97, 0.00, 587.05, 144, NULL, NULL, NULL, NULL, NULL),
+(945, 441.05, 0.00, 0, b'0', 'MORA', NULL, '2025-09-15', 146.00, 0.00, NULL, NULL, 10, NULL, 87.00, 1018.92, 0.00, 674.05, 144, NULL, NULL, NULL, NULL, NULL),
+(946, 485.16, 0.00, 0, b'0', 'MORA', NULL, '2025-10-15', 101.89, 0.00, NULL, NULL, 11, NULL, 87.00, 533.76, 0.00, 674.05, 144, NULL, NULL, NULL, NULL, NULL),
+(947, 533.76, 0.00, 0, b'0', 'MORA', NULL, '2025-11-15', 53.38, 0.00, NULL, NULL, 12, NULL, 87.00, 0.00, 0.00, 674.14, 144, NULL, NULL, NULL, NULL, NULL),
+(948, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-01-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-179874', 1, NULL, 0.00, 0.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(949, 174.89, 0.00, 0, b'0', 'MORA', NULL, '2025-02-04', 200.00, 0.00, NULL, NULL, 1, NULL, 120.00, 1825.11, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(950, 192.38, 0.00, 0, b'0', 'MORA', NULL, '2025-03-04', 182.51, 0.00, NULL, NULL, 2, NULL, 120.00, 1632.73, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(951, 211.62, 0.00, 0, b'0', 'MORA', NULL, '2025-04-04', 163.27, 0.00, NULL, NULL, 3, NULL, 120.00, 1421.11, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(952, 232.78, 0.00, 0, b'0', 'MORA', NULL, '2025-05-04', 142.11, 0.00, NULL, NULL, 4, NULL, 120.00, 1188.33, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(953, 256.06, 0.00, 0, b'0', 'MORA', NULL, '2025-06-04', 118.83, 0.00, NULL, NULL, 5, NULL, 120.00, 932.27, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(954, 281.66, 0.00, 0, b'0', 'MORA', NULL, '2025-07-04', 93.23, 0.00, NULL, NULL, 6, NULL, 120.00, 650.61, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(955, 309.83, 0.00, 0, b'0', 'MORA', NULL, '2025-08-04', 65.06, 0.00, NULL, NULL, 7, NULL, 120.00, 340.78, 0.00, 494.89, 146, NULL, NULL, NULL, NULL, NULL),
+(956, 340.78, 0.00, 0, b'0', 'MORA', NULL, '2025-09-04', 34.08, 0.00, NULL, NULL, 8, NULL, 120.00, 0.00, 0.00, 494.86, 146, NULL, NULL, NULL, NULL, NULL),
+(957, 45.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-11', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 754.41, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(958, 51.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-11', 90.53, 0.00, NULL, NULL, 2, NULL, 0.00, 703.35, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(959, 57.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-11', 84.40, 0.00, NULL, NULL, 3, NULL, 0.00, 646.16, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(960, 64.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-11', 77.54, 0.00, NULL, NULL, 4, NULL, 0.00, 582.11, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(961, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-11', 69.85, 0.00, NULL, NULL, 5, NULL, 0.00, 510.37, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(962, 80.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-11', 61.24, 0.00, NULL, NULL, 6, NULL, 0.00, 430.02, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(963, 89.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-11', 51.60, 0.00, NULL, NULL, 7, NULL, 0.00, 340.03, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(964, 100.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-11', 40.80, 0.00, NULL, NULL, 8, NULL, 0.00, 239.24, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(965, 112.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-11', 28.71, 0.00, NULL, NULL, 9, NULL, 0.00, 126.36, 0.00, 141.59, 147, NULL, NULL, NULL, NULL, NULL),
+(966, 126.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-11', 15.16, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 141.52, 147, NULL, NULL, NULL, NULL, NULL),
+(22854, 31.48, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-02-12', 117.00, 0.00, 'EFECTIVO', 'EFECTIVO-785568', 1, NULL, 0.00, 1268.52, 0.00, 226.48, 122, NULL, NULL, NULL, 226.48, NULL),
+(22855, 34.31, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-03-12', 114.17, 0.00, 'EFECTIVO', 'EFECTIVO-836738', 2, NULL, 0.00, 1234.21, 0.00, 226.48, 122, NULL, NULL, NULL, 226.48, NULL),
+(22856, 37.40, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-12', 111.08, 0.00, 'EFECTIVO', 'EFECTIVO-240182', 3, NULL, 0.00, 1196.81, 0.00, 148.48, 122, NULL, NULL, NULL, 148.48, NULL),
+(22857, 40.77, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-12', 107.71, 0.00, 'EFECTIVO', 'EFECTIVO-252800', 4, NULL, 0.00, 1156.04, 0.00, 148.48, 122, NULL, NULL, NULL, 148.48, NULL),
+(22858, 44.44, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-12', 104.04, 0.00, 'YAPE', '80053EF06B1D', 5, NULL, 0.00, 1111.60, 0.00, 148.48, 122, NULL, NULL, '/uploads/user-10491297/comprobantes/1782140150599_WhatsApp_Image_2026-06-15_at_10_21_17_PM__1_.jpeg', 148.48, NULL),
+(22859, 48.44, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-12', 100.04, 0.00, NULL, NULL, 6, NULL, 0.00, 1063.16, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22860, 52.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-12', 95.68, 0.00, NULL, NULL, 7, NULL, 0.00, 1010.36, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22861, 57.55, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-12', 90.93, 0.00, NULL, NULL, 8, NULL, 0.00, 952.81, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22862, 62.73, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-12', 85.75, 0.00, NULL, NULL, 9, NULL, 0.00, 890.08, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22863, 68.37, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-12', 80.11, 0.00, NULL, NULL, 10, NULL, 0.00, 821.71, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22864, 74.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-12', 73.95, 0.00, NULL, NULL, 11, NULL, 0.00, 747.18, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22865, 81.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-12', 67.25, 0.00, NULL, NULL, 12, NULL, 0.00, 665.95, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22866, 88.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-12', 59.94, 0.00, NULL, NULL, 13, NULL, 0.00, 577.41, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22867, 96.51, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-12', 51.97, 0.00, NULL, NULL, 14, NULL, 0.00, 480.90, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22868, 105.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-12', 43.28, 0.00, NULL, NULL, 15, NULL, 0.00, 375.70, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22869, 114.67, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-12', 33.81, 0.00, NULL, NULL, 16, NULL, 0.00, 261.03, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22870, 124.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-12', 23.49, 0.00, NULL, NULL, 17, NULL, 0.00, 136.04, 0.00, 148.48, 122, NULL, NULL, NULL, NULL, NULL),
+(22871, 136.04, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-07-12', 12.24, 0.00, NULL, NULL, 18, NULL, 0.00, 0.00, 0.00, 148.28, 122, NULL, NULL, NULL, NULL, NULL),
+(22872, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-02-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-953357', 2, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22873, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-03-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-966221', 3, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22874, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-04-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-980557', 4, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22875, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-05-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-994485', 5, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22876, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-06-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-009398', 6, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22877, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-07-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-023421', 7, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22878, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-08-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-036758', 8, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22879, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-09-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-050949', 9, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22880, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-10-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-063205', 10, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22881, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-11-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-078382', 11, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22882, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2025-12-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-090709', 12, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22883, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-01-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-103661', 13, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22884, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-02-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-115142', 14, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22885, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-133934', 15, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22886, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-902045', 16, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22887, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-21', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-883470', 17, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, NULL, 100.00, NULL),
+(22888, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-23', '2026-06-21', 100.00, 0.00, 'YAPE', '11749326', 18, NULL, 0.00, 1000.00, 0.00, 100.00, 138, NULL, NULL, '/uploads/user-70421079/comprobantes/1782226195036_WhatsApp_Image_2026-06-22_at_1_29_40_PM.jpeg', 100.00, NULL),
+(22889, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-02-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-245322', 2, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22890, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-03-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-257780', 3, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22891, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-04-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-271274', 4, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22892, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-05-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-286570', 5, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22893, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-06-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-301059', 6, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22894, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-07-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-317579', 7, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22895, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-08-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-337642', 8, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22896, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-355570', 9, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22897, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-372779', 10, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22898, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-041666', 11, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22899, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-054243', 12, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22900, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-01-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-066571', 13, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22901, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-02-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-079763', 14, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22902, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-03-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-092611', 15, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22903, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-04-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-143044', 16, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22904, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2026-05-24', 30.00, 0.00, 'EFECTIVO', 'EFECTIVO-156266', 17, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, NULL, 30.00, NULL),
+(22905, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-06-24', 30.00, 0.00, 'YAPE', '87168783', 18, NULL, 0.00, 200.00, 0.00, 30.00, 145, NULL, NULL, '/uploads/user-75958326/comprobantes/1782480133280_WhatsApp_Image_2026-06-25_at_8_53_38_PM.jpeg', 30.00, NULL),
+(22906, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-07-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-741335', 2, NULL, 0.00, NULL, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(22908, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-23', 200.00, 0.00, NULL, NULL, 1, NULL, 78.00, 0.00, 0.00, 278.00, 150, NULL, NULL, NULL, NULL, NULL),
+(22909, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-23', 200.00, 0.00, NULL, NULL, 2, NULL, 78.00, 1300.00, 0.00, 278.00, 150, NULL, NULL, NULL, NULL, NULL),
+(22910, 0.00, 0.00, 1, b'0', 'MORA', NULL, '2026-06-23', 200.00, 0.00, NULL, NULL, 3, NULL, 78.00, 1300.00, 0.00, 278.00, 150, NULL, NULL, NULL, NULL, NULL),
+(22911, 104.62, 0.00, 0, b'0', 'PAGADO', NULL, '2025-12-12', 60.00, 0.00, NULL, NULL, 1, NULL, 30.00, 395.38, 0.00, 194.62, 104, NULL, NULL, NULL, NULL, NULL),
+(22912, 117.17, 0.00, 0, b'0', 'PAGADO', NULL, '2026-01-12', 47.45, 0.00, NULL, NULL, 2, NULL, 0.00, 278.21, 0.00, 164.62, 104, NULL, NULL, NULL, NULL, NULL),
+(22913, 131.23, 0.00, 0, b'0', 'PAGADO', NULL, '2026-02-12', 33.39, 0.00, NULL, NULL, 3, NULL, 17.00, 146.98, 0.00, 181.62, 104, NULL, NULL, NULL, NULL, NULL),
+(22914, 146.98, 0.00, 0, b'0', 'PAGADO', NULL, '2026-04-12', 17.64, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 164.62, 104, NULL, NULL, NULL, NULL, NULL),
+(22915, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-04-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-131086', 2, NULL, 0.00, NULL, 0.00, 45.00, 132, 22916, NULL, NULL, 45.00, NULL),
+(22916, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-05-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-151573', 3, NULL, 0.00, NULL, 0.00, 45.00, 132, 22917, NULL, NULL, 45.00, NULL),
+(22917, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-06-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-172581', 4, NULL, 0.00, NULL, 0.00, 45.00, 132, 22918, NULL, NULL, 45.00, NULL),
+(22918, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-07-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-250493', 5, NULL, 0.00, NULL, 0.00, 45.00, 132, 22919, NULL, NULL, 45.00, NULL),
+(22919, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-08-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-236598', 6, NULL, 0.00, NULL, 0.00, 45.00, 132, 22920, NULL, NULL, 45.00, NULL),
+(22920, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-09-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-214845', 7, NULL, 0.00, NULL, 0.00, 45.00, 132, 22921, NULL, NULL, 45.00, NULL),
+(22921, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2024-10-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-191130', 8, NULL, 0.00, NULL, 0.00, 55.00, 132, 22922, NULL, NULL, 55.00, NULL),
+(22922, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2024-11-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-498495', 9, NULL, 0.00, NULL, 0.00, 63.00, 132, 22923, NULL, NULL, 45.00, NULL),
+(22923, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2024-12-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-569431', 10, NULL, 0.00, NULL, 0.00, 63.00, 132, 22924, NULL, NULL, 45.00, NULL),
+(22924, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-01-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-658808', 11, NULL, 0.00, NULL, 0.00, 63.00, 132, 22925, NULL, NULL, 45.00, NULL),
+(22925, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-02-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-856471', 12, NULL, 0.00, NULL, 0.00, 63.00, 132, 22926, NULL, NULL, 45.00, NULL),
+(22926, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-03-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-908951', 13, NULL, 0.00, NULL, 0.00, 63.00, 132, 22927, NULL, NULL, 45.00, NULL),
+(22927, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-26', '2025-04-05', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-984479', 14, NULL, 0.00, NULL, 0.00, 63.00, 132, 22928, NULL, NULL, 45.00, NULL),
+(22928, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-05', 45.00, 18.00, NULL, NULL, 15, NULL, 0.00, NULL, 0.00, 63.00, 132, 22929, NULL, NULL, NULL, NULL),
+(22929, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-05', 45.00, 18.00, NULL, NULL, 16, NULL, 0.00, NULL, 0.00, 63.00, 132, 22930, NULL, NULL, NULL, NULL),
+(22930, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-05', 45.00, 18.00, NULL, NULL, 17, NULL, 0.00, NULL, 0.00, 63.00, 132, 22931, NULL, NULL, NULL, NULL),
+(22931, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-05', 45.00, 18.00, NULL, NULL, 18, NULL, 0.00, NULL, 0.00, 63.00, 132, 22932, NULL, NULL, NULL, NULL),
+(22932, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-05', 45.00, 18.00, NULL, NULL, 19, NULL, 0.00, NULL, 0.00, 63.00, 132, 22933, NULL, NULL, NULL, NULL),
+(22933, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-05', 45.00, 18.00, NULL, NULL, 20, NULL, 0.00, NULL, 0.00, 63.00, 132, 22934, NULL, NULL, NULL, NULL),
+(22934, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-05', 45.00, 18.00, NULL, NULL, 21, NULL, 0.00, NULL, 0.00, 63.00, 132, 22935, NULL, NULL, NULL, NULL),
+(22935, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-05', 45.00, 18.00, NULL, NULL, 22, NULL, 0.00, NULL, 0.00, 63.00, 132, 22936, NULL, NULL, NULL, NULL),
+(22936, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-05', 45.00, 18.00, NULL, NULL, 23, NULL, 0.00, NULL, 0.00, 63.00, 132, 22937, NULL, NULL, NULL, NULL),
+(22937, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-05', 45.00, 18.00, NULL, NULL, 24, NULL, 0.00, NULL, 0.00, 63.00, 132, 22938, NULL, NULL, NULL, NULL),
+(22938, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-05', 45.00, 18.00, NULL, NULL, 25, NULL, 0.00, NULL, 0.00, 63.00, 132, 22939, NULL, NULL, NULL, NULL),
+(22939, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-05', 45.00, 18.00, NULL, NULL, 26, NULL, 0.00, NULL, 0.00, 63.00, 132, 22940, NULL, NULL, NULL, NULL),
+(22940, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-05', 45.00, 18.00, NULL, NULL, 27, NULL, 0.00, NULL, 0.00, 63.00, 132, 22941, NULL, NULL, NULL, NULL),
+(22941, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-05', 45.00, 0.00, NULL, NULL, 28, NULL, 18.00, NULL, 0.00, 63.00, 132, NULL, NULL, NULL, NULL, NULL),
+(22978, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-03-22', 130.00, 0.00, 'EFECTIVO', 'EFECTIVO-471739', 1, NULL, 0.00, 0.00, 0.00, 208.00, 151, NULL, NULL, NULL, 286.00, NULL),
+(22979, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-04-22', 130.00, 0.00, 'EFECTIVO', 'EFECTIVO-484194', 2, NULL, 0.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, 286.00, NULL),
+(22980, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-05-22', 130.00, 0.00, 'EFECTIVO', 'EFECTIVO-500123', 3, NULL, 0.00, 1300.00, 0.00, 130.00, 151, NULL, NULL, NULL, 130.00, NULL),
+(22981, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-06-22', 130.00, 0.00, 'EFECTIVO', 'EFECTIVO-512811', 4, NULL, 0.00, 1300.00, 0.00, 130.00, 151, NULL, NULL, NULL, 130.00, NULL),
+(22982, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-07-22', 130.00, 0.00, NULL, NULL, 5, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22983, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-08-22', 130.00, 0.00, NULL, NULL, 6, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22984, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-09-22', 130.00, 0.00, NULL, NULL, 7, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22985, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-10-22', 130.00, 0.00, NULL, NULL, 8, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22986, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-11-22', 130.00, 0.00, NULL, NULL, 9, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22987, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-12-22', 130.00, 0.00, NULL, NULL, 10, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22988, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-01-22', 130.00, 0.00, NULL, NULL, 11, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22989, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-02-22', 130.00, 0.00, NULL, NULL, 12, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22990, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-03-22', 130.00, 0.00, NULL, NULL, 13, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22991, 0.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-04-22', 130.00, 0.00, NULL, NULL, 14, NULL, 78.00, 1300.00, 0.00, 208.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22992, 1300.00, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-05-22', 130.00, 0.00, NULL, NULL, 15, NULL, 0.00, 1300.00, 0.00, 1430.00, 151, NULL, NULL, NULL, NULL, NULL),
+(22993, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-05', 40.00, 0.00, NULL, NULL, 7, NULL, 24.00, 870.39, 0.00, 64.00, 46, NULL, NULL, NULL, NULL, NULL),
+(22994, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-05', 40.00, 0.00, NULL, NULL, 8, NULL, 24.00, 870.39, 0.00, 64.00, 46, NULL, NULL, NULL, NULL, NULL),
+(22995, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-05', 40.00, 0.00, NULL, NULL, 9, NULL, 24.00, 870.39, 0.00, 64.00, 46, NULL, NULL, NULL, NULL, NULL),
+(22996, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-05', 40.00, 0.00, NULL, NULL, 10, NULL, 24.00, 870.39, 0.00, 64.00, 46, NULL, NULL, NULL, NULL, NULL),
+(22997, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-271259', 2, NULL, 0.00, 300.00, 0.00, 45.00, 64, NULL, NULL, NULL, 45.00, NULL),
+(22998, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-11-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-286764', 3, NULL, 0.00, 300.00, 0.00, 45.00, 64, NULL, NULL, NULL, 45.00, NULL),
+(22999, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-21', 45.00, 0.00, NULL, NULL, 4, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23000, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-21', 45.00, 0.00, NULL, NULL, 5, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23001, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-21', 45.00, 0.00, NULL, NULL, 6, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23002, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-21', 45.00, 0.00, NULL, NULL, 7, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23003, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-21', 45.00, 0.00, NULL, NULL, 8, NULL, 18.00, 300.00, 18.00, 81.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23004, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-21', 45.00, 0.00, NULL, NULL, 9, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23005, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-21', 45.00, 0.00, NULL, NULL, 10, NULL, 18.00, 300.00, 0.00, 63.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23006, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-30', 72.45, 0.00, NULL, NULL, 7, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23007, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-30', 72.45, 0.00, NULL, NULL, 8, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23008, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-30', 72.45, 0.00, NULL, NULL, 9, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23009, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-30', 72.45, 0.00, NULL, NULL, 10, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23010, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-30', 72.45, 0.00, NULL, NULL, 11, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23011, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-30', 72.45, 0.00, NULL, NULL, 12, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23012, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-30', 72.45, 0.00, NULL, NULL, 13, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23013, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-30', 72.40, 0.00, NULL, NULL, 14, NULL, 28.00, 482.65, 0.00, 100.40, 139, NULL, NULL, NULL, NULL, NULL),
+(23014, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-28', 72.45, 0.00, NULL, NULL, 15, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23015, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-28', 72.45, 0.00, NULL, NULL, 16, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23016, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-28', 72.45, 0.00, NULL, NULL, 17, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23017, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-28', 72.45, 0.00, NULL, NULL, 18, NULL, 28.00, 482.65, 0.00, 100.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23018, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-28', 72.45, 0.00, NULL, NULL, 19, NULL, 0.00, 482.65, 0.00, 72.45, 139, NULL, NULL, NULL, NULL, NULL),
+(23019, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-01', 100.00, 0.00, NULL, NULL, 9, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23020, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-01', 100.00, 0.00, NULL, NULL, 10, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23021, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-01', 100.00, 0.00, NULL, NULL, 11, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23022, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-01', 100.00, 0.00, NULL, NULL, 12, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23023, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-01', 100.00, 0.00, NULL, NULL, 13, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23024, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-01', 100.00, 0.00, NULL, NULL, 14, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23025, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-01', 100.00, 0.00, NULL, NULL, 15, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23026, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-01', 100.00, 0.00, NULL, NULL, 16, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23027, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-01', 100.00, 0.00, NULL, NULL, 17, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23028, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-01', 100.00, 0.00, NULL, NULL, 18, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23029, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-01', 100.00, 0.00, NULL, NULL, 19, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23030, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-01', 100.00, 0.00, NULL, NULL, 20, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23031, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-01', 100.00, 0.00, NULL, NULL, 21, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23032, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-01', 100.00, 0.00, NULL, NULL, 22, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23033, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-01', 100.00, 0.00, NULL, NULL, 23, NULL, 30.00, 1000.00, 0.00, 130.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23034, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-01', 100.00, 0.00, NULL, NULL, 24, NULL, 0.00, 1000.00, 0.00, 100.00, 140, NULL, NULL, NULL, NULL, NULL),
+(23035, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-28', 75.00, 0.00, NULL, NULL, 6, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23036, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-28', 75.00, 0.00, NULL, NULL, 7, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23037, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-28', 75.00, 0.00, NULL, NULL, 8, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23038, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-28', 75.00, 0.00, NULL, NULL, 9, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23039, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-28', 75.00, 0.00, NULL, NULL, 10, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23040, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-28', 75.00, 0.00, NULL, NULL, 11, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23041, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-28', 75.00, 0.00, NULL, NULL, 12, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23042, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-28', 75.00, 0.00, NULL, NULL, 13, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23043, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-28', 75.00, 0.00, NULL, NULL, 14, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23044, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-28', 75.00, 0.00, NULL, NULL, 15, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23045, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-28', 75.00, 0.00, NULL, NULL, 16, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23046, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-28', 75.00, 0.00, NULL, NULL, 17, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23047, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-28', 75.00, 0.00, NULL, NULL, 18, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23048, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-28', 75.00, 0.00, NULL, NULL, 19, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23049, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-28', 75.00, 0.00, NULL, NULL, 20, NULL, 30.00, 242.48, 0.00, 105.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23050, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-28', 75.00, 0.00, NULL, NULL, 21, NULL, 0.00, 242.48, 0.00, 75.00, 96, NULL, NULL, NULL, NULL, NULL),
+(23051, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-09-03', 45.00, 0.00, NULL, NULL, 2, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23052, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-10-03', 45.00, 0.00, NULL, NULL, 3, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23053, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-11-03', 45.00, 0.00, NULL, NULL, 4, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23054, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-12-03', 45.00, 0.00, NULL, NULL, 5, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23055, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-01-03', 45.00, 0.00, NULL, NULL, 6, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cuotas` (`id`, `capital`, `comision`, `dias_atraso`, `es_gracia`, `estado_cuota`, `fecha_pago`, `fecha_vencimiento`, `interes`, `interes_mora`, `metodo_pago`, `numero_comprobante`, `numero_cuota`, `observacion`, `penalidad`, `saldo_restante`, `seguro`, `total_cuota`, `credito_id`, `cuota_siguiente_id`, `comentario_rechazo`, `imagen_comprobante`, `monto_pagado_cliente`, `cargo_refinanciamiento`) VALUES
+(23056, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-02-03', 45.00, 0.00, NULL, NULL, 7, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23057, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-03', 45.00, 0.00, NULL, NULL, 8, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23058, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-03', 45.00, 0.00, NULL, NULL, 9, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23059, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-03', 45.00, 0.00, NULL, NULL, 10, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23060, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-03', 45.00, 0.00, NULL, NULL, 11, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23061, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-03', 45.00, 0.00, NULL, NULL, 12, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23062, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-03', 45.00, 0.00, NULL, NULL, 13, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23063, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-03', 45.00, 0.00, NULL, NULL, 14, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23064, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-03', 45.00, 0.00, NULL, NULL, 15, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23065, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-03', 45.00, 0.00, NULL, NULL, 16, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23066, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-03', 45.00, 0.00, NULL, NULL, 17, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23067, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-03', 45.00, 0.00, NULL, NULL, 18, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23068, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-03', 45.00, 0.00, NULL, NULL, 19, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23069, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-03', 45.00, 0.00, NULL, NULL, 20, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23070, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-03', 45.00, 0.00, NULL, NULL, 21, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23071, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-03', 45.00, 0.00, NULL, NULL, 22, NULL, 10.00, 300.00, 0.00, 55.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23072, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-03', 45.00, 0.00, NULL, NULL, 23, NULL, 30.00, 300.00, 0.00, 75.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23073, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-03', 45.00, 0.00, NULL, NULL, 24, NULL, 0.00, 345.00, 0.00, 345.00, 141, NULL, NULL, NULL, NULL, NULL),
+(23074, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-10-25', 45.00, 0.00, NULL, NULL, 3, NULL, 10.00, 160.47, 0.00, 55.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23075, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-11-25', 45.00, 0.00, NULL, NULL, 4, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23076, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-12-25', 45.00, 0.00, NULL, NULL, 5, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23077, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-01-25', 45.00, 0.00, NULL, NULL, 6, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23078, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-02-25', 45.00, 0.00, NULL, NULL, 7, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23079, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-25', 45.00, 0.00, NULL, NULL, 8, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23080, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-25', 45.00, 0.00, NULL, NULL, 9, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23081, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-25', 45.00, 0.00, NULL, NULL, 10, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23082, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-25', 45.00, 0.00, NULL, NULL, 11, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23083, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-25', 45.00, 0.00, NULL, NULL, 12, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23084, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-25', 45.00, 0.00, NULL, NULL, 13, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23085, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-25', 45.00, 0.00, NULL, NULL, 14, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23086, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-25', 45.00, 0.00, NULL, NULL, 15, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23087, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-25', 45.00, 0.00, NULL, NULL, 16, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23088, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-25', 45.00, 0.00, NULL, NULL, 17, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23089, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-25', 45.00, 0.00, NULL, NULL, 18, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23090, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-25', 45.00, 0.00, NULL, NULL, 19, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23091, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-25', 45.00, 0.00, NULL, NULL, 20, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23092, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-25', 45.00, 0.00, NULL, NULL, 21, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23093, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-25', 45.00, 0.00, NULL, NULL, 22, NULL, 18.00, 160.47, 0.00, 63.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23094, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-25', 45.00, 0.00, NULL, NULL, 23, NULL, 0.00, 160.47, 0.00, 345.00, 142, NULL, NULL, NULL, NULL, NULL),
+(23095, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-07-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-659536', 2, NULL, 0.00, 300.00, 0.00, 45.00, 135, NULL, NULL, NULL, 45.00, NULL),
+(23096, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-08-21', 45.00, 0.00, 'EFECTIVO', 'EFECTIVO-681005', 3, NULL, 0.00, 300.00, 0.00, 45.00, 135, NULL, NULL, NULL, 45.00, NULL),
+(23097, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-09-21', 45.00, 0.00, NULL, NULL, 4, NULL, 10.00, 300.00, 0.00, 55.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23098, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-10-21', 45.00, 0.00, NULL, NULL, 5, NULL, 10.00, 300.00, 0.00, 55.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23099, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-11-21', 45.00, 0.00, NULL, NULL, 6, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23100, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-12-21', 45.00, 0.00, NULL, NULL, 7, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23101, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-01-21', 45.00, 0.00, NULL, NULL, 8, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23102, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-02-21', 45.00, 0.00, NULL, NULL, 9, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23103, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-21', 45.00, 0.00, NULL, NULL, 10, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23104, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-21', 45.00, 0.00, NULL, NULL, 11, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23105, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-21', 45.00, 0.00, NULL, NULL, 12, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23106, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-21', 45.00, 0.00, NULL, NULL, 13, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23107, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-21', 45.00, 0.00, NULL, NULL, 14, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23108, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-21', 45.00, 0.00, NULL, NULL, 15, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23109, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-21', 45.00, 0.00, NULL, NULL, 16, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23110, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-21', 45.00, 0.00, NULL, NULL, 17, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23111, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-21', 45.00, 0.00, NULL, NULL, 18, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23112, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-21', 45.00, 0.00, NULL, NULL, 19, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23113, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-21', 45.00, 0.00, NULL, NULL, 20, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23114, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-21', 45.00, 0.00, NULL, NULL, 21, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23115, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-21', 45.00, 0.00, NULL, NULL, 22, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23116, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-21', 45.00, 0.00, NULL, NULL, 23, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23117, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-21', 45.00, 0.00, NULL, NULL, 24, NULL, 18.00, 300.00, 0.00, 63.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23118, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-21', 45.00, 0.00, NULL, NULL, 25, NULL, 0.00, 601.00, 0.00, 345.00, 135, NULL, NULL, NULL, NULL, NULL),
+(23119, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-04', 200.00, 0.00, NULL, NULL, 9, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23120, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-04', 200.00, 0.00, NULL, NULL, 10, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23121, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-04', 200.00, 0.00, NULL, NULL, 11, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23122, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-04', 200.00, 0.00, NULL, NULL, 12, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23123, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-04', 200.00, 0.00, NULL, NULL, 13, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23124, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-04', 200.00, 0.00, NULL, NULL, 14, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23125, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-04', 200.00, 0.00, NULL, NULL, 15, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23126, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-04', 200.00, 0.00, NULL, NULL, 16, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23127, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-04', 200.00, 0.00, NULL, NULL, 17, NULL, 120.00, 2000.00, 0.00, 320.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23128, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-04', 200.00, 0.00, NULL, NULL, 18, NULL, 0.00, 2000.00, 0.00, 200.00, 146, NULL, NULL, NULL, NULL, NULL),
+(23129, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-21', 120.00, 0.00, NULL, NULL, 9, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23130, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-21', 120.00, 0.00, NULL, NULL, 10, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23131, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-21', 120.00, 0.00, NULL, NULL, 11, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23132, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-21', 120.00, 0.00, NULL, NULL, 12, NULL, 148.00, 800.00, 0.00, 268.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23133, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-21', 120.00, 0.00, NULL, NULL, 13, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23134, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-21', 120.00, 0.00, NULL, NULL, 14, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23135, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-21', 120.00, 0.00, NULL, NULL, 15, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23136, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-21', 120.00, 0.00, NULL, NULL, 16, NULL, 48.00, 800.00, 0.00, 168.00, 114, NULL, NULL, NULL, NULL, NULL),
+(23137, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-04-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-033996', 1, NULL, 0.00, 0.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23138, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-05-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-052084', 2, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23139, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-06-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-067220', 3, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23140, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-07-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-148238', 4, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23141, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-08-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-164173', 5, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23142, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-09-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-178852', 6, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23143, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-10-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-195860', 7, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23144, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-11-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-212091', 8, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23145, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-12-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-226404', 9, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23146, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-01-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-241076', 10, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23147, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-02-28', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-271068', 11, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23148, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-03-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-285724', 12, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23149, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-04-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-302565', 13, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23150, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-05-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-316300', 14, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23151, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-06-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-342582', 15, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23152, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-07-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-359620', 16, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23153, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-08-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-375885', 17, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23154, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-09-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-389804', 18, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23155, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-10-29', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-405060', 19, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, NULL, 75.00, NULL),
+(23156, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-29', 75.00, 0.00, NULL, NULL, 20, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23157, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-12-29', 75.00, 0.00, 'YAPE', '1150834', 21, NULL, 0.00, 500.00, 0.00, 75.00, 133, NULL, NULL, '/uploads/user-48076516/comprobantes/1781993538173_WhatsApp_Image_2026-06-16_at_10_43_09_AM.jpeg', 75.00, NULL),
+(23158, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-29', 75.00, 0.00, NULL, NULL, 22, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23159, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-28', 75.00, 0.00, NULL, NULL, 23, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23160, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-29', 75.00, 0.00, NULL, NULL, 24, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23161, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-29', 75.00, 0.00, NULL, NULL, 25, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23162, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-29', 75.00, 0.00, NULL, NULL, 26, NULL, 30.00, 500.00, 0.00, 105.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23165, 236.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2025-11-27', 60.00, 0.00, 'EFECTIVO', 'EFECTIVO-640895', 1, NULL, 30.00, 264.15, 0.00, 326.00, 74, NULL, NULL, NULL, 50.00, NULL),
+(23166, 264.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-27', 32.00, 0.00, NULL, NULL, 2, NULL, 30.00, 0.00, 0.00, 326.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23167, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-27', 60.00, 0.00, NULL, NULL, 3, NULL, 30.00, 500.00, 0.00, 90.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23168, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-27', 60.00, 0.00, NULL, NULL, 4, NULL, 30.00, 500.00, 0.00, 90.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23169, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-27', 60.00, 0.00, NULL, NULL, 5, NULL, 30.00, 500.00, 0.00, 90.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23170, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-27', 60.00, 0.00, NULL, NULL, 6, NULL, 30.00, 500.00, 0.00, 90.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23171, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-27', 60.00, 0.00, NULL, NULL, 7, NULL, 30.00, 500.00, 0.00, 90.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23172, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-27', 60.00, 0.00, NULL, NULL, 8, NULL, 0.00, 500.00, 0.00, 60.00, 74, NULL, NULL, NULL, NULL, NULL),
+(23173, 500.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-29', 75.00, 0.00, NULL, NULL, 27, NULL, 0.00, 500.00, 0.00, 575.00, 133, NULL, NULL, NULL, NULL, NULL),
+(23174, 61.61, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2027-01-06', 7.40, 0.00, NULL, NULL, 7, NULL, 0.00, NULL, 0.00, 69.01, 82, NULL, NULL, NULL, NULL, NULL),
+(23175, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-07-01', 120.00, 0.00, NULL, NULL, 2, NULL, 10.00, 800.00, 0.00, 130.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23176, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-08-01', 120.00, 0.00, NULL, NULL, 3, NULL, 10.00, 800.00, 0.00, 130.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23177, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-09-01', 120.00, 0.00, NULL, NULL, 4, NULL, 10.00, 800.00, 0.00, 130.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23178, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-10-01', 120.00, 0.00, NULL, NULL, 5, NULL, 10.00, 800.00, 0.00, 130.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23179, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-11-01', 120.00, 0.00, NULL, NULL, 6, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23180, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2024-12-01', 120.00, 0.00, NULL, NULL, 7, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23181, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-01-01', 120.00, 0.00, NULL, NULL, 8, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23182, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-02-01', 120.00, 0.00, NULL, NULL, 9, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23183, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-03-01', 120.00, 0.00, NULL, NULL, 10, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23184, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-04-01', 120.00, 0.00, NULL, NULL, 11, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23185, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-05-01', 120.00, 0.00, NULL, NULL, 12, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23186, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-01', 120.00, 0.00, NULL, NULL, 13, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23187, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-01', 120.00, 0.00, NULL, NULL, 14, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23188, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-08-01', 120.00, 0.00, NULL, NULL, 15, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23189, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-01', 120.00, 0.00, NULL, NULL, 16, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23190, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-01', 120.00, 0.00, NULL, NULL, 17, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23191, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-01', 120.00, 0.00, NULL, NULL, 18, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23192, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-01', 120.00, 0.00, NULL, NULL, 19, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23193, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-01', 120.00, 0.00, NULL, NULL, 20, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23194, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-01', 120.00, 0.00, NULL, NULL, 21, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23195, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-01', 120.00, 0.00, NULL, NULL, 22, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23196, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-01', 120.00, 0.00, NULL, NULL, 23, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23197, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-01', 120.00, 0.00, NULL, NULL, 24, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23198, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-01', 120.00, 0.00, NULL, NULL, 25, NULL, 48.00, 800.00, 0.00, 168.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23199, 800.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-01', 120.00, 0.00, NULL, NULL, 26, NULL, 0.00, 800.00, 0.00, 920.00, 136, NULL, NULL, NULL, NULL, NULL),
+(23200, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-15', 285.80, 0.00, NULL, NULL, 13, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23201, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-15', 285.80, 0.00, NULL, NULL, 14, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23202, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-15', 285.80, 0.00, NULL, NULL, 15, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23203, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-15', 285.80, 0.00, NULL, NULL, 16, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23204, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-15', 285.80, 0.00, NULL, NULL, 17, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23205, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-15', 285.80, 0.00, NULL, NULL, 18, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23206, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-15', 285.80, 0.00, NULL, NULL, 19, NULL, 87.00, 4000.00, 0.00, 372.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23207, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-15', 285.80, 0.00, NULL, NULL, 20, NULL, 0.00, 4000.00, 0.00, 285.80, 144, NULL, NULL, NULL, NULL, NULL),
+(23208, 148.17, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-16', 60.00, 0.00, NULL, NULL, 1, NULL, 0.00, 351.83, 0.00, 208.17, 152, NULL, NULL, NULL, NULL, NULL),
+(23209, 165.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-16', 42.22, 0.00, NULL, NULL, 2, NULL, 0.00, 185.88, 0.00, 208.17, 152, NULL, NULL, NULL, NULL, NULL),
+(23210, 185.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-16', 22.31, 0.00, NULL, NULL, 3, NULL, 0.00, 0.00, 0.00, 208.19, 152, NULL, NULL, NULL, NULL, NULL),
+(23211, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-04-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-601933', 1, NULL, 0.00, 0.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23212, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-05-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-615262', 2, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23213, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-06-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-629461', 3, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23214, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-07-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-675165', 4, NULL, 0.00, 3000.00, 0.00, 310.00, 134, NULL, NULL, NULL, 320.00, NULL),
+(23215, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-08-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-706125', 5, NULL, 0.00, 3000.00, 0.00, 310.00, 134, NULL, NULL, NULL, 320.00, NULL),
+(23216, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-09-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-746334', 6, NULL, 0.00, 3000.00, 0.00, 310.00, 134, NULL, NULL, NULL, 320.00, NULL),
+(23217, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2024-10-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-991087', 7, NULL, 0.00, 3000.00, 0.00, 310.00, 134, NULL, NULL, NULL, 310.00, NULL),
+(23218, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-11-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-777254', 8, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23219, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2024-12-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-821173', 9, NULL, 0.00, 3000.00, 0.00, 340.00, 134, NULL, NULL, NULL, 380.00, NULL),
+(23220, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-01-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-852573', 10, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23221, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-02-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-913414', 11, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23222, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-03-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-822641', 12, NULL, 0.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, 480.00, NULL),
+(23223, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-20', '2025-04-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-970837', 13, NULL, 0.00, 3000.00, 0.00, 300.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23224, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2025-05-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-115567', 14, NULL, 0.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, 300.00, NULL),
+(23225, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-06-19', 300.00, 0.00, NULL, NULL, 15, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23226, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-07-19', 300.00, 0.00, NULL, NULL, 16, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23227, 0.00, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-25', '2025-08-19', 300.00, 0.00, 'EFECTIVO', 'EFECTIVO-904616', 17, NULL, 0.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, 50.00, NULL),
+(23228, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-09-19', 300.00, 0.00, NULL, NULL, 18, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23229, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-10-19', 300.00, 0.00, NULL, NULL, 19, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23230, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-11-19', 300.00, 0.00, NULL, NULL, 20, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23231, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2025-12-19', 300.00, 0.00, NULL, NULL, 21, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23232, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-01-19', 300.00, 0.00, NULL, NULL, 22, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23233, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-02-19', 300.00, 0.00, NULL, NULL, 23, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23234, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-03-19', 300.00, 0.00, NULL, NULL, 24, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23235, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-19', 300.00, 0.00, NULL, NULL, 25, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23236, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-19', 300.00, 0.00, NULL, NULL, 26, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23237, 100.00, 0.00, 0, b'0', 'PAGADO', '2026-07-01', '2026-07-16', 12.00, 0.00, 'EFECTIVO', 'EFECTIVO-719737', 1, NULL, 0.00, 0.00, 0.00, 112.00, 153, NULL, NULL, NULL, 112.00, NULL),
+(23238, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-19', 300.00, 0.00, NULL, NULL, 27, NULL, 180.00, 3000.00, 0.00, 480.00, 134, NULL, NULL, NULL, NULL, NULL),
+(23239, 104.62, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-18', 60.00, 0.00, NULL, NULL, 1, NULL, 0.00, 395.38, 0.00, 164.62, 154, NULL, NULL, NULL, NULL, NULL),
+(23240, 117.17, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-18', 47.45, 0.00, NULL, NULL, 2, NULL, 0.00, 278.21, 0.00, 164.62, 154, NULL, NULL, NULL, NULL, NULL),
+(23241, 131.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-18', 33.39, 0.00, NULL, NULL, 3, NULL, 0.00, 146.98, 0.00, 164.62, 154, NULL, NULL, NULL, NULL, NULL),
+(23242, 146.98, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-18', 17.64, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 164.62, 154, NULL, NULL, NULL, NULL, NULL),
+(23243, 62.75, 0.00, 416, b'0', 'PAGADO', '2026-06-20', '2025-04-30', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-075171', 1, NULL, 0.00, 937.25, 0.00, 162.75, 148, NULL, NULL, NULL, 218.99, NULL),
+(23244, 69.02, 0.00, 386, b'0', 'PAGADO', '2026-06-20', '2025-05-30', 93.73, 0.00, 'EFECTIVO', 'EFECTIVO-115906', 2, NULL, 0.00, 868.23, 0.00, 162.75, 148, NULL, NULL, NULL, 214.84, NULL),
+(23245, 47.54, 0.00, 360, b'0', 'MORA', '2026-06-24', '2025-06-30', 86.82, 0.00, 'EFECTIVO', 'EFECTIVO-628424', 3, NULL, 0.00, 792.30, 0.00, 162.75, 148, NULL, NULL, NULL, 162.75, NULL),
+(23246, 83.52, 0.00, 325, b'0', 'MORA', NULL, '2025-07-30', 79.23, 0.00, NULL, NULL, 4, NULL, 42.53, 708.78, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23247, 91.87, 0.00, 294, b'0', 'MORA', NULL, '2025-08-30', 70.88, 0.00, NULL, NULL, 5, NULL, 37.01, 616.91, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23248, 101.06, 0.00, 263, b'0', 'MORA', NULL, '2025-09-30', 61.69, 0.00, NULL, NULL, 6, NULL, 30.95, 515.85, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23249, 111.16, 0.00, 233, b'0', 'MORA', NULL, '2025-10-30', 51.59, 0.00, NULL, NULL, 7, NULL, 24.28, 404.69, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23250, 122.28, 0.00, 202, b'0', 'MORA', NULL, '2025-11-30', 40.47, 0.00, NULL, NULL, 8, NULL, 16.94, 282.41, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23251, 134.51, 0.00, 172, b'0', 'MORA', NULL, '2025-12-30', 28.24, 0.00, NULL, NULL, 9, NULL, 8.87, 147.90, 0.00, 162.75, 148, NULL, NULL, NULL, NULL, NULL),
+(23252, 147.90, 0.00, 141, b'0', 'MORA', NULL, '2026-01-30', 14.79, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 162.69, 148, NULL, NULL, NULL, NULL, NULL),
+(23253, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-08-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-757296', 3, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23254, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-09-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-774542', 4, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23255, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-10-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-796546', 5, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23256, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-11-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-814311', 6, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23257, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2025-12-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-828246', 7, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23258, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2026-01-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-846686', 8, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23259, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2026-02-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-863976', 9, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23260, 0.00, 0.00, 0, b'0', 'PAGADO', '2026-06-25', '2026-03-27', 75.00, 0.00, 'EFECTIVO', 'EFECTIVO-880312', 10, NULL, 0.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, 105.00, NULL),
+(23261, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-04-27', 75.00, 0.00, NULL, NULL, 11, NULL, 30.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, NULL, NULL),
+(23262, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-05-27', 75.00, 0.00, NULL, NULL, 12, NULL, 30.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, NULL, NULL),
+(23263, 0.00, 0.00, 0, b'0', 'MORA', NULL, '2026-06-27', 75.00, 0.00, NULL, NULL, 13, NULL, 30.00, 500.00, 0.00, 105.00, 79, NULL, NULL, NULL, NULL, NULL),
+(23276, 99.30, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-03-03', 180.00, 0.00, 'EFECTIVO', 'EFECTIVO-080133', 1, NULL, 0.00, 1900.70, 0.00, 279.30, 125, NULL, NULL, NULL, 279.30, NULL),
+(23277, 108.24, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-04-03', 171.06, 0.00, 'EFECTIVO', 'EFECTIVO-091453', 2, NULL, 0.00, 1792.46, 0.00, 279.30, 125, NULL, NULL, NULL, 279.30, NULL),
+(23278, 117.98, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-05-03', 161.32, 0.00, 'EFECTIVO', 'EFECTIVO-105286', 3, NULL, 0.00, 1674.48, 0.00, 279.30, 125, NULL, NULL, NULL, 279.30, NULL),
+(23279, 128.60, 0.00, 0, b'0', 'PAGADO', '2026-06-22', '2026-06-03', 150.70, 0.00, 'EFECTIVO', 'EFECTIVO-065357', 4, NULL, 0.00, 1545.88, 0.00, 279.30, 125, NULL, NULL, NULL, 279.30, NULL),
+(23280, 140.17, 0.00, 0, b'0', 'PAGADO', '2026-07-06', '2026-07-03', 139.13, 0.00, 'YAPE', '31502805', 5, NULL, 0.00, 1405.71, 0.00, 279.30, 125, NULL, NULL, '/uploads/user-00831340/comprobantes/1783343707590_WhatsApp_Image_2026-07-05_at_10_59_19_PM.jpeg', 279.30, NULL),
+(23281, 152.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-03', 126.51, 0.00, NULL, NULL, 6, NULL, 0.00, 1252.92, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23282, 166.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-03', 112.76, 0.00, NULL, NULL, 7, NULL, 0.00, 1086.38, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23283, 181.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-03', 97.77, 0.00, NULL, NULL, 8, NULL, 0.00, 904.85, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23284, 197.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-03', 81.44, 0.00, NULL, NULL, 9, NULL, 0.00, 706.99, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23285, 215.67, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-03', 63.63, 0.00, NULL, NULL, 10, NULL, 0.00, 491.32, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23286, 235.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-03', 44.22, 0.00, NULL, NULL, 11, NULL, 0.00, 256.24, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23287, 256.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-03', 23.06, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 279.30, 125, NULL, NULL, NULL, NULL, NULL),
+(23288, 1000.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-21', 100.00, 0.00, NULL, NULL, 19, NULL, 0.00, 1000.00, 0.00, 1100.00, 138, NULL, NULL, NULL, NULL, NULL),
+(23289, 200.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-24', 30.00, 0.00, NULL, NULL, 19, NULL, 0.00, 200.00, 0.00, 230.00, 145, NULL, NULL, NULL, NULL, NULL),
+(23290, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-21', 45.00, 0.00, NULL, NULL, 11, NULL, 0.00, 300.00, 0.00, 345.00, 64, NULL, NULL, NULL, NULL, NULL),
+(23291, 300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-05', 45.00, 0.00, NULL, NULL, 29, NULL, 0.00, 300.00, 0.00, 345.00, 132, NULL, NULL, NULL, NULL, NULL),
+(23304, 39.72, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-01-04', 72.00, 0.00, 'EFECTIVO', 'EFECTIVO-078719', 1, NULL, 0.00, 760.28, 0.00, 111.72, 23, NULL, NULL, NULL, 111.72, NULL),
+(23305, 43.29, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-02-04', 68.43, 0.00, 'EFECTIVO', 'EFECTIVO-093511', 2, NULL, 0.00, 716.99, 0.00, 111.72, 23, NULL, NULL, NULL, 111.72, NULL),
+(23306, 47.19, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-03-04', 64.53, 0.00, 'EFECTIVO', 'EFECTIVO-106902', 3, NULL, 0.00, 669.80, 0.00, 111.72, 23, NULL, NULL, NULL, 111.72, NULL),
+(23307, 51.44, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-04-04', 60.28, 0.00, 'EFECTIVO', 'EFECTIVO-121398', 4, NULL, 0.00, 618.36, 0.00, 111.72, 23, NULL, NULL, NULL, 111.72, NULL),
+(23308, 56.07, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-05-04', 55.65, 0.00, 'EFECTIVO', 'EFECTIVO-055767', 5, NULL, 0.00, 562.29, 0.00, 111.72, 23, NULL, NULL, NULL, 111.72, NULL),
+(23309, 61.11, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-06-04', 50.61, 0.00, NULL, NULL, 6, NULL, 0.00, 501.18, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23310, 66.61, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-04', 45.11, 0.00, NULL, NULL, 7, NULL, 0.00, 434.57, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23311, 72.61, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-04', 39.11, 0.00, NULL, NULL, 8, NULL, 0.00, 361.96, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23312, 79.14, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-04', 32.58, 0.00, NULL, NULL, 9, NULL, 0.00, 282.82, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23313, 86.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-04', 25.45, 0.00, NULL, NULL, 10, NULL, 0.00, 196.55, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23314, 94.03, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-04', 17.69, 0.00, NULL, NULL, 11, NULL, 0.00, 102.52, 0.00, 111.72, 23, NULL, NULL, NULL, NULL, NULL),
+(23315, 102.52, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-04', 9.23, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 111.75, 23, NULL, NULL, NULL, NULL, NULL),
+(23316, 87.44, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-06-02', 100.00, 0.00, 'EFECTIVO', 'EFECTIVO-853181', 1, NULL, 0.00, 912.56, 0.00, 187.44, 155, NULL, NULL, NULL, 187.44, NULL),
+(23317, 96.18, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-07-02', 91.26, 0.00, 'EFECTIVO', 'EFECTIVO-879516', 2, NULL, 0.00, 816.38, 0.00, 187.44, 155, NULL, NULL, NULL, 187.44, NULL),
+(23318, 105.80, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-08-02', 81.64, 0.00, 'EFECTIVO', 'EFECTIVO-904131', 3, NULL, 0.00, 710.58, 0.00, 187.44, 155, NULL, NULL, NULL, 187.44, NULL),
+(23319, 116.38, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2025-09-02', 71.06, 0.00, 'EFECTIVO', 'EFECTIVO-930741', 4, NULL, 0.00, 594.20, 0.00, 187.44, 155, NULL, NULL, NULL, 187.44, NULL),
+(23320, 128.02, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-10-02', 59.42, 0.00, NULL, NULL, 5, NULL, 35.65, 466.18, 0.00, 223.09, 155, NULL, NULL, NULL, NULL, NULL),
+(23321, 140.82, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-11-02', 46.62, 0.00, NULL, NULL, 6, NULL, 0.00, 325.36, 0.00, 187.44, 155, NULL, NULL, NULL, NULL, NULL),
+(23322, 154.90, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-12-02', 32.54, 0.00, NULL, NULL, 7, NULL, 0.00, 170.46, 0.00, 187.44, 155, NULL, NULL, NULL, NULL, NULL),
+(23323, 170.46, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-01-02', 17.05, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 187.51, 155, NULL, NULL, NULL, NULL, NULL),
+(23324, 29.50, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-07-26', 53.48, 0.00, 'EFECTIVO', 'EFECTIVO-861166', 1, NULL, 0.00, 564.70, 0.00, 98.92, 156, NULL, NULL, NULL, 99.00, 15.94),
+(23325, 32.16, 0.00, 0, b'0', 'PAGADO', '2026-06-29', '2026-08-26', 50.82, 0.00, 'EFECTIVO', 'EFECTIVO-070286', 2, NULL, 0.00, 532.54, 0.00, 98.92, 156, NULL, NULL, NULL, 99.00, 15.94),
+(23326, 35.05, 0.00, 0, b'0', 'REVISION', NULL, '2026-09-26', 47.93, 0.00, 'EFECTIVO', 'EFECTIVO-420713', 3, NULL, 0.00, 497.49, 0.00, 98.92, 156, NULL, NULL, NULL, 99.00, 15.94),
+(23327, 38.21, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-26', 44.77, 0.00, NULL, NULL, 4, NULL, 0.00, 459.28, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23328, 41.64, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-26', 41.34, 0.00, NULL, NULL, 5, NULL, 0.00, 417.64, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23329, 45.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-26', 37.59, 0.00, NULL, NULL, 6, NULL, 0.00, 372.25, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23330, 49.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-26', 33.50, 0.00, NULL, NULL, 7, NULL, 0.00, 322.77, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23331, 53.93, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-26', 29.05, 0.00, NULL, NULL, 8, NULL, 0.00, 268.84, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23332, 58.78, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-26', 24.20, 0.00, NULL, NULL, 9, NULL, 0.00, 210.06, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23333, 64.07, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-26', 18.91, 0.00, NULL, NULL, 10, NULL, 0.00, 145.99, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23334, 69.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-26', 13.14, 0.00, NULL, NULL, 11, NULL, 0.00, 76.15, 0.00, 98.92, 156, NULL, NULL, NULL, NULL, 15.94),
+(23335, 76.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-26', 6.85, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 98.94, 156, NULL, NULL, NULL, NULL, 15.94),
+(23336, 25.72, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-07-26', 55.00, 0.00, 'EFECTIVO', 'EFECTIVO-498961', 1, NULL, 0.00, 524.28, 0.00, 80.72, 157, NULL, NULL, NULL, 80.72, 0.00),
+(23337, 28.29, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-08-26', 52.43, 0.00, 'EFECTIVO', 'EFECTIVO-890299', 2, NULL, 0.00, 495.99, 0.00, 80.72, 157, NULL, NULL, NULL, 81.00, 0.00),
+(23338, 31.12, 0.00, 0, b'0', 'PAGADO', '2026-06-26', '2026-09-26', 49.60, 0.00, 'EFECTIVO', 'EFECTIVO-060318', 3, NULL, 0.00, 464.87, 0.00, 80.72, 157, NULL, NULL, NULL, 81.00, 0.00),
+(23339, 34.23, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-10-26', 46.49, 0.00, 'EFECTIVO', '', 4, NULL, 0.00, 430.64, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23340, 37.66, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-11-26', 43.06, 0.00, 'EFECTIVO', '', 5, NULL, 0.00, 392.98, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23341, 41.42, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-27', '2026-12-26', 39.30, 0.00, 'EFECTIVO', '', 6, NULL, 0.00, 351.56, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23342, 40.72, 0.00, 0, b'0', 'PAGADO_PARCIAL', '2026-06-27', '2027-01-26', 35.16, 0.00, 'EFECTIVO', 'EFECTIVO-439584', 7, NULL, 0.00, 306.00, 0.00, 80.72, 157, NULL, NULL, NULL, 40.00, 0.00),
+(23343, 50.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-26', 30.60, 0.00, NULL, NULL, 8, NULL, 0.00, 255.88, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23344, 55.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-26', 25.59, 0.00, NULL, NULL, 9, NULL, 0.00, 200.75, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23345, 60.64, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-26', 20.08, 0.00, NULL, NULL, 10, NULL, 0.00, 140.11, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23346, 66.71, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-26', 14.01, 0.00, NULL, NULL, 11, NULL, 0.00, 73.40, 0.00, 80.72, 157, NULL, NULL, NULL, NULL, 0.00),
+(23347, 73.40, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-26', 7.34, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 80.74, 157, NULL, NULL, NULL, NULL, 0.00),
+(23348, 3000.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-19', 300.00, 0.00, NULL, NULL, 28, NULL, 0.00, 3300.00, 0.00, 3300.00, 134, NULL, NULL, NULL, NULL, 0.00),
+(23349, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-21', 120.00, 0.00, NULL, NULL, 17, NULL, 0.00, 800.00, 0.00, 120.00, 114, NULL, NULL, NULL, NULL, 0.00),
+(23350, 1.90, 0.00, 0, b'0', 'PAGADO', '2026-06-27', '2026-07-27', 117.00, 0.00, 'EFECTIVO', 'EFECTIVO-968384', 1, NULL, 0.00, 1298.10, 0.00, 164.94, 158, NULL, NULL, NULL, 165.00, 46.04),
+(23351, 2.07, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-27', 116.83, 0.00, NULL, NULL, 2, NULL, 0.00, 1296.03, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23352, 2.26, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-27', 116.64, 0.00, NULL, NULL, 3, NULL, 0.00, 1293.77, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23353, 2.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-27', 116.44, 0.00, NULL, NULL, 4, NULL, 0.00, 1291.31, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23354, 2.68, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-27', 116.22, 0.00, NULL, NULL, 5, NULL, 0.00, 1288.63, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23355, 2.92, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-27', 115.98, 0.00, NULL, NULL, 6, NULL, 0.00, 1285.71, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23356, 3.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-27', 115.71, 0.00, NULL, NULL, 7, NULL, 0.00, 1282.52, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23357, 3.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-27', 115.43, 0.00, NULL, NULL, 8, NULL, 0.00, 1279.05, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23358, 3.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-27', 115.11, 0.00, NULL, NULL, 9, NULL, 0.00, 1275.26, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23359, 4.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-27', 114.77, 0.00, NULL, NULL, 10, NULL, 0.00, 1271.13, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23360, 4.50, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-27', 114.40, 0.00, NULL, NULL, 11, NULL, 0.00, 1266.63, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23361, 4.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-27', 114.00, 0.00, NULL, NULL, 12, NULL, 0.00, 1261.73, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23362, 5.34, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-07-27', 113.56, 0.00, NULL, NULL, 13, NULL, 0.00, 1256.39, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23363, 5.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-08-27', 113.08, 0.00, NULL, NULL, 14, NULL, 0.00, 1250.57, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23364, 6.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-09-27', 112.55, 0.00, NULL, NULL, 15, NULL, 0.00, 1244.22, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23365, 6.92, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-10-27', 111.98, 0.00, NULL, NULL, 16, NULL, 0.00, 1237.30, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23366, 7.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-11-27', 111.36, 0.00, NULL, NULL, 17, NULL, 0.00, 1229.76, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23367, 8.22, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-12-27', 110.68, 0.00, NULL, NULL, 18, NULL, 0.00, 1221.54, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23368, 8.96, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-01-27', 109.94, 0.00, NULL, NULL, 19, NULL, 0.00, 1212.58, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23369, 9.77, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-02-27', 109.13, 0.00, NULL, NULL, 20, NULL, 0.00, 1202.81, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23370, 10.65, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-03-27', 108.25, 0.00, NULL, NULL, 21, NULL, 0.00, 1192.16, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23371, 11.61, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-04-27', 107.29, 0.00, NULL, NULL, 22, NULL, 0.00, 1180.55, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23372, 12.65, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-05-27', 106.25, 0.00, NULL, NULL, 23, NULL, 0.00, 1167.90, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23373, 13.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-06-27', 105.11, 0.00, NULL, NULL, 24, NULL, 0.00, 1154.11, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23374, 15.03, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-07-27', 103.87, 0.00, NULL, NULL, 25, NULL, 0.00, 1139.08, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23375, 16.38, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-08-27', 102.52, 0.00, NULL, NULL, 26, NULL, 0.00, 1122.70, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23376, 17.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-09-27', 101.04, 0.00, NULL, NULL, 27, NULL, 0.00, 1104.84, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23377, 19.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-10-27', 99.44, 0.00, NULL, NULL, 28, NULL, 0.00, 1085.38, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23378, 21.22, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-11-27', 97.68, 0.00, NULL, NULL, 29, NULL, 0.00, 1064.16, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23379, 23.13, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-12-27', 95.77, 0.00, NULL, NULL, 30, NULL, 0.00, 1041.03, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23380, 25.21, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-01-27', 93.69, 0.00, NULL, NULL, 31, NULL, 0.00, 1015.82, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23381, 27.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-02-27', 91.42, 0.00, NULL, NULL, 32, NULL, 0.00, 988.34, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23382, 29.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-03-27', 88.95, 0.00, NULL, NULL, 33, NULL, 0.00, 958.39, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04);
+INSERT INTO `cuotas` (`id`, `capital`, `comision`, `dias_atraso`, `es_gracia`, `estado_cuota`, `fecha_pago`, `fecha_vencimiento`, `interes`, `interes_mora`, `metodo_pago`, `numero_comprobante`, `numero_cuota`, `observacion`, `penalidad`, `saldo_restante`, `seguro`, `total_cuota`, `credito_id`, `cuota_siguiente_id`, `comentario_rechazo`, `imagen_comprobante`, `monto_pagado_cliente`, `cargo_refinanciamiento`) VALUES
+(23383, 32.64, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-04-27', 86.26, 0.00, NULL, NULL, 34, NULL, 0.00, 925.75, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23384, 35.58, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-05-27', 83.32, 0.00, NULL, NULL, 35, NULL, 0.00, 890.17, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23385, 38.78, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-06-27', 80.12, 0.00, NULL, NULL, 36, NULL, 0.00, 851.39, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23386, 42.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-07-27', 76.63, 0.00, NULL, NULL, 37, NULL, 0.00, 809.12, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23387, 46.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-08-27', 72.82, 0.00, NULL, NULL, 38, NULL, 0.00, 763.04, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23388, 50.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-09-27', 68.67, 0.00, NULL, NULL, 39, NULL, 0.00, 712.81, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23389, 54.75, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-10-27', 64.15, 0.00, NULL, NULL, 40, NULL, 0.00, 658.06, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23390, 59.67, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-11-27', 59.23, 0.00, NULL, NULL, 41, NULL, 0.00, 598.39, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23391, 65.04, 0.00, 0, b'0', 'PENDIENTE', NULL, '2029-12-27', 53.86, 0.00, NULL, NULL, 42, NULL, 0.00, 533.35, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23392, 70.90, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-01-27', 48.00, 0.00, NULL, NULL, 43, NULL, 0.00, 462.45, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23393, 77.28, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-02-27', 41.62, 0.00, NULL, NULL, 44, NULL, 0.00, 385.17, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23394, 84.23, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-03-27', 34.67, 0.00, NULL, NULL, 45, NULL, 0.00, 300.94, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23395, 91.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-04-27', 27.08, 0.00, NULL, NULL, 46, NULL, 0.00, 209.12, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23396, 100.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-05-27', 18.82, 0.00, NULL, NULL, 47, NULL, 0.00, 109.04, 0.00, 164.94, 158, NULL, NULL, NULL, NULL, 46.04),
+(23397, 109.04, 0.00, 0, b'0', 'PENDIENTE', NULL, '2030-06-27', 9.81, 0.00, NULL, NULL, 48, NULL, 0.00, 0.00, 0.00, 164.97, 158, NULL, NULL, NULL, NULL, 46.12),
+(23398, 1300.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-23', 200.00, 0.00, NULL, NULL, 4, NULL, 0.00, 1300.00, 0.00, 1500.00, 150, NULL, NULL, NULL, NULL, 0.00),
+(23441, 87.44, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-06-02', 100.00, 0.00, NULL, NULL, 1, NULL, 0.00, 912.56, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23442, 96.18, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-07-02', 91.26, 0.00, NULL, NULL, 2, NULL, 0.00, 816.38, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23443, 105.80, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-08-02', 81.64, 0.00, NULL, NULL, 3, NULL, 0.00, 710.58, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23444, 116.38, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-09-02', 71.06, 0.00, NULL, NULL, 4, NULL, 0.00, 594.20, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23445, 128.02, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-10-02', 59.42, 0.00, NULL, NULL, 5, NULL, 0.00, 466.18, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23446, 140.82, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-11-02', 46.62, 0.00, NULL, NULL, 6, NULL, 0.00, 325.36, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23447, 154.90, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2025-12-02', 32.54, 0.00, NULL, NULL, 7, NULL, 0.00, 170.46, 0.00, 187.44, 161, NULL, NULL, NULL, NULL, 0.00),
+(23448, 170.46, 0.00, 0, b'0', 'REFINANCIADO', NULL, '2026-01-02', 17.05, 0.00, NULL, NULL, 8, NULL, 0.00, 0.00, 0.00, 187.51, 161, NULL, NULL, NULL, NULL, 0.00),
+(23449, 13.02, 0.00, 39, b'0', 'MORA', NULL, '2026-05-22', 90.00, 0.00, NULL, NULL, 1, NULL, 0.85, 986.98, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23450, 14.19, 0.00, 8, b'0', 'MORA', NULL, '2026-06-22', 88.83, 0.00, NULL, NULL, 2, NULL, 0.00, 972.79, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23451, 15.47, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-22', 87.55, 0.00, NULL, NULL, 3, NULL, 0.00, 957.32, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23452, 16.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-22', 86.16, 0.00, NULL, NULL, 4, NULL, 0.00, 940.46, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23453, 18.38, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-22', 84.64, 0.00, NULL, NULL, 5, NULL, 0.00, 922.08, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23454, 20.03, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-22', 82.99, 0.00, NULL, NULL, 6, NULL, 0.00, 902.05, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23455, 21.84, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-22', 81.18, 0.00, NULL, NULL, 7, NULL, 0.00, 880.21, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23456, 23.80, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-22', 79.22, 0.00, NULL, NULL, 8, NULL, 0.00, 856.41, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23457, 25.94, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-22', 77.08, 0.00, NULL, NULL, 9, NULL, 0.00, 830.47, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23458, 28.28, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-22', 74.74, 0.00, NULL, NULL, 10, NULL, 0.00, 802.19, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23459, 30.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-22', 72.20, 0.00, NULL, NULL, 11, NULL, 0.00, 771.37, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23460, 33.60, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-22', 69.42, 0.00, NULL, NULL, 12, NULL, 0.00, 737.77, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23461, 36.62, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-22', 66.40, 0.00, NULL, NULL, 13, NULL, 0.00, 701.15, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23462, 39.92, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-22', 63.10, 0.00, NULL, NULL, 14, NULL, 0.00, 661.23, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23463, 43.51, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-07-22', 59.51, 0.00, NULL, NULL, 15, NULL, 0.00, 617.72, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23464, 47.43, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-08-22', 55.59, 0.00, NULL, NULL, 16, NULL, 0.00, 570.29, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23465, 51.69, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-09-22', 51.33, 0.00, NULL, NULL, 17, NULL, 0.00, 518.60, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23466, 56.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-10-22', 46.67, 0.00, NULL, NULL, 18, NULL, 0.00, 462.25, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23467, 61.42, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-11-22', 41.60, 0.00, NULL, NULL, 19, NULL, 0.00, 400.83, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23468, 66.95, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-12-22', 36.07, 0.00, NULL, NULL, 20, NULL, 0.00, 333.88, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23469, 72.97, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-01-22', 30.05, 0.00, NULL, NULL, 21, NULL, 0.00, 260.91, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23470, 79.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-02-22', 23.48, 0.00, NULL, NULL, 22, NULL, 0.00, 181.37, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23471, 86.70, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-03-22', 16.32, 0.00, NULL, NULL, 23, NULL, 0.00, 94.67, 0.00, 123.84, 162, NULL, NULL, NULL, NULL, 20.82),
+(23472, 94.67, 0.00, 0, b'0', 'PENDIENTE', NULL, '2028-04-22', 8.52, 0.00, NULL, NULL, 24, NULL, 0.00, 0.00, 0.00, 123.92, 162, NULL, NULL, NULL, NULL, 20.73),
+(23473, 98.58, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-30', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 701.42, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23474, 110.41, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-30', 84.17, 0.00, NULL, NULL, 2, NULL, 0.00, 591.01, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23475, 123.66, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-30', 70.92, 0.00, NULL, NULL, 3, NULL, 0.00, 467.35, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23476, 138.50, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-30', 56.08, 0.00, NULL, NULL, 4, NULL, 0.00, 328.85, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23477, 155.12, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-30', 39.46, 0.00, NULL, NULL, 5, NULL, 0.00, 173.73, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23478, 173.73, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-30', 20.85, 0.00, NULL, NULL, 6, NULL, 0.00, 0.00, 0.00, 194.58, 163, NULL, NULL, NULL, NULL, 0.00),
+(23479, 65.82, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-30', 90.00, 0.00, NULL, NULL, 1, NULL, 0.00, 934.18, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23480, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-30', 84.08, 0.00, NULL, NULL, 2, NULL, 0.00, 862.44, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23481, 78.20, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-30', 77.62, 0.00, NULL, NULL, 3, NULL, 0.00, 784.24, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23482, 85.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-30', 70.58, 0.00, NULL, NULL, 4, NULL, 0.00, 699.00, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23483, 92.91, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-30', 62.91, 0.00, NULL, NULL, 5, NULL, 0.00, 606.09, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23484, 101.27, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-30', 54.55, 0.00, NULL, NULL, 6, NULL, 0.00, 504.82, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23485, 110.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-30', 45.43, 0.00, NULL, NULL, 7, NULL, 0.00, 394.43, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23486, 120.32, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-28', 35.50, 0.00, NULL, NULL, 8, NULL, 0.00, 274.11, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23487, 131.15, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-30', 24.67, 0.00, NULL, NULL, 9, NULL, 0.00, 142.96, 0.00, 155.82, 164, NULL, NULL, NULL, NULL, 0.00),
+(23488, 142.96, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-30', 12.87, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 155.83, 164, NULL, NULL, NULL, NULL, 0.00),
+(23489, 45.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-01', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 754.41, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23490, 51.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-01', 90.53, 0.00, NULL, NULL, 2, NULL, 0.00, 703.35, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23491, 57.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-01', 84.40, 0.00, NULL, NULL, 3, NULL, 0.00, 646.16, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23492, 64.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-01', 77.54, 0.00, NULL, NULL, 4, NULL, 0.00, 582.11, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23493, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-01', 69.85, 0.00, NULL, NULL, 5, NULL, 0.00, 510.37, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23494, 80.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-01', 61.24, 0.00, NULL, NULL, 6, NULL, 0.00, 430.02, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23495, 89.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-01', 51.60, 0.00, NULL, NULL, 7, NULL, 0.00, 340.03, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23496, 100.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-01', 40.80, 0.00, NULL, NULL, 8, NULL, 0.00, 239.24, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23497, 112.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-01', 28.71, 0.00, NULL, NULL, 9, NULL, 0.00, 126.36, 0.00, 141.59, 165, NULL, NULL, NULL, NULL, 0.00),
+(23498, 126.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-01', 15.16, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 141.52, 165, NULL, NULL, NULL, NULL, 0.00),
+(23499, 99.30, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-03', 180.00, 0.00, NULL, NULL, 1, NULL, 0.00, 1900.70, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23500, 108.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-03', 171.06, 0.00, NULL, NULL, 2, NULL, 0.00, 1792.46, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23501, 117.98, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-03', 161.32, 0.00, NULL, NULL, 3, NULL, 0.00, 1674.48, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23502, 128.60, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-03', 150.70, 0.00, NULL, NULL, 4, NULL, 0.00, 1545.88, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23503, 140.17, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-03', 139.13, 0.00, NULL, NULL, 5, NULL, 0.00, 1405.71, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23504, 152.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-03', 126.51, 0.00, NULL, NULL, 6, NULL, 0.00, 1252.92, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23505, 166.54, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-03', 112.76, 0.00, NULL, NULL, 7, NULL, 0.00, 1086.38, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23506, 181.53, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-03', 97.77, 0.00, NULL, NULL, 8, NULL, 0.00, 904.85, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23507, 197.86, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-03', 81.44, 0.00, NULL, NULL, 9, NULL, 0.00, 706.99, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23508, 215.67, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-03', 63.63, 0.00, NULL, NULL, 10, NULL, 0.00, 491.32, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23509, 235.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-06-03', 44.22, 0.00, NULL, NULL, 11, NULL, 0.00, 256.24, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23510, 256.24, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-07-03', 23.06, 0.00, NULL, NULL, 12, NULL, 0.00, 0.00, 0.00, 279.30, 166, NULL, NULL, NULL, NULL, 0.00),
+(23511, 167.39, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-02', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 632.61, 0.00, 263.39, 167, NULL, NULL, NULL, NULL, 0.00),
+(23512, 187.48, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-02', 75.91, 0.00, NULL, NULL, 2, NULL, 0.00, 445.13, 0.00, 263.39, 167, NULL, NULL, NULL, NULL, 0.00),
+(23513, 209.97, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-02', 53.42, 0.00, NULL, NULL, 3, NULL, 0.00, 235.16, 0.00, 263.39, 167, NULL, NULL, NULL, NULL, 0.00),
+(23514, 235.16, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-02', 28.22, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 263.38, 167, NULL, NULL, NULL, NULL, 0.00),
+(23515, 45.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-03', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 754.41, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23516, 51.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-03', 90.53, 0.00, NULL, NULL, 2, NULL, 0.00, 703.35, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23517, 57.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-03', 84.40, 0.00, NULL, NULL, 3, NULL, 0.00, 646.16, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23518, 64.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-03', 77.54, 0.00, NULL, NULL, 4, NULL, 0.00, 582.11, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23519, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-03', 69.85, 0.00, NULL, NULL, 5, NULL, 0.00, 510.37, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23520, 80.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-03', 61.24, 0.00, NULL, NULL, 6, NULL, 0.00, 430.02, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23521, 89.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-03', 51.60, 0.00, NULL, NULL, 7, NULL, 0.00, 340.03, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23522, 100.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-03', 40.80, 0.00, NULL, NULL, 8, NULL, 0.00, 239.24, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23523, 112.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-03', 28.71, 0.00, NULL, NULL, 9, NULL, 0.00, 126.36, 0.00, 141.59, 168, NULL, NULL, NULL, NULL, 0.00),
+(23524, 126.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-03', 15.16, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 141.52, 168, NULL, NULL, NULL, NULL, 0.00),
+(23525, 400.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-27', 75.00, 0.00, NULL, NULL, 14, NULL, 0.00, 400.00, 0.00, 475.00, 79, NULL, NULL, NULL, NULL, 0.00),
+(23526, 45.59, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-08-04', 96.00, 0.00, NULL, NULL, 1, NULL, 0.00, 754.41, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23527, 51.06, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-09-04', 90.53, 0.00, NULL, NULL, 2, NULL, 0.00, 703.35, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23528, 57.19, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-10-04', 84.40, 0.00, NULL, NULL, 3, NULL, 0.00, 646.16, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23529, 64.05, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-11-04', 77.54, 0.00, NULL, NULL, 4, NULL, 0.00, 582.11, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23530, 71.74, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-12-04', 69.85, 0.00, NULL, NULL, 5, NULL, 0.00, 510.37, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23531, 80.35, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-01-04', 61.24, 0.00, NULL, NULL, 6, NULL, 0.00, 430.02, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23532, 89.99, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-02-04', 51.60, 0.00, NULL, NULL, 7, NULL, 0.00, 340.03, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23533, 100.79, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-03-04', 40.80, 0.00, NULL, NULL, 8, NULL, 0.00, 239.24, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23534, 112.88, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-04-04', 28.71, 0.00, NULL, NULL, 9, NULL, 0.00, 126.36, 0.00, 141.59, 169, NULL, NULL, NULL, NULL, 0.00),
+(23535, 126.36, 0.00, 0, b'0', 'PENDIENTE', NULL, '2027-05-04', 15.16, 0.00, NULL, NULL, 10, NULL, 0.00, 0.00, 0.00, 141.52, 169, NULL, NULL, NULL, NULL, 0.00),
+(23536, 0.00, 0.00, 0, b'0', 'PENDIENTE', NULL, '2026-07-05', 40.00, 0.00, NULL, NULL, 11, NULL, 0.00, 181.00, 0.00, 40.00, 46, NULL, NULL, NULL, NULL, 0.00),
+(23537, 60.08, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-11-14', 45.00, 0.00, NULL, NULL, 1, NULL, 0.00, 239.92, 0.00, 105.08, 170, NULL, NULL, NULL, NULL, 0.00),
+(23538, 69.09, 0.00, 0, b'0', 'PENDIENTE', NULL, '2024-12-14', 35.99, 0.00, NULL, NULL, 2, NULL, 0.00, 170.83, 0.00, 105.08, 170, NULL, NULL, NULL, NULL, 0.00),
+(23539, 79.46, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-01-14', 25.62, 0.00, NULL, NULL, 3, NULL, 0.00, 91.37, 0.00, 105.08, 170, NULL, NULL, NULL, NULL, 0.00),
+(23540, 91.37, 0.00, 0, b'0', 'PENDIENTE', NULL, '2025-02-14', 13.71, 0.00, NULL, NULL, 4, NULL, 0.00, 0.00, 0.00, 105.08, 170, NULL, NULL, NULL, NULL, 0.00);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `dispositivos_confiables`
+--
+
+CREATE TABLE `dispositivos_confiables` (
+  `id` bigint(20) NOT NULL,
+  `fecha_creacion` datetime(6) NOT NULL,
+  `fecha_expiracion` datetime(6) NOT NULL,
+  `ip_registro` varchar(255) DEFAULT NULL,
+  `token_dispositivo` varchar(255) NOT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `usuario_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `dispositivos_confiables`
+--
+
+INSERT INTO `dispositivos_confiables` (`id`, `fecha_creacion`, `fecha_expiracion`, `ip_registro`, `token_dispositivo`, `user_agent`, `usuario_id`) VALUES
+(1, '2026-06-25 12:41:55.000000', '2026-07-25 12:41:55.000000', '179.6.225.93', 'ea199f9c-1168-49f8-a7e5-226bf4d20da4', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118),
+(2, '2026-06-25 13:50:39.000000', '2026-07-25 13:50:39.000000', '38.250.151.133', '6afd9591-2960-4896-94d1-defea5f93599', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118),
+(3, '2026-06-25 13:59:06.000000', '2026-07-25 13:59:06.000000', '38.250.151.133', 'd9e06d56-886b-4b54-a78f-0a91dc4c841d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `garantes`
+--
+
+CREATE TABLE `garantes` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `dni` varchar(255) NOT NULL,
+  `nombre_completo` varchar(255) NOT NULL,
+  `relacion_con_cliente` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  `credito_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `garantes`
+--
+
+INSERT INTO `garantes` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `direccion`, `dni`, `nombre_completo`, `relacion_con_cliente`, `telefono`, `credito_id`) VALUES
+(1, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-05-29 15:46:57.000000', '2026-05-29 15:46:57.000000', NULL, '65124552', 'juan los angeles', NULL, '968456123', 16),
+(2, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-02 17:53:50.000000', '2026-06-02 17:53:50.000000', NULL, '49034008', 'ALEX  ARNALDO MURAYARI RENGIFO', NULL, '', 22),
+(3, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-08 10:18:29.000000', '2026-06-08 10:18:29.000000', NULL, '42154165', 'WALTER VILLACORTA LABAJOS ', NULL, '936144112', 112),
+(4, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-01 12:14:14.000000', '2026-07-01 12:14:14.000000', NULL, '46597311', 'JHULIOR RAMOS YAHUARCANI', NULL, '969040984', 165),
+(5, 'jhony.elamante@gmail.com', 'jhony.elamante@gmail.com', '2026-07-04 13:02:11.000000', '2026-07-04 13:02:11.000000', NULL, '40739419', 'LUCIA CAJO VENTURA', NULL, '987613747', 169);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ip_lista_blanca`
+--
+
+CREATE TABLE `ip_lista_blanca` (
+  `id` bigint(20) NOT NULL,
+  `admin_registro` varchar(255) DEFAULT NULL,
+  `alias_oficina` varchar(255) DEFAULT NULL,
+  `fecha_registro` datetime(6) NOT NULL,
+  `ip_direccion` varchar(255) NOT NULL,
+  `notas` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `ip_lista_blanca`
+--
+
+INSERT INTO `ip_lista_blanca` (`id`, `admin_registro`, `alias_oficina`, `fecha_registro`, `ip_direccion`, `notas`) VALUES
+(1, 'nixon25herrera@gmail.com', 'Oficina', '2026-06-25 15:39:02.000000', '179.6.225.93', 'Oficina'),
+(2, 'admin', 'CAsaNixon', '2026-06-29 03:30:07.000000', '38.250.151.156', 'infiny');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ip_lista_negra`
+--
+
+CREATE TABLE `ip_lista_negra` (
+  `id` bigint(20) NOT NULL,
+  `desbloqueada_por` varchar(255) DEFAULT NULL,
+  `fecha_bloqueo` datetime(6) NOT NULL,
+  `fecha_desbloqueo` datetime(6) DEFAULT NULL,
+  `ip_direccion` varchar(255) NOT NULL,
+  `motivo` varchar(255) NOT NULL,
+  `total_intentos` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `modulos`
+--
+
+CREATE TABLE `modulos` (
+  `id` bigint(20) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `icono` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `ruta` varchar(255) DEFAULT NULL,
+  `orden` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `modulos`
+--
+
+INSERT INTO `modulos` (`id`, `descripcion`, `icono`, `nombre`, `ruta`, `orden`) VALUES
+(1, 'Panel de Control Principal', 'home', 'Inicio', 'home', 1),
+(2, 'Gestión de mis créditos', 'credit-card', 'Mis Créditos', 'creditos', 5),
+(3, 'Panel de Evaluación (Admin)', 'file-text', 'Evaluación', 'admin', 3),
+(4, 'Configuración de intereses', 'settings', 'Gestión de Tasas', 'configuracion-tasas', 6),
+(5, 'Gestión de Roles y Usuarios', 'lock', 'Seguridad', 'seguridad', 9),
+(6, 'Gestión de Módulos del Sistema', 'box', 'Módulos', 'modulos', 10),
+(7, 'Control del tesoro privado', 'lock', 'Tesorería', 'tesoreria', 2),
+(8, 'Módulo interno para administrar el equipo de asesores y roles.', 'users', 'Gestión de Personal', '/admin/personal', 7),
+(9, 'Control de la billetera digital', 'wallet', 'Cartera', 'cartera_clientes', 4),
+(10, 'modulo de graficos de la situación de la empresa', 'pie-chart', 'Reportes Financieros', 'reportes', 8),
+(13, 'Manual explicativo de las funciones y botones del detalle de crédito para los trabajadores.', 'lightbulb', 'Manual de Usuario', 'ayuda', 11);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `monedas`
+--
+
+CREATE TABLE `monedas` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `activo` bit(1) NOT NULL,
+  `codigo` varchar(10) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `simbolo` varchar(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `monedas`
+--
+
+INSERT INTO `monedas` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `activo`, `codigo`, `nombre`, `simbolo`) VALUES
+(4, 'SISTEMA', 'SISTEMA', '2026-04-16 14:54:10.000000', '2026-04-16 14:54:10.000000', b'1', 'PEN', 'Sol', 'S/.'),
+(7, 'SISTEMA', 'SISTEMA', '2026-06-04 17:36:53.000000', '2026-06-04 17:36:53.000000', b'1', 'USD', 'Dólar Americano', '$'),
+(8, 'SISTEMA', 'SISTEMA', '2026-06-04 17:36:53.000000', '2026-06-04 17:36:53.000000', b'1', 'EUR', 'Euro', '€');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `movimientos`
+--
+
+CREATE TABLE `movimientos` (
+  `id` bigint(20) NOT NULL,
+  `aplicado_capital` decimal(38,2) DEFAULT NULL,
+  `aplicado_comision` decimal(38,2) DEFAULT NULL,
+  `aplicado_interes` decimal(38,2) DEFAULT NULL,
+  `aplicado_mora` decimal(38,2) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `fecha` datetime(6) DEFAULT NULL,
+  `metodo_pago` varchar(255) DEFAULT NULL,
+  `monto` decimal(38,2) DEFAULT NULL,
+  `numero_comprobante` varchar(255) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `credito_id` bigint(20) DEFAULT NULL,
+  `cuota_id` bigint(20) DEFAULT NULL,
+  `ajuste_redondeo` decimal(38,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `movimientos`
+--
+
+INSERT INTO `movimientos` (`id`, `aplicado_capital`, `aplicado_comision`, `aplicado_interes`, `aplicado_mora`, `descripcion`, `fecha`, `metodo_pago`, `monto`, `numero_comprobante`, `tipo`, `credito_id`, `cuota_id`, `ajuste_redondeo`) VALUES
+(18, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-02 16:29:36.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 21, NULL, NULL),
+(19, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-02 17:53:50.000000', NULL, 1400.00, NULL, 'DESEMBOLSO', 22, NULL, NULL),
+(20, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-03 15:14:24.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 23, NULL, NULL),
+(21, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-03 15:26:08.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 24, NULL, NULL),
+(22, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-04 16:12:40.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 25, NULL, NULL),
+(23, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-04 16:49:18.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 26, NULL, NULL),
+(24, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-04 17:11:25.000000', NULL, 239.00, NULL, 'DESEMBOLSO', 27, NULL, NULL),
+(25, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-04 12:42:32.000000', NULL, 5184.00, NULL, 'DESEMBOLSO', 28, NULL, NULL),
+(26, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-04 16:59:59.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 29, NULL, NULL),
+(27, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 12:33:54.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 30, NULL, NULL),
+(28, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 12:36:09.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 31, NULL, NULL),
+(29, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 12:50:56.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 32, NULL, NULL),
+(30, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 12:57:39.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 33, NULL, NULL),
+(31, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 13:02:42.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 34, NULL, NULL),
+(32, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:21:03.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 35, NULL, NULL),
+(33, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:32:29.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 36, NULL, NULL),
+(34, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:40:23.000000', NULL, 600.00, NULL, 'DESEMBOLSO', 37, NULL, NULL),
+(35, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:43:54.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 38, NULL, NULL),
+(36, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:47:34.000000', NULL, 400.00, NULL, 'DESEMBOLSO', 39, NULL, NULL),
+(37, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:48:33.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 40, NULL, NULL),
+(38, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:50:03.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 41, NULL, NULL),
+(39, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:52:13.000000', NULL, 600.00, NULL, 'DESEMBOLSO', 42, NULL, NULL),
+(40, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 16:56:15.000000', NULL, 200.00, NULL, 'DESEMBOLSO', 43, NULL, NULL),
+(41, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:06:28.000000', NULL, 600.00, NULL, 'DESEMBOLSO', 44, NULL, NULL),
+(42, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:07:19.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 45, NULL, NULL),
+(43, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:14:09.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 46, NULL, NULL),
+(44, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:17:06.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 47, NULL, NULL),
+(45, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:20:10.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 48, NULL, NULL),
+(46, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:23:36.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 49, NULL, NULL),
+(47, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:26:35.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 50, NULL, NULL),
+(48, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:31:51.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 51, NULL, NULL),
+(49, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:35:06.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 52, NULL, NULL),
+(50, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:37:23.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 53, NULL, NULL),
+(51, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:42:53.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 54, NULL, NULL),
+(52, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 17:55:51.000000', NULL, 1300.00, NULL, 'DESEMBOLSO', 55, NULL, NULL),
+(53, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 18:06:56.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 56, NULL, NULL),
+(54, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 18:10:29.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 57, NULL, NULL),
+(55, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 18:22:43.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 58, NULL, NULL),
+(56, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-05 18:49:24.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 59, NULL, NULL),
+(57, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:00:17.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 60, NULL, NULL),
+(58, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:04:01.000000', NULL, 600.00, NULL, 'DESEMBOLSO', 61, NULL, NULL),
+(60, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:09:52.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 63, NULL, NULL),
+(61, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:12:48.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 64, NULL, NULL),
+(62, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:26:51.000000', NULL, 600.00, NULL, 'DESEMBOLSO', 65, NULL, NULL),
+(63, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:34:14.000000', NULL, 5000.00, NULL, 'DESEMBOLSO', 66, NULL, NULL),
+(64, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:40:53.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 67, NULL, NULL),
+(65, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:45:35.000000', NULL, 6000.00, NULL, 'DESEMBOLSO', 68, NULL, NULL),
+(66, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:45:37.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 69, NULL, NULL),
+(67, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:48:02.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 70, NULL, NULL),
+(68, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:49:24.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 71, NULL, NULL),
+(69, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:50:42.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 72, NULL, NULL),
+(70, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:51:55.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 73, NULL, NULL),
+(71, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:54:03.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 74, NULL, NULL),
+(72, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:55:45.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 75, NULL, NULL),
+(73, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 10:57:14.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 76, NULL, NULL),
+(74, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:03:34.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 77, NULL, NULL),
+(75, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:06:20.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 78, NULL, NULL),
+(76, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:08:48.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 79, NULL, NULL),
+(77, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:11:12.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 80, NULL, NULL),
+(78, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:14:22.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 81, NULL, NULL),
+(79, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:16:01.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 82, NULL, NULL),
+(80, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:16:38.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 83, NULL, NULL),
+(81, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:18:33.000000', NULL, 150.00, NULL, 'DESEMBOLSO', 84, NULL, NULL),
+(82, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:19:58.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 85, NULL, NULL),
+(83, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:22:21.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 86, NULL, NULL),
+(84, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:24:33.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 87, NULL, NULL),
+(85, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:26:08.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 88, NULL, NULL),
+(86, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:26:48.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 89, NULL, NULL),
+(87, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:29:41.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 90, NULL, NULL),
+(88, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:39:37.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 91, NULL, NULL),
+(89, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:44:29.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 92, NULL, NULL),
+(90, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:48:41.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 93, NULL, NULL),
+(91, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:50:10.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 94, NULL, NULL),
+(92, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:52:24.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 95, NULL, NULL),
+(93, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:54:43.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 96, NULL, NULL),
+(94, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:55:42.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 97, NULL, NULL),
+(95, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 11:56:39.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 98, NULL, NULL),
+(96, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 12:00:42.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 99, NULL, NULL),
+(97, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 12:05:08.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 100, NULL, NULL),
+(98, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 12:07:49.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 101, NULL, NULL),
+(99, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 12:36:14.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 102, NULL, NULL),
+(100, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 12:47:37.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 103, NULL, NULL),
+(101, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 15:17:09.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 104, NULL, NULL),
+(102, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 16:43:03.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 105, NULL, NULL),
+(103, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 17:04:25.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 106, NULL, NULL),
+(104, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 17:43:22.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 107, NULL, NULL),
+(105, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 17:58:47.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 108, NULL, NULL),
+(106, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 18:14:30.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 109, NULL, NULL),
+(107, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 18:28:33.000000', NULL, 1300.00, NULL, 'DESEMBOLSO', 110, NULL, NULL),
+(108, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-06 18:42:59.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 111, NULL, NULL),
+(109, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 10:18:29.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 112, NULL, NULL),
+(110, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 10:40:43.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 113, NULL, NULL),
+(111, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 10:44:33.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 114, NULL, NULL),
+(112, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 11:48:40.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 115, NULL, NULL),
+(113, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 11:50:35.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 116, NULL, NULL),
+(114, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 11:53:39.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 117, NULL, NULL),
+(115, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 11:58:03.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 118, NULL, NULL),
+(116, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 11:58:58.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 119, NULL, NULL),
+(117, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 12:43:39.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 120, NULL, NULL),
+(118, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 12:55:06.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 121, NULL, NULL),
+(119, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:25:45.000000', NULL, 900.00, NULL, 'DESEMBOLSO', 123, NULL, NULL),
+(120, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:27:32.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 124, NULL, NULL),
+(121, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:30:51.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 125, NULL, NULL),
+(122, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:33:35.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 126, NULL, NULL),
+(123, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:42:44.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 127, NULL, NULL),
+(124, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:45:59.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 128, NULL, NULL),
+(125, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:51:58.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 129, NULL, NULL),
+(126, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-08 17:55:29.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 130, NULL, NULL),
+(127, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 09:45:57.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 131, NULL, NULL),
+(128, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 10:34:41.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 132, NULL, NULL),
+(129, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 10:48:12.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 133, NULL, NULL),
+(130, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 10:59:23.000000', NULL, 3000.00, NULL, 'DESEMBOLSO', 134, NULL, NULL),
+(131, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 11:06:13.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 135, NULL, NULL),
+(132, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 11:12:32.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 136, NULL, NULL),
+(133, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 12:02:02.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 137, NULL, NULL),
+(134, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-10 12:17:15.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 138, NULL, NULL),
+(135, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 08:26:42.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 139, NULL, NULL),
+(136, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 08:36:47.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 140, NULL, NULL),
+(137, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 09:35:01.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 141, NULL, NULL),
+(138, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 09:45:54.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 142, NULL, NULL),
+(139, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 10:17:29.000000', NULL, 1500.00, NULL, 'DESEMBOLSO', 143, NULL, NULL),
+(140, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 10:25:11.000000', NULL, 4000.00, NULL, 'DESEMBOLSO', 144, NULL, NULL),
+(141, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 11:49:57.000000', NULL, 200.00, NULL, 'DESEMBOLSO', 145, NULL, NULL),
+(142, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 12:01:07.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 146, NULL, NULL),
+(143, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-11 17:39:09.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 147, NULL, NULL),
+(145, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-12 11:50:16.000000', NULL, 1300.00, NULL, 'DESEMBOLSO', 122, NULL, NULL),
+(146, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-13 09:58:13.000000', NULL, 1300.00, NULL, 'DESEMBOLSO', 150, NULL, NULL),
+(147, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-13 12:11:10.000000', NULL, 1300.00, NULL, 'DESEMBOLSO', 151, NULL, NULL),
+(148, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-16 09:36:09.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 152, NULL, NULL),
+(149, 36.97, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.97, '', 'PAGO_CUOTA', 91, 595, 0.00),
+(150, 41.41, 0.00, 31.56, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.97, '', 'PAGO_CUOTA', 91, 596, 0.00),
+(151, 46.38, 0.00, 26.59, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.97, '', 'PAGO_CUOTA', 91, 597, 0.00),
+(152, 51.94, 0.00, 21.03, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.97, '', 'PAGO_CUOTA', 91, 598, 0.00),
+(153, 58.17, 0.00, 14.80, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.97, '', 'PAGO_CUOTA', 91, 599, 0.00),
+(154, 65.13, 0.00, 7.82, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-16 12:05:45.000000', 'EFECTIVO', 72.95, '', 'PAGO_CUOTA', 91, 600, 0.00),
+(155, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-16 15:41:50.000000', NULL, 100.00, NULL, 'DESEMBOLSO', 153, NULL, NULL),
+(156, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-18 17:28:10.000000', NULL, 500.00, NULL, 'DESEMBOLSO', 154, NULL, NULL),
+(157, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-19 11:14:01.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 148, NULL, NULL),
+(158, 600.00, 0.00, 72.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-19 11:22:39.000000', 'EFECTIVO', 672.00, '', 'PAGO_CUOTA', 44, 336, 0.00),
+(159, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-19 11:26:52.000000', 'EFECTIVO', 75.00, 'EFECTIVO-285008', 'PAGO_CUOTA', 133, 23137, 0.00),
+(160, 62.75, 0.00, 100.00, 56.24, 'Pago cuota #1 via EFECTIVO', '2026-06-20 01:48:02.000000', 'EFECTIVO', 218.99, 'EFECTIVO-075171', 'PAGO_CUOTA', 148, 23243, 0.00),
+(161, 69.02, 0.00, 93.73, 52.09, 'Pago cuota #2 via EFECTIVO', '2026-06-20 01:48:46.000000', 'EFECTIVO', 214.84, 'EFECTIVO-115906', 'PAGO_CUOTA', 148, 23244, 0.00),
+(162, 149.49, 0.00, 403.65, 302.54, 'Pago cuota #2 via EFECTIVO', '2026-06-20 10:09:25.000000', 'EFECTIVO', 1158.22, 'EFECTIVO-150864', 'PAGO_CUOTA', 28, 248, 0.00),
+(163, 37.41, 0.00, 80.00, 0.00, 'Pago cuota #1 via YAPE', '2026-06-20 10:12:52.000000', 'YAPE', 117.41, '27669955', 'PAGO_CUOTA', 56, 396, 0.00),
+(164, 149.49, 0.00, 403.65, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 10:14:16.000000', 'EFECTIVO', 553.14, 'EFECTIVO-444159', 'PAGO_CUOTA', 28, 248, 0.00),
+(165, 161.45, 0.00, 391.69, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 10:14:47.000000', 'EFECTIVO', 553.14, 'EFECTIVO-478320', 'PAGO_CUOTA', 28, 249, 0.00),
+(166, 174.37, 0.00, 378.77, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 10:15:22.000000', 'EFECTIVO', 553.14, 'EFECTIVO-513591', 'PAGO_CUOTA', 28, 250, 0.00),
+(167, 188.32, 0.00, 364.82, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 10:15:57.000000', 'EFECTIVO', 553.14, 'EFECTIVO-545704', 'PAGO_CUOTA', 28, 251, 0.00),
+(168, 109.65, 0.00, 500.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 10:38:28.000000', 'EFECTIVO', 609.65, 'EFECTIVO-896615', 'PAGO_CUOTA', 66, 450, 0.00),
+(169, 132.68, 0.00, 476.97, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 10:41:48.000000', 'EFECTIVO', 609.65, 'EFECTIVO-095104', 'PAGO_CUOTA', 66, 452, 0.00),
+(170, 0.00, 0.00, 0.00, 263.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 10:43:22.000000', 'EFECTIVO', 526.00, 'EFECTIVO-193496', 'PAGO_CUOTA', 66, 453, 0.00),
+(171, 176.59, 0.00, 433.06, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 10:47:31.000000', 'EFECTIVO', 609.65, 'EFECTIVO-443790', 'PAGO_CUOTA', 66, 455, 0.00),
+(172, 194.25, 0.00, 415.40, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 10:47:52.000000', 'EFECTIVO', 609.65, 'EFECTIVO-460550', 'PAGO_CUOTA', 66, 456, 0.00),
+(173, 213.68, 0.00, 395.97, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 10:48:21.000000', 'EFECTIVO', 609.65, 'EFECTIVO-487943', 'PAGO_CUOTA', 66, 457, 0.00),
+(174, 213.68, 0.00, 395.97, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 11:22:35.000000', 'EFECTIVO', 609.65, 'EFECTIVO-547222', 'PAGO_CUOTA', 66, 457, 0.00),
+(175, 67.80, 0.00, 600.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 11:45:28.000000', 'EFECTIVO', 667.80, 'EFECTIVO-921022', 'PAGO_CUOTA', 68, 474, 0.00),
+(176, 187.05, 0.00, 400.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 11:47:09.000000', 'EFECTIVO', 587.05, 'EFECTIVO-023509', 'PAGO_CUOTA', 144, 936, 0.00),
+(177, 205.75, 0.00, 381.30, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 11:47:25.000000', 'EFECTIVO', 587.05, 'EFECTIVO-038206', 'PAGO_CUOTA', 144, 937, 0.00),
+(178, 226.33, 0.00, 360.72, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 11:47:41.000000', 'EFECTIVO', 587.05, 'EFECTIVO-054758', 'PAGO_CUOTA', 144, 938, 0.00),
+(179, 331.37, 0.00, 255.68, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 11:51:02.000000', 'EFECTIVO', 587.05, 'EFECTIVO-255430', 'PAGO_CUOTA', 144, 942, 0.00),
+(180, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 12:13:28.000000', 'EFECTIVO', 300.00, 'EFECTIVO-601933', 'PAGO_CUOTA', 134, 23211, 0.00),
+(181, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 12:13:41.000000', 'EFECTIVO', 300.00, 'EFECTIVO-615262', 'PAGO_CUOTA', 134, 23212, 0.00),
+(182, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 12:13:55.000000', 'EFECTIVO', 300.00, 'EFECTIVO-629461', 'PAGO_CUOTA', 134, 23213, 0.00),
+(183, 0.00, 0.00, 300.00, 10.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 12:14:42.000000', 'EFECTIVO', 320.00, 'EFECTIVO-675165', 'PAGO_CUOTA', 134, 23214, 0.00),
+(184, 0.00, 0.00, 300.00, 10.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 12:15:15.000000', 'EFECTIVO', 320.00, 'EFECTIVO-706125', 'PAGO_CUOTA', 134, 23215, 0.00),
+(185, 0.00, 0.00, 300.00, 10.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 12:15:39.000000', 'EFECTIVO', 320.00, 'EFECTIVO-731054', 'PAGO_CUOTA', 134, 23217, 0.00),
+(186, 0.00, 0.00, 300.00, 10.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 12:15:53.000000', 'EFECTIVO', 320.00, 'EFECTIVO-746334', 'PAGO_CUOTA', 134, 23216, 0.00),
+(187, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 12:16:26.000000', 'EFECTIVO', 300.00, 'EFECTIVO-777254', 'PAGO_CUOTA', 134, 23218, 0.00),
+(188, 0.00, 0.00, 300.00, 40.00, 'Pago cuota #9 via EFECTIVO', '2026-06-20 12:17:11.000000', 'EFECTIVO', 380.00, 'EFECTIVO-821173', 'PAGO_CUOTA', 134, 23219, 0.00),
+(189, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-20 12:17:46.000000', 'EFECTIVO', 300.00, 'EFECTIVO-852573', 'PAGO_CUOTA', 134, 23220, 0.00),
+(190, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-20 12:18:40.000000', 'EFECTIVO', 300.00, 'EFECTIVO-913414', 'PAGO_CUOTA', 134, 23221, 0.00),
+(191, 0.00, 0.00, 300.00, 180.00, 'Pago cuota #12 via EFECTIVO', '2026-06-20 12:19:05.000000', 'EFECTIVO', 660.00, 'EFECTIVO-937253', 'PAGO_CUOTA', 134, 23222, 0.00),
+(192, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #13 via EFECTIVO', '2026-06-20 12:19:37.000000', 'EFECTIVO', 300.00, 'EFECTIVO-970837', 'PAGO_CUOTA', 134, 23223, 0.00),
+(193, 139.53, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 12:25:52.000000', 'EFECTIVO', 184.53, 'EFECTIVO-345637', 'PAGO_CUOTA', 115, 723, 0.00),
+(194, 160.47, 0.00, 24.07, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 12:26:12.000000', 'EFECTIVO', 184.54, 'EFECTIVO-364501', 'PAGO_CUOTA', 115, 724, 0.00),
+(195, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 12:55:20.000000', 'EFECTIVO', 45.00, 'EFECTIVO-110693', 'PAGO_CUOTA', 132, 850, 0.00),
+(196, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 12:55:40.000000', 'EFECTIVO', 45.00, 'EFECTIVO-131086', 'PAGO_CUOTA', 132, 22915, 0.00),
+(197, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 12:56:01.000000', 'EFECTIVO', 45.00, 'EFECTIVO-151573', 'PAGO_CUOTA', 132, 22916, 0.00),
+(198, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 12:56:22.000000', 'EFECTIVO', 45.00, 'EFECTIVO-172581', 'PAGO_CUOTA', 132, 22917, 0.00),
+(199, 0.00, 0.00, 45.00, 10.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 12:56:45.000000', 'EFECTIVO', 65.00, 'EFECTIVO-196670', 'PAGO_CUOTA', 132, 22921, 0.00),
+(200, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 12:57:04.000000', 'EFECTIVO', 45.00, 'EFECTIVO-214845', 'PAGO_CUOTA', 132, 22920, 0.00),
+(201, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 12:57:23.000000', 'EFECTIVO', 45.00, 'EFECTIVO-236598', 'PAGO_CUOTA', 132, 22919, 0.00),
+(202, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 12:57:40.000000', 'EFECTIVO', 45.00, 'EFECTIVO-250493', 'PAGO_CUOTA', 132, 22918, 0.00),
+(203, 132.68, 0.00, 476.97, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 15:30:59.000000', 'EFECTIVO', 609.65, 'EFECTIVO-449582', 'PAGO_CUOTA', 66, 452, 0.00),
+(204, 176.59, 0.00, 433.06, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 15:33:18.000000', 'EFECTIVO', 609.65, 'EFECTIVO-585925', 'PAGO_CUOTA', 66, 455, 0.00),
+(205, 194.25, 0.00, 415.40, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 15:33:48.000000', 'EFECTIVO', 609.65, 'EFECTIVO-618573', 'PAGO_CUOTA', 66, 456, 0.00),
+(206, 133.00, 0.00, 477.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 15:38:17.000000', 'EFECTIVO', 610.00, 'EFECTIVO-882195', 'PAGO_CUOTA', 66, 452, 0.00),
+(207, 60.08, 0.00, 45.00, 18.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 15:57:50.000000', 'EFECTIVO', 141.08, 'EFECTIVO-057501', 'PAGO_CUOTA', 27, 243, 0.00),
+(208, 0.00, 0.00, 98.20, 14.34, 'Pago cuota #2 via EFECTIVO', '2026-06-20 16:00:21.000000', 'EFECTIVO', 126.88, 'EFECTIVO-207649', 'PAGO_CUOTA', 27, 244, 0.00),
+(209, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 16:07:27.000000', 'EFECTIVO', 45.00, 'EFECTIVO-628594', 'PAGO_CUOTA', 135, 853, 0.00),
+(210, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 16:07:51.000000', 'EFECTIVO', 45.00, 'EFECTIVO-659536', 'PAGO_CUOTA', 135, 23095, 0.00),
+(211, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 16:08:08.000000', 'EFECTIVO', 45.00, 'EFECTIVO-681005', 'PAGO_CUOTA', 135, 23096, 0.00),
+(212, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 16:15:37.000000', 'EFECTIVO', 45.00, 'EFECTIVO-122403', 'PAGO_CUOTA', 93, 605, 0.00),
+(213, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 16:16:00.000000', 'EFECTIVO', 45.00, 'EFECTIVO-150712', 'PAGO_CUOTA', 93, 819, 0.00),
+(214, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 16:16:20.000000', 'EFECTIVO', 45.00, 'EFECTIVO-169248', 'PAGO_CUOTA', 93, 820, 0.00),
+(215, 91.39, 0.00, 120.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 16:22:28.000000', 'EFECTIVO', 211.39, 'EFECTIVO-536266', 'PAGO_CUOTA', 139, 907, 0.00),
+(216, 105.10, 0.00, 106.29, 48.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 16:22:54.000000', 'EFECTIVO', 307.39, 'EFECTIVO-564741', 'PAGO_CUOTA', 139, 908, 0.00),
+(217, 120.86, 0.00, 90.53, 48.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 16:24:10.000000', 'EFECTIVO', 307.39, 'EFECTIVO-625467', 'PAGO_CUOTA', 139, 909, 0.00),
+(218, 138.99, 0.00, 72.40, 48.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 16:24:45.000000', 'EFECTIVO', 307.39, 'EFECTIVO-674212', 'PAGO_CUOTA', 139, 910, 0.00),
+(219, 53.40, 0.00, 160.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 16:32:26.000000', 'EFECTIVO', 213.40, 'EFECTIVO-135028', 'PAGO_CUOTA', 25, 201, 0.00),
+(220, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 17:04:02.000000', 'EFECTIVO', 75.00, 'EFECTIVO-033996', 'PAGO_CUOTA', 133, 23137, 0.00),
+(221, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 17:04:20.000000', 'EFECTIVO', 75.00, 'EFECTIVO-052084', 'PAGO_CUOTA', 133, 23138, 0.00),
+(222, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 17:04:34.000000', 'EFECTIVO', 75.00, 'EFECTIVO-067220', 'PAGO_CUOTA', 133, 23139, 0.00),
+(223, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 17:05:56.000000', 'EFECTIVO', 75.00, 'EFECTIVO-148238', 'PAGO_CUOTA', 133, 23140, 0.00),
+(224, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 17:06:12.000000', 'EFECTIVO', 75.00, 'EFECTIVO-164173', 'PAGO_CUOTA', 133, 23141, 0.00),
+(225, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 17:06:26.000000', 'EFECTIVO', 75.00, 'EFECTIVO-178852', 'PAGO_CUOTA', 133, 23142, 0.00),
+(226, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 17:06:44.000000', 'EFECTIVO', 75.00, 'EFECTIVO-195860', 'PAGO_CUOTA', 133, 23143, 0.00),
+(227, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 17:07:01.000000', 'EFECTIVO', 75.00, 'EFECTIVO-212091', 'PAGO_CUOTA', 133, 23144, 0.00),
+(228, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-20 17:07:13.000000', 'EFECTIVO', 75.00, 'EFECTIVO-226404', 'PAGO_CUOTA', 133, 23145, 0.00),
+(229, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-20 17:07:32.000000', 'EFECTIVO', 75.00, 'EFECTIVO-241076', 'PAGO_CUOTA', 133, 23146, 0.00),
+(230, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-20 17:07:58.000000', 'EFECTIVO', 75.00, 'EFECTIVO-271068', 'PAGO_CUOTA', 133, 23147, 0.00),
+(231, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-20 17:08:15.000000', 'EFECTIVO', 75.00, 'EFECTIVO-285724', 'PAGO_CUOTA', 133, 23148, 0.00),
+(232, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #13 via EFECTIVO', '2026-06-20 17:08:30.000000', 'EFECTIVO', 75.00, 'EFECTIVO-302565', 'PAGO_CUOTA', 133, 23149, 0.00),
+(233, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #14 via EFECTIVO', '2026-06-20 17:08:47.000000', 'EFECTIVO', 75.00, 'EFECTIVO-316300', 'PAGO_CUOTA', 133, 23150, 0.00),
+(234, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #15 via EFECTIVO', '2026-06-20 17:09:12.000000', 'EFECTIVO', 75.00, 'EFECTIVO-342582', 'PAGO_CUOTA', 133, 23151, 0.00),
+(235, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #16 via EFECTIVO', '2026-06-20 17:09:28.000000', 'EFECTIVO', 75.00, 'EFECTIVO-359620', 'PAGO_CUOTA', 133, 23152, 0.00),
+(236, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #17 via EFECTIVO', '2026-06-20 17:09:43.000000', 'EFECTIVO', 75.00, 'EFECTIVO-375885', 'PAGO_CUOTA', 133, 23153, 0.00),
+(237, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #18 via EFECTIVO', '2026-06-20 17:09:58.000000', 'EFECTIVO', 75.00, 'EFECTIVO-389804', 'PAGO_CUOTA', 133, 23154, 0.00),
+(238, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #19 via EFECTIVO', '2026-06-20 17:10:12.000000', 'EFECTIVO', 75.00, 'EFECTIVO-405060', 'PAGO_CUOTA', 133, 23155, 0.00),
+(239, 0.00, 0.00, 75.00, 0.00, 'Pago cuota #21 via YAPE', '2026-06-20 17:12:45.000000', 'YAPE', 75.00, '1150834', 'PAGO_CUOTA', 133, 23157, 0.00),
+(240, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 17:24:18.000000', 'EFECTIVO', 45.00, 'EFECTIVO-249860', 'PAGO_CUOTA', 64, 443, 0.00),
+(241, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 17:24:37.000000', 'EFECTIVO', 45.00, 'EFECTIVO-271259', 'PAGO_CUOTA', 64, 22997, 0.00),
+(242, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 17:24:56.000000', 'EFECTIVO', 45.00, 'EFECTIVO-286764', 'PAGO_CUOTA', 64, 22998, 0.00),
+(243, 64.80, 0.00, 50.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 17:59:11.000000', 'EFECTIVO', 114.80, 'EFECTIVO-343267', 'PAGO_CUOTA', 33, 280, 0.00),
+(244, 71.28, 0.00, 43.52, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:00:05.000000', 'EFECTIVO', 114.80, 'EFECTIVO-398859', 'PAGO_CUOTA', 33, 281, 0.00),
+(245, 78.41, 0.00, 36.39, 21.84, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:00:45.000000', 'EFECTIVO', 158.48, 'EFECTIVO-437787', 'PAGO_CUOTA', 33, 282, 0.00),
+(246, 86.25, 0.00, 28.55, 21.80, 'Pago cuota #4 via EFECTIVO', '2026-06-20 18:00:58.000000', 'EFECTIVO', 158.40, 'EFECTIVO-452212', 'PAGO_CUOTA', 33, 283, 0.00),
+(247, 94.87, 0.00, 19.93, 21.80, 'Pago cuota #5 via EFECTIVO', '2026-06-20 18:01:13.000000', 'EFECTIVO', 158.40, 'EFECTIVO-466723', 'PAGO_CUOTA', 33, 284, 0.00),
+(248, 104.39, 0.00, 10.44, 21.80, 'Pago cuota #6 via EFECTIVO', '2026-06-20 18:01:27.000000', 'EFECTIVO', 158.43, 'EFECTIVO-479836', 'PAGO_CUOTA', 33, 285, 0.00),
+(249, 0.00, 0.00, 36.00, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 18:01:41.000000', 'EFECTIVO', 36.00, 'EFECTIVO-494475', 'PAGO_CUOTA', 33, 906, 0.00),
+(250, 114.26, 0.00, 17.14, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:02:42.000000', 'EFECTIVO', 131.40, 'EFECTIVO-554731', 'PAGO_CUOTA', 48, 359, 0.00),
+(251, 86.39, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 18:02:52.000000', 'EFECTIVO', 131.39, 'EFECTIVO-567804', 'PAGO_CUOTA', 48, 357, 0.00),
+(252, 99.35, 0.00, 32.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:03:05.000000', 'EFECTIVO', 131.39, 'EFECTIVO-578260', 'PAGO_CUOTA', 48, 358, 0.00),
+(253, 130.00, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 18:07:19.000000', 'EFECTIVO', 230.00, 'EFECTIVO-827427', 'PAGO_CUOTA', 46, 345, 0.00),
+(254, 143.00, 0.00, 87.00, 52.32, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:07:31.000000', 'EFECTIVO', 334.64, 'EFECTIVO-845179', 'PAGO_CUOTA', 46, 346, 0.00),
+(255, 157.00, 0.00, 73.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:07:50.000000', 'EFECTIVO', 230.00, 'EFECTIVO-864787', 'PAGO_CUOTA', 46, 347, 0.00),
+(256, 173.00, 0.00, 57.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 18:08:17.000000', 'EFECTIVO', 230.00, 'EFECTIVO-890675', 'PAGO_CUOTA', 46, 348, 0.00),
+(257, 190.00, 0.00, 40.00, 24.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 18:08:48.000000', 'EFECTIVO', 278.00, 'EFECTIVO-919547', 'PAGO_CUOTA', 46, 349, 0.00),
+(258, 0.00, 0.00, 130.00, 78.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 18:17:58.000000', 'EFECTIVO', 286.00, 'EFECTIVO-471739', 'PAGO_CUOTA', 151, 22978, 0.00),
+(259, 0.00, 0.00, 130.00, 78.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:18:10.000000', 'EFECTIVO', 286.00, 'EFECTIVO-484194', 'PAGO_CUOTA', 151, 22979, 0.00),
+(260, 0.00, 0.00, 130.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:18:26.000000', 'EFECTIVO', 130.00, 'EFECTIVO-500123', 'PAGO_CUOTA', 151, 22980, 0.00),
+(261, 0.00, 0.00, 130.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 18:18:42.000000', 'EFECTIVO', 130.00, 'EFECTIVO-512811', 'PAGO_CUOTA', 151, 22981, 0.00),
+(262, 68.54, 0.00, 90.00, 36.06, 'Pago cuota #1 via EFECTIVO', '2026-06-20 18:31:01.000000', 'EFECTIVO', 230.66, 'EFECTIVO-255387', 'PAGO_CUOTA', 42, 326, 0.00),
+(263, 78.82, 0.00, 79.72, 31.92, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:32:18.000000', 'EFECTIVO', 222.38, 'EFECTIVO-332691', 'PAGO_CUOTA', 42, 327, 0.00),
+(264, 90.64, 0.00, 67.90, 27.18, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:32:36.000000', 'EFECTIVO', 212.90, 'EFECTIVO-350362', 'PAGO_CUOTA', 42, 328, 0.00),
+(265, 104.24, 0.00, 54.30, 21.72, 'Pago cuota #4 via EFECTIVO', '2026-06-20 18:32:52.000000', 'EFECTIVO', 201.98, 'EFECTIVO-365282', 'PAGO_CUOTA', 42, 329, 0.00),
+(266, 119.88, 0.00, 38.66, 15.48, 'Pago cuota #5 via EFECTIVO', '2026-06-20 18:33:06.000000', 'EFECTIVO', 189.50, 'EFECTIVO-379499', 'PAGO_CUOTA', 42, 330, 0.00),
+(267, 137.88, 0.00, 20.68, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 18:33:21.000000', 'EFECTIVO', 158.56, 'EFECTIVO-392571', 'PAGO_CUOTA', 42, 331, 0.00),
+(268, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-20 18:44:07.000000', 'EFECTIVO', 30.00, 'EFECTIVO-041666', 'PAGO_CUOTA', 145, 22898, 0.00),
+(269, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-20 18:44:20.000000', 'EFECTIVO', 30.00, 'EFECTIVO-054243', 'PAGO_CUOTA', 145, 22899, 0.00),
+(270, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #13 via EFECTIVO', '2026-06-20 18:44:33.000000', 'EFECTIVO', 30.00, 'EFECTIVO-066571', 'PAGO_CUOTA', 145, 22900, 0.00),
+(271, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #14 via EFECTIVO', '2026-06-20 18:44:47.000000', 'EFECTIVO', 30.00, 'EFECTIVO-079763', 'PAGO_CUOTA', 145, 22901, 0.00),
+(272, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #15 via EFECTIVO', '2026-06-20 18:45:35.000000', 'EFECTIVO', 30.00, 'EFECTIVO-092611', 'PAGO_CUOTA', 145, 22902, 0.00),
+(273, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #16 via EFECTIVO', '2026-06-20 18:45:50.000000', 'EFECTIVO', 30.00, 'EFECTIVO-143044', 'PAGO_CUOTA', 145, 22903, 0.00),
+(274, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #17 via EFECTIVO', '2026-06-20 18:46:02.000000', 'EFECTIVO', 30.00, 'EFECTIVO-156266', 'PAGO_CUOTA', 145, 22904, 0.00),
+(275, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-20 18:47:18.000000', 'EFECTIVO', 30.00, 'EFECTIVO-179874', 'PAGO_CUOTA', 145, 948, 0.00),
+(276, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-20 18:47:31.000000', 'EFECTIVO', 30.00, 'EFECTIVO-245322', 'PAGO_CUOTA', 145, 22889, 0.00),
+(277, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-20 18:47:44.000000', 'EFECTIVO', 30.00, 'EFECTIVO-257780', 'PAGO_CUOTA', 145, 22890, 0.00),
+(278, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-20 18:47:59.000000', 'EFECTIVO', 30.00, 'EFECTIVO-271274', 'PAGO_CUOTA', 145, 22891, 0.00),
+(279, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-20 18:48:13.000000', 'EFECTIVO', 30.00, 'EFECTIVO-286570', 'PAGO_CUOTA', 145, 22892, 0.00),
+(280, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-20 18:48:28.000000', 'EFECTIVO', 30.00, 'EFECTIVO-301059', 'PAGO_CUOTA', 145, 22893, 0.00),
+(281, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-20 18:48:45.000000', 'EFECTIVO', 30.00, 'EFECTIVO-317579', 'PAGO_CUOTA', 145, 22894, 0.00),
+(282, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-20 18:49:06.000000', 'EFECTIVO', 30.00, 'EFECTIVO-337642', 'PAGO_CUOTA', 145, 22895, 0.00),
+(283, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-20 18:49:24.000000', 'EFECTIVO', 30.00, 'EFECTIVO-355570', 'PAGO_CUOTA', 145, 22896, 0.00),
+(284, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-20 18:49:40.000000', 'EFECTIVO', 30.00, 'EFECTIVO-372779', 'PAGO_CUOTA', 145, 22897, 0.00),
+(285, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 09:08:07.000000', 'EFECTIVO', 135.00, 'EFECTIVO-279590', 'PAGO_CUOTA', 79, 549, 0.00),
+(286, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 09:08:49.000000', 'EFECTIVO', 135.00, 'EFECTIVO-322958', 'PAGO_CUOTA', 79, 549, 0.00),
+(287, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 09:09:08.000000', 'EFECTIVO', 135.00, 'EFECTIVO-340399', 'PAGO_CUOTA', 79, 22906, 0.00),
+(288, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 09:09:27.000000', 'EFECTIVO', 135.00, 'EFECTIVO-359278', 'PAGO_CUOTA', 79, 23253, 0.00),
+(289, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 09:09:45.000000', 'EFECTIVO', 135.00, 'EFECTIVO-378950', 'PAGO_CUOTA', 79, 23254, 0.00),
+(290, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 09:10:05.000000', 'EFECTIVO', 135.00, 'EFECTIVO-397255', 'PAGO_CUOTA', 79, 23255, 0.00),
+(291, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 09:10:22.000000', 'EFECTIVO', 135.00, 'EFECTIVO-414207', 'PAGO_CUOTA', 79, 23256, 0.00),
+(292, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #7 via EFECTIVO', '2026-06-22 09:10:39.000000', 'EFECTIVO', 135.00, 'EFECTIVO-431366', 'PAGO_CUOTA', 79, 23257, 0.00),
+(293, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #8 via EFECTIVO', '2026-06-22 09:10:55.000000', 'EFECTIVO', 135.00, 'EFECTIVO-448423', 'PAGO_CUOTA', 79, 23258, 0.00),
+(294, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #9 via EFECTIVO', '2026-06-22 09:11:10.000000', 'EFECTIVO', 135.00, 'EFECTIVO-464397', 'PAGO_CUOTA', 79, 23259, 0.00),
+(295, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #10 via EFECTIVO', '2026-06-22 09:11:25.000000', 'EFECTIVO', 135.00, 'EFECTIVO-478485', 'PAGO_CUOTA', 79, 23260, 0.00),
+(296, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 09:34:22.000000', 'EFECTIVO', 100.00, 'EFECTIVO-856590', 'PAGO_CUOTA', 138, 905, 0.00),
+(297, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #17 via EFECTIVO', '2026-06-22 09:34:51.000000', 'EFECTIVO', 100.00, 'EFECTIVO-883470', 'PAGO_CUOTA', 138, 22887, 0.00),
+(298, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #16 via EFECTIVO', '2026-06-22 09:35:08.000000', 'EFECTIVO', 100.00, 'EFECTIVO-902045', 'PAGO_CUOTA', 138, 22886, 0.00),
+(299, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 09:35:58.000000', 'EFECTIVO', 100.00, 'EFECTIVO-953357', 'PAGO_CUOTA', 138, 22872, 0.00),
+(300, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 09:36:11.000000', 'EFECTIVO', 100.00, 'EFECTIVO-966221', 'PAGO_CUOTA', 138, 22873, 0.00),
+(301, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 09:36:26.000000', 'EFECTIVO', 100.00, 'EFECTIVO-980557', 'PAGO_CUOTA', 138, 22874, 0.00),
+(302, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 09:36:40.000000', 'EFECTIVO', 100.00, 'EFECTIVO-994485', 'PAGO_CUOTA', 138, 22875, 0.00),
+(303, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 09:36:56.000000', 'EFECTIVO', 100.00, 'EFECTIVO-009398', 'PAGO_CUOTA', 138, 22876, 0.00),
+(304, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-22 09:37:09.000000', 'EFECTIVO', 100.00, 'EFECTIVO-023421', 'PAGO_CUOTA', 138, 22877, 0.00),
+(305, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-22 09:37:24.000000', 'EFECTIVO', 100.00, 'EFECTIVO-036758', 'PAGO_CUOTA', 138, 22878, 0.00),
+(306, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-22 09:37:36.000000', 'EFECTIVO', 100.00, 'EFECTIVO-050949', 'PAGO_CUOTA', 138, 22879, 0.00),
+(307, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-22 09:37:49.000000', 'EFECTIVO', 100.00, 'EFECTIVO-063205', 'PAGO_CUOTA', 138, 22880, 0.00),
+(308, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-22 09:38:03.000000', 'EFECTIVO', 100.00, 'EFECTIVO-078382', 'PAGO_CUOTA', 138, 22881, 0.00),
+(309, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-22 09:38:16.000000', 'EFECTIVO', 100.00, 'EFECTIVO-090709', 'PAGO_CUOTA', 138, 22882, 0.00),
+(310, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #13 via EFECTIVO', '2026-06-22 09:38:29.000000', 'EFECTIVO', 100.00, 'EFECTIVO-103661', 'PAGO_CUOTA', 138, 22883, 0.00),
+(311, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #14 via EFECTIVO', '2026-06-22 09:38:42.000000', 'EFECTIVO', 100.00, 'EFECTIVO-115142', 'PAGO_CUOTA', 138, 22884, 0.00),
+(312, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #15 via EFECTIVO', '2026-06-22 09:39:00.000000', 'EFECTIVO', 100.00, 'EFECTIVO-133934', 'PAGO_CUOTA', 138, 22885, 0.00),
+(313, 44.44, 0.00, 104.04, 0.00, 'Pago cuota #5 via YAPE', '2026-06-22 09:56:00.000000', 'YAPE', 148.48, '80053EF06B1D', 'PAGO_CUOTA', 122, 22858, 0.00),
+(314, 31.48, 0.00, 117.00, 78.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 09:57:00.000000', 'EFECTIVO', 304.48, 'EFECTIVO-215351', 'PAGO_CUOTA', 122, 22854, 0.00),
+(315, 34.31, 0.00, 114.17, 76.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 09:57:13.000000', 'EFECTIVO', 300.48, 'EFECTIVO-227766', 'PAGO_CUOTA', 122, 22855, 0.00),
+(316, 37.40, 0.00, 111.08, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 09:57:26.000000', 'EFECTIVO', 148.48, 'EFECTIVO-240182', 'PAGO_CUOTA', 122, 22856, 0.00),
+(317, 40.77, 0.00, 107.71, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 09:57:38.000000', 'EFECTIVO', 148.48, 'EFECTIVO-252800', 'PAGO_CUOTA', 122, 22857, 0.00),
+(318, 57.12, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 09:58:40.000000', 'EFECTIVO', 132.12, 'EFECTIVO-314846', 'PAGO_CUOTA', 80, 550, 0.00),
+(319, 65.69, 0.00, 66.43, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 09:58:53.000000', 'EFECTIVO', 132.12, 'EFECTIVO-327366', 'PAGO_CUOTA', 80, 551, 0.00),
+(320, 75.54, 0.00, 56.58, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 09:59:04.000000', 'EFECTIVO', 132.12, 'EFECTIVO-339087', 'PAGO_CUOTA', 80, 552, 0.00),
+(321, 86.87, 0.00, 45.25, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 09:59:17.000000', 'EFECTIVO', 132.12, 'EFECTIVO-350798', 'PAGO_CUOTA', 80, 553, 0.00),
+(322, 99.90, 0.00, 32.22, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 09:59:27.000000', 'EFECTIVO', 132.12, 'EFECTIVO-362086', 'PAGO_CUOTA', 80, 554, 0.00),
+(323, 114.88, 0.00, 17.23, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 09:59:38.000000', 'EFECTIVO', 132.11, 'EFECTIVO-373767', 'PAGO_CUOTA', 80, 555, 0.00),
+(324, 86.39, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:00:18.000000', 'EFECTIVO', 131.39, 'EFECTIVO-412933', 'PAGO_CUOTA', 70, 506, 0.00),
+(325, 86.39, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:00:50.000000', 'EFECTIVO', 131.39, 'EFECTIVO-441454', 'PAGO_CUOTA', 70, 506, 0.00),
+(326, 99.35, 0.00, 32.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:01:00.000000', 'EFECTIVO', 131.39, 'EFECTIVO-455054', 'PAGO_CUOTA', 70, 507, 0.00),
+(327, 114.26, 0.00, 17.14, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:01:13.000000', 'EFECTIVO', 131.40, 'EFECTIVO-467117', 'PAGO_CUOTA', 70, 508, 0.00),
+(328, 65.04, 0.00, 96.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:04:19.000000', 'EFECTIVO', 161.04, 'EFECTIVO-653582', 'PAGO_CUOTA', 89, 583, 0.00),
+(329, 72.84, 0.00, 88.20, 44.10, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:04:29.000000', 'EFECTIVO', 249.24, 'EFECTIVO-665318', 'PAGO_CUOTA', 89, 584, 0.00),
+(330, 81.59, 0.00, 79.45, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:04:40.000000', 'EFECTIVO', 161.04, 'EFECTIVO-674958', 'PAGO_CUOTA', 89, 585, 0.00),
+(331, 91.38, 0.00, 69.66, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 10:04:52.000000', 'EFECTIVO', 161.04, 'EFECTIVO-686646', 'PAGO_CUOTA', 89, 586, 0.00),
+(332, 102.34, 0.00, 58.70, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 10:05:04.000000', 'EFECTIVO', 161.04, 'EFECTIVO-699014', 'PAGO_CUOTA', 89, 587, 0.00),
+(333, 114.62, 0.00, 46.42, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 10:05:17.000000', 'EFECTIVO', 161.04, 'EFECTIVO-711017', 'PAGO_CUOTA', 89, 588, 0.00);
+INSERT INTO `movimientos` (`id`, `aplicado_capital`, `aplicado_comision`, `aplicado_interes`, `aplicado_mora`, `descripcion`, `fecha`, `metodo_pago`, `monto`, `numero_comprobante`, `tipo`, `credito_id`, `cuota_id`, `ajuste_redondeo`) VALUES
+(334, 128.38, 0.00, 32.66, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-22 10:05:33.000000', 'EFECTIVO', 161.04, 'EFECTIVO-727046', 'PAGO_CUOTA', 89, 589, 0.00),
+(335, 120.16, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:26:18.000000', 'EFECTIVO', 210.16, 'EFECTIVO-971638', 'PAGO_CUOTA', 37, 306, 0.00),
+(336, 138.18, 0.00, 71.98, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:26:30.000000', 'EFECTIVO', 210.16, 'EFECTIVO-984717', 'PAGO_CUOTA', 37, 307, 0.00),
+(337, 158.91, 0.00, 51.25, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:26:41.000000', 'EFECTIVO', 210.16, 'EFECTIVO-996709', 'PAGO_CUOTA', 37, 308, 0.00),
+(338, 182.75, 0.00, 27.41, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 10:26:56.000000', 'EFECTIVO', 210.16, 'EFECTIVO-010045', 'PAGO_CUOTA', 37, 309, 0.00),
+(339, 132.92, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:29:42.000000', 'EFECTIVO', 222.92, 'EFECTIVO-174310', 'PAGO_CUOTA', 102, 634, 0.00),
+(340, 144.88, 0.00, 78.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:29:53.000000', 'EFECTIVO', 222.92, 'EFECTIVO-188277', 'PAGO_CUOTA', 102, 635, 0.00),
+(341, 157.92, 0.00, 65.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:30:04.000000', 'EFECTIVO', 222.92, 'EFECTIVO-198949', 'PAGO_CUOTA', 102, 636, 0.00),
+(342, 118.00, 0.00, 63.55, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-22 10:32:18.000000', 'EFECTIVO', 181.55, 'EFECTIVO-332158', 'PAGO_CUOTA', 55, 391, 0.00),
+(343, 108.26, 0.00, 73.29, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-22 10:34:54.000000', 'EFECTIVO', 181.55, 'EFECTIVO-488077', 'PAGO_CUOTA', 55, 390, 0.00),
+(344, 64.55, 0.00, 117.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:35:05.000000', 'EFECTIVO', 181.55, 'EFECTIVO-499925', 'PAGO_CUOTA', 55, 384, 0.00),
+(345, 70.36, 0.00, 111.19, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:35:20.000000', 'EFECTIVO', 181.55, 'EFECTIVO-511293', 'PAGO_CUOTA', 55, 385, 0.00),
+(346, 76.69, 0.00, 104.86, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:35:31.000000', 'EFECTIVO', 181.55, 'EFECTIVO-526061', 'PAGO_CUOTA', 55, 386, 0.00),
+(347, 83.59, 0.00, 97.96, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 10:35:44.000000', 'EFECTIVO', 181.55, 'EFECTIVO-538134', 'PAGO_CUOTA', 55, 387, 0.00),
+(348, 91.12, 0.00, 90.43, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 10:35:58.000000', 'EFECTIVO', 181.55, 'EFECTIVO-550789', 'PAGO_CUOTA', 55, 388, 0.00),
+(349, 99.32, 0.00, 82.23, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 10:36:12.000000', 'EFECTIVO', 181.55, 'EFECTIVO-564365', 'PAGO_CUOTA', 55, 389, 0.00),
+(350, 129.61, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:38:52.000000', 'EFECTIVO', 229.61, 'EFECTIVO-726815', 'PAGO_CUOTA', 67, 468, 0.00),
+(351, 208.72, 0.00, 20.87, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 10:39:08.000000', 'EFECTIVO', 229.59, 'EFECTIVO-741589', 'PAGO_CUOTA', 67, 473, 0.00),
+(352, 142.57, 0.00, 87.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:39:29.000000', 'EFECTIVO', 229.61, 'EFECTIVO-759268', 'PAGO_CUOTA', 67, 469, 0.00),
+(353, 156.83, 0.00, 72.78, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:39:56.000000', 'EFECTIVO', 229.61, 'EFECTIVO-789725', 'PAGO_CUOTA', 67, 470, 0.00),
+(354, 172.51, 0.00, 57.10, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 10:40:21.000000', 'EFECTIVO', 229.61, 'EFECTIVO-815565', 'PAGO_CUOTA', 67, 471, 0.00),
+(355, 189.76, 0.00, 39.85, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 10:40:33.000000', 'EFECTIVO', 229.61, 'EFECTIVO-827437', 'PAGO_CUOTA', 67, 472, 0.00),
+(356, 208.72, 0.00, 20.87, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 10:41:05.000000', 'EFECTIVO', 229.59, 'EFECTIVO-859598', 'PAGO_CUOTA', 50, 368, 0.00),
+(357, 129.61, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:41:18.000000', 'EFECTIVO', 229.61, 'EFECTIVO-873286', 'PAGO_CUOTA', 50, 363, 0.00),
+(358, 142.57, 0.00, 87.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 10:41:30.000000', 'EFECTIVO', 229.61, 'EFECTIVO-884829', 'PAGO_CUOTA', 50, 364, 0.00),
+(359, 156.83, 0.00, 72.78, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 10:41:40.000000', 'EFECTIVO', 229.61, 'EFECTIVO-895214', 'PAGO_CUOTA', 50, 365, 0.00),
+(360, 172.51, 0.00, 57.10, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 10:41:52.000000', 'EFECTIVO', 229.61, 'EFECTIVO-906765', 'PAGO_CUOTA', 50, 366, 0.00),
+(361, 189.76, 0.00, 39.85, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 10:42:07.000000', 'EFECTIVO', 229.61, 'EFECTIVO-921807', 'PAGO_CUOTA', 50, 367, 0.00),
+(362, 132.92, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 10:57:11.000000', 'EFECTIVO', 222.92, 'EFECTIVO-822333', 'PAGO_CUOTA', 103, 640, 0.00),
+(363, 128.60, 0.00, 150.70, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:01:11.000000', 'EFECTIVO', 279.30, 'EFECTIVO-065357', 'PAGO_CUOTA', 125, 23279, 0.00),
+(364, 99.30, 0.00, 180.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:01:25.000000', 'EFECTIVO', 279.30, 'EFECTIVO-080133', 'PAGO_CUOTA', 125, 23276, 0.00),
+(365, 108.24, 0.00, 171.06, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:01:38.000000', 'EFECTIVO', 279.30, 'EFECTIVO-091453', 'PAGO_CUOTA', 125, 23277, 0.00),
+(366, 117.98, 0.00, 161.32, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:01:51.000000', 'EFECTIVO', 279.30, 'EFECTIVO-105286', 'PAGO_CUOTA', 125, 23278, 0.00),
+(367, 144.88, 0.00, 78.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:03:18.000000', 'EFECTIVO', 222.92, 'EFECTIVO-192949', 'PAGO_CUOTA', 103, 641, 0.00),
+(368, 157.92, 0.00, 65.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:03:31.000000', 'EFECTIVO', 222.92, 'EFECTIVO-203813', 'PAGO_CUOTA', 103, 642, 0.00),
+(369, 172.13, 0.00, 50.79, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:03:42.000000', 'EFECTIVO', 222.92, 'EFECTIVO-217565', 'PAGO_CUOTA', 103, 643, 0.00),
+(370, 187.63, 0.00, 35.29, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:03:52.000000', 'EFECTIVO', 222.92, 'EFECTIVO-227453', 'PAGO_CUOTA', 103, 644, 0.00),
+(371, 204.52, 0.00, 18.41, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 11:04:04.000000', 'EFECTIVO', 222.93, 'EFECTIVO-237877', 'PAGO_CUOTA', 103, 645, 0.00),
+(372, 115.20, 0.00, 135.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:04:56.000000', 'EFECTIVO', 250.20, 'EFECTIVO-290621', 'PAGO_CUOTA', 129, 803, 0.00),
+(373, 49.65, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:08:59.000000', 'EFECTIVO', 139.65, 'EFECTIVO-533485', 'PAGO_CUOTA', 112, 702, 0.00),
+(374, 54.12, 0.00, 85.53, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:09:11.000000', 'EFECTIVO', 139.65, 'EFECTIVO-545948', 'PAGO_CUOTA', 112, 703, 0.00),
+(375, 58.99, 0.00, 80.66, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:09:21.000000', 'EFECTIVO', 139.65, 'EFECTIVO-556910', 'PAGO_CUOTA', 112, 704, 0.00),
+(376, 64.30, 0.00, 75.35, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:09:34.000000', 'EFECTIVO', 139.65, 'EFECTIVO-569237', 'PAGO_CUOTA', 112, 705, 0.00),
+(377, 70.09, 0.00, 69.56, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:09:46.000000', 'EFECTIVO', 139.65, 'EFECTIVO-581013', 'PAGO_CUOTA', 112, 706, 0.00),
+(378, 49.65, 0.00, 90.00, 60.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:13:02.000000', 'EFECTIVO', 259.65, 'EFECTIVO-776541', 'PAGO_CUOTA', 111, 690, 0.00),
+(379, 54.12, 0.00, 85.53, 57.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:13:13.000000', 'EFECTIVO', 253.65, 'EFECTIVO-788397', 'PAGO_CUOTA', 111, 691, 0.00),
+(380, 58.99, 0.00, 80.66, 54.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:13:25.000000', 'EFECTIVO', 247.65, 'EFECTIVO-799445', 'PAGO_CUOTA', 111, 692, 0.00),
+(381, 46.76, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:16:08.000000', 'EFECTIVO', 146.76, 'EFECTIVO-962509', 'PAGO_CUOTA', 21, 153, 0.00),
+(382, 51.44, 0.00, 95.32, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:16:19.000000', 'EFECTIVO', 146.76, 'EFECTIVO-974093', 'PAGO_CUOTA', 21, 154, 0.00),
+(383, 56.58, 0.00, 90.18, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:16:32.000000', 'EFECTIVO', 146.76, 'EFECTIVO-985669', 'PAGO_CUOTA', 21, 155, 0.00),
+(384, 62.24, 0.00, 84.52, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:16:57.000000', 'EFECTIVO', 146.76, 'EFECTIVO-011878', 'PAGO_CUOTA', 21, 156, 0.00),
+(385, 68.46, 0.00, 78.30, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:17:09.000000', 'EFECTIVO', 146.76, 'EFECTIVO-023492', 'PAGO_CUOTA', 21, 157, 0.00),
+(386, 194.41, 0.00, 150.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:19:59.000000', 'EFECTIVO', 344.41, 'EFECTIVO-194277', 'PAGO_CUOTA', 60, 427, 0.00),
+(387, 213.85, 0.00, 130.56, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:20:09.000000', 'EFECTIVO', 344.41, 'EFECTIVO-204708', 'PAGO_CUOTA', 60, 428, 0.00),
+(388, 235.24, 0.00, 109.17, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:20:20.000000', 'EFECTIVO', 344.41, 'EFECTIVO-215141', 'PAGO_CUOTA', 60, 429, 0.00),
+(389, 258.76, 0.00, 85.65, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:20:34.000000', 'EFECTIVO', 344.41, 'EFECTIVO-228773', 'PAGO_CUOTA', 60, 430, 0.00),
+(390, 284.64, 0.00, 59.77, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:20:46.000000', 'EFECTIVO', 344.41, 'EFECTIVO-240261', 'PAGO_CUOTA', 60, 431, 0.00),
+(391, 313.10, 0.00, 31.31, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 11:21:03.000000', 'EFECTIVO', 344.41, 'EFECTIVO-255157', 'PAGO_CUOTA', 60, 432, 0.00),
+(392, 93.53, 0.00, 200.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:22:53.000000', 'EFECTIVO', 293.53, 'EFECTIVO-367325', 'PAGO_CUOTA', 121, 743, 0.00),
+(393, 102.88, 0.00, 190.65, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:23:07.000000', 'EFECTIVO', 293.53, 'EFECTIVO-382860', 'PAGO_CUOTA', 121, 744, 0.00),
+(394, 113.17, 0.00, 180.36, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:23:18.000000', 'EFECTIVO', 293.53, 'EFECTIVO-392757', 'PAGO_CUOTA', 121, 745, 0.00),
+(395, 124.49, 0.00, 169.04, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:23:32.000000', 'EFECTIVO', 293.53, 'EFECTIVO-406012', 'PAGO_CUOTA', 121, 746, 0.00),
+(396, 136.94, 0.00, 156.59, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:23:45.000000', 'EFECTIVO', 293.53, 'EFECTIVO-418957', 'PAGO_CUOTA', 121, 747, 0.00),
+(397, 0.00, 0.00, 50.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:23:59.000000', 'EFECTIVO', 50.00, 'EFECTIVO-420300', 'PAGO_CUOTA', 82, 564, 0.00),
+(398, 62.77, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:25:04.000000', 'EFECTIVO', 98.77, 'EFECTIVO-498925', 'PAGO_CUOTA', 52, 372, 0.00),
+(399, 70.30, 0.00, 28.47, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:25:18.000000', 'EFECTIVO', 98.77, 'EFECTIVO-512541', 'PAGO_CUOTA', 52, 373, 0.00),
+(400, 78.74, 0.00, 20.03, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:25:28.000000', 'EFECTIVO', 98.77, 'EFECTIVO-523677', 'PAGO_CUOTA', 52, 374, 0.00),
+(401, 88.19, 0.00, 10.58, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:25:40.000000', 'EFECTIVO', 98.77, 'EFECTIVO-533917', 'PAGO_CUOTA', 52, 375, 0.00),
+(402, 37.41, 0.00, 80.00, 0.00, 'Pago cuota #1 via YAPE', '2026-06-22 11:27:19.000000', 'YAPE', 117.41, '27669955', 'PAGO_CUOTA', 56, 396, 0.00),
+(403, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:45:26.000000', 'EFECTIVO', 45.00, 'EFECTIVO-720237', 'PAGO_CUOTA', 99, 629, 0.00),
+(404, 300.00, 0.00, 45.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:45:37.000000', 'EFECTIVO', 345.00, 'EFECTIVO-732910', 'PAGO_CUOTA', 99, 630, 0.00),
+(405, 127.99, 0.00, 52.68, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:52:49.000000', 'EFECTIVO', 180.67, 'EFECTIVO-162125', 'PAGO_CUOTA', 120, 739, 0.00),
+(406, 117.42, 0.00, 63.25, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:53:00.000000', 'EFECTIVO', 180.67, 'EFECTIVO-175620', 'PAGO_CUOTA', 120, 738, 0.00),
+(407, 90.67, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:53:11.000000', 'EFECTIVO', 180.67, 'EFECTIVO-186140', 'PAGO_CUOTA', 120, 735, 0.00),
+(408, 98.83, 0.00, 81.84, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:53:23.000000', 'EFECTIVO', 180.67, 'EFECTIVO-197392', 'PAGO_CUOTA', 120, 736, 0.00),
+(409, 107.72, 0.00, 72.95, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:53:35.000000', 'EFECTIVO', 180.67, 'EFECTIVO-210332', 'PAGO_CUOTA', 120, 737, 0.00),
+(410, 104.62, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:54:58.000000', 'EFECTIVO', 164.62, 'EFECTIVO-285086', 'PAGO_CUOTA', 127, 791, 0.00),
+(411, 139.51, 0.00, 41.16, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 11:58:35.000000', 'EFECTIVO', 180.67, 'EFECTIVO-508212', 'PAGO_CUOTA', 128, 800, 0.00),
+(412, 90.67, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 11:58:49.000000', 'EFECTIVO', 180.67, 'EFECTIVO-523565', 'PAGO_CUOTA', 128, 795, 0.00),
+(413, 98.83, 0.00, 81.84, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 11:59:03.000000', 'EFECTIVO', 180.67, 'EFECTIVO-537884', 'PAGO_CUOTA', 128, 796, 0.00),
+(414, 107.72, 0.00, 72.95, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 11:59:17.000000', 'EFECTIVO', 180.67, 'EFECTIVO-551277', 'PAGO_CUOTA', 128, 797, 0.00),
+(415, 117.42, 0.00, 63.25, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 11:59:29.000000', 'EFECTIVO', 180.67, 'EFECTIVO-563588', 'PAGO_CUOTA', 128, 798, 0.00),
+(416, 127.99, 0.00, 52.68, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 11:59:43.000000', 'EFECTIVO', 180.67, 'EFECTIVO-576877', 'PAGO_CUOTA', 128, 799, 0.00),
+(417, 62.77, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:02:24.000000', 'EFECTIVO', 98.77, 'EFECTIVO-739725', 'PAGO_CUOTA', 53, 376, 0.00),
+(418, 70.30, 0.00, 28.47, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:02:37.000000', 'EFECTIVO', 98.77, 'EFECTIVO-752044', 'PAGO_CUOTA', 53, 377, 0.00),
+(419, 78.74, 0.00, 20.03, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:02:49.000000', 'EFECTIVO', 98.77, 'EFECTIVO-763469', 'PAGO_CUOTA', 53, 378, 0.00),
+(420, 88.19, 0.00, 10.58, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:03:01.000000', 'EFECTIVO', 98.77, 'EFECTIVO-774821', 'PAGO_CUOTA', 53, 379, 0.00),
+(421, 104.62, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:05:23.000000', 'EFECTIVO', 165.00, 'EFECTIVO-917325', 'PAGO_CUOTA', 127, 791, 0.00),
+(422, 0.00, 0.00, 47.45, 22.55, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:06:54.000000', 'EFECTIVO', 70.00, 'EFECTIVO-004508', 'PAGO_CUOTA', 127, 792, 0.00),
+(423, 235.85, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:16:35.000000', 'EFECTIVO', 295.85, 'EFECTIVO-589596', 'PAGO_CUOTA', 105, 650, 0.00),
+(424, 264.15, 0.00, 31.70, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:18:32.000000', 'EFECTIVO', 295.85, 'EFECTIVO-611564', 'PAGO_CUOTA', 105, 651, 0.00),
+(425, 115.13, 0.00, 66.04, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 12:30:00.000000', 'EFECTIVO', 181.17, 'EFECTIVO-394460', 'PAGO_CUOTA', 123, 759, 0.00),
+(426, 102.80, 0.00, 78.37, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:30:16.000000', 'EFECTIVO', 181.17, 'EFECTIVO-410036', 'PAGO_CUOTA', 123, 758, 0.00),
+(427, 73.17, 0.00, 108.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:30:30.000000', 'EFECTIVO', 181.17, 'EFECTIVO-422819', 'PAGO_CUOTA', 123, 755, 0.00),
+(428, 81.95, 0.00, 99.22, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:30:41.000000', 'EFECTIVO', 181.17, 'EFECTIVO-435756', 'PAGO_CUOTA', 123, 756, 0.00),
+(429, 91.78, 0.00, 89.39, 44.70, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:30:53.000000', 'EFECTIVO', 270.57, 'EFECTIVO-446196', 'PAGO_CUOTA', 123, 757, 0.00),
+(430, 57.12, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:32:47.000000', 'EFECTIVO', 132.12, 'EFECTIVO-562925', 'PAGO_CUOTA', 47, 351, 0.00),
+(431, 65.69, 0.00, 66.43, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:33:00.000000', 'EFECTIVO', 132.12, 'EFECTIVO-575052', 'PAGO_CUOTA', 47, 352, 0.00),
+(432, 75.54, 0.00, 56.58, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:33:13.000000', 'EFECTIVO', 132.12, 'EFECTIVO-587172', 'PAGO_CUOTA', 47, 353, 0.00),
+(433, 86.87, 0.00, 45.25, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:33:24.000000', 'EFECTIVO', 132.12, 'EFECTIVO-599437', 'PAGO_CUOTA', 47, 354, 0.00),
+(434, 99.90, 0.00, 32.22, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 12:33:35.000000', 'EFECTIVO', 132.12, 'EFECTIVO-609676', 'PAGO_CUOTA', 47, 355, 0.00),
+(435, 114.88, 0.00, 17.23, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 12:33:46.000000', 'EFECTIVO', 132.11, 'EFECTIVO-620604', 'PAGO_CUOTA', 47, 356, 0.00),
+(436, 173.73, 0.00, 20.85, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 12:34:28.000000', 'EFECTIVO', 194.58, 'EFECTIVO-661180', 'PAGO_CUOTA', 109, 677, 0.00),
+(437, 98.58, 0.00, 96.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:34:44.000000', 'EFECTIVO', 194.58, 'EFECTIVO-676148', 'PAGO_CUOTA', 109, 672, 0.00),
+(438, 110.41, 0.00, 84.17, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:35:01.000000', 'EFECTIVO', 194.58, 'EFECTIVO-691083', 'PAGO_CUOTA', 109, 673, 0.00),
+(439, 123.66, 0.00, 70.92, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:35:17.000000', 'EFECTIVO', 194.58, 'EFECTIVO-712212', 'PAGO_CUOTA', 109, 674, 0.00),
+(440, 138.50, 0.00, 56.08, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:35:29.000000', 'EFECTIVO', 194.58, 'EFECTIVO-723644', 'PAGO_CUOTA', 109, 675, 0.00),
+(441, 155.12, 0.00, 39.46, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 12:35:41.000000', 'EFECTIVO', 194.58, 'EFECTIVO-735572', 'PAGO_CUOTA', 109, 676, 0.00),
+(442, 46.76, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:36:13.000000', 'EFECTIVO', 146.76, 'EFECTIVO-767435', 'PAGO_CUOTA', 36, 294, 0.00),
+(443, 69.77, 0.00, 22.50, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:36:52.000000', 'EFECTIVO', 92.27, 'EFECTIVO-807620', 'PAGO_CUOTA', 84, 574, 0.00),
+(444, 80.23, 0.00, 12.03, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:37:04.000000', 'EFECTIVO', 92.26, 'EFECTIVO-817548', 'PAGO_CUOTA', 84, 575, 0.00),
+(445, 60.08, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:38:07.000000', 'EFECTIVO', 105.08, 'EFECTIVO-881828', 'PAGO_CUOTA', 83, 570, 0.00),
+(446, 69.09, 0.00, 35.99, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:38:18.000000', 'EFECTIVO', 105.08, 'EFECTIVO-892804', 'PAGO_CUOTA', 83, 571, 0.00),
+(447, 79.46, 0.00, 25.62, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:38:30.000000', 'EFECTIVO', 105.08, 'EFECTIVO-904492', 'PAGO_CUOTA', 83, 572, 0.00),
+(448, 91.37, 0.00, 13.71, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:38:41.000000', 'EFECTIVO', 105.08, 'EFECTIVO-916396', 'PAGO_CUOTA', 83, 573, 0.00),
+(449, 62.77, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:39:00.000000', 'EFECTIVO', 98.77, 'EFECTIVO-934732', 'PAGO_CUOTA', 54, 380, 0.00),
+(450, 70.30, 0.00, 28.47, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:39:10.000000', 'EFECTIVO', 98.77, 'EFECTIVO-945595', 'PAGO_CUOTA', 54, 381, 0.00),
+(451, 78.74, 0.00, 20.03, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:39:23.000000', 'EFECTIVO', 98.77, 'EFECTIVO-957244', 'PAGO_CUOTA', 54, 382, 0.00),
+(452, 88.19, 0.00, 10.58, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:39:37.000000', 'EFECTIVO', 98.77, 'EFECTIVO-970028', 'PAGO_CUOTA', 54, 383, 0.00),
+(453, 40.65, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:40:01.000000', 'EFECTIVO', 100.65, 'EFECTIVO-995389', 'PAGO_CUOTA', 108, 664, 0.00),
+(454, 45.53, 0.00, 55.12, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:40:11.000000', 'EFECTIVO', 100.65, 'EFECTIVO-006899', 'PAGO_CUOTA', 108, 665, 0.00),
+(455, 50.99, 0.00, 49.66, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-22 12:40:22.000000', 'EFECTIVO', 100.65, 'EFECTIVO-017092', 'PAGO_CUOTA', 108, 666, 0.00),
+(456, 57.11, 0.00, 43.54, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-22 12:40:35.000000', 'EFECTIVO', 100.65, 'EFECTIVO-028924', 'PAGO_CUOTA', 108, 667, 0.00),
+(457, 63.96, 0.00, 36.69, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-22 12:40:47.000000', 'EFECTIVO', 100.65, 'EFECTIVO-041740', 'PAGO_CUOTA', 108, 668, 0.00),
+(458, 71.64, 0.00, 29.01, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-22 12:41:01.000000', 'EFECTIVO', 100.65, 'EFECTIVO-055180', 'PAGO_CUOTA', 108, 669, 0.00),
+(459, 80.24, 0.00, 20.41, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-22 12:41:15.000000', 'EFECTIVO', 100.65, 'EFECTIVO-067676', 'PAGO_CUOTA', 108, 670, 0.00),
+(460, 89.88, 0.00, 10.79, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-22 12:41:27.000000', 'EFECTIVO', 100.67, 'EFECTIVO-082004', 'PAGO_CUOTA', 108, 671, 0.00),
+(461, 74.48, 0.00, 135.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:42:37.000000', 'EFECTIVO', 209.48, 'EFECTIVO-152228', 'PAGO_CUOTA', 59, 415, 0.00),
+(462, 81.18, 0.00, 128.30, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:42:50.000000', 'EFECTIVO', 209.48, 'EFECTIVO-164835', 'PAGO_CUOTA', 59, 416, 0.00),
+(463, 600.00, 0.00, 72.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:44:12.000000', 'EFECTIVO', 672.00, 'EFECTIVO-246747', 'PAGO_CUOTA', 44, 336, 0.00),
+(464, 400.00, 0.00, 48.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:44:49.000000', 'EFECTIVO', 448.00, 'EFECTIVO-279948', 'PAGO_CUOTA', 39, 311, 0.00),
+(465, 88.90, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:45:43.000000', 'EFECTIVO', 124.90, 'EFECTIVO-337860', 'PAGO_CUOTA', 58, 412, 0.00),
+(466, 99.57, 0.00, 25.33, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:45:56.000000', 'EFECTIVO', 124.90, 'EFECTIVO-351420', 'PAGO_CUOTA', 58, 413, 0.00),
+(467, 74.48, 0.00, 135.00, 90.00, 'Pago cuota #1 via EFECTIVO', '2026-06-22 12:48:53.000000', 'EFECTIVO', 389.48, 'EFECTIVO-528564', 'PAGO_CUOTA', 126, 779, 0.00),
+(468, 81.18, 0.00, 128.30, 85.00, 'Pago cuota #2 via EFECTIVO', '2026-06-22 12:49:04.000000', 'EFECTIVO', 379.48, 'EFECTIVO-539012', 'PAGO_CUOTA', 126, 780, 0.00),
+(469, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #18 via YAPE', '2026-06-23 09:50:18.000000', 'YAPE', 100.00, '11749326', 'PAGO_CUOTA', 138, 22888, 0.00),
+(470, 0.00, 0.00, 50.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 10:24:35.000000', 'EFECTIVO', 50.00, 'EFECTIVO-263925', 'PAGO_CUOTA', 74, 23165, 0.00),
+(471, 0.00, 0.00, 0.00, 263.00, 'Pago cuota #4 via EFECTIVO', '2026-06-23 10:36:56.000000', 'EFECTIVO', 610.00, 'EFECTIVO-008725', 'PAGO_CUOTA', 66, 453, 0.00),
+(472, 199.00, 0.00, 351.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-23 10:44:11.000000', 'EFECTIVO', 550.00, 'EFECTIVO-441181', 'PAGO_CUOTA', 66, 459, 0.00),
+(473, 0.00, 0.00, 10.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-23 10:46:20.000000', 'EFECTIVO', 10.00, 'EFECTIVO-573430', 'PAGO_CUOTA', 66, 454, 0.00),
+(474, 0.00, 0.00, 450.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 10:48:14.000000', 'EFECTIVO', 450.00, 'EFECTIVO-687668', 'PAGO_CUOTA', 66, 450, 0.00),
+(475, 0.00, 0.00, 463.00, 147.00, 'Pago cuota #4 via EFECTIVO', '2026-06-23 10:51:24.000000', 'EFECTIVO', 610.00, 'EFECTIVO-876796', 'PAGO_CUOTA', 66, 453, 0.00),
+(476, 0.00, 0.00, 160.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 11:01:49.000000', 'EFECTIVO', 450.00, 'EFECTIVO-496893', 'PAGO_CUOTA', 66, 450, 0.00),
+(477, 0.00, 0.00, 160.00, 290.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 11:02:58.000000', 'EFECTIVO', 450.00, 'EFECTIVO-571120', 'PAGO_CUOTA', 66, 450, 0.00),
+(478, 0.00, 0.00, 450.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 11:04:17.000000', 'EFECTIVO', 450.00, 'EFECTIVO-649333', 'PAGO_CUOTA', 66, 450, 0.00),
+(479, 0.00, 0.00, 350.00, 203.00, 'Pago cuota #6 via EFECTIVO', '2026-06-23 11:12:26.000000', 'EFECTIVO', 553.00, 'EFECTIVO-139100', 'PAGO_CUOTA', 28, 252, 0.00),
+(480, 11.61, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 11:15:47.000000', 'EFECTIVO', 71.61, 'EFECTIVO-301565', 'PAGO_CUOTA', 82, 564, 0.00),
+(481, 10.34, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 12:14:13.000000', 'EFECTIVO', 55.34, 'EFECTIVO-844754', 'PAGO_CUOTA', 71, 509, 0.00),
+(482, 48.29, 0.00, 7.24, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-23 12:14:31.000000', 'EFECTIVO', 55.53, 'EFECTIVO-861722', 'PAGO_CUOTA', 71, 520, 0.00),
+(483, 41.82, 0.00, 13.52, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-23 12:14:44.000000', 'EFECTIVO', 55.34, 'EFECTIVO-876290', 'PAGO_CUOTA', 71, 519, 0.00),
+(484, 11.89, 0.00, 43.45, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-23 12:17:33.000000', 'EFECTIVO', 55.34, 'EFECTIVO-043906', 'PAGO_CUOTA', 71, 510, 0.00),
+(485, 13.67, 0.00, 41.67, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-23 12:17:47.000000', 'EFECTIVO', 55.34, 'EFECTIVO-058481', 'PAGO_CUOTA', 71, 511, 0.00),
+(486, 15.72, 0.00, 39.62, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-23 12:18:02.000000', 'EFECTIVO', 55.34, 'EFECTIVO-071666', 'PAGO_CUOTA', 71, 512, 0.00),
+(487, 18.08, 0.00, 37.26, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-23 12:18:21.000000', 'EFECTIVO', 55.34, 'EFECTIVO-093203', 'PAGO_CUOTA', 71, 513, 0.00),
+(488, 20.79, 0.00, 34.55, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-23 12:19:23.000000', 'EFECTIVO', 55.34, 'EFECTIVO-155738', 'PAGO_CUOTA', 71, 514, 0.00),
+(489, 23.91, 0.00, 31.43, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-23 12:19:37.000000', 'EFECTIVO', 55.34, 'EFECTIVO-167898', 'PAGO_CUOTA', 71, 515, 0.00),
+(490, 27.50, 0.00, 27.84, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-23 12:19:50.000000', 'EFECTIVO', 55.34, 'EFECTIVO-182019', 'PAGO_CUOTA', 71, 516, 0.00),
+(491, 31.62, 0.00, 23.72, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-23 12:20:02.000000', 'EFECTIVO', 55.34, 'EFECTIVO-194330', 'PAGO_CUOTA', 71, 517, 0.00),
+(492, 36.37, 0.00, 18.97, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-23 12:20:14.000000', 'EFECTIVO', 55.34, 'EFECTIVO-206459', 'PAGO_CUOTA', 71, 518, 0.00),
+(493, 143.99, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 12:39:22.000000', 'EFECTIVO', 218.99, 'EFECTIVO-353482', 'PAGO_CUOTA', 119, 732, 0.00),
+(494, 165.59, 0.00, 53.40, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-23 12:39:38.000000', 'EFECTIVO', 218.99, 'EFECTIVO-368729', 'PAGO_CUOTA', 119, 733, 0.00),
+(495, 190.42, 0.00, 28.56, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-23 12:39:53.000000', 'EFECTIVO', 218.98, 'EFECTIVO-384234', 'PAGO_CUOTA', 119, 734, 0.00),
+(496, 300.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-23 16:50:35.000000', 'EFECTIVO', 345.00, 'EFECTIVO-426095', 'PAGO_CUOTA', 100, 631, 0.00),
+(497, 57.12, 0.00, 75.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-24 19:14:04.000000', 'EFECTIVO', 132.12, 'EFECTIVO-439008', 'PAGO_CUOTA', 75, 527, 0.00),
+(498, 65.69, 0.00, 66.43, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-24 19:14:21.000000', 'EFECTIVO', 132.12, 'EFECTIVO-455040', 'PAGO_CUOTA', 75, 528, 0.00),
+(499, 75.54, 0.00, 56.58, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-24 19:14:34.000000', 'EFECTIVO', 132.12, 'EFECTIVO-468751', 'PAGO_CUOTA', 75, 529, 0.00),
+(500, 86.87, 0.00, 45.25, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-24 19:14:47.000000', 'EFECTIVO', 132.12, 'EFECTIVO-482154', 'PAGO_CUOTA', 75, 530, 0.00),
+(501, 99.90, 0.00, 32.22, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-24 19:14:59.000000', 'EFECTIVO', 132.12, 'EFECTIVO-493988', 'PAGO_CUOTA', 75, 531, 0.00),
+(502, 114.88, 0.00, 17.23, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-24 19:15:11.000000', 'EFECTIVO', 132.11, 'EFECTIVO-505567', 'PAGO_CUOTA', 75, 532, 0.00),
+(503, 28.39, 0.00, 86.82, 47.54, 'Pago cuota #3 via EFECTIVO', '2026-06-24 19:17:14.000000', 'EFECTIVO', 162.75, 'EFECTIVO-628424', 'PAGO_CUOTA', 148, 23245, 0.00),
+(504, 0.00, 0.00, 156.00, 57.00, 'Pago cuota #2 via EFECTIVO', '2026-06-25 08:34:54.000000', 'EFECTIVO', 213.00, 'EFECTIVO-480210', 'PAGO_CUOTA', 25, 202, 0.00),
+(505, 57.00, 0.00, 156.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-25 08:36:20.000000', 'EFECTIVO', 213.00, 'EFECTIVO-531890', 'PAGO_CUOTA', 25, 202, 0.00),
+(506, 0.00, 0.00, 156.00, 57.00, 'Pago cuota #2 via EFECTIVO', '2026-06-25 08:38:24.000000', 'EFECTIVO', 213.00, 'EFECTIVO-692938', 'PAGO_CUOTA', 25, 202, 0.00),
+(507, 0.00, 0.00, 151.00, 62.00, 'Pago cuota #3 via EFECTIVO', '2026-06-25 08:39:33.000000', 'EFECTIVO', 213.00, 'EFECTIVO-761483', 'PAGO_CUOTA', 25, 203, 0.00),
+(508, 76.39, 0.00, 63.26, 0.00, 'Pago cuota #6 via YAPE', '2026-06-25 11:24:23.000000', 'YAPE', 139.65, '10029929', 'PAGO_CUOTA', 112, 707, 0.00),
+(509, 120.00, 0.00, 0.00, 180.00, 'Pago cuota #14 via EFECTIVO', '2026-06-25 11:39:22.000000', 'EFECTIVO', 300.00, 'EFECTIVO-556848', 'PAGO_CUOTA', 134, 23224, 0.00),
+(510, 0.00, 0.00, 300.00, 180.00, 'Pago cuota #12 via EFECTIVO', '2026-06-25 11:43:49.000000', 'EFECTIVO', 480.00, 'EFECTIVO-822641', 'PAGO_CUOTA', 134, 23222, 0.00),
+(511, 0.00, 0.00, 250.00, 0.00, 'Pago cuota #17 via EFECTIVO', '2026-06-25 11:44:14.000000', 'EFECTIVO', 250.00, 'EFECTIVO-712616', 'PAGO_CUOTA', 134, 23227, 0.00),
+(512, 0.00, 0.00, 50.00, 0.00, 'Pago cuota #17 via EFECTIVO', '2026-06-25 11:45:10.000000', 'EFECTIVO', 50.00, 'EFECTIVO-904616', 'PAGO_CUOTA', 134, 23227, 0.00),
+(513, 0.00, 0.00, 300.00, 10.00, 'Pago cuota #7 via EFECTIVO', '2026-06-25 11:46:36.000000', 'EFECTIVO', 310.00, 'EFECTIVO-991087', 'PAGO_CUOTA', 134, 23217, 0.00),
+(514, 0.00, 0.00, 300.00, 0.00, 'Pago cuota #14 via EFECTIVO', '2026-06-25 11:48:41.000000', 'EFECTIVO', 300.00, 'EFECTIVO-115567', 'PAGO_CUOTA', 134, 23224, 0.00),
+(515, 0.00, 0.00, 50.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-25 11:57:26.000000', 'EFECTIVO', 50.00, 'EFECTIVO-640895', 'PAGO_CUOTA', 74, 23165, 0.00),
+(516, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #1 via EFECTIVO', '2026-06-25 12:12:27.000000', 'EFECTIVO', 105.00, 'EFECTIVO-542151', 'PAGO_CUOTA', 79, 549, 0.00),
+(517, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #2 via EFECTIVO', '2026-06-25 12:15:46.000000', 'EFECTIVO', 105.00, 'EFECTIVO-741335', 'PAGO_CUOTA', 79, 22906, 0.00),
+(518, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #3 via EFECTIVO', '2026-06-25 12:16:02.000000', 'EFECTIVO', 105.00, 'EFECTIVO-757296', 'PAGO_CUOTA', 79, 23253, 0.00),
+(519, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #4 via EFECTIVO', '2026-06-25 12:16:22.000000', 'EFECTIVO', 105.00, 'EFECTIVO-774542', 'PAGO_CUOTA', 79, 23254, 0.00),
+(520, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #5 via EFECTIVO', '2026-06-25 12:16:42.000000', 'EFECTIVO', 105.00, 'EFECTIVO-796546', 'PAGO_CUOTA', 79, 23255, 0.00),
+(521, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #6 via EFECTIVO', '2026-06-25 12:16:59.000000', 'EFECTIVO', 105.00, 'EFECTIVO-814311', 'PAGO_CUOTA', 79, 23256, 0.00),
+(522, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #7 via EFECTIVO', '2026-06-25 12:17:14.000000', 'EFECTIVO', 105.00, 'EFECTIVO-828246', 'PAGO_CUOTA', 79, 23257, 0.00),
+(523, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #8 via EFECTIVO', '2026-06-25 12:17:32.000000', 'EFECTIVO', 105.00, 'EFECTIVO-846686', 'PAGO_CUOTA', 79, 23258, 0.00),
+(524, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #9 via EFECTIVO', '2026-06-25 12:17:48.000000', 'EFECTIVO', 105.00, 'EFECTIVO-863976', 'PAGO_CUOTA', 79, 23259, 0.00),
+(525, 0.00, 0.00, 75.00, 30.00, 'Pago cuota #10 via EFECTIVO', '2026-06-25 12:18:09.000000', 'EFECTIVO', 105.00, 'EFECTIVO-880312', 'PAGO_CUOTA', 79, 23260, 0.00),
+(526, 105.00, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-25 12:52:05.000000', 'EFECTIVO', 165.00, 'EFECTIVO-920664', 'PAGO_CUOTA', 127, 791, 0.00),
+(527, 0.00, 0.00, 47.00, 23.00, 'Pago cuota #2 via EFECTIVO', '2026-06-25 12:53:03.000000', 'EFECTIVO', 70.00, 'EFECTIVO-977487', 'PAGO_CUOTA', 127, 792, 0.00),
+(528, 0.00, 0.00, 30.00, 0.00, 'Pago cuota #18 via YAPE', '2026-06-26 08:22:24.000000', 'YAPE', 30.00, '87168783', 'PAGO_CUOTA', 145, 22905, 0.00),
+(529, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-26 08:56:09.000000', 'EFECTIVO', 45.00, 'EFECTIVO-156103', 'PAGO_CUOTA', 132, 22921, 0.00),
+(530, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-26 08:59:02.000000', 'EFECTIVO', 45.00, 'EFECTIVO-328768', 'PAGO_CUOTA', 132, 22922, 0.00),
+(531, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #9 via EFECTIVO', '2026-06-26 09:01:48.000000', 'EFECTIVO', 45.00, 'EFECTIVO-498495', 'PAGO_CUOTA', 132, 22922, 0.00),
+(532, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #10 via EFECTIVO', '2026-06-26 09:02:58.000000', 'EFECTIVO', 45.00, 'EFECTIVO-569431', 'PAGO_CUOTA', 132, 22923, 0.00),
+(533, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #11 via EFECTIVO', '2026-06-26 09:04:28.000000', 'EFECTIVO', 45.00, 'EFECTIVO-658808', 'PAGO_CUOTA', 132, 22924, 0.00),
+(534, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-26 09:05:37.000000', 'EFECTIVO', 45.00, 'EFECTIVO-724287', 'PAGO_CUOTA', 132, 22925, 0.00),
+(535, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-26 09:06:52.000000', 'EFECTIVO', 45.00, 'EFECTIVO-804697', 'PAGO_CUOTA', 132, 22925, 0.00),
+(536, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-26 09:07:46.000000', 'EFECTIVO', 45.00, 'EFECTIVO-856471', 'PAGO_CUOTA', 132, 22925, 0.00),
+(537, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #13 via EFECTIVO', '2026-06-26 09:08:39.000000', 'EFECTIVO', 45.00, 'EFECTIVO-908951', 'PAGO_CUOTA', 132, 22926, 0.00),
+(538, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #14 via EFECTIVO', '2026-06-26 09:10:00.000000', 'EFECTIVO', 45.00, 'EFECTIVO-984479', 'PAGO_CUOTA', 132, 22927, 0.00),
+(540, 125.57, 0.00, 124.63, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 09:19:43.000000', 'EFECTIVO', 250.20, 'EFECTIVO-574846', 'PAGO_CUOTA', 129, 804, 0.00),
+(541, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-26 09:28:09.000000', 'EFECTIVO', 63.00, 'EFECTIVO-079809', 'PAGO_CUOTA', 132, 22921, 0.00),
+(542, 0.00, 0.00, 45.00, 10.00, 'Pago cuota #8 via EFECTIVO', '2026-06-26 09:29:59.000000', 'EFECTIVO', 55.00, 'EFECTIVO-191130', 'PAGO_CUOTA', 132, 22921, 0.00),
+(543, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 09:33:41.000000', 'EFECTIVO', 45.00, 'EFECTIVO-406029', 'PAGO_CUOTA', 93, 821, 0.00),
+(544, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 09:34:46.000000', 'EFECTIVO', 45.00, 'EFECTIVO-479469', 'PAGO_CUOTA', 93, 821, 0.00),
+(545, 0.00, 0.00, 45.00, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-26 09:35:32.000000', 'EFECTIVO', 45.00, 'EFECTIVO-518380', 'PAGO_CUOTA', 93, 822, 0.00),
+(546, 0.00, 0.00, 10.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-26 09:36:54.000000', 'EFECTIVO', 10.00, 'EFECTIVO-607621', 'PAGO_CUOTA', 93, 823, 0.00),
+(547, 67.00, 0.00, 36.00, 30.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 09:44:33.000000', 'EFECTIVO', 133.00, 'EFECTIVO-065172', 'PAGO_CUOTA', 96, 613, 0.00),
+(548, 51.00, 0.00, 19.00, 30.00, 'Pago cuota #5 via EFECTIVO', '2026-06-26 09:45:53.000000', 'EFECTIVO', 100.00, 'EFECTIVO-147197', 'PAGO_CUOTA', 96, 614, 0.00),
+(549, 99.00, 0.00, 338.00, 150.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 10:13:25.000000', 'EFECTIVO', 587.00, 'EFECTIVO-796313', 'PAGO_CUOTA', 144, 939, 0.00),
+(550, 99.00, 0.00, 338.00, 150.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 10:15:49.000000', 'EFECTIVO', 587.00, 'EFECTIVO-937017', 'PAGO_CUOTA', 144, 939, 0.00),
+(551, 99.00, 0.00, 313.00, 175.00, 'Pago cuota #5 via EFECTIVO', '2026-06-26 10:17:33.000000', 'EFECTIVO', 587.00, 'EFECTIVO-044537', 'PAGO_CUOTA', 144, 940, 0.00),
+(552, 0.00, 0.00, 110.00, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-26 10:19:48.000000', 'EFECTIVO', 110.00, 'EFECTIVO-180729', 'PAGO_CUOTA', 144, 941, 0.00),
+(553, 0.00, 0.00, 150.00, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-26 10:22:19.000000', 'EFECTIVO', 150.00, 'EFECTIVO-331065', 'PAGO_CUOTA', 144, 943, 0.00),
+(554, 138.00, 0.00, 51.00, 34.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 10:50:52.000000', 'EFECTIVO', 223.00, 'EFECTIVO-043337', 'PAGO_CUOTA', 102, 637, 0.00),
+(555, 31.00, 0.00, 117.00, 78.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 11:01:52.000000', 'EFECTIVO', 226.00, 'EFECTIVO-697792', 'PAGO_CUOTA', 122, 22854, 0.00),
+(556, 31.48, 0.00, 117.00, 78.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 11:03:13.000000', 'EFECTIVO', 226.48, 'EFECTIVO-785568', 'PAGO_CUOTA', 122, 22854, 0.00),
+(557, 34.31, 0.00, 114.17, 78.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 11:04:02.000000', 'EFECTIVO', 226.48, 'EFECTIVO-836738', 'PAGO_CUOTA', 122, 22855, 0.00),
+(558, 300.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 12:14:10.000000', 'EFECTIVO', 345.00, 'EFECTIVO-044263', 'PAGO_CUOTA', 94, 606, 0.00),
+(559, 77.85, 0.00, 11.68, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-26 12:15:36.000000', 'EFECTIVO', 89.53, 'EFECTIVO-130303', 'PAGO_CUOTA', 63, 442, 0.00),
+(560, 44.49, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 12:15:48.000000', 'EFECTIVO', 89.49, 'EFECTIVO-142503', 'PAGO_CUOTA', 63, 438, 0.00),
+(561, 51.16, 0.00, 38.33, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 12:16:00.000000', 'EFECTIVO', 89.49, 'EFECTIVO-154463', 'PAGO_CUOTA', 63, 439, 0.00),
+(562, 58.84, 0.00, 30.65, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-26 12:16:14.000000', 'EFECTIVO', 89.49, 'EFECTIVO-168839', 'PAGO_CUOTA', 63, 440, 0.00),
+(563, 67.66, 0.00, 21.83, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 12:16:26.000000', 'EFECTIVO', 89.49, 'EFECTIVO-180247', 'PAGO_CUOTA', 63, 441, 0.00),
+(564, 49.65, 0.00, 90.00, 60.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 12:20:35.000000', 'EFECTIVO', 199.65, 'EFECTIVO-428751', 'PAGO_CUOTA', 111, 690, 0.00),
+(565, 54.12, 0.00, 85.53, 57.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 12:21:35.000000', 'EFECTIVO', 196.65, 'EFECTIVO-488336', 'PAGO_CUOTA', 111, 691, 0.00),
+(566, 58.99, 0.00, 80.66, 54.00, 'Pago cuota #3 via EFECTIVO', '2026-06-26 12:22:29.000000', 'EFECTIVO', 193.65, 'EFECTIVO-543080', 'PAGO_CUOTA', 111, 692, 0.00),
+(567, 56.07, 0.00, 55.65, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-26 12:47:45.000000', 'EFECTIVO', 111.72, 'EFECTIVO-055767', 'PAGO_CUOTA', 23, 23308, 0.00),
+(568, 39.72, 0.00, 72.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 12:48:05.000000', 'EFECTIVO', 111.72, 'EFECTIVO-078719', 'PAGO_CUOTA', 23, 23304, 0.00),
+(569, 43.29, 0.00, 68.43, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 12:48:20.000000', 'EFECTIVO', 111.72, 'EFECTIVO-093511', 'PAGO_CUOTA', 23, 23305, 0.00),
+(570, 47.19, 0.00, 64.53, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-26 12:48:33.000000', 'EFECTIVO', 111.72, 'EFECTIVO-106902', 'PAGO_CUOTA', 23, 23306, 0.00),
+(571, 51.44, 0.00, 60.28, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 12:48:47.000000', 'EFECTIVO', 111.72, 'EFECTIVO-121398', 'PAGO_CUOTA', 23, 23307, 0.00),
+(572, 50.00, 0.00, 90.00, 41.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 12:56:36.000000', 'EFECTIVO', 181.00, 'EFECTIVO-589055', 'PAGO_CUOTA', 26, 219, 0.00),
+(573, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-26 14:41:55.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 155, NULL, NULL),
+(574, 87.44, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 14:57:43.000000', 'EFECTIVO', 187.44, 'EFECTIVO-853181', 'PAGO_CUOTA', 155, 23316, 0.00),
+(575, 96.18, 0.00, 91.26, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 14:58:09.000000', 'EFECTIVO', 187.44, 'EFECTIVO-879516', 'PAGO_CUOTA', 155, 23317, 0.00),
+(576, 105.80, 0.00, 81.64, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-26 14:58:35.000000', 'EFECTIVO', 187.44, 'EFECTIVO-904131', 'PAGO_CUOTA', 155, 23318, 0.00),
+(577, 116.38, 0.00, 71.06, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-26 14:59:00.000000', 'EFECTIVO', 187.44, 'EFECTIVO-930741', 'PAGO_CUOTA', 155, 23319, 0.00),
+(578, NULL, NULL, NULL, NULL, 'Cierre por refinanciamiento', '2026-06-26 15:31:09.000000', NULL, 785.48, NULL, 'REFINANCIAMIENTO_CIERRE', 155, NULL, NULL),
+(579, NULL, NULL, NULL, NULL, 'Apertura por refinanciamiento. Crédito origen #155', '2026-06-26 15:31:09.000000', NULL, 594.20, NULL, 'REFINANCIAMIENTO_APERTURA', 156, NULL, NULL),
+(580, NULL, NULL, NULL, NULL, 'Cierre por refinanciamiento', '2026-06-26 15:56:13.000000', NULL, 550.00, NULL, 'REFINANCIAMIENTO_CIERRE', 82, NULL, NULL),
+(581, NULL, NULL, NULL, NULL, 'Apertura por refinanciamiento. Crédito origen #82', '2026-06-26 15:56:13.000000', NULL, 550.00, NULL, 'REFINANCIAMIENTO_APERTURA', 157, NULL, NULL),
+(582, 25.72, 0.00, 55.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 17:22:09.000000', 'EFECTIVO', 80.72, 'EFECTIVO-498961', 'PAGO_CUOTA', 157, 23336, 0.00),
+(583, 28.29, 0.00, 52.43, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-26 17:28:49.000000', 'EFECTIVO', 81.00, 'EFECTIVO-890299', 'PAGO_CUOTA', 157, 23337, 0.00),
+(584, 29.50, 0.00, 53.48, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-26 17:44:41.000000', 'EFECTIVO', 99.00, 'EFECTIVO-861166', 'PAGO_CUOTA', 156, 23324, 0.00),
+(585, 31.12, 0.00, 49.60, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-26 17:47:52.000000', 'EFECTIVO', 81.00, 'EFECTIVO-060318', 'PAGO_CUOTA', 157, 23338, 0.00),
+(586, 87.00, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 10:45:25.000000', 'EFECTIVO', 187.00, 'EFECTIVO-119504', 'PAGO_CUOTA', 69, 498, 0.00),
+(587, 0.44, 0.00, 100.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 10:46:08.000000', 'EFECTIVO', 187.00, 'EFECTIVO-162216', 'PAGO_CUOTA', 69, 498, 0.00),
+(588, 170.46, 0.00, 17.05, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-27 10:46:22.000000', 'EFECTIVO', 188.00, 'EFECTIVO-176129', 'PAGO_CUOTA', 69, 505, 0.00),
+(589, 154.46, 0.00, 32.54, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-27 10:46:45.000000', 'EFECTIVO', 187.00, 'EFECTIVO-188000', 'PAGO_CUOTA', 69, 504, 0.00),
+(590, 0.44, 0.00, 32.54, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-27 10:47:04.000000', 'EFECTIVO', 187.00, 'EFECTIVO-218321', 'PAGO_CUOTA', 69, 504, 0.00),
+(591, 96.18, 0.00, 91.26, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 10:47:21.000000', 'EFECTIVO', 187.44, 'EFECTIVO-236016', 'PAGO_CUOTA', 69, 499, 0.00),
+(592, 105.36, 0.00, 81.64, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 10:49:39.000000', 'EFECTIVO', 187.00, 'EFECTIVO-371472', 'PAGO_CUOTA', 69, 500, 0.00),
+(593, 0.44, 0.00, 81.64, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 10:50:32.000000', 'EFECTIVO', 187.00, 'EFECTIVO-423176', 'PAGO_CUOTA', 69, 500, 0.00),
+(594, 115.94, 0.00, 71.06, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 10:50:47.000000', 'EFECTIVO', 187.00, 'EFECTIVO-440192', 'PAGO_CUOTA', 69, 501, 0.00),
+(595, 0.44, 0.00, 71.06, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 10:51:10.000000', 'EFECTIVO', 187.00, 'EFECTIVO-462656', 'PAGO_CUOTA', 69, 501, 0.00),
+(596, 128.02, 0.00, 59.42, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-27 10:51:33.000000', 'EFECTIVO', 187.44, 'EFECTIVO-481530', 'PAGO_CUOTA', 69, 502, 0.00),
+(597, 140.82, 0.00, 46.62, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-27 10:51:51.000000', 'EFECTIVO', 187.44, 'EFECTIVO-504087', 'PAGO_CUOTA', 69, 503, 0.00),
+(598, 34.23, 0.00, 46.49, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 11:22:48.000000', 'EFECTIVO', 80.72, '', 'PAGO_CUOTA', 157, 23339, 0.00),
+(599, 37.66, 0.00, 43.06, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-27 11:22:48.000000', 'EFECTIVO', 80.72, '', 'PAGO_CUOTA', 157, 23340, 0.00),
+(600, 0.00, 0.00, 38.56, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-27 11:22:48.000000', 'EFECTIVO', 38.56, '', 'PAGO_CUOTA', 157, 23341, 0.00),
+(601, 4.84, 0.00, 35.16, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-27 11:24:06.000000', 'EFECTIVO', 40.00, 'EFECTIVO-439584', 'PAGO_CUOTA', 157, 23342, 0.00),
+(602, NULL, NULL, NULL, NULL, 'Cierre por refinanciamiento', '2026-06-27 11:30:03.000000', NULL, 3510.00, NULL, 'REFINANCIAMIENTO_CIERRE', 151, NULL, NULL),
+(603, NULL, NULL, NULL, NULL, 'Apertura por refinanciamiento. Crédito origen #151', '2026-06-27 11:30:03.000000', NULL, 1300.00, NULL, 'REFINANCIAMIENTO_APERTURA', 158, NULL, NULL),
+(604, 1.90, 0.00, 117.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 11:33:08.000000', 'EFECTIVO', 165.00, 'EFECTIVO-968384', 'PAGO_CUOTA', 158, 23350, 0.00),
+(605, 300.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 11:50:33.000000', 'EFECTIVO', 345.00, 'EFECTIVO-027728', 'PAGO_CUOTA', 38, 310, 0.00),
+(606, 60.08, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 12:29:38.000000', 'EFECTIVO', 105.00, 'EFECTIVO-351687', 'PAGO_CUOTA', 92, 601, -0.08),
+(607, 69.09, 0.00, 35.99, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 12:29:43.000000', 'EFECTIVO', 105.00, 'EFECTIVO-357476', 'PAGO_CUOTA', 92, 602, -0.08),
+(608, 79.46, 0.00, 25.62, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 12:29:47.000000', 'EFECTIVO', 105.00, 'EFECTIVO-365822', 'PAGO_CUOTA', 92, 603, -0.08),
+(609, 91.37, 0.00, 13.71, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 12:29:51.000000', 'EFECTIVO', 105.00, 'EFECTIVO-372978', 'PAGO_CUOTA', 92, 604, -0.08),
+(610, 27.58, 0.00, 120.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 16:42:50.000000', 'EFECTIVO', 148.00, 'EFECTIVO-561693', 'PAGO_CUOTA', 98, 617, 0.00),
+(611, 68.54, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 16:51:33.000000', 'EFECTIVO', 159.00, 'EFECTIVO-086314', 'PAGO_CUOTA', 65, 444, 0.00),
+(612, 78.82, 0.00, 79.72, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 16:51:55.000000', 'EFECTIVO', 159.00, 'EFECTIVO-101354', 'PAGO_CUOTA', 65, 445, 0.00),
+(613, 90.64, 0.00, 67.90, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 16:52:23.000000', 'EFECTIVO', 159.00, 'EFECTIVO-133186', 'PAGO_CUOTA', 65, 446, 0.00),
+(614, 104.24, 0.00, 54.30, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 16:52:37.000000', 'EFECTIVO', 159.00, 'EFECTIVO-148626', 'PAGO_CUOTA', 65, 447, 0.00),
+(615, 119.88, 0.00, 38.66, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-27 16:52:51.000000', 'EFECTIVO', 159.00, 'EFECTIVO-163514', 'PAGO_CUOTA', 65, 448, 0.00),
+(616, 137.88, 0.00, 20.68, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-27 16:53:10.000000', 'EFECTIVO', 159.00, 'EFECTIVO-182018', 'PAGO_CUOTA', 65, 449, 0.00),
+(617, 104.62, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 16:53:51.000000', 'EFECTIVO', 165.00, 'EFECTIVO-223196', 'PAGO_CUOTA', 124, 763, 0.00),
+(618, 117.17, 0.00, 47.45, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 16:54:18.000000', 'EFECTIVO', 165.00, 'EFECTIVO-248690', 'PAGO_CUOTA', 124, 764, 0.00),
+(619, 131.23, 0.00, 33.39, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 16:54:52.000000', 'EFECTIVO', 165.00, 'EFECTIVO-283738', 'PAGO_CUOTA', 124, 765, 0.00),
+(620, 146.98, 0.00, 17.64, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 16:55:18.000000', 'EFECTIVO', 165.00, 'EFECTIVO-309714', 'PAGO_CUOTA', 124, 766, 0.00),
+(621, 132.92, 0.00, 90.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 16:56:45.000000', 'EFECTIVO', 223.00, 'EFECTIVO-397451', 'PAGO_CUOTA', 106, 652, 0.08),
+(622, 144.88, 0.00, 78.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 16:57:02.000000', 'EFECTIVO', 223.00, 'EFECTIVO-414579', 'PAGO_CUOTA', 106, 653, 0.08),
+(623, 157.92, 0.00, 65.00, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 16:57:20.000000', 'EFECTIVO', 223.00, 'EFECTIVO-429667', 'PAGO_CUOTA', 106, 654, 0.08),
+(624, 172.13, 0.00, 50.79, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 16:57:39.000000', 'EFECTIVO', 223.00, 'EFECTIVO-452603', 'PAGO_CUOTA', 106, 655, 0.08),
+(625, 187.63, 0.00, 35.29, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-27 16:57:59.000000', 'EFECTIVO', 223.00, 'EFECTIVO-470819', 'PAGO_CUOTA', 106, 656, 0.08),
+(626, 204.52, 0.00, 18.41, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-27 16:58:15.000000', 'EFECTIVO', 223.00, 'EFECTIVO-486362', 'PAGO_CUOTA', 106, 657, 0.07),
+(627, 40.05, 0.00, 30.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 17:01:33.000000', 'EFECTIVO', 70.00, 'EFECTIVO-684635', 'PAGO_CUOTA', 43, 332, -0.05),
+(628, 46.06, 0.00, 23.99, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 17:01:49.000000', 'EFECTIVO', 70.00, 'EFECTIVO-700396', 'PAGO_CUOTA', 43, 333, -0.05),
+(629, 52.97, 0.00, 17.08, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 17:02:03.000000', 'EFECTIVO', 70.00, 'EFECTIVO-715596', 'PAGO_CUOTA', 43, 334, -0.05),
+(630, 60.92, 0.00, 9.14, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 17:02:23.000000', 'EFECTIVO', 70.00, 'EFECTIVO-734644', 'PAGO_CUOTA', 43, 335, -0.06),
+(631, 131.00, 0.00, 150.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 17:03:52.000000', 'EFECTIVO', 281.00, 'EFECTIVO-823194', 'PAGO_CUOTA', 40, 312, 0.00),
+(632, 0.17, 0.00, 150.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 17:04:18.000000', 'EFECTIVO', 281.00, 'EFECTIVO-850731', 'PAGO_CUOTA', 40, 312, 0.00),
+(633, 255.55, 0.00, 25.56, 0.00, 'Pago cuota #8 via EFECTIVO', '2026-06-27 17:04:40.000000', 'EFECTIVO', 281.11, 'EFECTIVO-871644', 'PAGO_CUOTA', 40, 319, 0.00),
+(634, 144.29, 0.00, 136.88, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 17:05:05.000000', 'EFECTIVO', 281.17, 'EFECTIVO-894411', 'PAGO_CUOTA', 40, 313, 0.00),
+(635, 158.72, 0.00, 122.45, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 17:05:28.000000', 'EFECTIVO', 281.17, 'EFECTIVO-917912', 'PAGO_CUOTA', 40, 314, 0.00),
+(636, 174.59, 0.00, 106.58, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 17:05:55.000000', 'EFECTIVO', 281.17, 'EFECTIVO-944193', 'PAGO_CUOTA', 40, 315, 0.00),
+(637, 192.05, 0.00, 89.12, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-27 17:06:18.000000', 'EFECTIVO', 281.17, 'EFECTIVO-967685', 'PAGO_CUOTA', 40, 316, 0.00),
+(638, 211.25, 0.00, 69.92, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-27 17:06:40.000000', 'EFECTIVO', 281.17, 'EFECTIVO-990231', 'PAGO_CUOTA', 40, 317, 0.00),
+(639, 232.38, 0.00, 48.79, 0.00, 'Pago cuota #7 via EFECTIVO', '2026-06-27 17:07:00.000000', 'EFECTIVO', 281.17, 'EFECTIVO-011643', 'PAGO_CUOTA', 40, 318, 0.00),
+(640, 0.17, 0.00, 150.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 17:08:04.000000', 'EFECTIVO', 281.17, 'EFECTIVO-075134', 'PAGO_CUOTA', 40, 312, 0.00),
+(641, 104.62, 0.00, 60.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 18:29:37.000000', 'EFECTIVO', 165.00, 'EFECTIVO-968770', 'PAGO_CUOTA', 57, 408, 0.00),
+(642, 117.17, 0.00, 47.45, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 18:29:56.000000', 'EFECTIVO', 165.00, 'EFECTIVO-985633', 'PAGO_CUOTA', 57, 409, 0.00),
+(643, 131.23, 0.00, 33.39, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 18:30:16.000000', 'EFECTIVO', 165.00, 'EFECTIVO-004786', 'PAGO_CUOTA', 57, 410, 0.00),
+(644, 146.98, 0.00, 17.64, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-27 18:30:37.000000', 'EFECTIVO', 165.00, 'EFECTIVO-025311', 'PAGO_CUOTA', 57, 411, 0.00),
+(645, 86.00, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 18:31:50.000000', 'EFECTIVO', 131.00, 'EFECTIVO-098654', 'PAGO_CUOTA', 87, 578, 0.00);
+INSERT INTO `movimientos` (`id`, `aplicado_capital`, `aplicado_comision`, `aplicado_interes`, `aplicado_mora`, `descripcion`, `fecha`, `metodo_pago`, `monto`, `numero_comprobante`, `tipo`, `credito_id`, `cuota_id`, `ajuste_redondeo`) VALUES
+(646, 0.39, 0.00, 45.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 18:32:31.000000', 'EFECTIVO', 131.39, 'EFECTIVO-140169', 'PAGO_CUOTA', 87, 578, 0.00),
+(647, 99.35, 0.00, 32.04, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 18:32:55.000000', 'EFECTIVO', 131.39, 'EFECTIVO-164615', 'PAGO_CUOTA', 87, 579, 0.00),
+(648, 114.26, 0.00, 17.14, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-27 18:33:24.000000', 'EFECTIVO', 131.40, 'EFECTIVO-189672', 'PAGO_CUOTA', 87, 580, 0.00),
+(649, 141.51, 0.00, 36.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-06-27 18:43:29.000000', 'EFECTIVO', 177.51, 'EFECTIVO-798651', 'PAGO_CUOTA', 97, 615, 0.00),
+(650, 158.49, 0.00, 19.02, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-27 18:44:05.000000', 'EFECTIVO', 177.51, 'EFECTIVO-831345', 'PAGO_CUOTA', 97, 616, 0.00),
+(651, 32.16, 0.00, 50.82, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-06-29 11:05:16.000000', 'EFECTIVO', 99.00, 'EFECTIVO-070286', 'PAGO_CUOTA', 156, 23325, 0.00),
+(654, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-29 11:42:08.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 161, NULL, NULL),
+(655, NULL, NULL, NULL, NULL, 'Cierre por refinanciamiento', '2026-06-29 11:46:15.000000', NULL, 1499.59, NULL, 'REFINANCIAMIENTO_CIERRE', 161, NULL, NULL),
+(656, NULL, NULL, NULL, NULL, 'Apertura por refinanciamiento. Crédito origen #161', '2026-06-29 11:46:15.000000', NULL, 1000.00, NULL, 'REFINANCIAMIENTO_APERTURA', 162, NULL, NULL),
+(657, 84.73, 0.00, 135.27, 90.00, 'Pago cuota #3 via EFECTIVO', '2026-06-29 15:02:02.000000', 'EFECTIVO', 310.00, 'EFECTIVO-313018', 'PAGO_CUOTA', 143, 926, 0.00),
+(658, 181.92, 0.00, 38.22, 32.82, 'Pago cuota #11 via EFECTIVO', '2026-06-29 15:02:44.000000', 'EFECTIVO', 253.00, 'EFECTIVO-291626', 'PAGO_CUOTA', 143, 934, 0.04),
+(659, 93.22, 0.00, 126.78, 90.00, 'Pago cuota #4 via EFECTIVO', '2026-06-29 15:04:00.000000', 'EFECTIVO', 310.00, 'EFECTIVO-433338', 'PAGO_CUOTA', 143, 927, 0.00),
+(660, 102.55, 0.00, 117.45, 90.00, 'Pago cuota #5 via EFECTIVO', '2026-06-29 15:05:20.000000', 'EFECTIVO', 310.00, 'EFECTIVO-504946', 'PAGO_CUOTA', 143, 928, 0.00),
+(661, 199.98, 0.00, 20.02, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-29 15:06:25.000000', 'EFECTIVO', 220.00, 'EFECTIVO-574858', 'PAGO_CUOTA', 143, 935, 0.00),
+(662, 0.00, 0.00, 0.25, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-29 15:07:17.000000', 'EFECTIVO', 0.25, 'EFECTIVO-628834', 'PAGO_CUOTA', 143, 935, 0.00),
+(663, 0.25, 0.00, 20.02, 0.00, 'Pago cuota #12 via EFECTIVO', '2026-06-29 15:07:53.000000', 'EFECTIVO', 220.00, 'EFECTIVO-661307', 'PAGO_CUOTA', 143, 935, 0.00),
+(664, 0.00, 0.00, 0.14, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-29 15:20:39.000000', 'EFECTIVO', 0.14, 'EFECTIVO-428498', 'PAGO_CUOTA', 143, 926, 0.00),
+(665, 0.14, 0.00, 135.27, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-06-29 15:21:00.000000', 'EFECTIVO', 310.00, 'EFECTIVO-452162', 'PAGO_CUOTA', 143, 926, 0.00),
+(666, 0.00, 0.00, 0.14, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-29 15:22:31.000000', 'EFECTIVO', 0.14, 'EFECTIVO-484634', 'PAGO_CUOTA', 143, 927, 0.00),
+(667, 0.14, 0.00, 126.78, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-06-29 15:22:53.000000', 'EFECTIVO', 310.00, 'EFECTIVO-565667', 'PAGO_CUOTA', 143, 927, 0.00),
+(668, 0.00, 0.00, 0.14, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-29 15:23:20.000000', 'EFECTIVO', 0.14, 'EFECTIVO-588378', 'PAGO_CUOTA', 143, 928, 0.00),
+(669, 0.14, 0.00, 117.45, 0.00, 'Pago cuota #5 via EFECTIVO', '2026-06-29 15:23:38.000000', 'EFECTIVO', 310.00, 'EFECTIVO-610610', 'PAGO_CUOTA', 143, 928, 0.00),
+(670, 112.82, 0.00, 107.18, 90.00, 'Pago cuota #6 via EFECTIVO', '2026-06-29 15:23:54.000000', 'EFECTIVO', 310.00, 'EFECTIVO-627082', 'PAGO_CUOTA', 143, 929, 0.00),
+(671, 0.00, 0.00, 0.14, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-29 15:24:15.000000', 'EFECTIVO', 0.14, 'EFECTIVO-648938', 'PAGO_CUOTA', 143, 929, 0.00),
+(672, 0.14, 0.00, 107.18, 0.00, 'Pago cuota #6 via EFECTIVO', '2026-06-29 15:24:31.000000', 'EFECTIVO', 310.00, 'EFECTIVO-664610', 'PAGO_CUOTA', 143, 929, 0.00),
+(673, 124.26, 0.00, 95.88, 90.00, 'Pago cuota #7 via EFECTIVO', '2026-06-29 15:24:53.000000', 'EFECTIVO', 310.14, 'EFECTIVO-685419', 'PAGO_CUOTA', 143, 930, 0.00),
+(674, 165.39, 0.00, 54.75, 32.82, 'Pago cuota #10 via EFECTIVO', '2026-06-29 15:25:27.000000', 'EFECTIVO', 253.00, 'EFECTIVO-720034', 'PAGO_CUOTA', 143, 933, 0.04),
+(675, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-30 09:19:18.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 163, NULL, NULL),
+(676, 143.81, 0.00, 17.26, 0.00, 'Pago cuota #8 via YAPE', '2026-06-30 16:42:17.000000', 'YAPE', 161.07, '23915671', 'PAGO_CUOTA', 89, 590, 0.00),
+(677, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-06-30 18:16:02.000000', NULL, 1000.00, NULL, 'DESEMBOLSO', 164, NULL, NULL),
+(678, 128.62, 0.00, 52.93, 0.00, 'Pago cuota #9 via YAPE', '2026-07-01 09:04:44.000000', 'YAPE', 181.55, '28247755', 'PAGO_CUOTA', 55, 392, 0.00),
+(679, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-01 12:31:36.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 165, NULL, NULL),
+(680, 186.09, 0.00, 126.00, 0.00, 'Pago cuota #1 via YAPE', '2026-07-01 17:16:33.000000', 'YAPE', 312.09, '5527261', 'PAGO_CUOTA', 22, 165, 0.00),
+(681, 75.31, 0.00, 71.45, 0.00, 'Pago cuota #6 via YAPE', '2026-07-01 17:24:27.000000', 'YAPE', 146.76, '13591252', 'PAGO_CUOTA', 21, 158, 0.00),
+(682, 100.00, 0.00, 12.00, 0.00, 'Pago cuota #1 via EFECTIVO', '2026-07-01 21:35:30.000000', 'EFECTIVO', 112.00, 'EFECTIVO-719737', 'PAGO_CUOTA', 153, 23237, 0.00),
+(683, 0.00, 0.00, 100.00, 0.00, 'Pago cuota #2 via EFECTIVO', '2026-07-02 09:11:40.000000', 'EFECTIVO', 100.00, 'EFECTIVO-491614', 'PAGO_CUOTA', 68, 475, 0.00),
+(684, 150.63, 0.00, 142.90, 0.00, 'Pago cuota #6 via YAPE', '2026-07-02 09:18:53.000000', 'YAPE', 293.53, '06903319', 'PAGO_CUOTA', 121, 748, 0.00),
+(685, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-02 10:19:16.000000', NULL, 2000.00, NULL, 'DESEMBOLSO', 166, NULL, NULL),
+(686, 79.46, 0.00, 25.62, 0.00, 'Pago cuota #3 via EFECTIVO', '2026-07-02 11:37:10.000000', 'EFECTIVO', 105.00, 'EFECTIVO-224045', 'PAGO_CUOTA', 27, 245, -0.08),
+(687, 91.37, 0.00, 13.71, 0.00, 'Pago cuota #4 via EFECTIVO', '2026-07-02 11:38:05.000000', 'EFECTIVO', 105.00, 'EFECTIVO-279173', 'PAGO_CUOTA', 27, 246, -0.08),
+(688, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-02 12:52:14.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 167, NULL, NULL),
+(689, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-03 09:03:12.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 168, NULL, NULL),
+(690, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-04 13:02:11.000000', NULL, 800.00, NULL, 'DESEMBOLSO', 169, NULL, NULL),
+(691, 88.49, 0.00, 120.99, 0.00, 'Pago cuota #3 via YAPE', '2026-07-04 15:46:32.000000', 'YAPE', 209.48, '19552546', 'PAGO_CUOTA', 59, 417, 0.00),
+(692, 143.00, 0.00, 87.00, 52.32, 'Pago cuota #2 via EFECTIVO', '2026-07-04 16:48:13.000000', 'EFECTIVO', 282.32, 'EFECTIVO-587337', 'PAGO_CUOTA', 46, 346, 0.00),
+(693, 140.17, 0.00, 139.13, 0.00, 'Pago cuota #5 via YAPE', '2026-07-06 08:15:16.000000', 'YAPE', 279.30, '31502805', 'PAGO_CUOTA', 125, 23280, 0.00),
+(694, NULL, NULL, NULL, NULL, 'Desembolso a Billetera Virtual del Cliente.', '2026-07-06 08:50:11.000000', NULL, 300.00, NULL, 'DESEMBOLSO', 170, NULL, NULL),
+(695, 50.00, 0.00, 90.00, 41.00, 'Pago cuota #1 via EFECTIVO', '2026-07-06 09:22:56.000000', 'EFECTIVO', 181.00, 'EFECTIVO-768857', 'PAGO_CUOTA', 26, 219, 0.00);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pasivos`
+--
+
+CREATE TABLE `pasivos` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `cuota_mensual` double DEFAULT NULL,
+  `entidad_acreedora` varchar(255) DEFAULT NULL,
+  `monto_pendiente` double DEFAULT NULL,
+  `observacion` varchar(255) DEFAULT NULL,
+  `tipo` varchar(255) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL,
+  `vencimiento` varchar(10) DEFAULT NULL COMMENT 'Fecha de vencimiento del pasivo en formato MM/YYYY (ej: 06/2027)',
+  `doc_url` text DEFAULT NULL COMMENT 'URL relativa del documento de respaldo (imagen o PDF)'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `pasivos`
+--
+
+INSERT INTO `pasivos` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `cuota_mensual`, `entidad_acreedora`, `monto_pendiente`, `observacion`, `tipo`, `cliente_id`, `vencimiento`, `doc_url`) VALUES
+(2, 'angelicaurquiayshuiza@gmail.com', 'angelicaurquiayshuiza@gmail.com', '2026-06-01 15:57:02.000000', '2026-06-01 15:57:01.000000', 334, 'BCP', 500, 'Puntual', 'TARJETAS', 24, '06-2026', '/uploads/user-45718155/Patrimonio/1780329422110_pasivo_2.pdf');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `permisos_rol_modulo`
+--
+
+CREATE TABLE `permisos_rol_modulo` (
+  `id` bigint(20) NOT NULL,
+  `p_create` bit(1) NOT NULL,
+  `p_delete` bit(1) NOT NULL,
+  `p_edit` bit(1) NOT NULL,
+  `p_view` bit(1) NOT NULL,
+  `ver_modulo` bit(1) NOT NULL,
+  `modulo_id` bigint(20) NOT NULL,
+  `rol_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `permisos_rol_modulo`
+--
+
+INSERT INTO `permisos_rol_modulo` (`id`, `p_create`, `p_delete`, `p_edit`, `p_view`, `ver_modulo`, `modulo_id`, `rol_id`) VALUES
+(1, b'1', b'1', b'1', b'1', b'1', 1, 4),
+(2, b'1', b'1', b'1', b'1', b'1', 2, 4),
+(3, b'1', b'1', b'1', b'1', b'1', 3, 4),
+(4, b'1', b'1', b'1', b'1', b'1', 4, 4),
+(5, b'1', b'1', b'1', b'1', b'1', 5, 4),
+(6, b'1', b'1', b'1', b'1', b'1', 6, 4),
+(25, b'1', b'1', b'1', b'1', b'1', 7, 4),
+(26, b'1', b'1', b'1', b'1', b'1', 8, 4),
+(27, b'1', b'1', b'1', b'1', b'1', 9, 4),
+(549, b'0', b'0', b'0', b'1', b'1', 1, 6),
+(550, b'1', b'0', b'0', b'1', b'1', 2, 6),
+(551, b'1', b'0', b'1', b'1', b'1', 1, 5),
+(552, b'1', b'0', b'1', b'1', b'0', 2, 5),
+(553, b'1', b'0', b'1', b'1', b'1', 3, 5),
+(554, b'1', b'0', b'1', b'1', b'1', 7, 5),
+(555, b'1', b'0', b'1', b'1', b'1', 9, 5),
+(556, b'0', b'0', b'0', b'0', b'1', 4, 5),
+(557, b'0', b'0', b'0', b'0', b'1', 13, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rangos_interes`
+--
+
+CREATE TABLE `rangos_interes` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `monto_maximo` decimal(38,2) NOT NULL,
+  `monto_minimo` decimal(38,2) NOT NULL,
+  `tasa_mensual` decimal(38,2) NOT NULL,
+  `tipo_credito_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `rangos_interes`
+--
+
+INSERT INTO `rangos_interes` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `monto_maximo`, `monto_minimo`, `tasa_mensual`, `tipo_credito_id`) VALUES
+(5, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:48:46.000000', '2026-04-29 17:48:46.000000', 999.00, 300.00, 12.00, 4),
+(6, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:49:03.000000', '2026-04-29 17:49:03.000000', 4999.00, 1000.00, 9.00, 4),
+(7, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:49:42.000000', '2026-04-29 17:49:42.000000', 9999.00, 5000.00, 8.00, 4),
+(8, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:50:00.000000', '2026-04-29 17:50:00.000000', 50000.00, 10000.00, 5.00, 4),
+(9, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:53:15.000000', '2026-04-29 17:53:15.000000', 999.00, 300.00, 12.00, 6),
+(10, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:53:31.000000', '2026-04-29 17:53:31.000000', 2500.00, 1000.00, 9.00, 6),
+(11, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:57:09.000000', '2026-04-29 17:57:09.000000', 4999.00, 3000.00, 9.00, 5),
+(12, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-04-29 17:57:24.000000', '2026-04-29 17:57:24.000000', 20000.00, 5000.00, 6.00, 5),
+(13, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-02 16:44:25.000000', '2026-06-02 16:44:25.000000', 999.00, 100.00, 15.00, 14),
+(16, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-03 15:23:10.000000', '2026-06-03 15:23:10.000000', 10000.00, 1000.00, 10.00, 14),
+(17, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-03 15:24:41.000000', '2026-06-03 15:24:41.000000', 5000.00, 1000.00, 8.00, 15),
+(18, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-11 10:38:34.000000', '2026-06-11 10:38:34.000000', 80000.00, 20000.00, 5.00, 11);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `refresh_tokens`
+--
+
+CREATE TABLE `refresh_tokens` (
+  `id` bigint(20) NOT NULL,
+  `fecha_creacion` datetime(6) NOT NULL,
+  `fecha_expiracion` datetime(6) NOT NULL,
+  `ip_origen` varchar(255) DEFAULT NULL,
+  `token` varchar(512) NOT NULL,
+  `user_agent` varchar(512) DEFAULT NULL,
+  `usuario_id` bigint(20) NOT NULL,
+  `ultima_actividad` datetime(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `refresh_tokens`
+--
+
+INSERT INTO `refresh_tokens` (`id`, `fecha_creacion`, `fecha_expiracion`, `ip_origen`, `token`, `user_agent`, `usuario_id`, `ultima_actividad`) VALUES
+(1, '2026-06-25 12:41:55.000000', '2026-07-02 12:41:55.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MDkzMTUsImV4cCI6MTc4MzAxNDExNX0.pD6XU9QZlTwsEtV9ROGV6c_3LfgLw1jWTbNBWNJwfUQ', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(2, '2026-06-25 13:28:31.000000', '2026-07-02 13:28:31.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MTIxMTEsImV4cCI6MTc4MzAxNjkxMX0.l_wY3KXUEmieUi6cctzieHucEx5uTKZIAQAYejPMK0Y', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(3, '2026-06-25 13:50:39.000000', '2026-07-02 13:50:39.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MTM0MzksImV4cCI6MTc4MzAxODIzOX0.m2o2DY4sDrr7jQICjdFElq1nW9PDRjJq4I86U1YDzaQ', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(4, '2026-06-25 13:59:06.000000', '2026-07-02 13:59:06.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MTM5NDYsImV4cCI6MTc4MzAxODc0Nn0.Zjhy7uVfrLymiwUV_xhP0-XFj79O6xgaCGcZkinX6qs', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(5, '2026-06-25 14:05:43.000000', '2026-07-02 14:05:43.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MTQzNDMsImV4cCI6MTc4MzAxOTE0M30.r_8b0soSQ-H6_c7WuQRDfJTOPAM_-YTD8MkNWFJox6I', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(6, '2026-06-25 15:30:54.000000', '2026-07-02 15:30:54.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MTk0NTQsImV4cCI6MTc4MzAyNDI1NH0.2ANvBXgSZsczdaitu_a5gm_m4q4TDsscd7ay7mrYPEk', NULL, 118, NULL),
+(7, '2026-06-25 15:41:39.000000', '2026-07-02 15:41:39.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MjAwOTksImV4cCI6MTc4MzAyNDg5OX0.S6FqBs0aTJucWV1gv91dnuHJCYrp7vXuCPe3Kx8UdV8', NULL, 118, NULL),
+(8, '2026-06-25 15:42:21.000000', '2026-07-02 15:42:21.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0MjAxNDEsImV4cCI6MTc4MzAyNDk0MX0.ug3dHnNYzwu03f4zza7wUnBtJpQ-GlpugPxbYB4iG00', NULL, 224, NULL),
+(9, '2026-06-25 17:50:43.000000', '2026-07-02 17:50:43.000000', '38.250.151.133', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0Mjc4NDMsImV4cCI6MTc4MzAzMjY0M30.JdLzM_63MsxhdxkE4Yjz8NNbz3g5kPIbEycx06dfmnk', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 118, NULL),
+(10, '2026-06-26 10:22:15.000000', '2026-07-03 10:22:15.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ4NzMzNSwiZXhwIjoxNzgzMDkyMTM1fQ.7C_1pqpjJ2Vu1z4XqGxezbir_5iB0iq0n-gYZp6CJ4o', NULL, 117, NULL),
+(11, '2026-06-26 10:30:21.000000', '2026-07-03 10:30:21.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ4NzgyMSwiZXhwIjoxNzgzMDkyNjIxfQ.Z37Kdib-9t6-_ol8vj9t1vmYHntkE4rfv4u5Q0OuWZ8', NULL, 117, NULL),
+(12, '2026-06-26 11:12:44.000000', '2026-07-03 11:12:44.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5MDM2NCwiZXhwIjoxNzgzMDk1MTY0fQ.1WaQ2li0p6ssyEJvtvthdYLY-qeSsvFmAhs3sWHVKAY', NULL, 117, '2026-06-26 11:42:38.000000'),
+(13, '2026-06-26 11:15:03.000000', '2026-07-03 11:15:03.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNDkwNTAzLCJleHAiOjE3ODMwOTUzMDN9.3Q85X_8HzocwQJYaW-_cW-oUZ_xe_JrWmb-RQ1NdLdk', NULL, 95, '2026-06-26 11:43:21.000000'),
+(14, '2026-06-26 11:20:33.000000', '2026-07-03 11:20:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTA4MzMsImV4cCI6MTc4MzA5NTYzM30.B_5X4Hk-KQ_1MAcBgIoQrrcldcz1Bv6VB3qSZ-pQIv0', NULL, 224, '2026-06-26 11:32:29.000000'),
+(15, '2026-06-26 11:22:40.000000', '2026-07-03 11:22:40.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTA5NjAsImV4cCI6MTc4MzA5NTc2MH0.DleK1u1x7nVbkgkrzpw0Qt1tju_pXvfuF0zApMyelfA', NULL, 118, '2026-06-26 11:51:51.000000'),
+(16, '2026-06-26 11:43:31.000000', '2026-07-03 11:43:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5MjIxMSwiZXhwIjoxNzgzMDk3MDExfQ.Fg2U0Woojb9OYzBui1GmEeFH4GYYnL3rNJn8N121byk', NULL, 117, '2026-06-26 12:11:37.000000'),
+(17, '2026-06-26 11:45:23.000000', '2026-07-03 11:45:23.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNDkyMzIzLCJleHAiOjE3ODMwOTcxMjN9.spHEQA_N5Bi5QzV1X-GknA7qx1gU_x87SpN6nuw2oLY', NULL, 95, '2026-06-26 12:15:02.000000'),
+(18, '2026-06-26 11:52:43.000000', '2026-07-03 11:52:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTI3NjMsImV4cCI6MTc4MzA5NzU2M30.KmFvHCDlBdL0PjuvhsxFd7cyQwCmy_2zqAhOZMtFryk', NULL, 118, '2026-06-26 12:20:45.000000'),
+(19, '2026-06-26 12:10:43.000000', '2026-07-03 12:10:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTM4NDMsImV4cCI6MTc4MzA5ODY0M30.3vBKK7C3ymYOQqJx_Hl83CAtemhsB2nS8eJTn4BzAZo', NULL, 224, '2026-06-26 12:40:31.000000'),
+(20, '2026-06-26 12:13:38.000000', '2026-07-03 12:13:38.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5NDAxOCwiZXhwIjoxNzgzMDk4ODE4fQ.aVyDBO-VvfWXC455hkO1XZwPb6UnoAKFJ3MrGFDcPZk', NULL, 117, '2026-06-26 12:42:37.000000'),
+(21, '2026-06-26 12:15:24.000000', '2026-07-03 12:15:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNDk0MTI0LCJleHAiOjE3ODMwOTg5MjR9.P2E5y939UpUgI_pR0TvHvkH6Ch82CGUICCiNhHIJUnc', NULL, 95, '2026-06-26 12:44:38.000000'),
+(22, '2026-06-26 12:22:48.000000', '2026-07-03 12:22:48.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTQ1NjgsImV4cCI6MTc4MzA5OTM2OH0.wujy1W_p5PsROzvIOwIfvFPtOp8hGhuX_h5BkAVzMDI', NULL, 118, '2026-06-26 12:51:51.000000'),
+(23, '2026-06-26 12:27:47.000000', '2026-07-03 12:27:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5NDg2NywiZXhwIjoxNzgzMDk5NjY3fQ.v2Sou_yVBZdvAGzv3k0yHZg4RXRff29XaZB1z90bqfk', NULL, 117, '2026-06-26 12:56:37.000000'),
+(24, '2026-06-26 12:41:33.000000', '2026-07-03 12:41:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTU2OTMsImV4cCI6MTc4MzEwMDQ5M30.PDeahIW5A8gh_9YgUrmhn7lp4VKI_u2mfjj0Ph4N7CY', NULL, 224, '2026-06-26 13:02:43.000000'),
+(25, '2026-06-26 12:44:14.000000', '2026-07-03 12:44:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5NTg1NCwiZXhwIjoxNzgzMTAwNjU0fQ.H7hS_cJKeo15vTsv4266McyyFmfeojBLvxxm_HrSqc4', NULL, 117, '2026-06-26 13:13:57.000000'),
+(26, '2026-06-26 12:45:39.000000', '2026-07-03 12:45:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNDk1OTM5LCJleHAiOjE3ODMxMDA3Mzl9.35dE_iSPpotGYe4r5Xyof7Nzg9vLcRqBr8leFgLGx00', NULL, 95, '2026-06-26 12:59:39.000000'),
+(27, '2026-06-26 12:52:51.000000', '2026-07-03 12:52:51.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTYzNzEsImV4cCI6MTc4MzEwMTE3MX0.lrOO13pixWmp0mrYBgx3rKLEmfnjVZfyCqbrR4kIgDU', NULL, 118, '2026-06-26 13:20:51.000000'),
+(28, '2026-06-26 12:58:37.000000', '2026-07-03 12:58:37.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5NjcxNywiZXhwIjoxNzgzMTAxNTE3fQ.U3IBDaW-mOkQLBQZAjE9cbp0VuZxUWCS8Gdk-PkD2FY', NULL, 117, '2026-06-26 13:20:37.000000'),
+(29, '2026-06-26 13:14:57.000000', '2026-07-03 13:14:57.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjQ5NzY5NywiZXhwIjoxNzgzMTAyNDk3fQ.-Q3l-Tf5CQunAWCUbFXb4JOp7-G2Oa-CYmM9iyn-pj0', NULL, 117, '2026-06-26 13:19:37.000000'),
+(30, '2026-06-26 13:23:44.000000', '2026-07-03 13:23:44.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI0OTgyMjQsImV4cCI6MTc4MzEwMzAyNH0.qaZX7A_V88m2kYOjzWlAkCnV6UyvmHy6TepMZwGW7VU', NULL, 118, '2026-06-26 13:23:44.000000'),
+(31, '2026-06-26 13:53:58.000000', '2026-07-03 13:53:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMDAzOCwiZXhwIjoxNzgzMTA0ODM4fQ.K-37XGd0ox7jFesfUhgpVLqhYsb6cEyKOCFTx6u0bg0', NULL, 117, '2026-06-26 14:22:36.000000'),
+(32, '2026-06-26 13:58:19.000000', '2026-07-03 13:58:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMDI5OSwiZXhwIjoxNzgzMTA1MDk5fQ.lVl32qxyUOVSJgVCeaErBxKhVhcrc-8blMg_eqqGofA', NULL, 117, '2026-06-26 14:26:36.000000'),
+(33, '2026-06-26 14:24:36.000000', '2026-07-03 14:24:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMTg3NiwiZXhwIjoxNzgzMTA2Njc2fQ.91hFF9CePoQDeJk8Hxea6C_N9e_PTg0gk5vdCqDk2kY', NULL, 117, '2026-06-26 14:53:36.000000'),
+(34, '2026-06-26 14:29:16.000000', '2026-07-03 14:29:16.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMjE1NiwiZXhwIjoxNzgzMTA2OTU2fQ.x7bbC5ddvucXl_6KT6knZF-Jz1Y3s2e-H3g6Vs5T35c', NULL, 117, '2026-06-26 14:57:12.000000'),
+(35, '2026-06-26 14:54:36.000000', '2026-07-03 14:54:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMzY3NiwiZXhwIjoxNzgzMTA4NDc2fQ.7yh3lGA5LuAFtMebaXxXK-_7DLNucFVtAEEs5yigIp4', NULL, 117, '2026-06-26 15:23:36.000000'),
+(36, '2026-06-26 14:59:33.000000', '2026-07-03 14:59:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwMzk3MywiZXhwIjoxNzgzMTA4NzczfQ.POh0wSsZOU-wNgTs3nVKjrB1uNYEEjfUvwnWwQQ4pe8', NULL, 117, '2026-06-26 15:29:16.000000'),
+(37, '2026-06-26 15:04:36.000000', '2026-07-03 15:04:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MDQyNzYsImV4cCI6MTc4MzEwOTA3Nn0.vqaBG1uf9lp3BxBBsapNh-6lMnkcB0siSU_e4wemQlg', NULL, 224, '2026-06-26 15:33:19.000000'),
+(38, '2026-06-26 15:24:36.000000', '2026-07-03 15:24:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwNTQ3NiwiZXhwIjoxNzgzMTEwMjc2fQ.BSMEs0teC7jaiN0v_qfeEiMnttTe5trYNAB894NP-F4', NULL, 117, '2026-06-26 15:51:58.000000'),
+(39, '2026-06-26 15:29:42.000000', '2026-07-03 15:29:42.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwNTc4MiwiZXhwIjoxNzgzMTEwNTgyfQ.aZQ2UiXwDLViZdECAX4fIto8UIfWTWPU3RaRfCRRdxg', NULL, 117, '2026-06-26 15:58:45.000000'),
+(40, '2026-06-26 15:35:19.000000', '2026-07-03 15:35:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MDYxMTksImV4cCI6MTc4MzExMDkxOX0.EgSSLwi9kepSGF8nMzrWyU7O7jPqMve5POdP9_OuB34', NULL, 224, '2026-06-26 16:00:53.000000'),
+(41, '2026-06-26 15:54:36.000000', '2026-07-03 15:54:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwNzI3NiwiZXhwIjoxNzgzMTEyMDc2fQ.mMufE6-7Ev-21oP_OUOSyqGr-1eEkK_lH7tgJgLQjHA', NULL, 117, '2026-06-26 16:23:36.000000'),
+(42, '2026-06-26 15:59:45.000000', '2026-07-03 15:59:45.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwNzU4NSwiZXhwIjoxNzgzMTEyMzg1fQ.jURoDJdlkcqNuV9ncAYIGM-M6vqzQpCxtoemuek0uLg', NULL, 117, '2026-06-26 16:29:36.000000'),
+(43, '2026-06-26 16:24:36.000000', '2026-07-03 16:24:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwOTA3NiwiZXhwIjoxNzgzMTEzODc2fQ.Lco41aEsSzjkVqc2laTzxgHbROhLoHGagobob0wK7h4', NULL, 117, '2026-06-26 16:52:36.000000'),
+(44, '2026-06-26 16:27:47.000000', '2026-07-03 16:27:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MDkyNjcsImV4cCI6MTc4MzExNDA2N30.resl9yrNlxsgv8DzsLjYVXL2KnFm2MGhKehc7EFVBTs', NULL, 224, '2026-06-26 16:56:52.000000'),
+(45, '2026-06-26 16:30:36.000000', '2026-07-03 16:30:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUwOTQzNiwiZXhwIjoxNzgzMTE0MjM2fQ.jE6whCrA5-MEohjyrENXGJcrw5_fogx9ukuW2L-1x9Y', NULL, 117, '2026-06-26 16:59:11.000000'),
+(46, '2026-06-26 16:54:36.000000', '2026-07-03 16:54:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUxMDg3NiwiZXhwIjoxNzgzMTE1Njc2fQ.iRNoBoLNO6K4RhlmRoCTTlqilsesd-QpwMEGsWFn1UQ', NULL, 117, '2026-06-26 17:22:36.000000'),
+(47, '2026-06-26 16:57:53.000000', '2026-07-03 16:57:53.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MTEwNzMsImV4cCI6MTc4MzExNTg3M30.PjNRQ84eex_ap_WQsiWkuzNrRbDvBjwiBnyisZAh7cs', NULL, 224, '2026-06-26 17:27:11.000000'),
+(48, '2026-06-26 17:01:12.000000', '2026-07-03 17:01:12.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUxMTI3MiwiZXhwIjoxNzgzMTE2MDcyfQ.vRoqpsH1C5MlCwxkpxku2N77E6xnvhvT8Wz0BFXmfNY', NULL, 117, '2026-06-26 17:29:20.000000'),
+(49, '2026-06-26 17:24:37.000000', '2026-07-03 17:24:37.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUxMjY3NywiZXhwIjoxNzgzMTE3NDc3fQ.06lLDoy4H0Q0cm09M7UlRV8fvr8TJUAtXaASNubyrA0', NULL, 117, '2026-06-26 17:50:36.000000'),
+(50, '2026-06-26 17:28:11.000000', '2026-07-03 17:28:11.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MTI4OTEsImV4cCI6MTc4MzExNzY5MX0.dIh0U7yg-VuivA1rFL7CtTiH129xXBcqLlDQg1xW8Lw', NULL, 224, '2026-06-26 17:56:56.000000'),
+(51, '2026-06-26 17:31:20.000000', '2026-07-03 17:31:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjUxMzA4MCwiZXhwIjoxNzgzMTE3ODgwfQ.JRMwKPp4ba1vnU1R1xr7PjuyDv5BB-gaupI1vM-aK2c', NULL, 117, '2026-06-26 17:51:58.000000'),
+(52, '2026-06-26 17:58:58.000000', '2026-07-03 17:58:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MTQ3MzgsImV4cCI6MTc4MzExOTUzOH0.lfNh565_ycs71hwGNoWMl-3o8TsMv-eYrFy3j5S2bmA', NULL, 224, '2026-06-26 18:07:34.000000'),
+(53, '2026-06-26 18:09:48.000000', '2026-07-03 18:09:48.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTE1Mzg4LCJleHAiOjE3ODMxMjAxODh9.p51vGeWwoVE14-qmzHc9UPR62P3kCWbuKUvYf5NWigU', NULL, 95, '2026-06-26 18:11:54.000000'),
+(54, '2026-06-26 20:07:17.000000', '2026-07-03 20:07:17.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1MjI0MzcsImV4cCI6MTc4MzEyNzIzN30.k7IOB0WdBc63GVU7ePXrQucB_RO10gP2rwD4hrGHEsI', NULL, 224, '2026-06-26 20:07:17.000000'),
+(55, '2026-06-26 22:49:34.000000', '2026-07-03 22:49:34.000000', '190.238.187.105', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTMyMTc0LCJleHAiOjE3ODMxMzY5NzR9.86iofcb-EwvIkVyks2FgXKkXTVmDmH1NJQeZfVkyVeU', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 209, '2026-06-26 22:49:34.000000'),
+(56, '2026-06-26 22:56:37.000000', '2026-07-03 22:56:37.000000', '190.238.187.105', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTMyNTk3LCJleHAiOjE3ODMxMzczOTd9.-c4EuQLWgm-nd_7oh8kQFzRfHH5fbkl0TSOlfnjoOYc', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 209, '2026-06-26 23:25:22.000000'),
+(57, '2026-06-26 23:27:24.000000', '2026-07-03 23:27:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTM0NDQ0LCJleHAiOjE3ODMxMzkyNDR9.PK9ERtxIWn81mIguVQFJUzT5NCAxMChDsRp_3vjK7Jg', NULL, 209, '2026-06-26 23:57:12.000000'),
+(58, '2026-06-26 23:58:12.000000', '2026-07-03 23:58:12.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTM2MjkyLCJleHAiOjE3ODMxNDEwOTJ9.4WkhpkXDG-sgpVwE_vMZ5Qjb6kmOiQIq71XqGycW9kY', NULL, 209, '2026-06-27 00:14:28.000000'),
+(59, '2026-06-27 09:10:31.000000', '2026-07-04 09:10:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1Njk0MzEsImV4cCI6MTc4MzE3NDIzMX0.6gvEjqPyiipmV89seEtpHnNrXk1yTcAyIhm8QotY8SE', NULL, 224, '2026-06-27 09:38:32.000000'),
+(60, '2026-06-27 09:16:13.000000', '2026-07-04 09:16:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTY5NzczLCJleHAiOjE3ODMxNzQ1NzN9.P7BSWeh_JyMQvv1gyPUviDYjCOKKf0UxD7Jv81VG4v4', NULL, 95, '2026-06-27 09:45:14.000000'),
+(61, '2026-06-27 09:40:34.000000', '2026-07-04 09:40:34.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1NzEyMzQsImV4cCI6MTc4MzE3NjAzNH0.Mh-DhwPptxq4Isgry_pMbCBJW2h1C3cPctkwMT9MqcU', NULL, 224, '2026-06-27 10:08:36.000000'),
+(62, '2026-06-27 09:46:16.000000', '2026-07-04 09:46:16.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTcxNTc2LCJleHAiOjE3ODMxNzYzNzZ9.tlQpmoa9AVlc594lhd6IJ9p4FtlTdXQbWcIkDhdkIqQ', NULL, 95, '2026-06-27 10:15:17.000000'),
+(63, '2026-06-27 10:01:37.000000', '2026-07-04 10:01:37.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjU3MjQ5NywiZXhwIjoxNzgzMTc3Mjk3fQ.aj4nidfnqpAeg1tQIzkJIB72HOoabXFo7OiajJmeD9M', NULL, 117, '2026-06-27 10:30:39.000000'),
+(64, '2026-06-27 10:06:54.000000', '2026-07-04 10:06:54.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTcyODE0LCJleHAiOjE3ODMxNzc2MTR9.5m7QBPQNIIf43sVzNK_ctig-VsuTPDKoBVCbU7M_8CY', NULL, 209, '2026-06-27 10:35:13.000000'),
+(65, '2026-06-27 10:10:38.000000', '2026-07-04 10:10:38.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1NzMwMzgsImV4cCI6MTc4MzE3NzgzOH0.dmW8hPseQ0IVig8totC84SWnPvvcWg-DRoDodw-cChw', NULL, 224, '2026-06-27 10:39:46.000000'),
+(66, '2026-06-27 10:16:18.000000', '2026-07-04 10:16:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTczMzc4LCJleHAiOjE3ODMxNzgxNzh9.njxYxqgriz-QzYV4P428c0_1V6voCoU4uHlOxUEU5ck', NULL, 95, '2026-06-27 10:46:17.000000'),
+(67, '2026-06-27 10:31:39.000000', '2026-07-04 10:31:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjU3NDI5OSwiZXhwIjoxNzgzMTc5MDk5fQ.gsPIFygnHlqQtXrtZ8mbcaC-tNJW_Pykizb-CT6lqs4', NULL, 117, '2026-06-27 10:59:06.000000'),
+(68, '2026-06-27 10:37:16.000000', '2026-07-04 10:37:16.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTc0NjM2LCJleHAiOjE3ODMxNzk0MzZ9.TLs5iLYyncQC_QG337OTs8M93MAl3j895DHbqTPHquU', NULL, 209, '2026-06-27 11:03:27.000000'),
+(69, '2026-06-27 10:40:47.000000', '2026-07-04 10:40:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1NzQ4NDcsImV4cCI6MTc4MzE3OTY0N30.jQZfwMvqWwK49QN7_U-4b6yRWotQbBUXa6IJgnfDoSg', NULL, 224, '2026-06-27 11:10:32.000000'),
+(70, '2026-06-27 10:46:18.000000', '2026-07-04 10:46:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTc1MTc4LCJleHAiOjE3ODMxNzk5Nzh9.RYoduByXl_6QMonQfMe8mSdzklkwi-9HoZZGkz410d4', NULL, 95, '2026-06-27 11:15:16.000000'),
+(71, '2026-06-27 11:01:40.000000', '2026-07-04 11:01:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjU3NjEwMCwiZXhwIjoxNzgzMTgwOTAwfQ.8008XiG--mNB1BVA7WhI85h8vx6UumYIdPYnGRnrWnw', NULL, 117, '2026-06-27 11:31:39.000000'),
+(72, '2026-06-27 11:11:33.000000', '2026-07-04 11:11:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1NzY2OTMsImV4cCI6MTc4MzE4MTQ5M30.APbnsUjvWwXkBAQ_3RC9liZ-18FDF8kkw9rbS_YXJP8', NULL, 224, '2026-06-27 11:39:33.000000'),
+(73, '2026-06-27 11:17:18.000000', '2026-07-04 11:17:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTc3MDM4LCJleHAiOjE3ODMxODE4Mzh9.1v6cNWVJFjhfav4rZrsd7enCmTafGYZFjHLmB-sh4RQ', NULL, 95, '2026-06-27 11:46:18.000000'),
+(74, '2026-06-27 11:32:40.000000', '2026-07-04 11:32:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjU3Nzk2MCwiZXhwIjoxNzgzMTgyNzYwfQ.SyXLu7CNcc1HRHH2XakyudaQWOy0kX0BVh6hbVRR_U8', NULL, 117, '2026-06-27 11:42:14.000000'),
+(75, '2026-06-27 11:35:23.000000', '2026-07-04 11:35:23.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTc4MTIzLCJleHAiOjE3ODMxODI5MjN9.u-leIqOmNCD3fm3VA83VKK55btK3kwSeQHDzwbVI_Pg', NULL, 209, '2026-06-27 11:40:25.000000'),
+(76, '2026-06-27 11:42:33.000000', '2026-07-04 11:42:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1Nzg1NTMsImV4cCI6MTc4MzE4MzM1M30.EmdQXwANoFfOZ4V49H330pa44COE2Mq0PCdqbfp9ETs', NULL, 224, '2026-06-27 12:11:31.000000'),
+(77, '2026-06-27 11:47:18.000000', '2026-07-04 11:47:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTc4ODM4LCJleHAiOjE3ODMxODM2Mzh9.WdlAkLmgxLNM5HqD_gW_EfWkPUL0Ys69dEXSC4t20v0', NULL, 95, '2026-06-27 12:16:28.000000'),
+(78, '2026-06-27 12:10:15.000000', '2026-07-04 12:10:15.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTgwMjE1LCJleHAiOjE3ODMxODUwMTV9.bEGMJ_vum-fLbklK0CqUJErrrO3a2dQ4XR8hbJfvEX8', NULL, 209, '2026-06-27 12:39:48.000000'),
+(79, '2026-06-27 12:13:33.000000', '2026-07-04 12:13:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1ODA0MTMsImV4cCI6MTc4MzE4NTIxM30.n5erSWqLvBEo-39o9VuOnV0Isp9Y74USIuG1B21mTVw', NULL, 224, '2026-06-27 12:41:33.000000'),
+(80, '2026-06-27 12:17:27.000000', '2026-07-04 12:17:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTgwNjQ3LCJleHAiOjE3ODMxODU0NDd9.Ifgh_fjmNNqxs1AC7qPe41f3P3cACiXULbTHwLDg4GI', NULL, 95, '2026-06-27 12:38:35.000000'),
+(81, '2026-06-27 12:40:50.000000', '2026-07-04 12:40:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTgyMDUwLCJleHAiOjE3ODMxODY4NTB9.X6nC868V7t87XhgZp06ZV8Rv-eBd6_0Mqqx59lSoYn4', NULL, 209, '2026-06-27 13:00:11.000000'),
+(82, '2026-06-27 12:43:35.000000', '2026-07-04 12:43:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI1ODIyMTUsImV4cCI6MTc4MzE4NzAxNX0.5XjctodeGWwcUtfoCghzNU09JGiqW8X0kb7MUCieBNk', NULL, 224, '2026-06-27 12:43:35.000000'),
+(83, '2026-06-27 14:58:18.000000', '2026-07-04 14:58:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTkwMjk4LCJleHAiOjE3ODMxOTUwOTh9.Imb_jzEkbLpy0WuPKFpnSYXxLTM-lGiGdDfNhamuHl8', NULL, 95, '2026-06-27 15:27:28.000000'),
+(84, '2026-06-27 15:28:27.000000', '2026-07-04 15:28:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTkyMTA3LCJleHAiOjE3ODMxOTY5MDd9.IuLgkOjBB82958gQlynKiS-WTdOOFRWBruhUNobaZFg', NULL, 95, '2026-06-27 15:57:38.000000'),
+(85, '2026-06-27 15:37:36.000000', '2026-07-04 15:37:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNTkyNjU2LCJleHAiOjE3ODMxOTc0NTZ9.yGWVSo8vGoqJfQHnMOg64SJkcTXfpHpQH1jk4Ut8edQ', NULL, 209, '2026-06-27 16:04:03.000000'),
+(86, '2026-06-27 15:58:38.000000', '2026-07-04 15:58:38.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTkzOTE4LCJleHAiOjE3ODMxOTg3MTh9.7hbcJ0kayI-ZGYvpzNcdHieUIo3JQtZT7ccLfuZ4n-k', NULL, 95, '2026-06-27 16:27:27.000000'),
+(87, '2026-06-27 16:29:27.000000', '2026-07-04 16:29:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTk1NzY3LCJleHAiOjE3ODMyMDA1Njd9.da6pZqjeZExKsTyWhdP9Shs2RbGaIPjl4R_inQTNwOk', NULL, 95, '2026-06-27 16:58:53.000000'),
+(88, '2026-06-27 16:59:28.000000', '2026-07-04 16:59:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTk3NTY4LCJleHAiOjE3ODMyMDIzNjh9.kZvhXyiDOZP7mTbfIQAt3OfBtyg4XhrxeulX7a9x5-0', NULL, 95, '2026-06-27 17:27:37.000000'),
+(89, '2026-06-27 17:29:38.000000', '2026-07-04 17:29:38.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNTk5Mzc4LCJleHAiOjE3ODMyMDQxNzh9.Nd3oUC5cpBXI_XcPCNjDynedrSDWdQUTmDwUa2A2WyU', NULL, 95, '2026-06-27 17:57:31.000000'),
+(90, '2026-06-27 18:00:31.000000', '2026-07-04 18:00:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNjAxMjMxLCJleHAiOjE3ODMyMDYwMzF9.hFxvJFOlRLqbWQYatfRDa8dtFGB95AuNSDV8NnLmyfk', NULL, 95, '2026-06-27 18:29:30.000000'),
+(91, '2026-06-27 18:30:36.000000', '2026-07-04 18:30:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNjAzMDM2LCJleHAiOjE3ODMyMDc4MzZ9.mO48aNIZTH4SZaTRL4vbiG5t6LsMp4CgsuWC4y2o3DA', NULL, 95, '2026-06-27 18:50:24.000000'),
+(92, '2026-06-27 23:17:22.000000', '2026-07-04 23:17:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjIwMjQyLCJleHAiOjE3ODMyMjUwNDJ9.qk7XKIFPtZ_iUsSzXTmeP7FWh1orWmjglcnWoUZOWVE', NULL, 209, '2026-06-27 23:46:37.000000'),
+(93, '2026-06-27 23:47:44.000000', '2026-07-04 23:47:44.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjIyMDY0LCJleHAiOjE3ODMyMjY4NjR9.viVe5quJRaPB0rCiLrsRPZeow58EIv0oni9afqXcr6M', NULL, 209, '2026-06-28 00:17:33.000000'),
+(94, '2026-06-28 00:18:35.000000', '2026-07-05 00:18:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjIzOTE1LCJleHAiOjE3ODMyMjg3MTV9.P30UqyjjDZ1Pi68oOywkWNuqoROlhY8aI_hzMWYdHGc', NULL, 209, '2026-06-28 00:46:35.000000'),
+(95, '2026-06-28 00:49:35.000000', '2026-07-05 00:49:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjI1Nzc1LCJleHAiOjE3ODMyMzA1NzV9.NllCOuuQcP0pue2DctkN-6oYTw9ZNMBhppR8iqGZLbc', NULL, 209, '2026-06-28 01:05:34.000000'),
+(96, '2026-06-28 01:37:27.000000', '2026-07-05 01:37:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjI4NjQ3LCJleHAiOjE3ODMyMzM0NDd9.B7zmr-lBrLuy86r92WuxHlBaYLozzvDcTLVJjXRa1wM', NULL, 209, '2026-06-28 01:55:27.000000'),
+(97, '2026-06-28 13:50:57.000000', '2026-07-05 13:50:57.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjcyNjU3LCJleHAiOjE3ODMyNzc0NTd9.lo01cECeDQIr-EeN-4UVRueEdrV84CECCraP6JarxI8', NULL, 209, '2026-06-28 14:20:35.000000'),
+(98, '2026-06-28 14:21:36.000000', '2026-07-05 14:21:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjc0NDk2LCJleHAiOjE3ODMyNzkyOTZ9.uv684UhSMC_N5X8qL4aRP3DJyIwZeIzwUrpdTufc_m4', NULL, 209, '2026-06-28 14:49:13.000000'),
+(99, '2026-06-28 14:52:12.000000', '2026-07-05 14:52:12.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjc2MzMyLCJleHAiOjE3ODMyODExMzJ9.ZhtU8uCsYuVr0HaEyXW_MrGC54zuwsYawYiam1EBSOw', NULL, 209, '2026-06-28 14:54:12.000000'),
+(100, '2026-06-28 17:51:50.000000', '2026-07-05 17:51:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjg3MTEwLCJleHAiOjE3ODMyOTE5MTB9.4_yfICE-OFVkzyClQ42JPTAr0hydCtHxhPQuNhEgADc', NULL, 209, '2026-06-28 18:21:25.000000'),
+(101, '2026-06-28 18:22:26.000000', '2026-07-05 18:22:26.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjg4OTQ2LCJleHAiOjE3ODMyOTM3NDZ9.1YtIpoucV6SkpYDmT-LhEIL--tae0pEYJA4m9frZGiA', NULL, 209, '2026-06-28 18:51:04.000000'),
+(102, '2026-06-28 18:53:10.000000', '2026-07-05 18:53:10.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjkwNzkwLCJleHAiOjE3ODMyOTU1OTB9.MLfIrL1hgs6e2eE8hI_ShkChOkkI9Z2yL_ArQ4VbxHY', NULL, 209, '2026-06-28 19:05:25.000000'),
+(103, '2026-06-28 19:37:22.000000', '2026-07-05 19:37:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNjkzNDQyLCJleHAiOjE3ODMyOTgyNDJ9.CmdsLBEVfvEGKk1WCQYkF966uOE-ehk9FUzTUE5VRqM', NULL, 209, '2026-06-28 19:57:30.000000'),
+(104, '2026-06-29 00:47:24.000000', '2026-07-06 00:47:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaXhvbjI1aGVycmVyYUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3MTIwNDQsImV4cCI6MTc4MzMxNjg0NH0.iWRbdPbS2AjU6Q2Bea6j7UsA-YFSgcIJGglNiPIsWvY', NULL, 118, '2026-06-29 00:47:24.000000'),
+(105, '2026-06-29 08:16:13.000000', '2026-07-06 08:16:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3Mzg5NzMsImV4cCI6MTc4MzM0Mzc3M30.WYt7H8Md5bUZDWLJ1MouS82UxbLD5aQbGpAugauT1_w', NULL, 224, '2026-06-29 08:43:15.000000'),
+(106, '2026-06-29 08:24:50.000000', '2026-07-06 08:24:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzM5NDkwLCJleHAiOjE3ODMzNDQyOTB9.x4XUlHCemorY_4DR3ZXX3lBrOwpScGyzrosywn-kKvE', NULL, 95, '2026-06-29 08:52:50.000000'),
+(107, '2026-06-29 08:46:14.000000', '2026-07-06 08:46:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NDA3NzQsImV4cCI6MTc4MzM0NTU3NH0.HqQPG2PQF9eoNjUIR2-rFscJpMYJpbYfByz9PNHjlHw', NULL, 224, '2026-06-29 09:15:57.000000'),
+(108, '2026-06-29 08:54:52.000000', '2026-07-06 08:54:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzQxMjkyLCJleHAiOjE3ODMzNDYwOTJ9.1quIYiLSycls3cCYAYBmQuZbKPWb-dQoQbWYwgzROlw', NULL, 95, '2026-06-29 09:23:50.000000'),
+(109, '2026-06-29 09:16:58.000000', '2026-07-06 09:16:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NDI2MTgsImV4cCI6MTc4MzM0NzQxOH0.w1W0m5VfUaK-udznIaZk17zaAUF4PFC5oKq3YuuPGCE', NULL, 224, '2026-06-29 09:45:59.000000'),
+(110, '2026-06-29 09:25:50.000000', '2026-07-06 09:25:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzQzMTUwLCJleHAiOjE3ODMzNDc5NTB9.tFBD0WQwJpo-AdYwgMeTWGeZLnpi-ZXojADwGTRRJAs', NULL, 95, '2026-06-29 09:39:59.000000'),
+(111, '2026-06-29 09:46:59.000000', '2026-07-06 09:46:59.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NDQ0MTksImV4cCI6MTc4MzM0OTIxOX0._RteJj6dm1cxhVL4qNEQI2Q677QJRljkM3BOdztkxls', NULL, 224, '2026-06-29 09:48:59.000000'),
+(112, '2026-06-29 10:03:07.000000', '2026-07-06 10:03:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzQ1Mzg3LCJleHAiOjE3ODMzNTAxODd9.ZY8lfFs5_a4hey320JOUpowVayA2iAX9iIY_HuQGkwc', NULL, 209, '2026-06-29 10:17:19.000000'),
+(113, '2026-06-29 10:29:40.000000', '2026-07-06 10:29:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzQ2OTgwLCJleHAiOjE3ODMzNTE3ODB9.RsIDgnWbmUxmhiJZ_1c9wkB9CK8v70zx_KRUtrhrHFY', NULL, 95, '2026-06-29 10:59:32.000000'),
+(114, '2026-06-29 10:38:23.000000', '2026-07-06 10:38:23.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc0NzUwMywiZXhwIjoxNzgzMzUyMzAzfQ.Xbe2ldfq8drw5qG9IB53mk_0crVwymQFYBf3nhNrjd0', NULL, 117, '2026-06-29 11:06:28.000000'),
+(115, '2026-06-29 10:52:35.000000', '2026-07-06 10:52:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NDgzNTUsImV4cCI6MTc4MzM1MzE1NX0.ACQVsrF22yzS85vwXTVqbcFBDWxUi6GRzQxISN31M6Q', NULL, 224, '2026-06-29 11:21:16.000000'),
+(116, '2026-06-29 10:59:40.000000', '2026-07-06 10:59:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzQ4NzgwLCJleHAiOjE3ODMzNTM1ODB9.YdApF4Hvv3mTxhAh3p5816NIOZ7n7lg8AeEMPWAbt94', NULL, 95, '2026-06-29 11:29:12.000000'),
+(117, '2026-06-29 11:02:03.000000', '2026-07-06 11:02:03.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2xpY21pa2k5NkBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NDg5MjMsImV4cCI6MTc4MzM1MzcyM30.ht2VLLXASHW8k5lAoNbcLl9xqtn8Mfq6gceFwa6UeGQ', NULL, 180, '2026-06-29 11:04:31.000000'),
+(118, '2026-06-29 11:08:29.000000', '2026-07-06 11:08:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc0OTMwOSwiZXhwIjoxNzgzMzU0MTA5fQ.UIw4PtNo7neL5yEzzJp4varboipkwxvwKEYzD3KI9PA', NULL, 117, '2026-06-29 11:37:11.000000'),
+(119, '2026-06-29 11:20:24.000000', '2026-07-06 11:20:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzUwMDI0LCJleHAiOjE3ODMzNTQ4MjR9.sIYK57lfMaUCvyibADB9xpl0jQs-aJvmkSpdFZokpzM', NULL, 209, '2026-06-29 11:22:25.000000'),
+(120, '2026-06-29 11:23:13.000000', '2026-07-06 11:23:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTAxOTMsImV4cCI6MTc4MzM1NDk5M30.OkaJRqzyOdP1MHQyyjRCOz5ufQEevHhihZHEOKtDQws', NULL, 224, '2026-06-29 11:52:38.000000'),
+(121, '2026-06-29 11:31:15.000000', '2026-07-06 11:31:15.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzUwNjc1LCJleHAiOjE3ODMzNTU0NzV9.xXInVv3JBp8Q4SvduClCRiWSOpCvXDNAetRnMx0tyg4', NULL, 95, '2026-06-29 12:00:14.000000'),
+(122, '2026-06-29 11:39:15.000000', '2026-07-06 11:39:15.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1MTE1NSwiZXhwIjoxNzgzMzU1OTU1fQ.rHtpaqW7-2VUIY1zfUIHRMs1BVf8vz9umqM2GEuAMzg', NULL, 117, '2026-06-29 11:51:35.000000'),
+(123, '2026-06-29 11:39:35.000000', '2026-07-06 11:39:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1MTE3NSwiZXhwIjoxNzgzMzU1OTc1fQ.984t_-VMnl651kv483tMNJPAFM6xGXMPHoI3gWcvfdI', NULL, 117, '2026-06-29 12:07:23.000000'),
+(124, '2026-06-29 11:53:25.000000', '2026-07-06 11:53:25.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTIwMDUsImV4cCI6MTc4MzM1NjgwNX0.gppYMlwNPotY3n4I2-3MKQ6HgNvnkD9NxZ0-bVTCS1U', NULL, 224, '2026-06-29 12:20:27.000000'),
+(125, '2026-06-29 12:01:15.000000', '2026-07-06 12:01:15.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzUyNDc1LCJleHAiOjE3ODMzNTcyNzV9.FIMH9sh-sKCZzPic6UhcjQzbJSiabxDYM2wB1XhloyE', NULL, 95, '2026-06-29 12:30:16.000000'),
+(126, '2026-06-29 12:09:50.000000', '2026-07-06 12:09:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1Mjk5MCwiZXhwIjoxNzgzMzU3NzkwfQ.LXN6r-qeUk6VRkbyaW8EXlBaWNUXN1L7XerZ6NhXWVE', NULL, 117, '2026-06-29 12:09:50.000000'),
+(128, '2026-06-29 12:09:51.000000', '2026-07-06 12:09:51.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1Mjk5MSwiZXhwIjoxNzgzMzU3NzkxfQ.RpwC7xUOo-jfZe2Dd23luAv9kh0kMnLCZIWJtjyYIWU', NULL, 117, '2026-06-29 12:38:35.000000'),
+(129, '2026-06-29 12:23:27.000000', '2026-07-06 12:23:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTM4MDcsImV4cCI6MTc4MzM1ODYwN30.PcNmMdEwio6W04ie0__Q-PPCfRHKkE7eKRTHyGn3QQI', NULL, 224, '2026-06-29 12:53:26.000000'),
+(130, '2026-06-29 12:31:18.000000', '2026-07-06 12:31:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzU0Mjc4LCJleHAiOjE3ODMzNTkwNzh9.D_tQ0-SXAmqB-R8vbZCK5lugXJwnFU4TbiY-oRRbmzg', NULL, 95, '2026-06-29 12:31:18.000000'),
+(131, '2026-06-29 12:31:19.000000', '2026-07-06 12:31:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzU0Mjc5LCJleHAiOjE3ODMzNTkwNzl9.-85F6HHEY3CA80VlWUQLxp0qf-hM60zPoDeXGGld6TY', NULL, 95, '2026-06-29 13:00:14.000000'),
+(132, '2026-06-29 12:40:13.000000', '2026-07-06 12:40:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1NDgxMywiZXhwIjoxNzgzMzU5NjEzfQ.XsH94f3jcU32quJj8mwe4ctUz0giPvdFFRKzSnZc-OM', NULL, 117, '2026-06-29 13:06:35.000000'),
+(133, '2026-06-29 12:40:35.000000', '2026-07-06 12:40:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc1NDgzNSwiZXhwIjoxNzgzMzU5NjM1fQ.zeu3E279XZxlBIPKZkR6SHlsZOY-XKQoOuqXHGYh7ps', NULL, 117, '2026-06-29 13:07:35.000000'),
+(134, '2026-06-29 12:54:27.000000', '2026-07-06 12:54:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTU2NjcsImV4cCI6MTc4MzM2MDQ2N30.gWax5w_cxjx1sHbkVlyc-fVSjf_g13TzErAXYty4wwU', NULL, 224, '2026-06-29 13:03:25.000000'),
+(135, '2026-06-29 12:58:58.000000', '2026-07-06 12:58:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTU5MzgsImV4cCI6MTc4MzM2MDczOH0.yah7XPXuCslAWjeQbyoVdLcvhGo_43tTou61lqRibKI', NULL, 224, '2026-06-29 12:58:58.000000'),
+(137, '2026-06-29 12:59:03.000000', '2026-07-06 12:59:03.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NTU5NDMsImV4cCI6MTc4MzM2MDc0M30.HsmsBOo5qQ8GFjLYxTzbnpx1HSq92D2_3P85ENrH4So', NULL, 224, '2026-06-29 13:03:04.000000'),
+(138, '2026-06-29 13:01:28.000000', '2026-07-06 13:01:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyNzU2MDg4LCJleHAiOjE3ODMzNjA4ODh9.JPiQJDOvaZ4C6o7qiS_wKOXefhR7vuhMq-JCUj7uSo4', NULL, 95, '2026-06-29 13:01:28.000000'),
+(139, '2026-06-29 13:44:33.000000', '2026-07-06 13:44:33.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzU4NjczLCJleHAiOjE3ODMzNjM0NzN9.cWeMw3cP6D0TdSZDXoH9PJJs9YlWLBFXNkOBOfcaz5o', NULL, 209, '2026-06-29 14:13:57.000000'),
+(140, '2026-06-29 14:14:58.000000', '2026-07-06 14:14:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzYwNDk4LCJleHAiOjE3ODMzNjUyOTh9.ZfjOYAhX2Amgy041B0HUwj7HISZrA88XDkzLCyDKwlw', NULL, 209, '2026-06-29 14:43:48.000000'),
+(141, '2026-06-29 14:45:50.000000', '2026-07-06 14:45:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzYyMzUwLCJleHAiOjE3ODMzNjcxNTB9.nPI3wTo06YGkyhlAGYHDnoUcYRc7cEUht09exfRH-Fc', NULL, 209, '2026-06-29 15:03:44.000000'),
+(142, '2026-06-29 14:58:16.000000', '2026-07-06 14:58:16.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NjMwOTYsImV4cCI6MTc4MzM2Nzg5Nn0.oBVmeDsN9bPXsgNs5Y-g8BveRltQS3f5PPSbbAUTzgc', NULL, 224, '2026-06-29 15:17:42.000000'),
+(143, '2026-06-29 15:19:49.000000', '2026-07-06 15:19:49.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NjQzODksImV4cCI6MTc4MzM2OTE4OX0.dDtjQHlLTN5Efm83ynitO1SMF57amxlx0y-OWDJglBY', NULL, 224, '2026-06-29 15:47:51.000000'),
+(144, '2026-06-29 15:35:45.000000', '2026-07-06 15:35:45.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzY1MzQ1LCJleHAiOjE3ODMzNzAxNDV9.zxCQscGJwizIa6XNitYifjC6mrT7jHzmEYyF_FNz8M8', NULL, 209, '2026-06-29 15:38:43.000000'),
+(145, '2026-06-29 15:49:52.000000', '2026-07-06 15:49:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NjYxOTIsImV4cCI6MTc4MzM3MDk5Mn0.0_82ugnLHuWZn3P0gsobjmKwjjga2OTuOlJSUnHGTdc', NULL, 224, '2026-06-29 16:19:22.000000'),
+(146, '2026-06-29 16:09:41.000000', '2026-07-06 16:09:41.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzY3MzgxLCJleHAiOjE3ODMzNzIxODF9.h2PeFodV9iUx7iYFQ_aqaeEotfkLkTkQmbAljYX9j04', NULL, 209, '2026-06-29 16:38:09.000000'),
+(147, '2026-06-29 16:19:55.000000', '2026-07-06 16:19:55.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3Njc5OTUsImV4cCI6MTc4MzM3Mjc5NX0.gEko-_LUAa5E3osBEE7I5FG62uRgX9nnPS1BZseMY0w', NULL, 224, '2026-06-29 16:48:54.000000'),
+(148, '2026-06-29 16:40:11.000000', '2026-07-06 16:40:11.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzY5MjExLCJleHAiOjE3ODMzNzQwMTF9.Nuo8BTvEcC7DbxFZcnnOfPCzKUKHmSJiwCyGhU9QXGc', NULL, 209, '2026-06-29 17:09:19.000000'),
+(149, '2026-06-29 16:49:55.000000', '2026-07-06 16:49:55.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3Njk3OTUsImV4cCI6MTc4MzM3NDU5NX0.yVWEtEdcJFzYSqM_WoJp-uteSjCIvdXmRbDrvmQ8yIk', NULL, 224, '2026-06-29 17:17:55.000000'),
+(150, '2026-06-29 16:58:32.000000', '2026-07-06 16:58:32.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3MDMxMiwiZXhwIjoxNzgzMzc1MTEyfQ.NopdKrr6HTm2iGtP5b74hUUX98X_GCeSnypgqgi8Dds', NULL, 117, '2026-06-29 17:28:31.000000'),
+(151, '2026-06-29 17:10:20.000000', '2026-07-06 17:10:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzcxMDIwLCJleHAiOjE3ODMzNzU4MjB9.OEmMZbpDWq8k4vFiIZS-Ky2-nzdQ97bdW7PoUrwKlSc', NULL, 209, '2026-06-29 17:37:06.000000'),
+(152, '2026-06-29 17:20:52.000000', '2026-07-06 17:20:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NzE2NTIsImV4cCI6MTc4MzM3NjQ1Mn0.0TNk0iF92LPsH7iT3_CzmEV2apXAhyG1lK-Tl8831L8', NULL, 224, '2026-06-29 17:49:07.000000'),
+(153, '2026-06-29 17:29:22.000000', '2026-07-06 17:29:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3MjE2MiwiZXhwIjoxNzgzMzc2OTYyfQ.lNzv0z5Ju4SNiuuqu84QIGb5qT82B2ZFGNR0798TVfE', NULL, 117, '2026-06-29 17:29:22.000000'),
+(155, '2026-06-29 17:31:25.000000', '2026-07-06 17:31:25.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3MjI4NSwiZXhwIjoxNzgzMzc3MDg1fQ.ZxV_KVG4BZ3J_G1ExbjSLg9DTxQEw9RL5ZOrPWbfwdU', NULL, 117, '2026-06-29 18:00:29.000000'),
+(156, '2026-06-29 17:35:54.000000', '2026-07-06 17:35:54.000000', '179.6.225.93', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3MjU1NCwiZXhwIjoxNzgzMzc3MzU0fQ.CVaB2QjAfHVaY408PpoPiqZVL88jpcG1p-jXzFM8hi8', NULL, 117, '2026-06-29 18:04:29.000000'),
+(157, '2026-06-29 17:46:27.000000', '2026-07-06 17:46:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzczMTg3LCJleHAiOjE3ODMzNzc5ODd9.EWFAO-dM5if19OqxLA4nKQuaInPApTJPkdehPvsJM3E', NULL, 209, '2026-06-29 17:54:32.000000'),
+(158, '2026-06-29 17:51:08.000000', '2026-07-06 17:51:08.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NzM0NjgsImV4cCI6MTc4MzM3ODI2OH0.kxyC2UdeYnFdT_IxCOaxSNs9aRMosLbHMbhnG1z62ZE', NULL, 224, '2026-06-29 18:21:07.000000'),
+(159, '2026-06-29 18:01:43.000000', '2026-07-06 18:01:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NDEwMywiZXhwIjoxNzgzMzc4OTAzfQ.amvgXewQcEtKALKYQ59JY9pezB2MbN39iYwfcKD5fEU', NULL, 117, '2026-06-29 18:30:29.000000'),
+(160, '2026-06-29 18:06:01.000000', '2026-07-06 18:06:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NDM2MSwiZXhwIjoxNzgzMzc5MTYxfQ.9xoYWCll-zVunplE0Em6fS9DgtEQUDxI1jXM2LnHCoA', NULL, 117, '2026-06-29 18:34:01.000000'),
+(161, '2026-06-29 18:06:29.000000', '2026-07-06 18:06:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NDM4OSwiZXhwIjoxNzgzMzc5MTg5fQ.Vjvn1Ecxgb1X5lTzt95K8DFWisKldukBmHZ6vukYzzU', NULL, 117, '2026-06-29 18:35:29.000000'),
+(162, '2026-06-29 18:22:07.000000', '2026-07-06 18:22:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NzUzMjcsImV4cCI6MTc4MzM4MDEyN30.Nc73rz4sn9SbBey4QBLUFc9iXO_tLcQ7DQfaxQx_vZk', NULL, 224, '2026-06-29 18:49:56.000000'),
+(163, '2026-06-29 18:32:29.000000', '2026-07-06 18:32:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NTk0OSwiZXhwIjoxNzgzMzgwNzQ5fQ.uz7P56mG_yZU5YcSFwWEb787OrjC_nbGkqmNCJl_C-Q', NULL, 117, '2026-06-29 18:46:29.000000'),
+(164, '2026-06-29 18:36:02.000000', '2026-07-06 18:36:02.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NjE2MiwiZXhwIjoxNzgzMzgwOTYyfQ.P113dbDGhDKyi5bC6YZIPxzj7RcwCtfarn1PPU8NO24', NULL, 117, '2026-06-29 18:47:01.000000'),
+(165, '2026-06-29 18:36:07.000000', '2026-07-06 18:36:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzc2MTY3LCJleHAiOjE3ODMzODA5Njd9.aobtXJLy_DszEzqp34OGNUkNYKybeYZhoDc_7EsSja0', NULL, 209, '2026-06-29 19:03:12.000000'),
+(166, '2026-06-29 18:37:29.000000', '2026-07-06 18:37:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc3NjI0OSwiZXhwIjoxNzgzMzgxMDQ5fQ.OXfrs13cx_AM2y5DPJ2phC_VAb5Ll6bLOO1hluH27Gg', NULL, 117, '2026-06-29 18:46:17.000000'),
+(167, '2026-06-29 18:52:07.000000', '2026-07-06 18:52:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI3NzcxMjcsImV4cCI6MTc4MzM4MTkyN30.QT5PNs2XZ4Dqd0nKAlP4GjLrfMRy8Any9LIfH2gSfC0', NULL, 224, '2026-06-29 19:10:25.000000'),
+(168, '2026-06-29 19:12:32.000000', '2026-07-06 19:12:32.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzc4MzUyLCJleHAiOjE3ODMzODMxNTJ9.BjgnTxUxhPQ4kKWhjmqS_oLXmOTdujwsnDtlS_VAX0I', NULL, 209, '2026-06-29 19:18:38.000000'),
+(169, '2026-06-29 21:57:03.000000', '2026-07-06 21:57:03.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzg4MjIzLCJleHAiOjE3ODMzOTMwMjN9._PZ1JHK0ffHyYIbQykK75PqpI7tF1lBvdk4wPI3Jjts', NULL, 209, '2026-06-29 22:14:48.000000'),
+(170, '2026-06-29 22:07:51.000000', '2026-07-06 22:07:51.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc4ODg3MSwiZXhwIjoxNzgzMzkzNjcxfQ.eWgXxITEsd5SuQn1BR289TFNdsLjvNUc29Ivvuw8dCA', NULL, 117, '2026-06-29 22:36:18.000000'),
+(171, '2026-06-29 22:10:18.000000', '2026-07-06 22:10:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc4OTAxOCwiZXhwIjoxNzgzMzkzODE4fQ.h1mMplRWWNomPWYonRdpwaZgcY4t2MOVD2Tf-WTQmHk', NULL, 117, '2026-06-29 22:38:18.000000'),
+(172, '2026-06-29 22:38:18.000000', '2026-07-06 22:38:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5MDY5OCwiZXhwIjoxNzgzMzk1NDk4fQ.xXmkQilQRQYLIaKKz7lI9ooU4GnfjREE6ZSGc3fjfaw', NULL, 117, '2026-06-29 23:06:18.000000'),
+(173, '2026-06-29 22:40:18.000000', '2026-07-06 22:40:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5MDgxOCwiZXhwIjoxNzgzMzk1NjE4fQ.mlZOH3hFcc_Te8_RszwqYy5elS77RQajn2-qo_kZk3Y', NULL, 117, '2026-06-29 23:07:19.000000'),
+(174, '2026-06-29 23:08:19.000000', '2026-07-06 23:08:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5MjQ5OSwiZXhwIjoxNzgzMzk3Mjk5fQ.6tO-oQ65I46FW9VvJ5Wpw59aCNQ0cAAknpyqRhSpUzk', NULL, 117, '2026-06-29 23:37:18.000000'),
+(175, '2026-06-29 23:10:19.000000', '2026-07-06 23:10:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5MjYxOSwiZXhwIjoxNzgzMzk3NDE5fQ.a6ULlmhGlOu-TevW69j6MS8mMbHH89Me6BZe3BlS54U', NULL, 117, '2026-06-29 23:40:18.000000'),
+(176, '2026-06-29 23:36:20.000000', '2026-07-06 23:36:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzk0MTgwLCJleHAiOjE3ODMzOTg5ODB9.DA8RKatOV--sjRKXRfDpfYFfzm359yh99LvK_U3V-LU', NULL, 209, '2026-06-30 00:06:13.000000'),
+(177, '2026-06-29 23:39:18.000000', '2026-07-06 23:39:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5NDM1OCwiZXhwIjoxNzgzMzk5MTU4fQ.1LEWVfE_rYn1xvFGC2YllncoZiYcRZ6yVnjoDA9s3rs', NULL, 117, '2026-06-30 00:08:18.000000'),
+(178, '2026-06-29 23:41:18.000000', '2026-07-06 23:41:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5NDQ3OCwiZXhwIjoxNzgzMzk5Mjc4fQ.O7yYIkAKWNvjux6A-exZX9KpXWPxBYp2cAFlzbkdHOw', NULL, 117, '2026-06-30 00:09:18.000000'),
+(179, '2026-06-30 00:07:14.000000', '2026-07-07 00:07:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzk2MDM0LCJleHAiOjE3ODM0MDA4MzR9.tjy7yqRtkAvQLRSRbxxuE56_mnE78j-pUZHWBDD2lAo', NULL, 209, '2026-06-30 00:36:16.000000'),
+(180, '2026-06-30 00:09:29.000000', '2026-07-07 00:09:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5NjE2OSwiZXhwIjoxNzgzNDAwOTY5fQ.cBlwE7jOBJWS3eBL6MNT2Ks9uWByhSBOPaOoD9pN_fU', NULL, 117, '2026-06-30 00:39:18.000000'),
+(181, '2026-06-30 00:11:19.000000', '2026-07-07 00:11:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5NjI3OSwiZXhwIjoxNzgzNDAxMDc5fQ.fU9v0nrIm4KHZ2mCs3y02aFpB41p4nqEiZN4A6wWpK4', NULL, 117, '2026-06-30 00:41:18.000000'),
+(182, '2026-06-30 00:38:13.000000', '2026-07-07 00:38:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzk3ODkzLCJleHAiOjE3ODM0MDI2OTN9.1GPwCAyBHT5PNg7JYS8Wa0BvJkdoRC3uzNQdr-IFxY4', NULL, 209, '2026-06-30 01:06:13.000000'),
+(183, '2026-06-30 00:40:19.000000', '2026-07-07 00:40:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5ODAxOSwiZXhwIjoxNzgzNDAyODE5fQ.ptdmGNk-92gmQVTSwrjZBYdYQWsPs6WRyIgM7Ev812E', NULL, 117, '2026-06-30 01:10:18.000000'),
+(184, '2026-06-30 00:42:19.000000', '2026-07-07 00:42:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5ODEzOSwiZXhwIjoxNzgzNDAyOTM5fQ.N1gD4aA76rGFKqN8IGqA0i4TdOvG2FrJCZ3QW4m3e74', NULL, 117, '2026-06-30 01:11:18.000000');
+INSERT INTO `refresh_tokens` (`id`, `fecha_creacion`, `fecha_expiracion`, `ip_origen`, `token`, `user_agent`, `usuario_id`, `ultima_actividad`) VALUES
+(185, '2026-06-30 01:08:14.000000', '2026-07-07 01:08:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyNzk5Njk0LCJleHAiOjE3ODM0MDQ0OTR9.BgTHI4LpvcDMoO7QMnN8MYLddi4PbUuI73Mi9Js4iIs', NULL, 209, '2026-06-30 01:34:19.000000'),
+(186, '2026-06-30 01:11:19.000000', '2026-07-07 01:11:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5OTg3OSwiZXhwIjoxNzgzNDA0Njc5fQ.8LHv2JApmJU7QZ89v6YseATEKUVBeNEixVcSOO9Rjkg', NULL, 117, '2026-06-30 01:40:18.000000'),
+(187, '2026-06-30 01:12:19.000000', '2026-07-07 01:12:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjc5OTkzOSwiZXhwIjoxNzgzNDA0NzM5fQ.XvtFFO3LfzhwPw_D5wHQobuL44af7GW6LR8aPU8sIu8', NULL, 117, '2026-06-30 01:40:19.000000'),
+(188, '2026-06-30 01:41:19.000000', '2026-07-07 01:41:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwMTY3OSwiZXhwIjoxNzgzNDA2NDc5fQ._qpvWpfDGfKHn5arM2PRC77K9nF2ZSjVInDj6ly3-t0', NULL, 117, '2026-06-30 02:09:19.000000'),
+(189, '2026-06-30 01:42:19.000000', '2026-07-07 01:42:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwMTczOSwiZXhwIjoxNzgzNDA2NTM5fQ.u9SqtqIopB5_TeKi9vS8H72jW-d9dUPCUhEA3ywMVGI', NULL, 117, '2026-06-30 02:10:19.000000'),
+(190, '2026-06-30 02:11:19.000000', '2026-07-07 02:11:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwMzQ3OSwiZXhwIjoxNzgzNDA4Mjc5fQ.qX2Txm-Pv8iRS0Jfr36k0SOxRiHbvE0owslVGTbnUNE', NULL, 117, '2026-06-30 02:39:19.000000'),
+(191, '2026-06-30 02:12:19.000000', '2026-07-07 02:12:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwMzUzOSwiZXhwIjoxNzgzNDA4MzM5fQ._rGTuMS5HISPwOoBX4rI11nX3-_LN80uZ1knup7Zsi0', NULL, 117, '2026-06-30 02:41:19.000000'),
+(192, '2026-06-30 02:41:19.000000', '2026-07-07 02:41:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwNTI3OSwiZXhwIjoxNzgzNDEwMDc5fQ.oOxMcwC0jbU7zeJYsKB7s2sPa1R-ctT_b00lDg_hIEI', NULL, 117, '2026-06-30 02:56:19.000000'),
+(193, '2026-06-30 02:42:19.000000', '2026-07-07 02:42:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgwNTMzOSwiZXhwIjoxNzgzNDEwMTM5fQ.Z9ceL_rLCC1Bia23c1sqMxMNmqBVUGesVwbGVSnrGHs', NULL, 117, '2026-06-30 02:56:19.000000'),
+(194, '2026-06-30 08:56:16.000000', '2026-07-07 08:56:16.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4Mjc3NzYsImV4cCI6MTc4MzQzMjU3Nn0.2eZFZXIZ63tHWO2cQgmp9xHSoXeZvQWpP4pT_Lqr9PI', NULL, 224, '2026-06-30 09:24:29.000000'),
+(195, '2026-06-30 09:01:08.000000', '2026-07-07 09:01:08.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyODI4MDY4LCJleHAiOjE3ODM0MzI4Njh9.6tvciKoBVUa99fpXHVm0aQ6alttMO66brsM6igVkUIE', NULL, 95, '2026-06-30 09:29:15.000000'),
+(196, '2026-06-30 09:26:30.000000', '2026-07-07 09:26:30.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4Mjk1OTAsImV4cCI6MTc4MzQzNDM5MH0.n5EE7oHk3apIJEkUoRBkAsJW6DEpcfoVoQezNlAzfbI', NULL, 224, '2026-06-30 09:55:29.000000'),
+(197, '2026-06-30 09:31:17.000000', '2026-07-07 09:31:17.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyODI5ODc3LCJleHAiOjE3ODM0MzQ2Nzd9.GupvnsE9miDTbqdxus4Fun8b9c5uwIQa4cQX3Zbx2Q8', NULL, 95, '2026-06-30 09:47:33.000000'),
+(198, '2026-06-30 09:57:29.000000', '2026-07-07 09:57:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4MzE0NDksImV4cCI6MTc4MzQzNjI0OX0.eRJcfOVOew4lKncFiSzGXliTfMaEhZyJdRt5d6TbbN8', NULL, 224, '2026-06-30 10:25:36.000000'),
+(199, '2026-06-30 10:13:47.000000', '2026-07-07 10:13:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODMyNDI3LCJleHAiOjE3ODM0MzcyMjd9.P8lyIGNmhMHMj3xO6mjpXwZurOOFfCJ_xbQb5NRUNZk', NULL, 209, '2026-06-30 10:22:24.000000'),
+(200, '2026-06-30 10:27:29.000000', '2026-07-07 10:27:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4MzMyNDksImV4cCI6MTc4MzQzODA0OX0.p7VbCj7SHTtQcUhRoe2UromPjW9Opj0ToLlwq5Yai_s', NULL, 224, '2026-06-30 10:56:52.000000'),
+(201, '2026-06-30 10:57:52.000000', '2026-07-07 10:57:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4MzUwNzIsImV4cCI6MTc4MzQzOTg3Mn0.b0lgziWdEXzXuXpV0Ph7Ltnl7fJ2wti-UExDguin62k', NULL, 224, '2026-06-30 11:26:29.000000'),
+(202, '2026-06-30 11:22:44.000000', '2026-07-07 11:22:44.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgzNjU2NCwiZXhwIjoxNzgzNDQxMzY0fQ.jult4USCmAb1cxPjC8xi0qbA0pR5_SvbH9e2QPVyFXA', NULL, 117, '2026-06-30 11:52:27.000000'),
+(203, '2026-06-30 11:28:25.000000', '2026-07-07 11:28:25.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4MzY5MDUsImV4cCI6MTc4MzQ0MTcwNX0.Qgj9b-__uDPxsMuecsevHOoTRlZHg9Am1rs7Y1Ouhe4', NULL, 224, '2026-06-30 11:57:40.000000'),
+(204, '2026-06-30 11:29:32.000000', '2026-07-07 11:29:32.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgzNjk3MiwiZXhwIjoxNzgzNDQxNzcyfQ.hijn-o4XQ365NH8tgS1ecQ-8m0M8v4lnuD5ijfI45Do', NULL, 117, '2026-06-30 11:58:19.000000'),
+(205, '2026-06-30 11:31:37.000000', '2026-07-07 11:31:37.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODM3MDk3LCJleHAiOjE3ODM0NDE4OTd9.bZ_ETFQU9rtGHf7tIsd3zVhey3jqD2eEnQq00j19PlY', NULL, 209, '2026-06-30 11:54:54.000000'),
+(206, '2026-06-30 11:53:27.000000', '2026-07-07 11:53:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgzODQwNywiZXhwIjoxNzgzNDQzMjA3fQ.MgOS8sRg8KX_YtuDzUCeoqu9qh-r3XIFz4WoP3-X8MI', NULL, 117, '2026-06-30 12:21:27.000000'),
+(207, '2026-06-30 11:58:40.000000', '2026-07-07 11:58:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4Mzg3MjAsImV4cCI6MTc4MzQ0MzUyMH0.8Bw8KTAXCwF7iacbmu0pdbUD1k5KMxiOv-SmN_pDWr4', NULL, 224, '2026-06-30 12:27:41.000000'),
+(208, '2026-06-30 11:59:49.000000', '2026-07-07 11:59:49.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjgzODc4OSwiZXhwIjoxNzgzNDQzNTg5fQ.3lluYInBCmZboOtfYwWCmAoJNC94cm0G-XJgageA3HU', NULL, 117, '2026-06-30 12:28:17.000000'),
+(209, '2026-06-30 12:23:44.000000', '2026-07-07 12:23:44.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjg0MDIyNCwiZXhwIjoxNzgzNDQ1MDI0fQ.r6VOi8Rv52imBZNx-4GHP3i7Hnl2QssRDQNOU5sv0C0', NULL, 117, '2026-06-30 12:52:27.000000'),
+(210, '2026-06-30 12:28:40.000000', '2026-07-07 12:28:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NDA1MjAsImV4cCI6MTc4MzQ0NTMyMH0.w6ljaIPZi2ocpNlN0EYxGwVQkizoXGBDmp_e2v5_nE0', NULL, 224, '2026-06-30 12:56:46.000000'),
+(211, '2026-06-30 12:30:07.000000', '2026-07-07 12:30:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjg0MDYwNywiZXhwIjoxNzgzNDQ1NDA3fQ.oB9ERyeHWQRW-f71xVFVYutqTCNx252y--6WGp0S0gc', NULL, 117, '2026-06-30 12:54:07.000000'),
+(212, '2026-06-30 12:58:42.000000', '2026-07-07 12:58:42.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NDIzMjIsImV4cCI6MTc4MzQ0NzEyMn0.Virhf8PMgbPr-n1YOBB4FBe8RI1PFkNlbw44iVUmWQE', NULL, 224, '2026-06-30 13:00:42.000000'),
+(213, '2026-06-30 13:03:28.000000', '2026-07-07 13:03:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODQyNjA4LCJleHAiOjE3ODM0NDc0MDh9.9Rg8UB8XpZdTbct1AEcYLunB-hTrj5-sZ7qr6KL2zgY', NULL, 209, '2026-06-30 13:30:52.000000'),
+(214, '2026-06-30 13:35:21.000000', '2026-07-07 13:35:21.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODQ0NTIxLCJleHAiOjE3ODM0NDkzMjF9.yDyrReh0oogQe-bsHUnScgV8xk6SUM6j0RHtE-6viKc', NULL, 209, '2026-06-30 14:03:24.000000'),
+(215, '2026-06-30 14:05:24.000000', '2026-07-07 14:05:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODQ2MzI0LCJleHAiOjE3ODM0NTExMjR9.4cvpTyygzY1wazMNk4-REfMCsAVQ9IZ_xa5spgIGRVo', NULL, 209, '2026-06-30 14:15:25.000000'),
+(216, '2026-06-30 14:24:41.000000', '2026-07-07 14:24:41.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyODQ3NDgxLCJleHAiOjE3ODM0NTIyODF9.z2kP9f-XJCiBY1eInh0M_e-KzRe-Ig6CcGLE_Vcwsfw', NULL, 95, '2026-06-30 14:24:41.000000'),
+(217, '2026-06-30 14:45:39.000000', '2026-07-07 14:45:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODQ4NzM5LCJleHAiOjE3ODM0NTM1Mzl9.UPp50ZKDvSqiRpuk2OG3XLXcT9DpTaa2ll5FZHZG2SE', NULL, 209, '2026-06-30 15:15:01.000000'),
+(218, '2026-06-30 15:15:48.000000', '2026-07-07 15:15:48.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODUwNTQ4LCJleHAiOjE3ODM0NTUzNDh9.wcOLQwFgmeSVIIoGLfuXlUF5-KAnPc9mrwwmXK5wj34', NULL, 209, '2026-06-30 15:18:00.000000'),
+(219, '2026-06-30 15:26:31.000000', '2026-07-07 15:26:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NTExOTEsImV4cCI6MTc4MzQ1NTk5MX0.Dfq_GUvoQSZ-lIql5gIUB7n7lfY_I6edWYiyML5jB_k', NULL, 224, '2026-06-30 15:54:34.000000'),
+(220, '2026-06-30 15:56:36.000000', '2026-07-07 15:56:36.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NTI5OTYsImV4cCI6MTc4MzQ1Nzc5Nn0.WSL0uXU7D7fQ2otCSgql-VhlG-t_OFg-WYbfPDgG1OI', NULL, 224, '2026-06-30 16:24:38.000000'),
+(221, '2026-06-30 16:26:40.000000', '2026-07-07 16:26:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NTQ4MDAsImV4cCI6MTc4MzQ1OTYwMH0.crBNRek9sn6a4xUMgmCc9nFx9llRepWRPnORBa4f3Fg', NULL, 224, '2026-06-30 16:54:39.000000'),
+(222, '2026-06-30 16:56:41.000000', '2026-07-07 16:56:41.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NTY2MDEsImV4cCI6MTc4MzQ2MTQwMX0.S2dhPBbp5aPeilv9QJQuXR8CPnUBVLvczzyfMhAq6v0', NULL, 224, '2026-06-30 17:26:31.000000'),
+(223, '2026-06-30 17:10:38.000000', '2026-07-07 17:10:38.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjg1NzQzOCwiZXhwIjoxNzgzNDYyMjM4fQ.Kwro4n3eHEdjVpccZHLBC0ANYORg9pdG2id4JB-WhaY', NULL, 117, '2026-06-30 17:40:17.000000'),
+(224, '2026-06-30 17:27:05.000000', '2026-07-07 17:27:05.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NTg0MjUsImV4cCI6MTc4MzQ2MzIyNX0.VxwUAwOaQm54XBqOVGCMaVylTojxluDOGASJDZx3E0w', NULL, 224, '2026-06-30 17:56:48.000000'),
+(225, '2026-06-30 17:40:42.000000', '2026-07-07 17:40:42.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjg1OTI0MiwiZXhwIjoxNzgzNDY0MDQyfQ.N9S8jWSWm2ayieiycHSmj51cBmoC7jFXBcX4SaVH7s0', NULL, 117, '2026-06-30 18:09:41.000000'),
+(226, '2026-06-30 17:57:49.000000', '2026-07-07 17:57:49.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NjAyNjksImV4cCI6MTc4MzQ2NTA2OX0.Eez3BPeKscz-iIfPsg0Bso3eXpTkFkvdVWczpq7kguA', NULL, 224, '2026-06-30 18:26:51.000000'),
+(227, '2026-06-30 18:10:43.000000', '2026-07-07 18:10:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4Mjg2MTA0MywiZXhwIjoxNzgzNDY1ODQzfQ.Z4rRV6OUF3YicDlFbl0-BcYGu1DVf3ImTaX7Uj9CXU8', NULL, 117, '2026-06-30 18:39:21.000000'),
+(228, '2026-06-30 18:27:50.000000', '2026-07-07 18:27:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NjIwNzAsImV4cCI6MTc4MzQ2Njg3MH0.rEfaL0v3Er2Bz2PkbRzlaAKPzgYQ74qIXLlHF9b6K-g', NULL, 224, '2026-06-30 18:40:50.000000'),
+(229, '2026-06-30 18:40:44.000000', '2026-07-07 18:40:44.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODYyODQ0LCJleHAiOjE3ODM0Njc2NDR9.h2dGHrM-ENA8_G91O8X78oHZ1y686piazGB_iMPjv9c', NULL, 209, '2026-06-30 19:07:49.000000'),
+(230, '2026-06-30 19:10:47.000000', '2026-07-07 19:10:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODY0NjQ3LCJleHAiOjE3ODM0Njk0NDd9.2XxGFCzB3SSe_MWwCDE4Ksl_c04FSq_ORO8SyCTYGR4', NULL, 209, '2026-06-30 19:38:47.000000'),
+(231, '2026-06-30 19:27:01.000000', '2026-07-07 19:27:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NjU2MjEsImV4cCI6MTc4MzQ3MDQyMX0.e5Fuv4r6zglO3KNpwHP_gZvwZzv-DeriJDS9_dINRGk', NULL, 224, '2026-06-30 19:27:01.000000'),
+(232, '2026-06-30 19:27:06.000000', '2026-07-07 19:27:06.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI4NjU2MjYsImV4cCI6MTc4MzQ3MDQyNn0.qCPSMXmG_Ri_t5ffZetz2alB4qC4vT1h-S9mVMo8azA', NULL, 224, '2026-06-30 19:29:50.000000'),
+(233, '2026-06-30 19:40:47.000000', '2026-07-07 19:40:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODY2NDQ3LCJleHAiOjE3ODM0NzEyNDd9.0qwztzBi_nOI-JaJD6CMRkxRpW4rHSEncZPi5WdrDbU', NULL, 209, '2026-06-30 20:00:51.000000'),
+(234, '2026-07-01 00:31:24.000000', '2026-07-08 00:31:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODgzODg0LCJleHAiOjE3ODM0ODg2ODR9.m5tbov2F9-Z-lxaQPGj-hUvL2O9lENguwgUCrrsyMq4', NULL, 209, '2026-07-01 00:59:28.000000'),
+(235, '2026-07-01 01:01:28.000000', '2026-07-08 01:01:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODg1Njg4LCJleHAiOjE3ODM0OTA0ODh9.hx_Ia3Bf2CTtjf467xG7IwFt410xGcxyR6iaVLjke4E', NULL, 209, '2026-07-01 01:30:28.000000'),
+(236, '2026-07-01 01:31:29.000000', '2026-07-08 01:31:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODg3NDg5LCJleHAiOjE3ODM0OTIyODl9.aN_K00oUdccjWNCMkDfNMiAMqiYNwePW2zmTuRkDrYk', NULL, 209, '2026-07-01 02:00:49.000000'),
+(237, '2026-07-01 02:01:50.000000', '2026-07-08 02:01:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyODg5MzEwLCJleHAiOjE3ODM0OTQxMTB9.dYDepPC9u629d15iZStI3n6FRYSdnGinYRIzwgc-CVk', NULL, 209, '2026-07-01 02:01:50.000000'),
+(238, '2026-07-01 08:18:14.000000', '2026-07-08 08:18:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MTE4OTQsImV4cCI6MTc4MzUxNjY5NH0.QEbIc9Sm_pG-Wr38_Q-PBYo758fMbAQgmxdo9vQpuF4', NULL, 224, '2026-07-01 08:47:25.000000'),
+(239, '2026-07-01 08:48:26.000000', '2026-07-08 08:48:26.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MTM3MDYsImV4cCI6MTc4MzUxODUwNn0.V7PxVLtb_zewbD_mucz727i4QYKvnO6xMt-5N-JUCqs', NULL, 224, '2026-07-01 09:17:11.000000'),
+(240, '2026-07-01 09:01:46.000000', '2026-07-08 09:01:46.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyOTE0NTA2LCJleHAiOjE3ODM1MTkzMDZ9.e2ICqoRhH3BrdGXp9BJFHmIP2MFirpKNBhzy8dqw5eY', NULL, 95, '2026-07-01 09:31:09.000000'),
+(241, '2026-07-01 09:18:28.000000', '2026-07-08 09:18:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MTU1MDgsImV4cCI6MTc4MzUyMDMwOH0.fZAMM6xkKJVMiodQccyfMo6V0UAwz2ImF21aEoS9cJU', NULL, 224, '2026-07-01 09:37:26.000000'),
+(242, '2026-07-01 09:32:11.000000', '2026-07-08 09:32:11.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyOTE2MzMxLCJleHAiOjE3ODM1MjExMzF9.-O9D_Tz3Oc9RQ5KJnrkmQHqXw7JtHDdy5ztyCF5_vqI', NULL, 95, '2026-07-01 09:38:16.000000'),
+(243, '2026-07-01 10:03:20.000000', '2026-07-08 10:03:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTE4MjAwLCJleHAiOjE3ODM1MjMwMDB9.uiBthOrBWGOzwRyxuUauLM2D4ym-q_dDoknSSgPPrxo', NULL, 209, '2026-07-01 10:32:35.000000'),
+(244, '2026-07-01 10:33:35.000000', '2026-07-08 10:33:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTIwMDE1LCJleHAiOjE3ODM1MjQ4MTV9.H7kW9HX4x5boC-56T82LXm6fbK8j5IMPP4EjGx_NrJw', NULL, 209, '2026-07-01 11:02:34.000000'),
+(245, '2026-07-01 11:04:34.000000', '2026-07-08 11:04:34.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTIxODc0LCJleHAiOjE3ODM1MjY2NzR9.VNxnD1pD2U9F8gGeTHhXU_H-U69AaFyMg-0HAzv4-94', NULL, 209, '2026-07-01 11:08:34.000000'),
+(246, '2026-07-01 11:12:21.000000', '2026-07-08 11:12:21.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyOTIyMzQxLCJleHAiOjE3ODM1MjcxNDF9.cYM8_MMYBn4aYGPAs2E9q6VBt8kTh_WRFtZaW51VXQU', NULL, 95, '2026-07-01 11:40:30.000000'),
+(247, '2026-07-01 11:27:59.000000', '2026-07-08 11:27:59.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MjMyNzksImV4cCI6MTc4MzUyODA3OX0.3GbVatMqoi5VwdC4yHdeOJhgAvNQWQHc2RevZmfdxnM', NULL, 224, '2026-07-01 11:57:58.000000'),
+(248, '2026-07-01 11:39:05.000000', '2026-07-08 11:39:05.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjkyMzk0NSwiZXhwIjoxNzgzNTI4NzQ1fQ.oJ2J3cgCVHn0P3z5NjD73t4SENukxsqSVDThiiTHod4', NULL, 117, '2026-07-01 12:08:56.000000'),
+(249, '2026-07-01 11:42:48.000000', '2026-07-08 11:42:48.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgyOTI0MTY4LCJleHAiOjE3ODM1Mjg5Njh9.3W-obYXcriR47yQ7865YsVOAae5E8bVdpCNQQ71iIGo', NULL, 95, '2026-07-01 12:05:49.000000'),
+(250, '2026-07-01 11:58:58.000000', '2026-07-08 11:58:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MjUxMzgsImV4cCI6MTc4MzUyOTkzOH0.Gxup7fesR0EbX-6nkzbQ4wJRlFl6CMANF-zPRJYlj_c', NULL, 224, '2026-07-01 12:27:02.000000'),
+(251, '2026-07-01 12:09:56.000000', '2026-07-08 12:09:56.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjkyNTc5NiwiZXhwIjoxNzgzNTMwNTk2fQ.tF0RDQTQsqaWIwN1Qgwsoq-RXJ6_Gm-LG_UgYSo0Oyc', NULL, 117, '2026-07-01 12:37:59.000000'),
+(252, '2026-07-01 12:28:58.000000', '2026-07-08 12:28:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MjY5MzgsImV4cCI6MTc4MzUzMTczOH0.FY8ZMXaDM1zxk_FmG0n60Q6JQoDFW4DhyjF8AeA6rQ4', NULL, 224, '2026-07-01 12:57:16.000000'),
+(253, '2026-07-01 12:40:01.000000', '2026-07-08 12:40:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MjkyNzYwMSwiZXhwIjoxNzgzNTMyNDAxfQ.okHpj1Tq4CQd_3Q9YwW5oN3A8uhAHALIrqrbF-1epG0', NULL, 117, '2026-07-01 13:01:27.000000'),
+(254, '2026-07-01 12:59:18.000000', '2026-07-08 12:59:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5Mjg3NTgsImV4cCI6MTc4MzUzMzU1OH0.RbsJ8pnkrxgXd2zpHvw9i3hm4AKBk83vKOcsl-ZWmVE', NULL, 224, '2026-07-01 12:59:18.000000'),
+(255, '2026-07-01 15:14:28.000000', '2026-07-08 15:14:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5MzY4NjgsImV4cCI6MTc4MzU0MTY2OH0.6pziTlcaugPpzkPor2ZIDfMh8OWa9vVZ3lFrHtl87tI', NULL, 224, '2026-07-01 15:42:36.000000'),
+(256, '2026-07-01 15:45:27.000000', '2026-07-08 15:45:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5Mzg3MjcsImV4cCI6MTc4MzU0MzUyN30.sGzJUJeZvqDAMoHwY6ZwFnjbFe7BKkeBqf3YQ4AAtQk', NULL, 224, '2026-07-01 16:13:29.000000'),
+(257, '2026-07-01 16:15:31.000000', '2026-07-08 16:15:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5NDA1MzEsImV4cCI6MTc4MzU0NTMzMX0.2gSWdWgxeQgk9KmH8L09HIZmp-SvrrARDlZX2ghMtXQ', NULL, 224, '2026-07-01 16:44:29.000000'),
+(258, '2026-07-01 16:46:23.000000', '2026-07-08 16:46:23.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5NDIzODMsImV4cCI6MTc4MzU0NzE4M30.gh-YvpGZkVrsS2omNSFjYa1QNFlnhsVTzXCI79sMXvY', NULL, 224, '2026-07-01 17:15:27.000000'),
+(259, '2026-07-01 17:16:27.000000', '2026-07-08 17:16:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5NDQxODcsImV4cCI6MTc4MzU0ODk4N30.PTt6RgZ-IG8kVxlUmTsyLHjXrGdZw_IOM-ciTCnQzq0', NULL, 224, '2026-07-01 17:44:28.000000'),
+(260, '2026-07-01 17:46:30.000000', '2026-07-08 17:46:30.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5NDU5OTAsImV4cCI6MTc4MzU1MDc5MH0.QeO7sMd4_8W2hNm3LmG6GFBNxqW4i2N49rX6DDu880E', NULL, 224, '2026-07-01 18:15:30.000000'),
+(261, '2026-07-01 18:16:31.000000', '2026-07-08 18:16:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODI5NDc3OTEsImV4cCI6MTc4MzU1MjU5MX0.VRv5CmeXTgw9sTXzdaGjs_tswtW9EkVK68KhEg6ZRxI', NULL, 224, '2026-07-01 18:23:34.000000'),
+(262, '2026-07-01 21:24:11.000000', '2026-07-08 21:24:11.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTU5MDUxLCJleHAiOjE3ODM1NjM4NTF9.Fe4-ZuCv8rm7YbqmLdz77HLzpG_3yxyMabN1Z7LH374', NULL, 209, '2026-07-01 21:52:29.000000'),
+(263, '2026-07-01 21:54:31.000000', '2026-07-08 21:54:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTYwODcxLCJleHAiOjE3ODM1NjU2NzF9.zN5j1sZKIQG2nJ5SZx_6ETXjkOOe0huO9AfbkqX_cKw', NULL, 209, '2026-07-01 22:00:37.000000'),
+(264, '2026-07-01 22:31:32.000000', '2026-07-08 22:31:32.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTYzMDkyLCJleHAiOjE3ODM1Njc4OTJ9.3CrjFhYSHm7jnvPB80okkWPSbOviKt1IT3BpR6ut1Hs', NULL, 209, '2026-07-01 22:52:42.000000'),
+(265, '2026-07-01 23:04:43.000000', '2026-07-08 23:04:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTY1MDgzLCJleHAiOjE3ODM1Njk4ODN9.Q9IvaVZTWTdBqUtdep7oVBMeODVRPm5dITxx2pY2yG4', NULL, 209, '2026-07-01 23:30:13.000000'),
+(266, '2026-07-01 23:38:13.000000', '2026-07-08 23:38:13.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTY3MDkzLCJleHAiOjE3ODM1NzE4OTN9.Eg6rYkgyN6ueKe34HefVJLwoK_FMy6Im-G44SUbLOzA', NULL, 209, '2026-07-01 23:58:13.000000'),
+(267, '2026-07-02 00:10:26.000000', '2026-07-09 00:10:26.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTY5MDI2LCJleHAiOjE3ODM1NzM4MjZ9.uwzEvthJZdha2ivgSXhSftdPLsysaZJhamjP5_TuvaQ', NULL, 209, '2026-07-02 00:40:06.000000'),
+(268, '2026-07-02 00:41:06.000000', '2026-07-09 00:41:06.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTcwODY2LCJleHAiOjE3ODM1NzU2NjZ9.xOIxWxS9OJiQCuGo_YSLWdydfMWESLK4EWmqP2sQJ04', NULL, 209, '2026-07-02 01:08:02.000000'),
+(269, '2026-07-02 08:31:22.000000', '2026-07-09 08:31:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgyOTk5MDgyLCJleHAiOjE3ODM2MDM4ODJ9.xdsdoK4-qykTE-pzW1KCHKAYalA4Y-ilhJhPjBIfJJg', NULL, 209, '2026-07-02 08:52:28.000000'),
+(270, '2026-07-02 09:04:22.000000', '2026-07-09 09:04:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDAxMDYyLCJleHAiOjE3ODM2MDU4NjJ9.OwqGT2KWqS5D5-3UQsDB6PM1iPHI2tytkhsnFpSnWkc', NULL, 95, '2026-07-02 09:32:22.000000'),
+(271, '2026-07-02 09:08:39.000000', '2026-07-09 09:08:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMDEzMTksImV4cCI6MTc4MzYwNjExOX0.rxZdmDudX2IVgVGMRFcRJDbC323cyIlUsNpuYQbm6po', NULL, 224, '2026-07-02 09:37:41.000000'),
+(272, '2026-07-02 09:34:24.000000', '2026-07-09 09:34:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDAyODY0LCJleHAiOjE3ODM2MDc2NjR9.dOOKm99iAE9qrI0RM3i-RLvQDHyHBWALmgWTnPQvQmM', NULL, 95, '2026-07-02 10:03:28.000000'),
+(273, '2026-07-02 09:38:42.000000', '2026-07-09 09:38:42.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMDMxMjIsImV4cCI6MTc4MzYwNzkyMn0.asEqzt6l3TmnLCRWj8nBqp_UOvcYyIp9hswogLh0FuE', NULL, 224, '2026-07-02 10:07:38.000000'),
+(274, '2026-07-02 10:04:29.000000', '2026-07-09 10:04:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDA0NjY5LCJleHAiOjE3ODM2MDk0Njl9.KEefSGhmKnedeaYtR4oYhEqXCuX_bpBp5JTlawN0qfI', NULL, 95, '2026-07-02 10:33:28.000000'),
+(275, '2026-07-02 10:09:35.000000', '2026-07-09 10:09:35.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMDQ5NzUsImV4cCI6MTc4MzYwOTc3NX0.rSN5-iaxW6kL1SZHyGIrlBxTS2HERFMIUSlIBK241xQ', NULL, 224, '2026-07-02 10:38:56.000000'),
+(276, '2026-07-02 10:15:52.000000', '2026-07-09 10:15:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAwNTM1MiwiZXhwIjoxNzgzNjEwMTUyfQ.tAEk3I2G6V4iDt17GLp-uoEirIt_t1IIzDfgdTFohA4', NULL, 117, '2026-07-02 10:44:53.000000'),
+(277, '2026-07-02 10:35:28.000000', '2026-07-09 10:35:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDA2NTI4LCJleHAiOjE3ODM2MTEzMjh9.mqq1OQEogHrjWas24pYv_JG7bugnJWIY9xwxtOE-7fA', NULL, 95, '2026-07-02 10:42:28.000000'),
+(278, '2026-07-02 10:39:58.000000', '2026-07-09 10:39:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMDY3OTgsImV4cCI6MTc4MzYxMTU5OH0.bAABz313gmMvOmIV6fh6IKr4h04UmUcPMMdChPcMt6o', NULL, 224, '2026-07-02 10:39:58.000000'),
+(279, '2026-07-02 10:41:22.000000', '2026-07-09 10:41:22.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDA2ODgyLCJleHAiOjE3ODM2MTE2ODJ9.WPh8QOzhe_QnjaTaisX5w62LMs7nh8D4quZCIcn6VSM', NULL, 209, '2026-07-02 11:09:40.000000'),
+(280, '2026-07-02 10:45:52.000000', '2026-07-09 10:45:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAwNzE1MiwiZXhwIjoxNzgzNjExOTUyfQ.6unpNEgJry-Tg_Y-u7Lr6s9mhpvvYVykiUuDucgoH8s', NULL, 117, '2026-07-02 11:15:22.000000'),
+(281, '2026-07-02 11:11:40.000000', '2026-07-09 11:11:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDA4NzAwLCJleHAiOjE3ODM2MTM1MDB9.Vut8WdtU3Hxpqxn8XRFTYincLPrxJWFBjcan_0YyT4A', NULL, 209, '2026-07-02 11:39:41.000000'),
+(282, '2026-07-02 11:16:24.000000', '2026-07-09 11:16:24.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAwODk4NCwiZXhwIjoxNzgzNjEzNzg0fQ.pxiLWo5owl4E_cqeJZxxRnn-xCTXSUPqCFItWvn-WD8', NULL, 117, '2026-07-02 11:45:36.000000'),
+(283, '2026-07-02 11:31:53.000000', '2026-07-09 11:31:53.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMDk5MTMsImV4cCI6MTc4MzYxNDcxM30.vyv--apSapSXLuzI8mVCBQaT8qjiXHte45dMPuTQLlo', NULL, 224, '2026-07-02 11:53:07.000000'),
+(284, '2026-07-02 11:42:39.000000', '2026-07-09 11:42:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDEwNTU5LCJleHAiOjE3ODM2MTUzNTl9.iqXZ7UyLv7KefA0PJS5c3X-IUEEmaN6Nv3vXYSwEP5c', NULL, 209, '2026-07-02 12:11:51.000000'),
+(285, '2026-07-02 11:47:05.000000', '2026-07-09 11:47:05.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAxMDgyNSwiZXhwIjoxNzgzNjE1NjI1fQ.aBQ20vQTUQU0pDGdZwW5QRi3as72sw7fi-CgZqZQgoU', NULL, 117, '2026-07-02 12:15:28.000000'),
+(286, '2026-07-02 12:13:25.000000', '2026-07-09 12:13:25.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDEyNDA1LCJleHAiOjE3ODM2MTcyMDV9.8m3KWAuOsp73ajy2Hopdx2-TzzDWE5Pip7jQEnoVjGA', NULL, 209, '2026-07-02 12:42:06.000000'),
+(287, '2026-07-02 12:17:31.000000', '2026-07-09 12:17:31.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAxMjY1MSwiZXhwIjoxNzgzNjE3NDUxfQ.Sdd7sKZ6-2T3sTOEArHNJkA78jI8JPABiyoct24WnDE', NULL, 117, '2026-07-02 12:45:41.000000'),
+(288, '2026-07-02 12:44:07.000000', '2026-07-09 12:44:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDE0MjQ3LCJleHAiOjE3ODM2MTkwNDd9.qlqsYntlK0zT8iuq6ACOIWFOpY0lV8XU-NXAt8_VW_8', NULL, 209, '2026-07-02 12:44:07.000000'),
+(289, '2026-07-02 12:46:25.000000', '2026-07-09 12:46:25.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDE0Mzg1LCJleHAiOjE3ODM2MTkxODV9.otIqMNSvlBYhP0EIbn9Hs-wyUzBUAHKsWkGhx_04KWE', NULL, 95, '2026-07-02 13:02:29.000000'),
+(290, '2026-07-02 12:47:00.000000', '2026-07-09 12:47:00.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAxNDQyMCwiZXhwIjoxNzgzNjE5MjIwfQ.PXJ9_moogXLCQqMYjbjVFIILYxoI825FHKmNTmdFOwk', NULL, 117, '2026-07-02 12:47:00.000000'),
+(291, '2026-07-02 12:47:27.000000', '2026-07-09 12:47:27.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMTQ0NDcsImV4cCI6MTc4MzYxOTI0N30.6gQ7_oaNWy2C6NSwjeCDASOWehzyTOxBqhaoAkM5R1w', NULL, 224, '2026-07-02 13:00:53.000000'),
+(292, '2026-07-02 12:48:30.000000', '2026-07-09 12:48:30.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzAxNDUxMCwiZXhwIjoxNzgzNjE5MzEwfQ.QShfEgwr3XjhFm0-NPfsAttyrCvNYdtdwlBHkAFoThY', NULL, 117, '2026-07-02 13:03:01.000000'),
+(293, '2026-07-02 13:17:02.000000', '2026-07-09 13:17:02.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDE2MjIyLCJleHAiOjE3ODM2MjEwMjJ9.TEsKP9bp5hyeJKbhxo23DSvhiBUXro3-HY-jIn--n68', NULL, 209, '2026-07-02 13:35:51.000000'),
+(294, '2026-07-02 15:05:53.000000', '2026-07-09 15:05:53.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMjI3NTMsImV4cCI6MTc4MzYyNzU1M30.vkEUWM2F3lVIzdcl0givylnkvHS86184Sz7tYFIF4cA', NULL, 224, '2026-07-02 15:34:05.000000'),
+(295, '2026-07-02 15:28:41.000000', '2026-07-09 15:28:41.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDI0MTIxLCJleHAiOjE3ODM2Mjg5MjF9.uGEN0r-TQCNY-OT4QEuFpJcUaPqr3mL-Pew3nzUgaXk', NULL, 209, '2026-07-02 15:39:39.000000'),
+(296, '2026-07-02 15:36:06.000000', '2026-07-09 15:36:06.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMjQ1NjYsImV4cCI6MTc4MzYyOTM2Nn0.10zT7ZBo9e26bXOIH4uiuEKzyO6XyNLpYjJEgvtjTzI', NULL, 224, '2026-07-02 16:04:09.000000'),
+(297, '2026-07-02 16:06:11.000000', '2026-07-09 16:06:11.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMjYzNzEsImV4cCI6MTc4MzYzMTE3MX0.70U0sGPSHuJlLLgGPPItfO5CpzS42-b99clTzYoF9mk', NULL, 224, '2026-07-02 16:35:32.000000'),
+(298, '2026-07-02 16:11:43.000000', '2026-07-09 16:11:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDI2NzAzLCJleHAiOjE3ODM2MzE1MDN9.h5HgyxqlVP2ZXfZVaIkVdH-d9hwVCPx06NajbGZFgSA', NULL, 209, '2026-07-02 16:11:43.000000'),
+(299, '2026-07-02 16:37:07.000000', '2026-07-09 16:37:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMjgyMjcsImV4cCI6MTc4MzYzMzAyN30.9Gw3bRkyv0iTe_D_NccNszG16OfVa1RxJhu0W3fMS9U', NULL, 224, '2026-07-02 16:56:09.000000'),
+(300, '2026-07-02 16:50:46.000000', '2026-07-09 16:50:46.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDI5MDQ2LCJleHAiOjE3ODM2MzM4NDZ9.gJ2eEYQMCrqbPEE-6tpNkZKEEz9Osj-8_XZ4lZKWfLU', NULL, 209, '2026-07-02 16:50:46.000000'),
+(301, '2026-07-02 17:35:59.000000', '2026-07-09 17:35:59.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMzE3NTksImV4cCI6MTc4MzYzNjU1OX0.OlldVfb1jPeMaI6TUEuZZxWFhlZ8VmmTg4Jwq8aBMDE', NULL, 224, '2026-07-02 18:05:14.000000'),
+(302, '2026-07-02 18:06:15.000000', '2026-07-09 18:06:15.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwMzM1NzUsImV4cCI6MTc4MzYzODM3NX0.LrCOJS5ddzryIqJujRJ_w4MSOuj3Um8Z-RGTTmATXuo', NULL, 224, '2026-07-02 18:26:23.000000'),
+(303, '2026-07-02 18:23:18.000000', '2026-07-09 18:23:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDM0NTk4LCJleHAiOjE3ODM2MzkzOTh9.0HEBkaMQqqIIExc8zxOEIK5o0FhnCzawcbThZg8YJHI', NULL, 95, '2026-07-02 18:26:17.000000'),
+(304, '2026-07-02 19:12:46.000000', '2026-07-09 19:12:46.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDM3NTY2LCJleHAiOjE3ODM2NDIzNjZ9.sGwWgZ_lnAkPEfKg5Bh2kzVOQbnFxlRQPR8K_YWOgjQ', NULL, 209, '2026-07-02 19:40:54.000000'),
+(305, '2026-07-02 19:42:59.000000', '2026-07-09 19:42:59.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDM5Mzc5LCJleHAiOjE3ODM2NDQxNzl9.JUSKSizWdb8a2iJLcvVXi2Hmsgjzrf3S-82VZUM_CO4', NULL, 209, '2026-07-02 20:12:58.000000'),
+(306, '2026-07-02 20:13:59.000000', '2026-07-09 20:13:59.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDQxMjM5LCJleHAiOjE3ODM2NDYwMzl9.XvYM6EvABWBPWLUBZzcOry1JG9UJxPVHerxRsOPNM60', NULL, 209, '2026-07-02 20:42:58.000000'),
+(307, '2026-07-02 20:44:58.000000', '2026-07-09 20:44:58.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDQzMDk4LCJleHAiOjE3ODM2NDc4OTh9.k0m2eWJghjG94aRV_FORABnWuAlyXvxln7oMm3tntU8', NULL, 209, '2026-07-02 20:54:59.000000'),
+(308, '2026-07-02 22:40:28.000000', '2026-07-09 22:40:28.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMwNTAwMjgsImV4cCI6MTc4MzY1NDgyOH0.7IL-3g4Ezsq1sgg0tQg3Qc9R5NZRAUVfZg4BBRRi9Xw', NULL, 224, '2026-07-02 22:43:02.000000'),
+(309, '2026-07-03 04:56:05.000000', '2026-07-10 04:56:05.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDcyNTY1LCJleHAiOjE3ODM2NzczNjV9.zz9cap5M_Rny0GX8HC1Xv-3dHl7kQIsj2kLE0xhEsds', NULL, 209, '2026-07-03 04:56:05.000000'),
+(310, '2026-07-03 08:07:39.000000', '2026-07-10 08:07:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDg0MDU5LCJleHAiOjE3ODM2ODg4NTl9.vgrZ4guJBCVNPzvmcz64_pvgT52X5mGtg3KiYeYNyho', NULL, 95, '2026-07-03 08:35:47.000000'),
+(311, '2026-07-03 08:38:39.000000', '2026-07-10 08:38:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDg1OTE5LCJleHAiOjE3ODM2OTA3MTl9.eVOWBL70eyEL-p6O7GZuGl1UZjGIEDRQm7lYGqPODaw', NULL, 95, '2026-07-03 09:06:58.000000'),
+(312, '2026-07-03 09:09:00.000000', '2026-07-10 09:09:00.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDg3NzQwLCJleHAiOjE3ODM2OTI1NDB9.o9uiVR4VmnnAF6_-8MftD7un3JMhn9UYzAvdV81imuM', NULL, 95, '2026-07-03 09:23:14.000000'),
+(313, '2026-07-03 09:17:43.000000', '2026-07-10 09:17:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDg4MjYzLCJleHAiOjE3ODM2OTMwNjN9.-v0G0yUNDkGXRgKGKoRE8VGxfVdpFpfWECt-LX-UJSM', NULL, 209, '2026-07-03 09:41:31.000000'),
+(314, '2026-07-03 09:53:09.000000', '2026-07-10 09:53:09.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMDkwMzg5LCJleHAiOjE3ODM2OTUxODl9.XrK7fk1EojZSeyRiA2WHn06pksI6RxV-D9sgFOCNQME', NULL, 209, '2026-07-03 09:55:11.000000'),
+(315, '2026-07-03 10:05:56.000000', '2026-07-10 10:05:56.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDkxMTU2LCJleHAiOjE3ODM2OTU5NTZ9._BT_IonN2KqEDcq1T8s-qRfJxn7mPMxt-LZJJpdyRCw', NULL, 95, '2026-07-03 10:34:26.000000'),
+(316, '2026-07-03 10:36:26.000000', '2026-07-10 10:36:26.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDkyOTg2LCJleHAiOjE3ODM2OTc3ODZ9.D5-u7q7JcGDwpQ5XeaaWyD4d08MaA8gNer53up1ZYMs', NULL, 95, '2026-07-03 11:05:39.000000'),
+(317, '2026-07-03 11:06:40.000000', '2026-07-10 11:06:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDk0ODAwLCJleHAiOjE3ODM2OTk2MDB9.fsiRCrmnrTCKVyXi6slh6_M7di6xPJfoiFNTRb_9Phs', NULL, 95, '2026-07-03 11:35:08.000000'),
+(318, '2026-07-03 11:37:10.000000', '2026-07-10 11:37:10.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDk2NjMwLCJleHAiOjE3ODM3MDE0MzB9.nrdOrhptOmLjHqSphtirAMq37N57dlErl8GXq97OoEE', NULL, 95, '2026-07-03 12:06:28.000000'),
+(319, '2026-07-03 12:07:29.000000', '2026-07-10 12:07:29.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMDk4NDQ5LCJleHAiOjE3ODM3MDMyNDl9.yuatTtEMZrc8fKasUuIy5tDI--bzUS2mjYGgcLSI3oY', NULL, 95, '2026-07-03 12:36:45.000000'),
+(320, '2026-07-03 12:37:46.000000', '2026-07-10 12:37:46.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTAwMjY2LCJleHAiOjE3ODM3MDUwNjZ9.piUTiDfrtr3vSl2xCQDjCj_F90FAVPhrM5v_DTzuU60', NULL, 95, '2026-07-03 13:04:12.000000'),
+(321, '2026-07-04 09:27:47.000000', '2026-07-11 09:27:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxNzUyNjcsImV4cCI6MTc4Mzc4MDA2N30.gk2vTuMBOr9wIh7cFFSl3cpJbfup6Bmw-Z7MShFJkYM', NULL, 224, '2026-07-04 09:56:48.000000'),
+(322, '2026-07-04 09:30:39.000000', '2026-07-11 09:30:39.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTc1NDM5LCJleHAiOjE3ODM3ODAyMzl9.-m3d3VocVrbZiCpHAaSNJlS01sLc55yy63kMbqqztgM', NULL, 95, '2026-07-04 09:58:44.000000'),
+(323, '2026-07-04 09:57:49.000000', '2026-07-11 09:57:49.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxNzcwNjksImV4cCI6MTc4Mzc4MTg2OX0.6sDNANbxpM4VZCdgcQnTBA9qnUE8PB5oZBfBTte_3uQ', NULL, 224, '2026-07-04 10:27:11.000000'),
+(324, '2026-07-04 10:00:46.000000', '2026-07-11 10:00:46.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTc3MjQ2LCJleHAiOjE3ODM3ODIwNDZ9.a4ONK_neMEbCGIFh0z9yUI4Uh8zY_wlRpCFgt19TV20', NULL, 95, '2026-07-04 10:06:52.000000'),
+(325, '2026-07-04 10:28:14.000000', '2026-07-11 10:28:14.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxNzg4OTQsImV4cCI6MTc4Mzc4MzY5NH0.B9YwKB6RsE5Sj3qQgaxo6TAl2W_uu_UcWtyXqUrqw1w', NULL, 224, '2026-07-04 10:56:52.000000'),
+(326, '2026-07-04 10:51:12.000000', '2026-07-11 10:51:12.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTgwMjcyLCJleHAiOjE3ODM3ODUwNzJ9.kwKnrg4lLBk2_VofshiTz-V1lLSpNI7iu_kNlyV4No4', NULL, 95, '2026-07-04 11:20:55.000000'),
+(327, '2026-07-04 10:58:47.000000', '2026-07-11 10:58:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxODA3MjcsImV4cCI6MTc4Mzc4NTUyN30.ja60oT8i4IdTkiMT2_dpKIWuhJH7OYxYmRB0pAsJLYA', NULL, 224, '2026-07-04 11:26:32.000000'),
+(328, '2026-07-04 11:21:20.000000', '2026-07-11 11:21:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTgyMDgwLCJleHAiOjE3ODM3ODY4ODB9.kqsIchgBjI77d6yzCc0LBZEIzBuPjkA1Zt6V0RnTpu8', NULL, 95, '2026-07-04 11:50:15.000000'),
+(329, '2026-07-04 11:28:47.000000', '2026-07-11 11:28:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxODI1MjcsImV4cCI6MTc4Mzc4NzMyN30.cOHUiYgcWSH3jS06t6IGlu_Rnjkn6zFw4xrzJaljjxk', NULL, 224, '2026-07-04 11:57:49.000000'),
+(330, '2026-07-04 11:52:07.000000', '2026-07-11 11:52:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTgzOTI3LCJleHAiOjE3ODM3ODg3Mjd9.5bm-e12qwGcakvYtQ6zZTOrSZTz5satD9SK8nQvonq0', NULL, 95, '2026-07-04 11:57:08.000000'),
+(331, '2026-07-04 11:58:50.000000', '2026-07-11 11:58:50.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxODQzMzAsImV4cCI6MTc4Mzc4OTEzMH0.0k-HmS4lMP3iRwSglcCWdi-HD5Cu-lDxolxaZs76a6g', NULL, 224, '2026-07-04 12:28:47.000000'),
+(332, '2026-07-04 12:01:41.000000', '2026-07-11 12:01:41.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTg0NTAxLCJleHAiOjE3ODM3ODkzMDF9.jG_Qs2WV9bWFiJvENR5DUtnb6Jhrt5GGBhpDbsbAutM', NULL, 209, '2026-07-04 12:23:28.000000'),
+(333, '2026-07-04 12:26:26.000000', '2026-07-11 12:26:26.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTg1OTg2LCJleHAiOjE3ODM3OTA3ODZ9.g3rMnpT6goob7na-brjtoD-uZGpTx4nl2SIugzuRswg', NULL, 95, '2026-07-04 12:55:07.000000'),
+(334, '2026-07-04 12:29:47.000000', '2026-07-11 12:29:47.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxODYxODcsImV4cCI6MTc4Mzc5MDk4N30.DAneK6VC0e0Q7pNTgf-Ij1fip0pse6CkRsM1rXeb1s4', NULL, 224, '2026-07-04 12:57:49.000000'),
+(335, '2026-07-04 12:57:08.000000', '2026-07-11 12:57:08.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTg3ODI4LCJleHAiOjE3ODM3OTI2Mjh9.i2x4-WOxh91j5pcLcULOe6hHIQntvYWFrFp2-IjW9k4', NULL, 95, '2026-07-04 12:57:08.000000'),
+(336, '2026-07-04 12:59:51.000000', '2026-07-11 12:59:51.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMxODc5OTEsImV4cCI6MTc4Mzc5Mjc5MX0.pfAgobqJM-vC-ZaZ7WHBtxLtfn6InZrFPQnHaCh6vN4', NULL, 224, '2026-07-04 13:04:47.000000'),
+(337, '2026-07-04 13:10:54.000000', '2026-07-11 13:10:54.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTg4NjU0LCJleHAiOjE3ODM3OTM0NTR9.FBPU8hysUydCra-JdKkaZgmg-CS5pSaTKLv3FxbARN4', NULL, 209, '2026-07-04 13:39:53.000000'),
+(338, '2026-07-04 13:41:53.000000', '2026-07-11 13:41:53.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTkwNTEzLCJleHAiOjE3ODM3OTUzMTN9.TflFoVyAkC8qXITs5QkzJsUxKfYt0d82RMetbNOtXlg', NULL, 209, '2026-07-04 14:09:53.000000'),
+(339, '2026-07-04 14:11:53.000000', '2026-07-11 14:11:53.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTkyMzEzLCJleHAiOjE3ODM3OTcxMTN9._uEM74PIxTzTexRdKMWpxUxuj5BOfhL87xs1bDeyyiE', NULL, 209, '2026-07-04 14:29:53.000000'),
+(340, '2026-07-04 15:00:54.000000', '2026-07-11 15:00:54.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk1MjU0LCJleHAiOjE3ODM4MDAwNTR9.YVWvstr3xHS7vLbOC5t00Kztwhw7JslOvaJk7oudG8Y', NULL, 95, '2026-07-04 15:30:05.000000'),
+(341, '2026-07-04 15:13:51.000000', '2026-07-11 15:13:51.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk2MDMxLCJleHAiOjE3ODM4MDA4MzF9.lyyYk-VsX4FSuoWQ8Cm531-ldGa8VKSj8FnEnEe9YCM', NULL, 209, '2026-07-04 15:13:51.000000'),
+(342, '2026-07-04 15:13:52.000000', '2026-07-11 15:13:52.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk2MDMyLCJleHAiOjE3ODM4MDA4MzJ9.Wp_pSvWMQ6CaLLZOGNEAUVwb0utdYW12xcj5saLcx7Q', NULL, 209, '2026-07-04 15:33:08.000000'),
+(343, '2026-07-04 15:30:55.000000', '2026-07-11 15:30:55.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk3MDU1LCJleHAiOjE3ODM4MDE4NTV9.tnoLXEgHtlxNn68AqksLtgn9QQOyElJTVlQgfrEKqWU', NULL, 95, '2026-07-04 15:59:04.000000'),
+(344, '2026-07-04 15:51:43.000000', '2026-07-11 15:51:43.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk4MzAzLCJleHAiOjE3ODM4MDMxMDN9.JHPsIV0UtGnOSvKnazUbtZvH0wxXhgpJ0I7GxBmGcZg', NULL, 209, '2026-07-04 16:19:55.000000'),
+(345, '2026-07-04 16:01:06.000000', '2026-07-11 16:01:06.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMTk4ODY2LCJleHAiOjE3ODM4MDM2NjZ9.0QI-eMYlAsGQPTpX5ypRuceuVZUPca_HOvdTuTo_d0E', NULL, 95, '2026-07-04 16:30:34.000000'),
+(346, '2026-07-04 16:21:55.000000', '2026-07-11 16:21:55.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMjAwMTE1LCJleHAiOjE3ODM4MDQ5MTV9.gX4Lz4GWPjZo0I-VrTlPSFm09YmginOHoiAUs99ttRA', NULL, 209, '2026-07-04 16:31:55.000000'),
+(347, '2026-07-04 16:31:07.000000', '2026-07-11 16:31:07.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMjAwNjY3LCJleHAiOjE3ODM4MDU0Njd9.ERZAYzRKXOH981RrvYnrCq2Oyxk0jsO9v58RcBs9vdI', NULL, 95, '2026-07-04 16:58:09.000000'),
+(348, '2026-07-04 16:57:20.000000', '2026-07-11 16:57:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMjAyMjQwLCJleHAiOjE3ODM4MDcwNDB9.lZYRro2BIYmRbHO2mfx7Gcqb6QCTUw_Tm9-z9TJXM60', NULL, 209, '2026-07-04 16:57:20.000000'),
+(349, '2026-07-04 16:57:21.000000', '2026-07-11 16:57:21.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMjAyMjQxLCJleHAiOjE3ODM4MDcwNDF9.WAKMEaWDB3c2m0B7U7tiyXNCuDrtIuiLAf69rikFaDc', NULL, 209, '2026-07-04 17:26:02.000000'),
+(350, '2026-07-04 17:19:19.000000', '2026-07-11 17:19:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMjAzNTU5LCJleHAiOjE3ODM4MDgzNTl9.eOjHlNL1l_mI5VJGn6DjjeZXMhW0xEDib_o-_wUwBfs', NULL, 95, '2026-07-04 17:47:33.000000'),
+(351, '2026-07-04 17:28:03.000000', '2026-07-11 17:28:03.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMjA0MDgzLCJleHAiOjE3ODM4MDg4ODN9.ArCRe9JqGqBY8Zd2wzSJdXbw6Bqjh0umgiLYoW6zQtk', NULL, 209, '2026-07-04 17:28:03.000000'),
+(353, '2026-07-04 18:03:09.000000', '2026-07-11 18:03:09.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMjA2MTg5LCJleHAiOjE3ODM4MTA5ODl9.RB62etFiR7STrDI6O4X6gwufhcYITMEbR7MVB4YS98s', NULL, 95, '2026-07-04 18:32:24.000000'),
+(354, '2026-07-04 18:33:25.000000', '2026-07-11 18:33:25.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMjA4MDA1LCJleHAiOjE3ODM4MTI4MDV9.QJqB3LVMXBVf1nAky3oRYWjT4hLIRAY7WicfhobjP0s', NULL, 95, '2026-07-04 18:59:19.000000'),
+(355, '2026-07-05 18:36:35.000000', '2026-07-12 18:36:35.000000', '190.237.48.135', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMjk0NTk1LCJleHAiOjE3ODM4OTkzOTV9.pAE8k_MMADt_rDUVcCtfkgsO9Yyti6lTZjlydMO0MBA', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 209, '2026-07-05 19:00:36.000000'),
+(356, '2026-07-06 08:12:23.000000', '2026-07-13 08:12:23.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMzNDM1NDMsImV4cCI6MTc4Mzk0ODM0M30.uVm5uJR2OHRfmk9xPh0G06C4DoR2cUZ0aMRTvdQOGfw', NULL, 224, '2026-07-06 08:40:25.000000'),
+(357, '2026-07-06 08:14:01.000000', '2026-07-13 08:14:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQzNjQxLCJleHAiOjE3ODM5NDg0NDF9.vpzOt4zKmm3-UueeYuvmer07NgYSqTPpeoLByoYT1GE', NULL, 95, '2026-07-06 08:42:01.000000'),
+(358, '2026-07-06 08:43:18.000000', '2026-07-13 08:43:18.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMzNDUzOTgsImV4cCI6MTc4Mzk1MDE5OH0.ocWWAaypPcgbL9kMZd5rNuGTRFSfxp-Fz6TTYRC-N8c', NULL, 224, '2026-07-06 09:11:44.000000'),
+(359, '2026-07-06 08:44:01.000000', '2026-07-13 08:44:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQ1NDQxLCJleHAiOjE3ODM5NTAyNDF9.DKB1TMz-oSKn_R4om5jwm1P3dBqr8yKAgEdskG3MIWo', NULL, 95, '2026-07-06 09:11:17.000000'),
+(360, '2026-07-06 09:13:19.000000', '2026-07-13 09:13:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMzNDcxOTksImV4cCI6MTc4Mzk1MTk5OX0.WU5b_IliTrh_rTIcRjM5DTamipsg1ceYLuprzdZZIMQ', NULL, 224, '2026-07-06 09:41:38.000000'),
+(361, '2026-07-06 09:14:02.000000', '2026-07-13 09:14:02.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQ3MjQyLCJleHAiOjE3ODM5NTIwNDJ9.MtScSuj7nPr8Gv65cE6in8hUEFe2Cao2J5u7rNRqldA', NULL, 95, '2026-07-06 09:42:07.000000'),
+(362, '2026-07-06 09:25:20.000000', '2026-07-13 09:25:20.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQ3OTIwLCJleHAiOjE3ODM5NTI3MjB9.DruQcA_IYpxZ0PTq-3XJDtvcYgjAZDv26pzw_t2_nNI', NULL, 209, '2026-07-06 09:54:37.000000'),
+(363, '2026-07-06 09:43:19.000000', '2026-07-13 09:43:19.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9ueS5lbGFtYW50ZUBnbWFpbC5jb20iLCJpYXQiOjE3ODMzNDg5OTksImV4cCI6MTc4Mzk1Mzc5OX0.odcClguMMljFIUXUZIUejhcDFjoslRInUWqWvLZFsQ8', NULL, 224, '2026-07-06 09:47:39.000000'),
+(364, '2026-07-06 09:44:09.000000', '2026-07-13 09:44:09.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbGljYXVycXVpYXlzaHVpemFAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQ5MDQ5LCJleHAiOjE3ODM5NTM4NDl9.xA-O9o3bBmsKSqAu9SXw90RncRiXhNnNm6BYrz47j8k', NULL, 95, '2026-07-06 10:08:18.000000'),
+(365, '2026-07-06 09:55:37.000000', '2026-07-13 09:55:37.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMzQ5NzM3LCJleHAiOjE3ODM5NTQ1Mzd9.FPgVmt4Eb-kTfKdfRH160MU56egAHZm8DHlmCRsFkHc', NULL, 209, '2026-07-06 10:11:37.000000'),
+(366, '2026-07-06 10:32:40.000000', '2026-07-13 10:32:40.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZG9saWNnQGdtYWlsLmNvbSIsImlhdCI6MTc4MzM1MTk2MCwiZXhwIjoxNzgzOTU2NzYwfQ.2ABuLZ--F7MWXUHDUSwReE3Rv4rsYT2tKfoVxNX2ibs', NULL, 117, '2026-07-06 10:44:43.000000'),
+(367, '2026-07-06 10:44:01.000000', '2026-07-13 10:44:01.000000', NULL, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2lkZXJ0YXBpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzgzMzUyNjQxLCJleHAiOjE3ODM5NTc0NDF9.AFodnRRuP8XwQ3vDm1tNgZAXeTpq4TPXqrAQo1Hru8o', NULL, 209, '2026-07-06 10:44:01.000000');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `registro_ataques`
+--
+
+CREATE TABLE `registro_ataques` (
+  `id` bigint(20) NOT NULL,
+  `contrasena_intentada` varchar(255) NOT NULL,
+  `email_intentado` varchar(255) NOT NULL,
+  `fecha_hora` datetime(6) NOT NULL,
+  `ip_origen` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `registro_ataques`
+--
+
+INSERT INTO `registro_ataques` (`id`, `contrasena_intentada`, `email_intentado`, `fecha_hora`, `ip_origen`) VALUES
+(1, 'kejejeje', 'jejejeke@gmail.com', '2026-06-29 18:23:57.000000', '179.6.225.93'),
+(2, 'dififkfkfkdk', 'roidertapia2000@gmail.com', '2026-06-29 18:25:36.000000', '179.6.225.93');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `requisitos`
+--
+
+CREATE TABLE `requisitos` (
+  `id` bigint(20) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `estado` varchar(20) DEFAULT 'PENDIENTE',
+  `nombre` varchar(255) DEFAULT NULL,
+  `obligatorio` bit(1) DEFAULT NULL,
+  `url_documento` varchar(255) DEFAULT NULL,
+  `cliente_id` bigint(20) DEFAULT NULL,
+  `credito_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `requisitos`
+--
+
+INSERT INTO `requisitos` (`id`, `descripcion`, `estado`, `nombre`, `obligatorio`, `url_documento`, `cliente_id`, `credito_id`) VALUES
+(2, 'test', 'ENTREGADO', 'test', NULL, '/uploads/docs/shell.php', NULL, NULL),
+(3, NULL, 'PENDIENTE', 'copia de agua', b'1', NULL, 20, 14),
+(4, NULL, 'PENDIENTE', 'copia de luz', b'1', NULL, 20, 14),
+(5, NULL, 'PENDIENTE', 'COPIA DE DNI', b'1', NULL, 20, 17),
+(6, NULL, 'PENDIENTE', 'COPIA DE LUZ', b'1', NULL, 20, 17);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` bigint(20) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `descripcion`, `nombre`) VALUES
+(4, 'Administrador del sistema', 'ROLE_ADMIN'),
+(5, 'Trabajador de la financiera', 'ROLE_TRABAJADOR'),
+(6, 'Cliente de la financiera', 'ROLE_CLIENTE');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `solicitudes_retiro`
+--
+
+CREATE TABLE `solicitudes_retiro` (
+  `id` bigint(20) NOT NULL,
+  `estado` varchar(20) NOT NULL,
+  `fecha_procesamiento` datetime(6) DEFAULT NULL,
+  `fecha_solicitud` datetime(6) NOT NULL,
+  `monto` decimal(38,2) NOT NULL,
+  `numero_operacion` varchar(100) DEFAULT NULL,
+  `procesado_por` varchar(100) DEFAULT NULL,
+  `cuenta_bancaria_id` bigint(20) NOT NULL,
+  `cuenta_virtual_id` bigint(20) NOT NULL,
+  `comprobante_url` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `solicitudes_retiro`
+--
+
+INSERT INTO `solicitudes_retiro` (`id`, `estado`, `fecha_procesamiento`, `fecha_solicitud`, `monto`, `numero_operacion`, `procesado_por`, `cuenta_bancaria_id`, `cuenta_virtual_id`, `comprobante_url`) VALUES
+(4, 'COMPLETADO', '2026-06-06 12:17:42.000000', '2026-06-06 12:16:08.000000', 300.00, '12356845', 'mdolicg@gmail.com', 8, 73, '/uploads/tesoreria/retiros/retiro-4-ca7698b7.png');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipos_credito`
+--
+
+CREATE TABLE `tipos_credito` (
+  `id` bigint(20) NOT NULL,
+  `actualizado_por` varchar(255) DEFAULT NULL,
+  `creado_por` varchar(255) DEFAULT NULL,
+  `fecha_actualizacion` datetime(6) DEFAULT NULL,
+  `fecha_creacion` datetime(6) DEFAULT NULL,
+  `activo` bit(1) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `tem_defecto` decimal(38,2) DEFAULT NULL,
+  `icono` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `tipos_credito`
+--
+
+INSERT INTO `tipos_credito` (`id`, `actualizado_por`, `creado_por`, `fecha_actualizacion`, `fecha_creacion`, `activo`, `descripcion`, `nombre`, `tem_defecto`, `icono`) VALUES
+(4, 'mdolicg@gmail.com', 'SISTEMA', '2026-06-08 17:59:04.000000', '2026-04-16 14:54:11.000000', b'1', 'Préstamo de libre disponibilidad en efectivo.', 'Personal', 12.00, 'user'),
+(5, 'mdolicg@gmail.com', 'SISTEMA', '2026-06-08 18:01:21.000000', '2026-04-16 14:54:11.000000', b'1', 'Préstamo para la adquisición de un vehículo nuevo o usado.', 'Vehicular', 9.00, 'truck'),
+(6, 'mdolicg@gmail.com', 'SISTEMA', '2026-06-08 18:01:30.000000', '2026-04-16 14:54:11.000000', b'1', 'Préstamo para financiar estudios técnicos, universitarios o posgrado.', 'Estudiantil', 12.00, 'graduation-cap'),
+(11, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-08 18:01:58.000000', '2026-05-28 16:36:11.000000', b'1', 'Prestamos para pequeños negociantes', 'Negocio', 5.00, 'shopping-cart'),
+(12, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-08 18:02:06.000000', '2026-05-28 16:39:57.000000', b'1', 'Préstamos para la adquisición de una casa', 'Hipotecario', 5.00, 'home'),
+(13, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-08 18:02:12.000000', '2026-05-28 16:40:46.000000', b'1', 'Préstamos para empresas', 'Empresarial', 4.00, 'building'),
+(14, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-08 18:35:33.000000', '2026-06-02 16:33:31.000000', b'1', 'Tasas antiguas, para registrar préstamos antiguos', 'T.Antigua', 10.00, 'coins'),
+(15, 'mdolicg@gmail.com', 'mdolicg@gmail.com', '2026-06-03 15:24:22.000000', '2026-06-03 15:24:22.000000', b'1', 'Préstamos para clientes con contrato indeterminado', 'Contrato Indeterminado', 8.00, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `trabajadores`
+--
+
+CREATE TABLE `trabajadores` (
+  `id` bigint(20) NOT NULL,
+  `cargo` varchar(255) DEFAULT NULL,
+  `contrato_activo` bit(1) NOT NULL,
+  `fecha_contratacion` date DEFAULT NULL,
+  `salario` double DEFAULT NULL,
+  `tipo_contrato` varchar(255) DEFAULT NULL,
+  `usuario_id` bigint(20) NOT NULL,
+  `dni` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `trabajadores`
+--
+
+INSERT INTO `trabajadores` (`id`, `cargo`, `contrato_activo`, `fecha_contratacion`, `salario`, `tipo_contrato`, `usuario_id`, `dni`) VALUES
+(4, 'Gerente', b'1', '2026-01-01', 1000, 'PLAZO_FIJO', 209, '76619340'),
+(5, 'Analista de créditos ', b'1', '2026-06-25', 1000, 'PLAZO_FIJO', 224, '77775390');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `transacciones_virtuales`
+--
+
+CREATE TABLE `transacciones_virtuales` (
+  `id` bigint(20) NOT NULL,
+  `concepto` varchar(50) NOT NULL,
+  `fecha` datetime(6) NOT NULL,
+  `monto` decimal(38,2) NOT NULL,
+  `referencia` varchar(100) DEFAULT NULL,
+  `saldo_resultante` decimal(38,2) NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `cuenta_virtual_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `transacciones_virtuales`
+--
+
+INSERT INTO `transacciones_virtuales` (`id`, `concepto`, `fecha`, `monto`, `referencia`, `saldo_resultante`, `tipo`, `cuenta_virtual_id`) VALUES
+(15, 'DESEMBOLSO_CREDITO', '2026-06-01 15:49:50.000000', 5000.00, 'Desembolso Crédito #19', 5000.00, 'INGRESO', 28),
+(16, 'DESEMBOLSO_CREDITO', '2026-06-02 16:15:30.000000', 1000.00, 'Desembolso Crédito #20', 1000.00, 'INGRESO', 29),
+(17, 'DESEMBOLSO_CREDITO', '2026-06-02 16:29:36.000000', 1000.00, 'Desembolso Crédito #21', 1000.00, 'INGRESO', 30),
+(18, 'DESEMBOLSO_CREDITO', '2026-06-02 17:53:50.000000', 1400.00, 'Desembolso Crédito #22', 1400.00, 'INGRESO', 31),
+(19, 'DESEMBOLSO_CREDITO', '2026-06-03 15:14:24.000000', 800.00, 'Desembolso Crédito #23', 800.00, 'INGRESO', 32),
+(20, 'DESEMBOLSO_CREDITO', '2026-06-03 15:26:08.000000', 2000.00, 'Desembolso Crédito #24', 3000.00, 'INGRESO', 30),
+(21, 'DESEMBOLSO_CREDITO', '2026-06-04 16:12:40.000000', 2000.00, 'Desembolso Crédito #25', 2000.00, 'INGRESO', 33),
+(22, 'DESEMBOLSO_CREDITO', '2026-06-04 16:49:18.000000', 1000.00, 'Desembolso Crédito #26', 1000.00, 'INGRESO', 35),
+(23, 'DESEMBOLSO_CREDITO', '2026-06-04 17:11:25.000000', 239.00, 'Desembolso Crédito #27', 1239.00, 'INGRESO', 29),
+(24, 'DESEMBOLSO_CREDITO', '2026-06-04 12:42:32.000000', 5184.00, 'Desembolso Crédito #28', 5184.00, 'INGRESO', 37),
+(27, 'DESEMBOLSO_CREDITO', '2026-06-05 12:33:54.000000', 800.00, 'Desembolso Crédito #30', 800.00, 'INGRESO', 39),
+(28, 'DESEMBOLSO_CREDITO', '2026-06-05 12:36:09.000000', 1000.00, 'Desembolso Crédito #31', 1000.00, 'INGRESO', 40),
+(29, 'DESEMBOLSO_CREDITO', '2026-06-05 12:50:56.000000', 500.00, 'Desembolso Crédito #32', 500.00, 'INGRESO', 41),
+(30, 'DESEMBOLSO_CREDITO', '2026-06-05 12:57:39.000000', 500.00, 'Desembolso Crédito #33', 500.00, 'INGRESO', 42),
+(31, 'DESEMBOLSO_CREDITO', '2026-06-05 13:02:42.000000', 1000.00, 'Desembolso Crédito #34', 1800.00, 'INGRESO', 39),
+(32, 'DESEMBOLSO_CREDITO', '2026-06-05 16:21:03.000000', 1000.00, 'Desembolso Crédito #35', 6000.00, 'INGRESO', 28),
+(33, 'DESEMBOLSO_CREDITO', '2026-06-05 16:32:29.000000', 1000.00, 'Desembolso Crédito #36', 1000.00, 'INGRESO', 43),
+(34, 'DESEMBOLSO_CREDITO', '2026-06-05 16:40:23.000000', 600.00, 'Desembolso Crédito #37', 600.00, 'INGRESO', 44),
+(35, 'DESEMBOLSO_CREDITO', '2026-06-05 16:43:54.000000', 300.00, 'Desembolso Crédito #38', 300.00, 'INGRESO', 45),
+(36, 'DESEMBOLSO_CREDITO', '2026-06-05 16:47:34.000000', 400.00, 'Desembolso Crédito #39', 400.00, 'INGRESO', 46),
+(37, 'DESEMBOLSO_CREDITO', '2026-06-05 16:48:33.000000', 1500.00, 'Desembolso Crédito #40', 3300.00, 'INGRESO', 39),
+(38, 'DESEMBOLSO_CREDITO', '2026-06-05 16:50:03.000000', 800.00, 'Desembolso Crédito #41', 1300.00, 'INGRESO', 41),
+(39, 'DESEMBOLSO_CREDITO', '2026-06-05 16:52:13.000000', 600.00, 'Desembolso Crédito #42', 600.00, 'INGRESO', 47),
+(40, 'DESEMBOLSO_CREDITO', '2026-06-05 16:56:15.000000', 200.00, 'Desembolso Crédito #43', 200.00, 'INGRESO', 48),
+(41, 'DESEMBOLSO_CREDITO', '2026-06-05 17:06:28.000000', 600.00, 'Desembolso Crédito #44', 1000.00, 'INGRESO', 46),
+(42, 'DESEMBOLSO_CREDITO', '2026-06-05 17:07:19.000000', 1000.00, 'Desembolso Crédito #45', 3000.00, 'INGRESO', 33),
+(43, 'DESEMBOLSO_CREDITO', '2026-06-05 17:14:09.000000', 1000.00, 'Desembolso Crédito #46', 1000.00, 'INGRESO', 49),
+(44, 'DESEMBOLSO_CREDITO', '2026-06-05 17:17:06.000000', 500.00, 'Desembolso Crédito #47', 1500.00, 'INGRESO', 43),
+(45, 'DESEMBOLSO_CREDITO', '2026-06-05 17:20:10.000000', 300.00, 'Desembolso Crédito #48', 800.00, 'INGRESO', 42),
+(46, 'DESEMBOLSO_CREDITO', '2026-06-05 17:23:36.000000', 300.00, 'Desembolso Crédito #49', 300.00, 'INGRESO', 50),
+(47, 'DESEMBOLSO_CREDITO', '2026-06-05 17:26:35.000000', 1000.00, 'Desembolso Crédito #50', 1000.00, 'INGRESO', 51),
+(48, 'DESEMBOLSO_CREDITO', '2026-06-05 17:31:51.000000', 300.00, 'Desembolso Crédito #51', 300.00, 'INGRESO', 52),
+(49, 'DESEMBOLSO_CREDITO', '2026-06-05 17:35:06.000000', 300.00, 'Desembolso Crédito #52', 300.00, 'INGRESO', 53),
+(50, 'DESEMBOLSO_CREDITO', '2026-06-05 17:37:23.000000', 300.00, 'Desembolso Crédito #53', 300.00, 'INGRESO', 54),
+(51, 'DESEMBOLSO_CREDITO', '2026-06-05 17:42:53.000000', 300.00, 'Desembolso Crédito #54', 300.00, 'INGRESO', 55),
+(52, 'DESEMBOLSO_CREDITO', '2026-06-05 17:55:51.000000', 1300.00, 'Desembolso Crédito #55', 1300.00, 'INGRESO', 56),
+(53, 'DESEMBOLSO_CREDITO', '2026-06-05 18:06:56.000000', 800.00, 'Desembolso Crédito #56', 1100.00, 'INGRESO', 53),
+(54, 'DESEMBOLSO_CREDITO', '2026-06-05 18:10:29.000000', 500.00, 'Desembolso Crédito #57', 500.00, 'INGRESO', 57),
+(55, 'DESEMBOLSO_CREDITO', '2026-06-05 18:22:43.000000', 300.00, 'Desembolso Crédito #58', 300.00, 'INGRESO', 58),
+(56, 'DESEMBOLSO_CREDITO', '2026-06-05 18:49:24.000000', 1500.00, 'Desembolso Crédito #59', 1500.00, 'INGRESO', 59),
+(57, 'DESEMBOLSO_CREDITO', '2026-06-06 10:00:17.000000', 1500.00, 'Desembolso Crédito #60', 1500.00, 'INGRESO', 60),
+(58, 'DESEMBOLSO_CREDITO', '2026-06-06 10:04:01.000000', 600.00, 'Desembolso Crédito #61', 900.00, 'INGRESO', 50),
+(59, 'DESEMBOLSO_CREDITO', '2026-06-06 10:06:41.000000', 500.00, 'Desembolso Crédito #62', 800.00, 'INGRESO', 45),
+(60, 'DESEMBOLSO_CREDITO', '2026-06-06 10:09:52.000000', 300.00, 'Desembolso Crédito #63', 900.00, 'INGRESO', 47),
+(61, 'DESEMBOLSO_CREDITO', '2026-06-06 10:12:48.000000', 300.00, 'Desembolso Crédito #64', 300.00, 'INGRESO', 61),
+(62, 'DESEMBOLSO_CREDITO', '2026-06-06 10:26:51.000000', 600.00, 'Desembolso Crédito #65', 600.00, 'INGRESO', 62),
+(63, 'DESEMBOLSO_CREDITO', '2026-06-06 10:34:14.000000', 5000.00, 'Desembolso Crédito #66', 5000.00, 'INGRESO', 63),
+(64, 'DESEMBOLSO_CREDITO', '2026-06-06 10:40:53.000000', 1000.00, 'Desembolso Crédito #67', 2000.00, 'INGRESO', 51),
+(65, 'DESEMBOLSO_CREDITO', '2026-06-06 10:45:35.000000', 6000.00, 'Desembolso Crédito #68', 6000.00, 'INGRESO', 64),
+(66, 'DESEMBOLSO_CREDITO', '2026-06-06 10:45:37.000000', 1000.00, 'Desembolso Crédito #69', 1000.00, 'INGRESO', 65),
+(67, 'DESEMBOLSO_CREDITO', '2026-06-06 10:48:02.000000', 300.00, 'Desembolso Crédito #70', 300.00, 'INGRESO', 66),
+(68, 'DESEMBOLSO_CREDITO', '2026-06-06 10:49:24.000000', 300.00, 'Desembolso Crédito #71', 1100.00, 'INGRESO', 32),
+(69, 'DESEMBOLSO_CREDITO', '2026-06-06 10:50:42.000000', 300.00, 'Desembolso Crédito #72', 300.00, 'INGRESO', 67),
+(70, 'DESEMBOLSO_CREDITO', '2026-06-06 10:51:55.000000', 300.00, 'Desembolso Crédito #73', 300.00, 'INGRESO', 68),
+(71, 'DESEMBOLSO_CREDITO', '2026-06-06 10:54:03.000000', 500.00, 'Desembolso Crédito #74', 1300.00, 'INGRESO', 45),
+(72, 'DESEMBOLSO_CREDITO', '2026-06-06 10:55:45.000000', 500.00, 'Desembolso Crédito #75', 5684.00, 'INGRESO', 37),
+(73, 'DESEMBOLSO_CREDITO', '2026-06-06 10:57:14.000000', 500.00, 'Desembolso Crédito #76', 500.00, 'INGRESO', 69),
+(74, 'DESEMBOLSO_CREDITO', '2026-06-06 11:03:34.000000', 800.00, 'Desembolso Crédito #77', 800.00, 'INGRESO', 70),
+(75, 'DESEMBOLSO_CREDITO', '2026-06-06 11:06:20.000000', 1000.00, 'Desembolso Crédito #78', 1000.00, 'INGRESO', 71),
+(76, 'DESEMBOLSO_CREDITO', '2026-06-06 11:08:48.000000', 500.00, 'Desembolso Crédito #79', 500.00, 'INGRESO', 72),
+(77, 'DESEMBOLSO_CREDITO', '2026-06-06 11:11:12.000000', 500.00, 'Desembolso Crédito #80', 800.00, 'INGRESO', 66),
+(78, 'DESEMBOLSO_CREDITO', '2026-06-06 11:14:22.000000', 1000.00, 'Desembolso Crédito #81', 2000.00, 'INGRESO', 65),
+(79, 'DESEMBOLSO_CREDITO', '2026-06-06 11:16:01.000000', 500.00, 'Desembolso Crédito #82', 500.00, 'INGRESO', 73),
+(80, 'DESEMBOLSO_CREDITO', '2026-06-06 11:16:38.000000', 300.00, 'Desembolso Crédito #83', 300.00, 'INGRESO', 74),
+(81, 'DESEMBOLSO_CREDITO', '2026-06-06 11:18:33.000000', 150.00, 'Desembolso Crédito #84', 450.00, 'INGRESO', 74),
+(82, 'DESEMBOLSO_CREDITO', '2026-06-06 11:19:58.000000', 300.00, 'Desembolso Crédito #85', 300.00, 'INGRESO', 75),
+(83, 'DESEMBOLSO_CREDITO', '2026-06-06 11:22:21.000000', 300.00, 'Desembolso Crédito #86', 300.00, 'INGRESO', 76),
+(84, 'DESEMBOLSO_CREDITO', '2026-06-06 11:24:33.000000', 300.00, 'Desembolso Crédito #87', 300.00, 'INGRESO', 77),
+(85, 'DESEMBOLSO_CREDITO', '2026-06-06 11:26:08.000000', 300.00, 'Desembolso Crédito #88', 6300.00, 'INGRESO', 28),
+(86, 'DESEMBOLSO_CREDITO', '2026-06-06 11:26:48.000000', 800.00, 'Desembolso Crédito #89', 1600.00, 'INGRESO', 66),
+(87, 'DESEMBOLSO_CREDITO', '2026-06-06 11:29:41.000000', 300.00, 'Desembolso Crédito #90', 300.00, 'INGRESO', 78),
+(88, 'DESEMBOLSO_CREDITO', '2026-06-06 11:39:37.000000', 300.00, 'Desembolso Crédito #91', 800.00, 'INGRESO', 73),
+(89, 'DESEMBOLSO_CREDITO', '2026-06-06 11:44:29.000000', 300.00, 'Desembolso Crédito #92', 300.00, 'INGRESO', 79),
+(90, 'DESEMBOLSO_CREDITO', '2026-06-06 11:48:41.000000', 300.00, 'Desembolso Crédito #93', 300.00, 'INGRESO', 80),
+(91, 'DESEMBOLSO_CREDITO', '2026-06-06 11:50:10.000000', 300.00, 'Desembolso Crédito #94', 5300.00, 'INGRESO', 63),
+(92, 'DESEMBOLSO_CREDITO', '2026-06-06 11:52:24.000000', 500.00, 'Desembolso Crédito #95', 500.00, 'INGRESO', 81),
+(93, 'DESEMBOLSO_CREDITO', '2026-06-06 11:54:43.000000', 500.00, 'Desembolso Crédito #96', 500.00, 'INGRESO', 82),
+(94, 'DESEMBOLSO_CREDITO', '2026-06-06 11:55:42.000000', 300.00, 'Desembolso Crédito #97', 300.00, 'INGRESO', 83),
+(95, 'DESEMBOLSO_CREDITO', '2026-06-06 11:56:39.000000', 800.00, 'Desembolso Crédito #98', 6484.00, 'INGRESO', 37),
+(96, 'DESEMBOLSO_CREDITO', '2026-06-06 12:00:42.000000', 300.00, 'Desembolso Crédito #99', 300.00, 'INGRESO', 84),
+(97, 'DESEMBOLSO_CREDITO', '2026-06-06 12:05:08.000000', 300.00, 'Desembolso Crédito #100', 300.00, 'INGRESO', 85),
+(98, 'DESEMBOLSO_CREDITO', '2026-06-06 12:07:49.000000', 500.00, 'Desembolso Crédito #101', 3800.00, 'INGRESO', 39),
+(99, 'RETIRO_BANCARIO', '2026-06-06 12:17:42.000000', 300.00, 'Retiro #4 - Ref: 12356845', 500.00, 'EGRESO', 73),
+(100, 'DESEMBOLSO_CREDITO', '2026-06-06 12:36:14.000000', 1000.00, 'Desembolso Crédito #102', 1600.00, 'INGRESO', 44),
+(101, 'DESEMBOLSO_CREDITO', '2026-06-06 12:47:37.000000', 1000.00, 'Desembolso Crédito #103', 1000.00, 'INGRESO', 86),
+(102, 'DESEMBOLSO_CREDITO', '2026-06-06 15:17:09.000000', 500.00, 'Desembolso Crédito #104', 500.00, 'INGRESO', 87),
+(103, 'DESEMBOLSO_CREDITO', '2026-06-06 16:43:03.000000', 500.00, 'Desembolso Crédito #105', 800.00, 'INGRESO', 54),
+(104, 'DESEMBOLSO_CREDITO', '2026-06-06 17:04:25.000000', 1000.00, 'Desembolso Crédito #106', 1600.00, 'INGRESO', 62),
+(105, 'DESEMBOLSO_CREDITO', '2026-06-06 17:43:22.000000', 1500.00, 'Desembolso Crédito #107', 7800.00, 'INGRESO', 28),
+(106, 'DESEMBOLSO_CREDITO', '2026-06-06 17:58:47.000000', 500.00, 'Desembolso Crédito #108', 950.00, 'INGRESO', 74),
+(107, 'DESEMBOLSO_CREDITO', '2026-06-06 18:14:30.000000', 800.00, 'Desembolso Crédito #109', 2300.00, 'INGRESO', 43),
+(108, 'DESEMBOLSO_CREDITO', '2026-06-06 18:28:33.000000', 1300.00, 'Desembolso Crédito #110', 3300.00, 'INGRESO', 65),
+(109, 'DESEMBOLSO_CREDITO', '2026-06-06 18:42:59.000000', 1000.00, 'Desembolso Crédito #111', 1000.00, 'INGRESO', 88),
+(110, 'DESEMBOLSO_CREDITO', '2026-06-08 10:18:29.000000', 1000.00, 'Desembolso Crédito #112', 1000.00, 'INGRESO', 89),
+(111, 'DESEMBOLSO_CREDITO', '2026-06-08 10:40:43.000000', 300.00, 'Desembolso Crédito #113', 300.00, 'INGRESO', 90),
+(112, 'DESEMBOLSO_CREDITO', '2026-06-08 10:44:33.000000', 800.00, 'Desembolso Crédito #114', 800.00, 'INGRESO', 91),
+(113, 'DESEMBOLSO_CREDITO', '2026-06-08 11:48:41.000000', 300.00, 'Desembolso Crédito #115', 300.00, 'INGRESO', 97),
+(114, 'DESEMBOLSO_CREDITO', '2026-06-08 11:50:35.000000', 500.00, 'Desembolso Crédito #116', 800.00, 'INGRESO', 68),
+(115, 'DESEMBOLSO_CREDITO', '2026-06-08 11:53:39.000000', 300.00, 'Desembolso Crédito #117', 1600.00, 'INGRESO', 41),
+(116, 'DESEMBOLSO_CREDITO', '2026-06-08 11:58:03.000000', 300.00, 'Desembolso Crédito #118', 4100.00, 'INGRESO', 39),
+(117, 'DESEMBOLSO_CREDITO', '2026-06-08 11:58:58.000000', 500.00, 'Desembolso Crédito #119', 3800.00, 'INGRESO', 65),
+(118, 'DESEMBOLSO_CREDITO', '2026-06-08 12:43:39.000000', 1000.00, 'Desembolso Crédito #120', 1900.00, 'INGRESO', 50),
+(119, 'DESEMBOLSO_CREDITO', '2026-06-08 12:55:06.000000', 2000.00, 'Desembolso Crédito #121', 3500.00, 'INGRESO', 60),
+(120, 'DESEMBOLSO_CREDITO', '2026-06-08 17:25:45.000000', 900.00, 'Desembolso Crédito #123', 1700.00, 'INGRESO', 54),
+(121, 'DESEMBOLSO_CREDITO', '2026-06-08 17:27:32.000000', 500.00, 'Desembolso Crédito #124', 2100.00, 'INGRESO', 62),
+(122, 'DESEMBOLSO_CREDITO', '2026-06-08 17:30:51.000000', 2000.00, 'Desembolso Crédito #125', 4000.00, 'INGRESO', 51),
+(123, 'DESEMBOLSO_CREDITO', '2026-06-08 17:33:35.000000', 1500.00, 'Desembolso Crédito #126', 5600.00, 'INGRESO', 39),
+(124, 'DESEMBOLSO_CREDITO', '2026-06-08 17:42:44.000000', 500.00, 'Desembolso Crédito #127', 500.00, 'INGRESO', 98),
+(125, 'DESEMBOLSO_CREDITO', '2026-06-08 17:45:59.000000', 1000.00, 'Desembolso Crédito #128', 1000.00, 'INGRESO', 99),
+(126, 'DESEMBOLSO_CREDITO', '2026-06-08 17:51:58.000000', 1500.00, 'Desembolso Crédito #129', 2500.00, 'INGRESO', 86),
+(127, 'DESEMBOLSO_CREDITO', '2026-06-08 17:55:29.000000', 800.00, 'Desembolso Crédito #130', 1300.00, 'INGRESO', 87),
+(128, 'DESEMBOLSO_CREDITO', '2026-06-10 09:45:57.000000', 800.00, 'Desembolso Crédito #131', 1750.00, 'INGRESO', 74),
+(129, 'DESEMBOLSO_CREDITO', '2026-06-10 10:34:41.000000', 300.00, 'Desembolso Crédito #132', 300.00, 'INGRESO', 101),
+(130, 'DESEMBOLSO_CREDITO', '2026-06-10 10:48:12.000000', 500.00, 'Desembolso Crédito #133', 500.00, 'INGRESO', 102),
+(131, 'DESEMBOLSO_CREDITO', '2026-06-10 10:59:23.000000', 3000.00, 'Desembolso Crédito #134', 3000.00, 'INGRESO', 103),
+(132, 'DESEMBOLSO_CREDITO', '2026-06-10 11:06:13.000000', 300.00, 'Desembolso Crédito #135', 300.00, 'INGRESO', 104),
+(133, 'DESEMBOLSO_CREDITO', '2026-06-10 11:12:32.000000', 800.00, 'Desembolso Crédito #136', 800.00, 'INGRESO', 105),
+(134, 'DESEMBOLSO_CREDITO', '2026-06-10 12:02:02.000000', 1000.00, 'Desembolso Crédito #137', 1000.00, 'INGRESO', 106),
+(135, 'DESEMBOLSO_CREDITO', '2026-06-10 12:17:15.000000', 1000.00, 'Desembolso Crédito #138', 1000.00, 'INGRESO', 107),
+(136, 'DESEMBOLSO_CREDITO', '2026-06-11 08:26:42.000000', 800.00, 'Desembolso Crédito #139', 1100.00, 'INGRESO', 79),
+(137, 'DESEMBOLSO_CREDITO', '2026-06-11 08:36:47.000000', 1000.00, 'Desembolso Crédito #140', 1000.00, 'INGRESO', 108),
+(138, 'DESEMBOLSO_CREDITO', '2026-06-11 09:35:01.000000', 300.00, 'Desembolso Crédito #141', 300.00, 'INGRESO', 109),
+(139, 'DESEMBOLSO_CREDITO', '2026-06-11 09:45:54.000000', 300.00, 'Desembolso Crédito #142', 300.00, 'INGRESO', 110),
+(140, 'DESEMBOLSO_CREDITO', '2026-06-11 10:17:29.000000', 1500.00, 'Desembolso Crédito #143', 1800.00, 'INGRESO', 84),
+(141, 'DESEMBOLSO_CREDITO', '2026-06-11 10:25:11.000000', 4000.00, 'Desembolso Crédito #144', 10000.00, 'INGRESO', 64),
+(142, 'DESEMBOLSO_CREDITO', '2026-06-11 11:49:57.000000', 200.00, 'Desembolso Crédito #145', 200.00, 'INGRESO', 111),
+(143, 'DESEMBOLSO_CREDITO', '2026-06-11 12:01:07.000000', 2000.00, 'Desembolso Crédito #146', 2500.00, 'INGRESO', 81),
+(144, 'DESEMBOLSO_CREDITO', '2026-06-11 17:39:09.000000', 800.00, 'Desembolso Crédito #147', 2039.00, 'INGRESO', 29),
+(145, 'DESEMBOLSO_CREDITO', '2026-06-12 10:35:46.000000', 5184.00, 'Desembolso Crédito #149', 11668.00, 'INGRESO', 37),
+(146, 'DESEMBOLSO_CREDITO', '2026-06-12 11:50:16.000000', 1300.00, 'Desembolso Crédito #122', 2900.00, 'INGRESO', 41),
+(147, 'DESEMBOLSO_CREDITO', '2026-06-13 09:58:13.000000', 1300.00, 'Desembolso Crédito #150', 3400.00, 'INGRESO', 62),
+(148, 'DESEMBOLSO_CREDITO', '2026-06-13 12:11:10.000000', 1300.00, 'Desembolso Crédito #151', 1300.00, 'INGRESO', 112),
+(149, 'DESEMBOLSO_CREDITO', '2026-06-16 09:36:09.000000', 500.00, 'Desembolso Crédito #152', 1500.00, 'INGRESO', 46),
+(150, 'DESEMBOLSO_CREDITO', '2026-06-16 15:41:50.000000', 100.00, 'Desembolso Crédito #153', 100.00, 'INGRESO', 113),
+(151, 'DESEMBOLSO_CREDITO', '2026-06-18 17:28:10.000000', 500.00, 'Desembolso Crédito #154', 500.00, 'INGRESO', 114),
+(152, 'DESEMBOLSO_CREDITO', '2026-06-19 11:14:01.000000', 1000.00, 'Desembolso Crédito #148', 12668.00, 'INGRESO', 37),
+(153, 'DESEMBOLSO_CREDITO', '2026-06-26 14:41:55.000000', 1000.00, 'Desembolso Crédito #155', 1500.00, 'INGRESO', 73),
+(154, 'DESEMBOLSO_CREDITO', '2026-06-29 11:11:35.000000', 2000.00, 'Desembolso Crédito #159', 2500.00, 'INGRESO', 57),
+(155, 'DESEMBOLSO_CREDITO', '2026-06-29 11:36:54.000000', 800.00, 'Desembolso Crédito #160', 3300.00, 'INGRESO', 57),
+(156, 'DESEMBOLSO_CREDITO', '2026-06-29 11:42:08.000000', 1000.00, 'Desembolso Crédito #161', 2500.00, 'INGRESO', 73),
+(157, 'DESEMBOLSO_CREDITO', '2026-06-30 09:19:18.000000', 800.00, 'Desembolso Crédito #163', 4100.00, 'INGRESO', 57),
+(158, 'DESEMBOLSO_CREDITO', '2026-06-30 18:16:02.000000', 1000.00, 'Desembolso Crédito #164', 2600.00, 'INGRESO', 66),
+(159, 'DESEMBOLSO_CREDITO', '2026-07-01 12:31:36.000000', 800.00, 'Desembolso Crédito #165', 800.00, 'INGRESO', 116),
+(160, 'DESEMBOLSO_CREDITO', '2026-07-02 10:19:16.000000', 2000.00, 'Desembolso Crédito #166', 9800.00, 'INGRESO', 28),
+(161, 'DESEMBOLSO_CREDITO', '2026-07-02 12:52:14.000000', 800.00, 'Desembolso Crédito #167', 800.00, 'INGRESO', 117),
+(162, 'DESEMBOLSO_CREDITO', '2026-07-03 09:03:12.000000', 800.00, 'Desembolso Crédito #168', 800.00, 'INGRESO', 118),
+(163, 'DESEMBOLSO_CREDITO', '2026-07-04 13:02:11.000000', 800.00, 'Desembolso Crédito #169', 800.00, 'INGRESO', 119),
+(164, 'DESEMBOLSO_CREDITO', '2026-07-06 08:50:11.000000', 300.00, 'Desembolso Crédito #170', 600.00, 'INGRESO', 78);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` bigint(20) NOT NULL,
+  `codigo_expira_en` datetime(6) DEFAULT NULL,
+  `codigo_verificacion` varchar(255) DEFAULT NULL,
+  `contrasena` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `habilitado` bit(1) NOT NULL,
+  `nombre_completo` varchar(255) DEFAULT NULL,
+  `rol_id` bigint(20) NOT NULL,
+  `cuenta_bloqueada_hasta` datetime(6) DEFAULT NULL,
+  `intentos_fallidos` int(11) NOT NULL,
+  `codigo2fa` varchar(255) DEFAULT NULL,
+  `codigo2fa_expira_en` datetime(6) DEFAULT NULL,
+  `ultima_ip` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `codigo_expira_en`, `codigo_verificacion`, `contrasena`, `email`, `habilitado`, `nombre_completo`, `rol_id`, `cuenta_bloqueada_hasta`, `intentos_fallidos`, `codigo2fa`, `codigo2fa_expira_en`, `ultima_ip`) VALUES
+(95, NULL, NULL, '$2a$10$dIH7LaGZCu.xm1TCOFkUBu01y8TrISyKUq6vf113wLBu/bIRYCYGS', 'angelicaurquiayshuiza@gmail.com', b'1', 'Angélica Rocio Urquia Yshuiza', 5, NULL, 0, NULL, NULL, '179.6.225.93'),
+(114, NULL, NULL, '$2a$10$WQxvkQ7ysHV4KPyfLPAigezOVhUQu8sfaz.kyxqOl0x93BBQR7xhC', '75776104@infinitycapital.com', b'1', 'Miguel Angel  Dolic Grandez', 6, NULL, 0, NULL, NULL, NULL),
+(115, NULL, NULL, '$2a$10$vdt.1n.lNvOUlXTjR9HhN.nL1ROk2T2TdoIlr3fj7b/36iIjQZ1z2', '76123123@infinitycapital.com', b'1', 'juan dolic Grandez', 6, NULL, 0, NULL, NULL, NULL),
+(116, NULL, NULL, '$2a$10$CtqUifLAuHWp3tBCpVrXIejdPO021KVPTGJ1gIIeGDXxLkVDSpJBC', '43243243@infinitycapital.com', b'1', 'gilmer  dolic  grandez', 6, NULL, 0, NULL, NULL, NULL),
+(117, NULL, NULL, '$2a$10$WRS77mae42PpFrHLStOihuDc3M5hg93IhKEsodVmvPJwzJZcffuwq', 'mdolicg@gmail.com', b'1', 'Miguel A. Dolic Grandez', 4, NULL, 0, NULL, NULL, '179.6.225.93'),
+(118, NULL, NULL, '$2a$10$G97c74ixmq8u2W3HBOn7g.sG0YrJ5nOULJDYlOJX2jPnSJ4Y3lElq', 'nixon25herrera@gmail.com', b'1', 'Nixon Herrera Fernández', 4, NULL, 0, NULL, NULL, '38.250.151.133'),
+(120, NULL, NULL, '$2a$10$yB6XabbopC74vk2D2nenTugTQmQLhycWPM.riCm/SNb38ctaWatau', '78432423@infinitycapital.com', b'1', 'maira cardenaz vasquez', 6, NULL, 0, NULL, NULL, NULL),
+(121, '2026-05-28 21:03:08.000000', NULL, '$2a$10$by40p5g7a7KXdFhTxYB8buf6sBGEzclO2dle2diFFjUq0RvSZ6sUK', 'careta1582@ifcoat.com', b'1', 'JUAN PABLO II PEREZ  SILVA', 6, NULL, 0, '115552', '2026-05-28 21:37:55.000000', NULL),
+(122, '2026-05-28 21:48:47.000000', NULL, '$2a$10$GqWe4autmrQ3QZwUyWKrpeSHvKUT8Nn.XnayAU1F/QQ4U8.SYC5g6', 'roziguz73@xelvo.me', b'1', 'JUAN PABLO TERCERO PEREZ SILVA', 6, NULL, 0, NULL, NULL, NULL),
+(130, NULL, NULL, '$2a$10$d9cQhTWAYo8biVPnge.QYOWTBPdI1M.sdAKM..fQBk/Hw1WzbHwza', '72651348@infinitycapital.com', b'1', 'gustavo beltran sunday', 6, NULL, 0, NULL, NULL, NULL),
+(132, NULL, NULL, '$2a$10$BB.KpKzzWpHlv6x634MpN.kJx4gp2pS35hzSulaBPKdFpPEREgsaK', '89456321@infinitycapital.com', b'1', 'NIXON HERRERA FERNANDEZ', 6, NULL, 0, NULL, NULL, NULL),
+(133, NULL, NULL, '$2a$10$n66V9reMFSZQYonjzHVw2eIkrL4uX0c82YF11mIYaETqW3mz06c.q', '72343232@infinitycapital.com', b'1', 'neiler lix neyra  ocupa', 6, NULL, 0, NULL, NULL, NULL),
+(134, NULL, NULL, '$2a$10$2Y9qBKoZ96IjUlneWO8s3O28hHZOQyqNPfEiiddusRruZof8QrP1u', 'rayaguirreaguilar@gmail.com', b'1', 'RAY LIONEL AGUIRRE AGUILAR', 6, NULL, 0, NULL, NULL, NULL),
+(135, NULL, NULL, '$2a$10$vosnUpnMWhniAUqa.3Ay8.SvIYMUO0Cyd3SPJ9nSOSYJ0WzDtlNZu', 'liyanci01@gmail.com', b'1', 'LIYANCI  LINARES  SANCHES', 6, NULL, 0, NULL, NULL, NULL),
+(136, NULL, NULL, '$2a$10$cktWZBEh5na8PsQfyiLMD.KEJKYcmos8tktfXqyjm9u1dsVpAffva', 'camusmitzugami@gmail.com', b'1', 'MITZUGAMI CAMUS OCMIN', 6, NULL, 0, NULL, NULL, NULL),
+(137, NULL, NULL, '$2a$10$nmYuop1JFJY7ifSgM4hu1ul/peYF2Mi0W0XXuTTrvleYrSHWkJQ4q', 'aguilargallego@gmail.com', b'1', 'REINERIO AGUILAR  GALLEGO', 6, NULL, 0, NULL, NULL, NULL),
+(138, NULL, NULL, '$2a$10$IuZHEwKYJcGcUPmsNtz.S.iZ74dPyYkS48C74AhYYHNipKctTVRXa', 'aqui@gmail.com', b'0', 'Luis  Eduardo Aquijes Canales', 5, NULL, 0, NULL, NULL, '179.6.225.93'),
+(139, NULL, NULL, '$2a$10$6V2vWLUta9Dfnn7l5pRwr.l.DY/VBmsQV0.KoXAXs04NvnXI38F7a', 'vallesrealmadrid@gmail.com', b'1', 'HUMBERTO VALLES MENDOZA', 6, NULL, 0, NULL, NULL, NULL),
+(140, NULL, NULL, '$2a$10$DlVTcHB1M8Kw7S4Dvzbpq.5Sb57NSSaBmuCIXYqfmZnbc7cQ02EIW', 'huamanlizana@gmail.com', b'1', 'JIMY LUIS HUAMAN LIZANA', 6, NULL, 0, NULL, NULL, NULL),
+(142, NULL, NULL, '$2a$10$rVGWVgHpHL.SFoChMP465eMUsffsaui6YYKKX8tcnbs9jzcsQsLFa', 'abelarcegarcia53@gmail.com', b'1', 'ABEL ARCE GARCIA', 6, NULL, 0, NULL, NULL, NULL),
+(144, NULL, NULL, '$2a$10$9p52GWkBKttCXVoYCr1XGuQA5nGw3SR6voPOeHei2k/4Lx3FfKSv6', 'jefersongongorazuta@gmail.com', b'1', 'JEFERSON GONGORA ZUTA', 6, NULL, 0, NULL, NULL, NULL),
+(146, NULL, NULL, '$2a$10$tABYDtxYtUfTNBXXOx1ITOe9mUNmSklhVtclfyGrfhIfAduCgsNRe', 'nicole25_93@hotmail.com', b'1', 'GRECIA NICOLE VENTURA RODRIGUEZ', 6, NULL, 0, NULL, NULL, NULL),
+(147, NULL, NULL, '$2a$10$JIa31eRuPtuHOLJxHvP2cuoUym8Fgl3Elz/RZejjVHs.vteLjDgXO', 'gomezguevarayessicanoemi@gmail.com', b'1', 'YESSICA  NOEMI GÓMEZ GUEVARA', 6, NULL, 0, NULL, NULL, NULL),
+(148, NULL, NULL, '$2a$10$B1Xsu.RqymGXucDXAmVuwuBX8uL4kmYZe8B0R/UCxfuK46kzqa5hy', 'persinchr.3@gmail.com', b'1', 'PERSIN CHUMBE RUIZ', 6, NULL, 0, NULL, NULL, NULL),
+(149, NULL, NULL, '$2a$10$D6qcadOjDoD/Oaa.bnM.EO61g26nUADXnMetuPjlyy53GXxFrixlC', 'ander.jhoelud@gmail.com', b'1', 'ANDER JHOEL  URRUTIA DELGADO', 6, NULL, 0, NULL, NULL, NULL),
+(150, NULL, NULL, '$2a$10$3r713uF/2GGpzGXgiDyq3.oe1G0CpMh.5kZiC5zJzLPApAL4wJNC.', 'sandyjanninau@gmail.com', b'1', 'SANDY JANNIANA  URIARTE  REQUEJO ', 6, NULL, 0, NULL, NULL, NULL),
+(151, NULL, NULL, '$2a$10$R5JdrZi9VUByPqp4YmNjkOUhr2zH.AVJv5GPWNrNDDLWe.1FmY1Gu', 'emildave07@gmail.com', b'1', 'EMILIO DAZA VELA', 6, NULL, 0, NULL, NULL, NULL),
+(152, NULL, NULL, '$2a$10$cRRAI9DjHrqClgfFNx53F.K7eBJWCrKjAYyFdxYaFsRayEjMWVlba', 'Asalassatalaya@gmail.com', b'1', 'IRMA ANITA SATALAYA SALA', 6, NULL, 0, NULL, NULL, NULL),
+(153, NULL, NULL, '$2a$10$XnUn3kAKsL2A2JPpVlm71unGEfU96Dq1bYR.GrDpkU33kBLgrJnDG', 'lopezapuel19@gmail.com', b'1', 'PAULO CESAR LOPEZ APUELA', 6, NULL, 0, NULL, NULL, NULL),
+(154, NULL, NULL, '$2a$10$/2QnbYanZSdmcNH97NoAmeT6Ym8BOEb6IzaQQsaEOEgPfQPsy92XO', 'polrv1@hotmail.com', b'1', 'PAUL CRISTHIAN ROJAS VENTURA', 6, NULL, 0, NULL, NULL, NULL),
+(155, NULL, NULL, '$2a$10$BCmUxrLcM4QzFAaZFYHHvOM7wsoAi07n4f9ayhX/HdFhwN.afCun6', '73590999@infinitycapital.com', b'1', 'CRISTIAN JHOEL REQUEJO LINARES', 6, NULL, 0, NULL, NULL, NULL),
+(156, NULL, NULL, '$2a$10$DpCiPHMM8Lcyn0IhVHB4TOKE5K2tkckDHRuFDWXKctA0FW6Rckqdm', 'chinitofoxarte5@gmail.com', b'1', 'DENIS AHUANARI ZUMBA', 6, NULL, 0, NULL, NULL, NULL),
+(157, NULL, NULL, '$2a$10$cB86UL5dk/Npzrwyn2ROQ.mxX0FM95pmsyEyJ6lv12rGEb/qTttmW', 'ele.fer@gmail.com', b'1', 'EMITA LUZ CUYAN URIARTE', 6, NULL, 0, NULL, NULL, NULL),
+(158, NULL, NULL, '$2a$10$nkO764ZWa41l8SECBIxGNeQxGk7FV163hIMcY/7cnZymEfv9G/OxW', 'nancymarinavilacorta@gmail.com', b'1', 'NANCY MARINA VILLACORTA', 6, NULL, 0, NULL, NULL, NULL),
+(159, NULL, NULL, '$2a$10$zfSDsPCMWUYqPUNrHaFMC.u.E2tGYv6TQj3GzNBypdpGpd3M7PAVW', 'tcelizaspajo@gmail.com', b'1', 'TRACY ESPERANZA CELIZ ASPAJO', 6, NULL, 0, NULL, NULL, NULL),
+(160, NULL, NULL, '$2a$10$7.yncuDSVJ6yrbW9MpAbpOMixY/JVY.NvGpaSQatdYph1zoz/gVYq', 'ceciacuario577@gmail.com', b'1', 'CECILIA  ALVARADO  TUANAMA ', 6, NULL, 0, NULL, NULL, NULL),
+(161, NULL, NULL, '$2a$10$aCKH1LNqOIygNdIJFY/3uuTcEGZtv/oSIzQ8/4gIa13tT49bHhZE.', 'Eezealadaa@alumno.unsm.edu.pe', b'1', 'ELDER EDINSON ZALADA  ABANTO', 6, NULL, 0, NULL, NULL, NULL),
+(162, NULL, NULL, '$2a$10$6qvFcHCU3DXkIWyNxEO2cuVon2F/o7.1O/SzAMU/3ItclQeBmpY9G', '734483224@infinitycapital.com', b'1', 'JUANA CARMEN QUISPE LOPEZ', 6, NULL, 0, NULL, NULL, NULL),
+(163, NULL, NULL, '$2a$10$MWH6H6NcfpAScuSVKRHJSeGywFsoy5RPedKXyv7J/s2tXZM4HxpeC', 'gessy_1201@hotmail.com', b'1', 'GESSY PATRICIA PINEDO PINEDO', 6, NULL, 0, NULL, NULL, NULL),
+(164, NULL, NULL, '$2a$10$cCgKnNnz997LTycJK9HU2.t9xrtSMELieuoXyjttBz5r7kx1UhfiG', 'taanyampisrubilindzay@gmail.com', b'1', 'RUBI LINDZAY TAAN YAMPIS', 6, NULL, 0, NULL, NULL, NULL),
+(165, NULL, NULL, '$2a$10$PqvBBQFgMlwzLV26h7CiEODtEkaGKbdhsC1kLp6rO3Xc6yGjvKdT6', 'aqujiesluis93@gmai.com', b'1', 'LUIS EDUARDO  AQUIJES CANALES', 6, NULL, 0, NULL, NULL, NULL),
+(166, NULL, NULL, '$2a$10$a0upmUf/tSgXCoJYoTYmROhXc72oGcxZemGBPAvbfXh9WygF9M6Tm', 'juboro_78@hotmail.com', b'1', 'JUDGNER  BOCONEGRA ROJAS ', 6, NULL, 0, NULL, NULL, NULL),
+(167, NULL, NULL, '$2a$10$xxcHc.DU.wDQtY8y6mwVqOgEtqM6iJHg1sAbLveCnsJxvOUbiGmAO', 'rociosantimar@gmai.com', b'1', 'ROCIO DEL PILAR  SANTILLAN   MARINA', 6, NULL, 0, NULL, NULL, NULL),
+(168, NULL, NULL, '$2a$10$3OuePEJEg.qLU7/LFO/onOM//plY6UMxVlMeXFyxkxK0Z2B8GPa9e', '74211105@infinitycapital.com', b'1', 'JHON EBERTH ESPINOZA HUAMANI', 6, NULL, 0, NULL, NULL, NULL),
+(169, NULL, NULL, '$2a$10$a6.YdWdIBskE9eUVDKfVAutTPsxsjekm2Mt8trnDCMxsc5Wvr4/jG', 'Ivansotomundaca3@gmail.com', b'1', 'ISIDRO IVAN  SOTO MUNDACA ', 6, NULL, 0, NULL, NULL, NULL),
+(170, NULL, NULL, '$2a$10$pKOky0I2y7BRVd4E6kWYYuYAmUI6112ISdXeXJBb9T21aBzedZ.te', 'rosahuamanpaisi1@gmail.com', b'1', 'ROSA CRUZ HUAMAN PAISIC', 6, NULL, 0, NULL, NULL, NULL),
+(171, NULL, NULL, '$2a$10$P.ObxBYLkpEe.vihwXBmre.xwTJJoLmIMdxNnmOvYfcNlY1kfgqHK', 'noemimonsalve342@gmail.com', b'1', 'NOEMI MONSALVE HUAMANCHARI', 6, NULL, 0, NULL, NULL, NULL),
+(172, NULL, NULL, '$2a$10$.6.WgCBHF0sOmg0SkIJQ0.HyoC0pKdXcy9e15rL7GxCP0l6HcKpy6', 'Zoilagomez417@gmail.com', b'1', 'ZOILA GÓMEZ HUAMAN', 6, NULL, 0, NULL, NULL, NULL),
+(173, NULL, NULL, '$2a$10$6fLuOFBedlws3L8XFQ2dzuDiXs2ZcaXLDmYAZDie9iEuLS93h.gni', 'mendozaaguilardaniela28@gmail.com', b'1', 'HALY DANIELA  MENDOZA AGUILAR', 6, NULL, 0, NULL, NULL, NULL),
+(174, NULL, NULL, '$2a$10$wofjuszDWgUw2hUmxXfMAe3F4jCswcEbfxia4r2r7IZeRUJ1FfMsO', 'alexandra.09rea@gmail.com', b'1', 'KARLA REAÑO PUERTA', 6, NULL, 0, NULL, NULL, NULL),
+(175, NULL, NULL, '$2a$10$AXMbut0KyR8Mqxiftl5ubum/ku1mVgqiMsoIScYbKiBxLuu5N0nTa', 'kennybabilonia29@gmail.com', b'1', 'KENY BABILONIA CASIQUE', 6, NULL, 0, NULL, NULL, NULL),
+(176, NULL, NULL, '$2a$10$9T9IR.UlPvPTx1/JAw9tP.zqxF6wjN1Xmt/3KLCuDLPSIoR32sEhC', 'marielsafuga@gmail.com', b'1', 'MARIELSA RHUT FUNG GARCIA', 6, NULL, 0, NULL, NULL, NULL),
+(177, NULL, NULL, '$2a$10$lIJhYjMK8JGN.IeJXu0aKukbvA2AaE3xzG4WBMTzRhDmHvHEKxVja', 'deysicarrascocordova@gmail.com', b'1', 'DEYSI CARRASCO CORDOVA', 6, NULL, 0, NULL, NULL, NULL),
+(178, NULL, NULL, '$2a$10$z00MJcuzu1U3wwNhyindTeWAMUFHPknAaE8xqxZsXyzQYS/qKO0R6', 'araselita1985@gmail.com', b'1', 'ARASELY DIAZ LOPEZ', 6, NULL, 0, NULL, NULL, NULL),
+(179, NULL, NULL, '$2a$10$0LTXvStypESHqLysRP/k4ej1vXbvxO2mtffu7j9Dsvj0suNu3Ex..', 'lilimagaliherdia@gmail.com', b'1', 'LILIANA MAGALI HEREDIA MONDRAGON', 6, NULL, 0, NULL, NULL, NULL),
+(180, NULL, NULL, '$2a$10$vx/K.BnFnwzzNZGXgUlAEO5H8ml/I9De1wDaGh3JpuGy/F6GD23G.', 'dolicmiki96@gmail.com', b'1', 'GILMER DOLIC GRANDEZ', 6, NULL, 0, NULL, NULL, '179.6.225.93'),
+(181, NULL, NULL, '$2a$10$krqS7cizShLFJ9MY8bUApeO6c6uGwdTVu4mEAZY2I36b4sFK8S1Um', 'juanacarmenquispelopez@gmail.com.pe', b'1', 'JUANA CARMEN QUISPE LOPEZ', 6, NULL, 0, NULL, NULL, NULL),
+(182, NULL, NULL, '$2a$10$GdYFT0RXBUXVZrRMc1Y5UOd05WdqghNIjLmWndcH22fgKSPHV0VQK', 'karluc2303@gmail.com', b'1', 'BETSY REAÑO PUERTA', 6, NULL, 0, NULL, NULL, NULL),
+(183, NULL, NULL, '$2a$10$3Xx04FLcJIJsjmpOhMjDseD/D9Tb1RK5Xngk/LfQNpyxSieHGbTvy', 'krojascasique59@gmail.com', b'1', 'KATHERINE VIANA ROJAS CASIQUE', 6, NULL, 0, NULL, NULL, NULL),
+(184, NULL, NULL, '$2a$10$m2ckMw1CydNOpuRj3CGRveclj8kjB6toPBUTRe4.BcxrTuGq/K4c.', 'ivanchallto.28@hotmail.com', b'1', 'IVAN CHALLTO  SÁNCHEZ CANAYI', 6, NULL, 0, NULL, NULL, NULL),
+(185, NULL, NULL, '$2a$10$5LLL5umVTB7l3z1prdDFtuvqqxPBpW/RwExV.fJiJgIxcQDj.68Ne', 'arbildocernakelvin1998@gmail.com', b'1', 'KELVIN ARBILDO CERNA', 6, NULL, 0, NULL, NULL, NULL),
+(186, NULL, NULL, '$2a$10$mupwpZ.tlcFUUlVBqK5TmOI90FzF33RQFkRl03HwROeUGJjfTIx2.', 'wiwiroo33@gmail.com', b'1', 'WILLIAM JIMENEZ ALVARADO', 6, NULL, 0, NULL, NULL, NULL),
+(187, NULL, NULL, '$2a$10$AqKMh5rnswWKvrLIGKmdFOTacJfl0Tp9vnOVPgQ63p.3cP.Y4lHtu', 'jurr1962@gmail.com', b'1', 'JORGE RIVA RODRIGUEZ', 6, NULL, 0, NULL, NULL, NULL),
+(188, NULL, NULL, '$2a$10$oy4CFWF4RFPThcFXATK8Z.b11p9UeokNLY9Y3xAt/il71DROHhLXS', 'Ighernandezmedina@gmail.com', b'1', 'HILDA ICELA HERNANDEZ MEDINA', 6, NULL, 0, NULL, NULL, NULL),
+(189, NULL, NULL, '$2a$10$fHhNz1RBM0OqvfZ5Z7gtkeMQDg8kSvBDDh5YpUgSWOBkmTEGWrZQK', 'mdiazolortegui@gmail.com', b'1', 'MARGARITA DIAZ OLORTEGUI', 6, NULL, 0, NULL, NULL, NULL),
+(190, NULL, NULL, '$2a$10$aHhbltuqaiLFCHiXc8N2LuDQQOc7iU.k3Pobsi.iqMDb0X79.4IuK', 'rubengc2107@gmail.com', b'1', 'RUBEN ANTONIO  GUEVARA CONTRERAS ', 6, NULL, 0, NULL, NULL, NULL),
+(191, NULL, NULL, '$2a$10$7FX8BznOTIaXfJacWSTGP.rcrEoayVZ/zIfpzyD/x/BwoySns192y', 'gabrieladelpilarrafael@gmail.com', b'1', 'GABRIELA RAFAEL LA MADRID', 6, NULL, 0, NULL, NULL, NULL),
+(192, NULL, NULL, '$2a$10$ngQzcwmVWCc5KD7.h101VeAJx.0byy12r23lME8SKI7SIxD.PVX5.', 'acoronelcahuaza@gmail.com', b'1', 'ANI MAYORELI CORONEL CAHUAZA', 6, NULL, 0, NULL, NULL, NULL),
+(193, NULL, NULL, '$2a$10$JicfU7GrQJ4ws6GJYvqAMOEqBZC.1j.8Ru1HpxMPZRwrLuQqH.4sK', 'villacortalabajosw@gmail.com', b'1', 'WALTER  VILLACORTA  LABAJOS', 6, NULL, 0, NULL, NULL, NULL),
+(195, NULL, NULL, '$2a$10$S/qXSMA1sZ18p0y/T1eR9.QpGKREAzCMLXaw1uCVQkasgvkzHT.0i', 'yacoriescoro7@gmail.com', b'1', 'KARLA SOFIA  BERNALES MENDOZA ', 6, NULL, 0, NULL, NULL, NULL),
+(196, NULL, NULL, '$2a$10$Mb3XFOcX97PEessA2nkt.OAaymWb513SyBsMrsREIg7RP.FVvFRgO', 'Christianlincollvera@gmail.com', b'1', 'CHRISTIAN LINCOLL VERA  CRUZ', 6, NULL, 0, NULL, NULL, NULL),
+(197, NULL, NULL, '$2a$10$1kO/mj5AOJ5tALrwt63GfeTPXfWTSeS1SgCctPyABQijKibY3aKfa', 'riossilvakarem@gmail.com', b'1', 'KAREM  RIOS  SILVA', 6, NULL, 0, NULL, NULL, NULL),
+(198, NULL, NULL, '$2a$10$y88cShbQa00/dmizb8X51eZ2VsM81KBPXO0TBYBIxa6ceRkhLfEdC', 'rmarichinchavez@gmail.com', b'1', 'ROSARIO MARICHIN CHAVEZ', 6, NULL, 0, NULL, NULL, NULL),
+(199, NULL, NULL, '$2a$10$/sfAZqxOWMyBa8C22.38puLTVT/liXTmLUNFAk6zdy3QjkF3.X2Ny', 'alipena686@gmail.com', b'1', 'ALI SINCLAIR PEÑA SILUPU', 6, NULL, 0, NULL, NULL, NULL),
+(205, NULL, NULL, '$2a$10$YxkdrfiGSdZt6Kheu6Wy3eE6SFiFM2WbmNcjhYccJNf7x4jSrJHb2', 'mafergra525@gmail.com', b'1', 'MARIA FERNADA FACHIN GARCIA', 6, NULL, 0, NULL, NULL, NULL),
+(206, NULL, NULL, '$2a$10$R8EPSuCcfb0KJeJ3cYQ4bOto87CS59z9zMLxay90Y4cj6.bZZm/pa', 'emiralluy@gmail.com', b'1', 'EMIR ENTSAKUA ALLUY', 6, NULL, 0, NULL, NULL, NULL),
+(207, NULL, NULL, '$2a$10$VFvLdKDgneQ8g3YK/subu.UDO/M91ArpGsxLpoE0fBSZr5eqrLEcK', 'juliahuarangadiaz235@gmail.com', b'1', 'JULIA HERMELINDA HUARANGA DIAZ', 6, NULL, 0, NULL, NULL, NULL),
+(208, '2026-06-08 18:06:49.000000', NULL, '$2a$10$jWrkP1xN///SSk1t/EZHQOgaHeMroNtxOs580dZNPN.517.BwkiuG', 'rmaluquistapia@gmail.com', b'1', 'ROIDER TRUPM  MALUQUIZ  TAP', 6, NULL, 0, NULL, NULL, '179.6.225.93'),
+(209, NULL, NULL, '$2a$10$jWrkP1xN///SSk1t/EZHQOgaHeMroNtxOs580dZNPN.517.BwkiuG', 'roidertapia2000@gmail.com', b'1', 'Roider Maluquiz Tapia', 4, NULL, 0, NULL, NULL, '190.237.48.135'),
+(210, NULL, NULL, '$2a$10$gUVZvwVT8BOiVLDnAVvhx.HQQ0GaCgnJ97QpjPsZXpiBOWKnqI2je', 'perezmozombitealex@gmail.com', b'1', 'ALEX NORBIL  PÉREZ MOZOMBITE ', 6, NULL, 0, NULL, NULL, NULL),
+(211, NULL, NULL, '$2a$10$Xb75FYB6AcPCl/w8yin6xOHfo7gb5mkpgEaqR7BtBLhdYY2vRh0Nm', 'vladi.24.22.14@gmail.com', b'1', 'EDWIN VLADIMIR  CARRASCO  DEL ROSARIO', 6, NULL, 0, NULL, NULL, NULL),
+(212, NULL, NULL, '$2a$10$.gfBGe0chiW6bV7YaswSNOzl5VzzwSXos/dS3GsvgFYkmNtUiDgym', 'ethelths925@gmail.com', b'1', 'ETHEL SARITHS  CHAVEZ ALAVA ', 6, NULL, 0, NULL, NULL, NULL),
+(213, NULL, NULL, '$2a$10$WPvmdme8k0ideLAOlzr2K.WdozNlIdi9FY1QaGHnbVH9GzejMVRTG', 'jorgelopezgarate1@gmail.com', b'1', 'JORGE ARMANDO LOPEZ GARATE', 6, NULL, 0, NULL, NULL, NULL),
+(214, NULL, NULL, '$2a$10$Saii4t/T1529uAApU9K8ReyiFqVD/Yk415FAiMFzx6fYh4vnr5Uqe', 'lupitarc92@gmail.com', b'1', ' MARÍA GUADALUPE  ROJAS  CASIQUE', 6, NULL, 0, NULL, NULL, NULL),
+(215, NULL, NULL, '$2a$10$gGOj6jscONgyZCE./kLK0eDRIzHeRTjBxciHsofRvv4bD8CoWj0Ii', 'shirleyastrid43@gmail.com', b'1', 'SHIRLEY ASTRID  HERMITAÑO  GONZALES ', 6, NULL, 0, NULL, NULL, NULL),
+(216, NULL, NULL, '$2a$10$tP3KJUOIkv9yNqudF99QI.OxMu/XcH.MYHxF4KV/G4dqurBBkWG7C', 'erikakarella@gmail.com', b'1', 'ERIKA KARELL ASPAJO  RODRÍGUEZ ', 6, NULL, 0, NULL, NULL, NULL),
+(217, NULL, NULL, '$2a$10$2LDqVr0cxgPrPfEaFQ.YpOCHTH4tKfplXQFlKlVgwRZDrfKzYt75q', 'jgoanaiveth19@gmail.com', b'1', 'JHOANA IVETH  GARCIA  CHAMBA', 6, NULL, 0, NULL, NULL, NULL),
+(218, NULL, NULL, '$2a$10$aI0OUG0mRwkbojnXAvncpOMEtXJG3jT0jIV0JbgVTy07w6ncu7rvW', 'leneraspajo@gmail.com', b'1', 'LENER    PINEDO   ASPAJO', 6, NULL, 0, NULL, NULL, NULL),
+(219, NULL, NULL, '$2a$10$GvSopio95Ntb20J5AuNRaezBLepsMU/lKIo0ERjceY.6veaPwKp3y', 'norkatuestaorizola@gmail.com', b'1', 'NORKA JARUMI TUESTA ORIZOLA', 6, NULL, 0, NULL, NULL, NULL),
+(220, NULL, NULL, '$2a$10$ZXT7C2wfuPtJYmWm5M.iUegzNIc8fhq1LqxNl3Mw3jsXSzu0WdPci', 'efrainlozanosalas467@gmail.com', b'1', 'EFRAIN LOZANO  SALAS ', 6, NULL, 0, NULL, NULL, NULL),
+(221, NULL, NULL, '$2a$10$Q6Hq4g5wg4ALCJ1pC08g9.DlUAPp83wvlqKBvAb1J5aix0J2.mlNW', 'vilelaticllakatherinenicoll@gmail.com', b'1', 'KATHERINE NICOLL   VILELA TICLLA ', 6, NULL, 0, NULL, NULL, NULL),
+(222, '2026-06-16 11:12:17.000000', '551004', '$2a$10$V6nL1KiziRR1abO7Vl8N1uSt2.sMFs.5rHbiRLutlldtHxXXsgDjS', 'celiacaropiñarreta@gmail.com', b'0', 'Celia Caro  Prñarreta', 6, NULL, 0, NULL, NULL, NULL),
+(223, NULL, NULL, '$2a$10$Zf7w16TQxpGsz6LbBXdgMuWriN7TvYZgkKFUuAoxgWOouaaVPFq72', 'diazbustamanteesteban6@gmail.com', b'1', 'ESTEBAN DIAZ BUSTAMANTE', 6, NULL, 0, NULL, NULL, NULL),
+(224, NULL, NULL, '$2a$10$x2OKlJe7XwqTi33Ksd21YOOUdsyd1vYFdlJKHXXnnvXtX/PVy6LpC', 'jhony.elamante@gmail.com', b'1', 'JHONY MOLOCHO TRUJILLO ', 5, NULL, 0, NULL, NULL, '179.6.225.93'),
+(225, NULL, NULL, '$2a$10$R5YDb/v0I83RfPHgof/HseqOSq/PKLPcJLscdrPj5zVzcFQhQ7fS6', 'midolicg@alumno.unsm.edu.pe', b'0', 'Maria Lopez', 5, NULL, 0, NULL, NULL, '179.6.225.93'),
+(227, '2026-06-29 17:09:11.000000', NULL, '$2a$10$RLD00MCB6RlqsrY74C1Z.e2eSba23u8XDZX0OjwSwn7bhV1XHZOQO', 'aspajopozo@yahoo.com', b'1', 'Luis Fernando Aspajo Pozo', 6, NULL, 0, NULL, NULL, NULL),
+(228, NULL, NULL, '$2a$10$03ju3eLEXhpD4IVhWjkozufPA7c9PU9QBuIpXjss10gHNRr4dqZLS', 'zoilafatama54@gmail.com', b'1', 'ZOILA LUCECITA FATAMA PACAYA', 6, NULL, 0, NULL, NULL, NULL),
+(229, NULL, NULL, '$2a$10$Jj56cL4SdWL6u8N4sbH9qu6QjCddQp.MGIPJH7LNcgORg1ukeXSIK', 'mendoza98.04.08@gmail.com', b'1', 'LLONI MENDOZA GUELAC', 6, NULL, 0, NULL, NULL, NULL),
+(230, NULL, NULL, '$2a$10$7d0PIkFy5YTdw1/8U.35/ezMJvT1WBD7YtmmzZC7t2ndJ0TU490y.', 'amavalentino2203@gmail.com', b'1', 'ANITA MARIETTA   ALVAREZ  RUIZ', 6, NULL, 0, NULL, NULL, NULL),
+(231, NULL, NULL, '$2a$10$NRcUvv1QdnI5EaK6tWeYDekP.RVK63lCg9JnOIt8AFLqOiJS4.aFa', 'jorge1120chv@gmail.Com', b'1', 'SEGUNDO JORGE CHUQUIMANGO VEGA', 6, NULL, 0, NULL, NULL, NULL);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `activos`
+--
+ALTER TABLE `activos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKlflhpwkuvij2yjkdtmdtj42f2` (`cliente_id`);
+
+--
+-- Indices de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK96x1n5ut15ns1xhkm87y7qhnd` (`usuario_id`);
+
+--
+-- Indices de la tabla `codigos_verificacion_temporal`
+--
+ALTER TABLE `codigos_verificacion_temporal`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `configuracion_sistema`
+--
+ALTER TABLE `configuracion_sistema`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKn2k8b6hwyumsdfmax8vg0320m` (`clave`);
+
+--
+-- Indices de la tabla `conyuges`
+--
+ALTER TABLE `conyuges`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKcwd40kmrhc9xn54hkypi0sk55` (`cliente_id`);
+
+--
+-- Indices de la tabla `credenciales_webauthn`
+--
+ALTER TABLE `credenciales_webauthn`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKf3c9ck5kc4gh2y8830cl2nvxh` (`credential_id`) USING HASH,
+  ADD KEY `FKcb1s4niygjgq99hulpdfj4cpn` (`usuario_id`);
+
+--
+-- Indices de la tabla `creditos`
+--
+ALTER TABLE `creditos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKebytgljwj03rs91cbtjvc3cdk` (`cliente_id`),
+  ADD KEY `FKcj7yhwfjm2jg174ra89gbbwyy` (`moneda_id`),
+  ADD KEY `FKaf0j4pioivjsicy1ft1b4tgfn` (`tipo_credito_id`),
+  ADD KEY `FKm6iclgv1mclsedfkvujgo311j` (`analista_registro_id`);
+
+--
+-- Indices de la tabla `cuentas_bancarias`
+--
+ALTER TABLE `cuentas_bancarias`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKqr38h8ys43msopafpjwbjl1k6` (`cliente_id`);
+
+--
+-- Indices de la tabla `cuentas_virtuales`
+--
+ALTER TABLE `cuentas_virtuales`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKesx5e5kn5d08n09g1yfbu9hl8` (`numero_cuenta`),
+  ADD UNIQUE KEY `UKmmjxt4dkk9gcrfis9ek1a5ay6` (`cliente_id`);
+
+--
+-- Indices de la tabla `cuotas`
+--
+ALTER TABLE `cuotas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK5ww873mqbm9jkj3kekinkowxw` (`credito_id`);
+
+--
+-- Indices de la tabla `dispositivos_confiables`
+--
+ALTER TABLE `dispositivos_confiables`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKd28xy5mb42d2grl20r1ssts63` (`token_dispositivo`),
+  ADD KEY `FK81pno95qj7v91gamqkwyvowpn` (`usuario_id`);
+
+--
+-- Indices de la tabla `garantes`
+--
+ALTER TABLE `garantes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK2u93huots1aucfvfvssthmq73` (`credito_id`);
+
+--
+-- Indices de la tabla `ip_lista_blanca`
+--
+ALTER TABLE `ip_lista_blanca`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK7ne3idye82o20lm2c3n6rjtyj` (`ip_direccion`);
+
+--
+-- Indices de la tabla `ip_lista_negra`
+--
+ALTER TABLE `ip_lista_negra`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKgsptrlknreb9604jxtk9wu0rt` (`ip_direccion`);
+
+--
+-- Indices de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKt5wsps1raxojltdfevtcpwr2v` (`nombre`);
+
+--
+-- Indices de la tabla `monedas`
+--
+ALTER TABLE `monedas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKkh95poheuve0o899aljb0lt53` (`codigo`);
+
+--
+-- Indices de la tabla `movimientos`
+--
+ALTER TABLE `movimientos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKcci0asr7lwl8n59pw98ru7dlh` (`credito_id`),
+  ADD KEY `FKs629gukcs8scddoxujhlrs8lr` (`cuota_id`);
+
+--
+-- Indices de la tabla `pasivos`
+--
+ALTER TABLE `pasivos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK2uary1w8hor6wia68xiylh9d8` (`cliente_id`);
+
+--
+-- Indices de la tabla `permisos_rol_modulo`
+--
+ALTER TABLE `permisos_rol_modulo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKruc3aw2jvlsa4nyh7rlitikmh` (`modulo_id`),
+  ADD KEY `FKokf0abtov0xla8gx10oldkdla` (`rol_id`);
+
+--
+-- Indices de la tabla `rangos_interes`
+--
+ALTER TABLE `rangos_interes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKm21bbf76mybymf144lmvfnm4b` (`tipo_credito_id`);
+
+--
+-- Indices de la tabla `refresh_tokens`
+--
+ALTER TABLE `refresh_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKghpmfn23vmxfu3spu3lfg4r2d` (`token`),
+  ADD KEY `FKpdrw1klic7bvvhhkjojwu64t2` (`usuario_id`);
+
+--
+-- Indices de la tabla `registro_ataques`
+--
+ALTER TABLE `registro_ataques`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `requisitos`
+--
+ALTER TABLE `requisitos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKmh68bmqrja1xqeemol841c1f8` (`cliente_id`),
+  ADD KEY `FKqodxxt2frwsxv6h5r8l6yvy5s` (`credito_id`);
+
+--
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKldv0v52e0udsh2h1rs0r0gw1n` (`nombre`);
+
+--
+-- Indices de la tabla `solicitudes_retiro`
+--
+ALTER TABLE `solicitudes_retiro`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK8mjq2xpsyuai3ufb8kfkx7c33` (`cuenta_bancaria_id`),
+  ADD KEY `FKqj6j70cdcj1i9yiggtephl1on` (`cuenta_virtual_id`);
+
+--
+-- Indices de la tabla `tipos_credito`
+--
+ALTER TABLE `tipos_credito`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK5qf49nl9rwupcslfyw24c38ne` (`nombre`);
+
+--
+-- Indices de la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKsp6s9q5m9hl964prvcc4mdmwd` (`usuario_id`);
+
+--
+-- Indices de la tabla `transacciones_virtuales`
+--
+ALTER TABLE `transacciones_virtuales`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK80hj7n6y65xiu3hdv5wdhsx94` (`cuenta_virtual_id`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKkfsp0s1tflm1cwlj8idhqsad0` (`email`),
+  ADD KEY `FKqf5elo4jcq7qrt83oi0qmenjo` (`rol_id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `activos`
+--
+ALTER TABLE `activos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+
+--
+-- AUTO_INCREMENT de la tabla `codigos_verificacion_temporal`
+--
+ALTER TABLE `codigos_verificacion_temporal`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `configuracion_sistema`
+--
+ALTER TABLE `configuracion_sistema`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `conyuges`
+--
+ALTER TABLE `conyuges`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
+-- AUTO_INCREMENT de la tabla `credenciales_webauthn`
+--
+ALTER TABLE `credenciales_webauthn`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `creditos`
+--
+ALTER TABLE `creditos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+
+--
+-- AUTO_INCREMENT de la tabla `cuentas_bancarias`
+--
+ALTER TABLE `cuentas_bancarias`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `cuentas_virtuales`
+--
+ALTER TABLE `cuentas_virtuales`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+
+--
+-- AUTO_INCREMENT de la tabla `cuotas`
+--
+ALTER TABLE `cuotas`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23541;
+
+--
+-- AUTO_INCREMENT de la tabla `dispositivos_confiables`
+--
+ALTER TABLE `dispositivos_confiables`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `garantes`
+--
+ALTER TABLE `garantes`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `ip_lista_blanca`
+--
+ALTER TABLE `ip_lista_blanca`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `ip_lista_negra`
+--
+ALTER TABLE `ip_lista_negra`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de la tabla `monedas`
+--
+ALTER TABLE `monedas`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `movimientos`
+--
+ALTER TABLE `movimientos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=696;
+
+--
+-- AUTO_INCREMENT de la tabla `pasivos`
+--
+ALTER TABLE `pasivos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `permisos_rol_modulo`
+--
+ALTER TABLE `permisos_rol_modulo`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=558;
+
+--
+-- AUTO_INCREMENT de la tabla `rangos_interes`
+--
+ALTER TABLE `rangos_interes`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT de la tabla `refresh_tokens`
+--
+ALTER TABLE `refresh_tokens`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=368;
+
+--
+-- AUTO_INCREMENT de la tabla `registro_ataques`
+--
+ALTER TABLE `registro_ataques`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `requisitos`
+--
+ALTER TABLE `requisitos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitudes_retiro`
+--
+ALTER TABLE `solicitudes_retiro`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `tipos_credito`
+--
+ALTER TABLE `tipos_credito`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT de la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `transacciones_virtuales`
+--
+ALTER TABLE `transacciones_virtuales`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `activos`
+--
+ALTER TABLE `activos`
+  ADD CONSTRAINT `FKlflhpwkuvij2yjkdtmdtj42f2` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+--
+-- Filtros para la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  ADD CONSTRAINT `FKk6iwsq3kts1bblivkjy6epajx` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `conyuges`
+--
+ALTER TABLE `conyuges`
+  ADD CONSTRAINT `FKgv1wjnfaga7v3yup93ybpnit6` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+--
+-- Filtros para la tabla `credenciales_webauthn`
+--
+ALTER TABLE `credenciales_webauthn`
+  ADD CONSTRAINT `FKcb1s4niygjgq99hulpdfj4cpn` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `creditos`
+--
+ALTER TABLE `creditos`
+  ADD CONSTRAINT `FKaf0j4pioivjsicy1ft1b4tgfn` FOREIGN KEY (`tipo_credito_id`) REFERENCES `tipos_credito` (`id`),
+  ADD CONSTRAINT `FKcj7yhwfjm2jg174ra89gbbwyy` FOREIGN KEY (`moneda_id`) REFERENCES `monedas` (`id`),
+  ADD CONSTRAINT `FKebytgljwj03rs91cbtjvc3cdk` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `FKm6iclgv1mclsedfkvujgo311j` FOREIGN KEY (`analista_registro_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `cuentas_bancarias`
+--
+ALTER TABLE `cuentas_bancarias`
+  ADD CONSTRAINT `FKqr38h8ys43msopafpjwbjl1k6` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+--
+-- Filtros para la tabla `cuentas_virtuales`
+--
+ALTER TABLE `cuentas_virtuales`
+  ADD CONSTRAINT `FKtabkh5qgcnbmxkukkhb3733tb` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+--
+-- Filtros para la tabla `cuotas`
+--
+ALTER TABLE `cuotas`
+  ADD CONSTRAINT `FK5ww873mqbm9jkj3kekinkowxw` FOREIGN KEY (`credito_id`) REFERENCES `creditos` (`id`);
+
+--
+-- Filtros para la tabla `dispositivos_confiables`
+--
+ALTER TABLE `dispositivos_confiables`
+  ADD CONSTRAINT `FK81pno95qj7v91gamqkwyvowpn` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `garantes`
+--
+ALTER TABLE `garantes`
+  ADD CONSTRAINT `FK2u93huots1aucfvfvssthmq73` FOREIGN KEY (`credito_id`) REFERENCES `creditos` (`id`);
+
+--
+-- Filtros para la tabla `movimientos`
+--
+ALTER TABLE `movimientos`
+  ADD CONSTRAINT `FKcci0asr7lwl8n59pw98ru7dlh` FOREIGN KEY (`credito_id`) REFERENCES `creditos` (`id`),
+  ADD CONSTRAINT `FKs629gukcs8scddoxujhlrs8lr` FOREIGN KEY (`cuota_id`) REFERENCES `cuotas` (`id`);
+
+--
+-- Filtros para la tabla `pasivos`
+--
+ALTER TABLE `pasivos`
+  ADD CONSTRAINT `FK2uary1w8hor6wia68xiylh9d8` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+--
+-- Filtros para la tabla `permisos_rol_modulo`
+--
+ALTER TABLE `permisos_rol_modulo`
+  ADD CONSTRAINT `FKokf0abtov0xla8gx10oldkdla` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`),
+  ADD CONSTRAINT `FKruc3aw2jvlsa4nyh7rlitikmh` FOREIGN KEY (`modulo_id`) REFERENCES `modulos` (`id`);
+
+--
+-- Filtros para la tabla `rangos_interes`
+--
+ALTER TABLE `rangos_interes`
+  ADD CONSTRAINT `FKm21bbf76mybymf144lmvfnm4b` FOREIGN KEY (`tipo_credito_id`) REFERENCES `tipos_credito` (`id`);
+
+--
+-- Filtros para la tabla `refresh_tokens`
+--
+ALTER TABLE `refresh_tokens`
+  ADD CONSTRAINT `FKpdrw1klic7bvvhhkjojwu64t2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `requisitos`
+--
+ALTER TABLE `requisitos`
+  ADD CONSTRAINT `FKmh68bmqrja1xqeemol841c1f8` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `FKqodxxt2frwsxv6h5r8l6yvy5s` FOREIGN KEY (`credito_id`) REFERENCES `creditos` (`id`);
+
+--
+-- Filtros para la tabla `solicitudes_retiro`
+--
+ALTER TABLE `solicitudes_retiro`
+  ADD CONSTRAINT `FK8mjq2xpsyuai3ufb8kfkx7c33` FOREIGN KEY (`cuenta_bancaria_id`) REFERENCES `cuentas_bancarias` (`id`),
+  ADD CONSTRAINT `FKqj6j70cdcj1i9yiggtephl1on` FOREIGN KEY (`cuenta_virtual_id`) REFERENCES `cuentas_virtuales` (`id`);
+
+--
+-- Filtros para la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  ADD CONSTRAINT `FKbj2tq4b166h22cigjb8r3vm3t` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `transacciones_virtuales`
+--
+ALTER TABLE `transacciones_virtuales`
+  ADD CONSTRAINT `FK80hj7n6y65xiu3hdv5wdhsx94` FOREIGN KEY (`cuenta_virtual_id`) REFERENCES `cuentas_virtuales` (`id`);
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `FKqf5elo4jcq7qrt83oi0qmenjo` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

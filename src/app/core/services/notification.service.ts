@@ -29,6 +29,28 @@ export interface RetiroPendienteItem {
   numeroCuenta: string;
 }
 
+export interface PendienteCobranzaItem {
+  creditoId: number;
+  clienteNombre: string;
+  clienteDocumento: string;
+  clienteEmail: string;
+  diasAtraso: number;
+  nivel: number;
+  cuotaAtrasadaId: number;
+}
+
+export interface SolicitudPendienteItem {
+  creditoId: number;
+  nombreCliente: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  montoSolicitado: number;
+  monedaNombre: string;
+  tipoCreditoNombre: string;
+  fechaSolicitud: string;
+  estado: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -41,12 +63,16 @@ export class NotificationService {
   private _isOpen = signal(false);
   private _pagosEnRevision = signal<PagoRevisionItem[]>([]);
   private _retirosPendientes = signal<RetiroPendienteItem[]>([]);
+  private _pendientesCobranza = signal<PendienteCobranzaItem[]>([]);
+  private _solicitudesPendientes = signal<SolicitudPendienteItem[]>([]);
   private pollingSubscription: Subscription | null = null;
 
   readonly isOpen = this._isOpen.asReadonly();
   readonly pagosEnRevision = this._pagosEnRevision.asReadonly();
   readonly retirosPendientes = this._retirosPendientes.asReadonly();
-  readonly totalNotificaciones = computed(() => this._pagosEnRevision().length + this._retirosPendientes().length);
+  readonly pendientesCobranza = this._pendientesCobranza.asReadonly();
+  readonly solicitudesPendientes = this._solicitudesPendientes.asReadonly();
+  readonly totalNotificaciones = computed(() => this._pagosEnRevision().length + this._retirosPendientes().length + this._pendientesCobranza().length + this._solicitudesPendientes().length);
 
   open() { this._isOpen.set(true); }
   close() { this._isOpen.set(false); }
@@ -66,12 +92,16 @@ export class NotificationService {
     this.pollingSubscription = interval(60_000).pipe(
       switchMap(() => forkJoin({
         pagos: this.fetchPagos(),
-        retiros: this.fetchRetiros()
+        retiros: this.fetchRetiros(),
+        cobranzas: this.fetchCobranzas(),
+        solicitudes: this.fetchSolicitudes()
       }))
-    ).subscribe(({ pagos, retiros }) => {
-      this.verificarYNotificar(pagos, retiros);
+    ).subscribe(({ pagos, retiros, cobranzas, solicitudes }) => {
+      this.verificarYNotificar(pagos, retiros, cobranzas, solicitudes);
       this._pagosEnRevision.set(pagos);
       this._retirosPendientes.set(retiros);
+      this._pendientesCobranza.set(cobranzas);
+      this._solicitudesPendientes.set(solicitudes);
     });
   }
 
@@ -80,6 +110,8 @@ export class NotificationService {
     this.pollingSubscription = null;
     this._pagosEnRevision.set([]);
     this._retirosPendientes.set([]);
+    this._pendientesCobranza.set([]);
+    this._solicitudesPendientes.set([]);
   }
 
   recargar() {
@@ -96,20 +128,29 @@ export class NotificationService {
     this.router.navigate(['/dashboard/admin/tesoreria']);
   }
 
+  irASolicitudes() {
+    this.close();
+    this.router.navigate(['/dashboard/admin/solicitudes']);
+  }
+
   private fetchAndUpdate() {
     forkJoin({
       pagos: this.fetchPagos(),
-      retiros: this.fetchRetiros()
-    }).subscribe(({ pagos, retiros }) => {
-      this.verificarYNotificar(pagos, retiros);
+      retiros: this.fetchRetiros(),
+      cobranzas: this.fetchCobranzas(),
+      solicitudes: this.fetchSolicitudes()
+    }).subscribe(({ pagos, retiros, cobranzas, solicitudes }) => {
+      this.verificarYNotificar(pagos, retiros, cobranzas, solicitudes);
       this._pagosEnRevision.set(pagos);
       this._retirosPendientes.set(retiros);
+      this._pendientesCobranza.set(cobranzas);
+      this._solicitudesPendientes.set(solicitudes);
     });
   }
 
-  private verificarYNotificar(newPagos: PagoRevisionItem[], newRetiros: RetiroPendienteItem[]) {
-    const currentTotalLength = this._pagosEnRevision().length + this._retirosPendientes().length;
-    const newTotalLength = newPagos.length + newRetiros.length;
+  private verificarYNotificar(newPagos: PagoRevisionItem[], newRetiros: RetiroPendienteItem[], newCobranzas: PendienteCobranzaItem[], newSolicitudes: SolicitudPendienteItem[]) {
+    const currentTotalLength = this._pagosEnRevision().length + this._retirosPendientes().length + this._pendientesCobranza().length + this._solicitudesPendientes().length;
+    const newTotalLength = newPagos.length + newRetiros.length + newCobranzas.length + newSolicitudes.length;
     
     // Reproducir sonido solo si hay nuevas notificaciones (más de las que ya teníamos)
     if (newTotalLength > currentTotalLength && currentTotalLength >= 0) {
@@ -158,6 +199,22 @@ export class NotificationService {
       `${this.apiUrl}/tesoreria/retiros-pendientes`
     ).pipe(
       catchError(() => of([] as RetiroPendienteItem[]))
+    );
+  }
+
+  private fetchCobranzas() {
+    return this.http.get<PendienteCobranzaItem[]>(
+      `${this.apiUrl}/creditos/admin/pendientes-cobranza`
+    ).pipe(
+      catchError(() => of([] as PendienteCobranzaItem[]))
+    );
+  }
+
+  private fetchSolicitudes() {
+    return this.http.get<SolicitudPendienteItem[]>(
+      `${this.apiUrl}/creditos/solicitudes-pendientes`
+    ).pipe(
+      catchError(() => of([] as SolicitudPendienteItem[]))
     );
   }
 }

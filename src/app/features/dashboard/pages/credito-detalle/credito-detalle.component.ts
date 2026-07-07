@@ -64,6 +64,8 @@ export class CreditoDetalleComponent implements OnInit {
   mostrarModalClientePerfil = signal<boolean>(false);
   mostrarModalPostergar = signal<boolean>(false);
   mostrarModalRenovar = signal<boolean>(false);
+  mostrarModalCorregirPagos = signal<boolean>(false);
+  cuotasSeleccionadasCorreccion = signal<Set<number>>(new Set());
   mostrarModalResolver = signal<boolean>(false);
   mostrarModalPagoGlobal = signal<boolean>(false);
   mostrarModalRefinanciamiento = signal<boolean>(false);
@@ -92,7 +94,8 @@ export class CreditoDetalleComponent implements OnInit {
   comprobanteForm = {
     monto: 0,
     metodoPago: 'YAPE',
-    numeroComprobante: ''
+    numeroComprobante: '',
+    fechaPago: '' as string | null
   };
 
   // --- Revisar Comprobante (Admin) ---
@@ -225,7 +228,8 @@ export class CreditoDetalleComponent implements OnInit {
     this.comprobanteForm = {
       monto: Number(montoPendiente.toFixed(2)),
       metodoPago: 'YAPE',
-      numeroComprobante: ''
+      numeroComprobante: '',
+      fechaPago: new Date().toISOString().split('T')[0] // default to today
     };
     this.comprobanteArchivo = null;
     this.comprobantePreviewUrl.set(null);
@@ -300,7 +304,8 @@ export class CreditoDetalleComponent implements OnInit {
       this.comprobanteForm.monto,
       this.comprobanteForm.metodoPago,
       this.comprobanteForm.numeroComprobante,
-      this.comprobanteArchivo || new File([''], 'empty.txt', { type: 'text/plain' }) // Dummy file for FormData if needed, but backend takes required=false
+      this.comprobanteArchivo || new File([''], 'empty.txt', { type: 'text/plain' }), // Dummy file for FormData if needed, but backend takes required=false
+      this.comprobanteForm.fechaPago
     ).subscribe({
       next: (resp) => {
         this.subiendoComprobante.set(false);
@@ -696,6 +701,106 @@ export class CreditoDetalleComponent implements OnInit {
   abrirEditarCuota(cuota: Cuota) {
     this.cuotaSeleccionada.set(cuota);
     this.mostrarModalEditarCuota.set(true);
+  }
+
+  // ==========================================
+  // CORRECCIÓN HISTORIAL DE PAGOS
+  // ==========================================
+  cuotaFueCorregida(cuota: Cuota): boolean {
+    if (cuota.estadoCuota !== 'PAGADO') return false;
+    if (!cuota.fechaPago || !cuota.fechaVencimiento) return false;
+    // Normalize both dates to YYYY-MM-DD strings to avoid type/timezone mismatches
+    const toDateStr = (val: any): string => {
+      if (!val) return '';
+      if (typeof val === 'string') return val.substring(0, 10);
+      if (val instanceof Date) return val.toISOString().substring(0, 10);
+      return String(val).substring(0, 10);
+    };
+    return toDateStr(cuota.fechaPago) === toDateStr(cuota.fechaVencimiento);
+  }
+
+  abrirModalCorregirPagos() {
+    const alreadyCorrected = this.credito()?.cuotas
+      ?.filter(c => this.cuotaFueCorregida(c))
+      .map(c => c.id) || [];
+    this.cuotasSeleccionadasCorreccion.set(new Set(alreadyCorrected));
+    this.mostrarModalCorregirPagos.set(true);
+  }
+
+  cerrarModalCorregirPagos() {
+    this.mostrarModalCorregirPagos.set(false);
+    this.cuotasSeleccionadasCorreccion.set(new Set());
+  }
+
+  toggleCuotaCorreccion(cuota: Cuota) {
+    if (this.cuotaFueCorregida(cuota)) return;
+    
+    const current = new Set(this.cuotasSeleccionadasCorreccion());
+    if (current.has(cuota.id)) {
+      current.delete(cuota.id);
+    } else {
+      current.add(cuota.id);
+    }
+    this.cuotasSeleccionadasCorreccion.set(current);
+  }
+
+  toggleTodasCuotasCorreccion(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const current = new Set(this.cuotasSeleccionadasCorreccion());
+    const pagadas = this.credito()?.cuotas?.filter(c => c.estadoCuota === 'PAGADO') || [];
+
+    if (isChecked) {
+      pagadas.forEach(c => current.add(c.id));
+    } else {
+      pagadas.forEach(c => {
+        if (!this.cuotaFueCorregida(c)) {
+          current.delete(c.id);
+        }
+      });
+    }
+    this.cuotasSeleccionadasCorreccion.set(current);
+  }
+
+  todasCuotasCorreccionSeleccionadas(): boolean {
+    const pagadas = this.credito()?.cuotas?.filter(c => c.estadoCuota === 'PAGADO') || [];
+    if (pagadas.length === 0) return false;
+    return pagadas.every(c => this.cuotasSeleccionadasCorreccion().has(c.id));
+  }
+
+  todasPagadasYaCorregidas(): boolean {
+    const pagadas = this.credito()?.cuotas?.filter(c => c.estadoCuota === 'PAGADO') || [];
+    if (pagadas.length === 0) return false;
+    return pagadas.every(c => this.cuotaFueCorregida(c));
+  }
+
+  nuevasCuotasACorregir(): number[] {
+    const current = Array.from(this.cuotasSeleccionadasCorreccion());
+    const cuotas = this.credito()?.cuotas || [];
+    return current.filter(id => {
+      const c = cuotas.find(x => x.id === id);
+      return c && !this.cuotaFueCorregida(c);
+    });
+  }
+
+  guardarCorreccionPagos() {
+    const nuevas = this.nuevasCuotasACorregir();
+    if (nuevas.length === 0) {
+      this.toastService.show('No hay cuotas nuevas seleccionadas para corregir.', 'warning');
+      return;
+    }
+    this.procesando.set(true);
+    this.creditoService.marcarCuotasPuntuales(this.credito()!.id, nuevas).subscribe({
+      next: () => {
+        this.procesando.set(false);
+        this.cerrarModalCorregirPagos();
+        this.cargarDetalle(this.credito()!.id);
+        this.toastService.show(`¡${nuevas.length} cuota(s) corregidas correctamente!`, 'success');
+      },
+      error: (err) => {
+        this.procesando.set(false);
+        this.toastService.show(err.error?.error || 'Error al corregir cuotas.', 'error');
+      }
+    });
   }
 
   abrirEditarCredito() {

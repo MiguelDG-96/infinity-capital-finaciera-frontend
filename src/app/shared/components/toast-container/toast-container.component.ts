@@ -10,16 +10,16 @@ import { LucideAngularModule } from 'lucide-angular';
   template: `
     <div class="toast toast-end toast-top z-[9999] mt-16">
       @for (toast of toastService.currentToasts(); track toast.id) {
-        <div class="alert shadow-lg border-none animate-fade-in-up" 
+        <div role="alert" class="alert shadow-lg animate-fade-in-up max-w-sm border"
              [ngClass]="{
-               'alert-success bg-success text-success-content': toast.type === 'success',
-               'alert-error bg-error text-error-content': toast.type === 'error',
-               'alert-info bg-info text-info-content': toast.type === 'info',
-               'alert-warning bg-warning text-warning-content': toast.type === 'warning'
+               'toast-success': toast.type === 'success',
+               'toast-error': toast.type === 'error',
+               'toast-info': toast.type === 'info',
+               'toast-warn': toast.type === 'warning'
              }">
-          <lucide-icon [name]="getIcon(toast.type)" [size]="20"></lucide-icon>
+          <lucide-icon [name]="getIcon(toast.type)" [size]="18"></lucide-icon>
           <span class="font-medium text-sm">{{ toast.message }}</span>
-          <button (click)="toastService.remove(toast.id)" class="btn btn-ghost btn-xs btn-circle">✕</button>
+          <button (click)="toastService.remove(toast.id)" class="btn btn-ghost btn-xs btn-circle opacity-60 hover:opacity-100">✕</button>
         </div>
       }
     </div>
@@ -31,6 +31,33 @@ import { LucideAngularModule } from 'lucide-angular';
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Base: fondo del tema activo, siempre se adapta a light/dark */
+    :host .alert {
+      background-color: var(--color-base-100, white);
+    }
+
+    :host .toast-success {
+      border-color: var(--color-success, oklch(0.723 0.219 149.579));
+      color: var(--color-success, oklch(0.723 0.219 149.579));
+    }
+    :host .toast-error {
+      border-color: var(--color-error, oklch(0.637 0.237 25.331));
+      color: var(--color-error, oklch(0.637 0.237 25.331));
+    }
+    :host .toast-info {
+      border-color: var(--color-info, oklch(0.72 0.191 231.6));
+      color: var(--color-info, oklch(0.72 0.191 231.6));
+    }
+    :host .toast-warn {
+      border-color: var(--color-warning, oklch(0.8 0.194 70.08));
+      color: var(--color-warning, oklch(0.8 0.194 70.08));
+    }
+
+    /* El texto del mensaje hereda el color del base-content para máxima legibilidad */
+    :host .alert span {
+      color: var(--color-base-content);
     }
   `]
 })

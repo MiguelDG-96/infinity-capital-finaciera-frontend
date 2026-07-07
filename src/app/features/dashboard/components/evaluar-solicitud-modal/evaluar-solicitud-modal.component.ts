@@ -12,7 +12,7 @@ import { CreditRatingGaugeComponent, CreditRating } from '../../../../shared/com
   selector: 'app-evaluar-solicitud-modal',
   standalone: true,
   // Forzando recompilación para que Angular detecte el HTML
-  imports: [CommonModule, ReactiveFormsModule, CreditRatingGaugeComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './evaluar-solicitud-modal.component.html',
   styleUrl: './evaluar-solicitud-modal.component.css'
 })

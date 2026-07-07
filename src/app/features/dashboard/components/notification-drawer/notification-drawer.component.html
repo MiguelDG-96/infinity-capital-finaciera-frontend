@@ -44,7 +44,7 @@
 
     <!-- Sección: Pagos en Revisión (solo admin/trabajador) -->
     @if (isAdmin) {
-      @if (notificationService.pagosEnRevision().length > 0 || notificationService.retirosPendientes().length > 0) {
+      @if (notificationService.pagosEnRevision().length > 0 || notificationService.retirosPendientes().length > 0 || notificationService.pendientesCobranza().length > 0 || notificationService.solicitudesPendientes().length > 0) {
         
         @if (notificationService.pagosEnRevision().length > 0) {
           <div class="mb-4">
@@ -150,6 +150,97 @@
           </div>
         }
 
+        @if (notificationService.pendientesCobranza().length > 0) {
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-white mb-2 flex items-center gap-1.5 mt-2">
+              <lucide-icon name="mail-warning" size="12"></lucide-icon>
+              Cartas de Cobranza Pendientes
+            </p>
+            <button
+              class="group flex flex-col gap-2 rounded-2xl bg-base-200/40 hover:bg-error/5 border border-transparent hover:border-error/20 p-3 text-left transition-all w-full cursor-pointer"
+              (click)="irACobranza()"
+            >
+              <!-- Fila superior -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2 flex-1 min-w-0">
+                  <!-- Ícono de alerta -->
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-error/15 text-error">
+                    <lucide-icon name="mail-warning" size="18"></lucide-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-bold text-base-content truncate">Centro de Cobranza</p>
+                    <p class="text-[10px] text-base-content/50">Clientes en mora</p>
+                  </div>
+                </div>
+                <!-- Badge -->
+                <span class="badge badge-error badge-xs font-bold shrink-0 mt-0.5 text-white">{{ notificationService.pendientesCobranza().length }} CRÉDITOS</span>
+              </div>
+
+              <!-- Detalle -->
+              <div class="pl-11 space-y-1">
+                <p class="text-[11px] text-base-content/70 leading-relaxed">
+                  Hay créditos con atraso que requieren envío de carta.
+                </p>
+              </div>
+
+              <!-- CTA -->
+              <div class="pl-11">
+                <span class="text-[10px] text-error font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <lucide-icon name="arrow-right" size="12"></lucide-icon>
+                  Ir al Centro de Cobranza
+                </span>
+              </div>
+            </button>
+          </div>
+        }
+
+        @if (notificationService.solicitudesPendientes().length > 0) {
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-white mb-2 flex items-center gap-1.5 mt-2">
+              <lucide-icon name="file-text" size="12"></lucide-icon>
+              Solicitudes por Evaluar
+            </p>
+            <button
+              class="group flex flex-col gap-2 rounded-2xl bg-base-200/40 hover:bg-warning/5 border border-transparent hover:border-warning/20 p-3 text-left transition-all w-full cursor-pointer"
+              (click)="irASolicitudes()"
+            >
+              <!-- Fila superior -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2 flex-1 min-w-0">
+                  <!-- Ícono de alerta -->
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-warning/15 text-warning">
+                    <lucide-icon name="file-text" size="18"></lucide-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-bold text-base-content truncate">Evaluación de Crédito</p>
+                    <p class="text-[10px] text-base-content/50">Solicitudes pendientes</p>
+                  </div>
+                </div>
+                <!-- Badge -->
+                <span class="badge badge-warning badge-xs font-bold shrink-0 mt-0.5 text-white">
+                  {{ notificationService.solicitudesPendientes().length }} 
+                  {{ notificationService.solicitudesPendientes().length === 1 ? 'SOLICITUD' : 'SOLICITUDES' }}
+                </span>
+              </div>
+
+              <!-- Detalle -->
+              <div class="pl-11 space-y-1">
+                <p class="text-[11px] text-base-content/70 leading-relaxed">
+                  Hay nuevas solicitudes de crédito que requieren evaluación gerencial.
+                </p>
+              </div>
+
+              <!-- CTA -->
+              <div class="pl-11">
+                <span class="text-[10px] text-warning font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <lucide-icon name="arrow-right" size="12"></lucide-icon>
+                  Ir a Solicitudes
+                </span>
+              </div>
+            </button>
+          </div>
+        }
+
       } @else {
         <div class="flex flex-col items-center justify-center py-10 gap-3 text-base-content/30">
           <div class="p-4 rounded-full bg-base-200/60">
@@ -157,7 +248,7 @@
           </div>
           <div class="text-center">
             <p class="text-sm font-bold">Sin pendientes</p>
-            <p class="text-xs opacity-60">No hay comprobantes ni retiros esperando revisión</p>
+            <p class="text-xs opacity-60">No hay comprobantes, retiros ni solicitudes esperando revisión</p>
           </div>
         </div>
       }

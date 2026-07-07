@@ -1,0 +1,211 @@
+<div class="flex flex-col gap-6 p-4 lg:p-8 animate-fade-in">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h1 class="text-3xl font-bold flex items-center gap-3 text-base-content">
+        <lucide-icon name="mail-warning" size="32" class="text-primary"></lucide-icon>
+        Centro de Cobranza
+      </h1>
+      <p class="text-base-content/60 mt-1 flex items-center gap-2">
+        <lucide-icon name="info" size="16"></lucide-icon>
+        Gestión de envío de cartas recordatorias y pre-legales a clientes con atrasos.
+      </p>
+    </div>
+    
+    <div class="flex gap-2">
+      <button class="btn btn-outline btn-primary" (click)="recargar()">
+        <lucide-icon name="refresh-cw" size="18"></lucide-icon>
+        Actualizar Datos
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+    <!-- Nivel 1 (4 a 29 días) -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="card-title text-warning flex items-center gap-2">
+            <lucide-icon name="alert-circle" size="24"></lucide-icon>
+            Nivel 1
+            <div class="badge badge-warning text-white">{{ nivel1().length }}</div>
+          </h2>
+          <span class="text-xs font-bold text-base-content/50 uppercase tracking-widest">4 - 29 DÍAS</span>
+        </div>
+        
+        <p class="text-sm text-base-content/70 mb-4 h-10">Recordatorio amistoso de pago para evitar incremento de moras.</p>
+        
+        <button class="btn btn-warning text-white w-full shadow-lg shadow-warning/20 mb-4" 
+                [disabled]="nivel1().length === 0 || sendingProgress().isActive" 
+                (click)="enviarMasivo(1)">
+          <lucide-icon name="send" size="18"></lucide-icon>
+          Enviar Masivo Nivel 1
+        </button>
+
+        <div class="overflow-y-auto max-h-96 pr-2 custom-scrollbar">
+          @if (nivel1().length === 0) {
+            <div class="text-center py-8 text-base-content/40 text-sm min-h-[200px] flex flex-col items-center justify-center">
+              <lucide-icon name="check-circle" size="32" class="mx-auto mb-2 opacity-50"></lucide-icon>
+              No hay clientes en Nivel 1
+            </div>
+          }
+          @for (item of nivel1(); track item.creditoId) {
+            <div class="bg-base-200/50 p-3 rounded-xl mb-2 border border-base-300">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-bold text-sm truncate pr-2">{{ item.clienteNombre }}</span>
+                <span class="badge badge-sm badge-ghost shrink-0">{{ item.diasAtraso }} d</span>
+              </div>
+              <div class="text-xs text-base-content/60">DNI: {{ item.clienteDocumento }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Nivel 2 (30 a 89 días) -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="card-title text-orange-500 flex items-center gap-2">
+            <lucide-icon name="alert-triangle" size="24"></lucide-icon>
+            Nivel 2
+            <div class="badge bg-orange-500 border-orange-500 text-white">{{ nivel2().length }}</div>
+          </h2>
+          <span class="text-xs font-bold text-base-content/50 uppercase tracking-widest">30 - 89 DÍAS</span>
+        </div>
+        
+        <p class="text-sm text-base-content/70 mb-4 h-10">Requerimiento formal de pago con plazo de 48 horas.</p>
+        
+        <button class="btn bg-orange-500 hover:bg-orange-600 border-none text-white w-full shadow-lg shadow-orange-500/20 mb-4" 
+                [disabled]="nivel2().length === 0 || sendingProgress().isActive" 
+                (click)="enviarMasivo(2)">
+          <lucide-icon name="send" size="18"></lucide-icon>
+          Enviar Masivo Nivel 2
+        </button>
+
+        <div class="overflow-y-auto max-h-96 pr-2 custom-scrollbar">
+          @if (nivel2().length === 0) {
+            <div class="text-center py-8 text-base-content/40 text-sm min-h-[200px] flex flex-col items-center justify-center">
+              <lucide-icon name="check-circle" size="32" class="mx-auto mb-2 opacity-50"></lucide-icon>
+              No hay clientes en Nivel 2
+            </div>
+          }
+          @for (item of nivel2(); track item.creditoId) {
+            <div class="bg-base-200/50 p-3 rounded-xl mb-2 border border-base-300">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-bold text-sm truncate pr-2">{{ item.clienteNombre }}</span>
+                <span class="badge badge-sm badge-ghost shrink-0">{{ item.diasAtraso }} d</span>
+              </div>
+              <div class="text-xs text-base-content/60">DNI: {{ item.clienteDocumento }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Nivel 3 (90+ días) -->
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="card-title text-error flex items-center gap-2">
+            <lucide-icon name="gavel" size="24"></lucide-icon>
+            Nivel 3
+            <div class="badge badge-error text-white">{{ nivel3().length }}</div>
+          </h2>
+          <span class="text-xs font-bold text-base-content/50 uppercase tracking-widest">90+ DÍAS</span>
+        </div>
+        
+        <p class="text-sm text-base-content/70 mb-4 h-10">Último aviso pre-legal antes de acciones judiciales y reporte.</p>
+        
+        <button class="btn btn-error text-white w-full shadow-lg shadow-error/20 mb-4" 
+                [disabled]="nivel3().length === 0 || sendingProgress().isActive" 
+                (click)="enviarMasivo(3)">
+          <lucide-icon name="send" size="18"></lucide-icon>
+          Enviar Masivo Nivel 3
+        </button>
+
+        <div class="overflow-y-auto max-h-96 pr-2 custom-scrollbar">
+          @if (nivel3().length === 0) {
+            <div class="text-center py-8 text-base-content/40 text-sm min-h-[200px] flex flex-col items-center justify-center">
+              <lucide-icon name="check-circle" size="32" class="mx-auto mb-2 opacity-50"></lucide-icon>
+              No hay clientes en Nivel 3
+            </div>
+          }
+          @for (item of nivel3(); track item.creditoId) {
+            <div class="bg-base-200/50 p-3 rounded-xl mb-2 border border-error/30">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-bold text-sm truncate pr-2">{{ item.clienteNombre }}</span>
+                <span class="badge badge-sm badge-error text-white shrink-0">{{ item.diasAtraso }} d</span>
+              </div>
+              <div class="text-xs text-base-content/60">DNI: {{ item.clienteDocumento }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal de Progreso Masivo -->
+@if (sendingProgress().isActive) {
+  <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-base-100 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-white/10 relative">
+      
+      <!-- Encabezado decorativo -->
+      <div class="bg-gradient-to-r from-primary/20 to-secondary/20 p-6 text-center border-b border-base-200">
+        <div class="w-16 h-16 bg-base-100 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+          @if (sendingProgress().current < sendingProgress().total) {
+            <lucide-icon name="mail-warning" size="32" class="text-primary animate-pulse"></lucide-icon>
+          } @else {
+            <lucide-icon name="check-circle-2" size="32" class="text-success"></lucide-icon>
+          }
+        </div>
+        <h3 class="text-xl font-bold">Enviando Nivel {{ sendingProgress().nivel }}</h3>
+        <p class="text-sm opacity-70">Por favor, no cierres esta ventana</p>
+      </div>
+
+      <div class="p-6">
+        <!-- Contadores -->
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-sm font-semibold">Progreso</span>
+          <span class="text-lg font-bold text-primary">{{ sendingProgress().current }} / {{ sendingProgress().total }}</span>
+        </div>
+
+        <!-- Barra de Progreso -->
+        <progress 
+          class="progress progress-primary w-full h-3" 
+          [value]="sendingProgress().current" 
+          [max]="sendingProgress().total">
+        </progress>
+
+        <!-- Resultados Parciales -->
+        <div class="flex justify-between mt-4 text-xs font-medium">
+          <span class="text-success flex items-center gap-1">
+            <lucide-icon name="check" size="14"></lucide-icon>
+            {{ sendingProgress().success }} correctos
+          </span>
+          <span class="text-error flex items-center gap-1">
+            <lucide-icon name="x" size="14"></lucide-icon>
+            {{ sendingProgress().failed }} fallidos
+          </span>
+        </div>
+
+        <!-- Logs Terminal-like -->
+        <div class="mt-6 bg-base-200 rounded-xl p-3 text-[10px] font-mono h-32 overflow-hidden flex flex-col justify-end">
+          @for (log of sendingProgress().logs; track $index) {
+            <div class="opacity-70 truncate" [class.opacity-100]="$first" [class.text-primary]="$first">> {{ log }}</div>
+          }
+        </div>
+        
+        <!-- Botón Cerrar (solo al terminar) -->
+        @if (sendingProgress().current === sendingProgress().total) {
+          <button class="btn btn-primary w-full mt-6" (click)="cerrarModalProgreso()">
+            Finalizar y Cerrar
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

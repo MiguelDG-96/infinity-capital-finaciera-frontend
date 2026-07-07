@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-drawer',
@@ -15,6 +16,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 export class NotificationDrawerComponent implements OnInit, OnDestroy {
   notificationService = inject(NotificationService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   get isAdmin(): boolean {
     const rol = this.authService.currentUserData()?.rol || '';
@@ -40,7 +42,18 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
   }
 
   irATesoreria() {
-    this.notificationService.irATesoreria();
+    this.notificationService.close();
+    this.router.navigate(['/dashboard/admin/tesoreria']);
+  }
+
+  irACobranza() {
+    this.notificationService.close();
+    this.router.navigate(['/dashboard/admin/cobranza']);
+  }
+
+  irASolicitudes() {
+    this.notificationService.close();
+    this.router.navigate(['/dashboard/admin/solicitudes']);
   }
 
   recargar() {

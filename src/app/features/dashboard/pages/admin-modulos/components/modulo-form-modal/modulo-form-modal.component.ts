@@ -47,7 +47,7 @@ export class ModuloFormModalComponent {
     'home', 'landmark', 'search', 'shield', 'lock', 'key', 'settings', 'wrench', 
     'package', 'truck', 'users', 'user', 'building', 'layers', 'globe', 'zap', 
     'lightbulb', 'clock', 'file-text', 'calendar', 'message-square', 'bell', 
-    'rocket', 'star', 'map-pin', 'folder', 'laptop', 'smartphone', 'shopping-cart', 'box'
+    'rocket', 'star', 'map-pin', 'folder', 'laptop', 'smartphone', 'shopping-cart', 'box', 'mail-warning'
   ];
 
   private cleanIcon(icon: string | undefined): string {

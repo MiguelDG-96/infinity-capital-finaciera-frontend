@@ -19,7 +19,7 @@ interface ClientProfile {
 @Component({
   selector: 'app-admin-evaluacion-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule, CreditRatingGaugeComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin-evaluacion-cliente.component.html',
   styleUrls: ['./admin-evaluacion-cliente.component.css']
 })

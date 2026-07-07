@@ -77,11 +77,14 @@ export class CreditoService {
     return this.http.post(`${this.apiUrl}/creditos/${creditoId}/pago-anticipado`, { monto, metodoPago, numeroComprobante });
   }
 
-  registrarPagoRevision(cuotaId: number, monto: number, metodoPago: string, numeroComprobante: string, archivo: File): Observable<any> {
+  registrarPagoRevision(cuotaId: number, monto: number, metodoPago: string, numeroComprobante: string, archivo: File, fechaPago?: string | null): Observable<any> {
     const formData = new FormData();
     formData.append('monto', monto.toString());
     formData.append('metodoPago', metodoPago);
     formData.append('numeroComprobante', numeroComprobante);
+    if (fechaPago) {
+      formData.append('fechaPago', fechaPago);
+    }
     formData.append('archivo', archivo);
     return this.http.post(`${this.apiUrl}/creditos/cuotas/${cuotaId}/registrar-pago-revision`, formData);
   }
@@ -239,5 +242,12 @@ export class CreditoService {
 
   refinanciarCredito(creditoId: number, payload: { nuevaTasa: number, nuevoNumeroCuotas: number, fechaRefinanciamiento?: string }): Observable<{ mensaje: string, nuevoCreditoId: number }> {
     return this.http.post<any>(`${this.apiUrl}/creditos/admin/${creditoId}/refinanciar`, payload);
+  }
+
+  // ==========================================
+  // CORRECCIÓN DE HISTORIAL
+  // ==========================================
+  marcarCuotasPuntuales(creditoId: number, cuotaIds: number[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/creditos/admin/${creditoId}/marcar-puntuales`, { cuotaIds });
   }
 }

@@ -49,6 +49,9 @@ export class DashboardSidebarComponent implements OnInit {
     'estadisticas': '/dashboard/reportes',
     'ayuda': '/dashboard/admin/ayuda',
     'manual': '/dashboard/admin/ayuda',
+    'cobranza': '/dashboard/admin/cobranza',
+    'admin/cobranza': '/dashboard/admin/cobranza',
+    '/dashboard/admin/cobranza': '/dashboard/admin/cobranza',
   };
 
   ngOnInit() {
@@ -76,6 +79,8 @@ export class DashboardSidebarComponent implements OnInit {
               route = '/dashboard/admin/cartera';
             } else if (lowerRuta.includes('ayuda') || lowerNombre.includes('manual')) {
               route = '/dashboard/admin/ayuda';
+            } else if (lowerRuta.includes('cobranza') || lowerNombre.includes('cobranza')) {
+              route = '/dashboard/admin/cobranza';
             }
           }
           

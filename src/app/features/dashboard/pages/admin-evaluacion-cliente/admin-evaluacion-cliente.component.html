@@ -44,17 +44,13 @@
   @if (cliente && !buscando) {
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
       
-      <!-- Panel de Calificación (Medidor) -->
+      <!-- Panel de Datos Cliente -->
       <div class="col-span-1 lg:col-span-6 bg-base-100 rounded-xl shadow-md border border-base-200 overflow-hidden flex flex-col justify-center items-center py-8 relative">
         <div class="absolute top-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-secondary"></div>
         <div class="text-center mb-4">
-          <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Dictamen del Sistema</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Cliente Encontrado</p>
           <h2 class="text-2xl font-extrabold">{{ cliente.nombre }}</h2>
           <p class="font-mono text-sm mt-1 opacity-70">DNI: {{ cliente.dni }}</p>
-        </div>
-        
-        <div class="w-full flex justify-center px-2">
-          <app-credit-rating-gauge [rating]="cliente.calificacion" [size]="380"></app-credit-rating-gauge>
         </div>
       </div>
 
