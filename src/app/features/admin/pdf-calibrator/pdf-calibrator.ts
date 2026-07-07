@@ -119,17 +119,17 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     },
     "telefono": {
         "x": 104,
-        "y": 595,
+        "y": 597,
         "page": 0
     },
     "celular": {
         "x": 504,
-        "y": 596,
+        "y": 598,
         "page": 0
     },
     "correo_electronico": {
         "x": 321,
-        "y": 596,
+        "y": 598,
         "page": 0
     },
     "check_sexo_f": {
@@ -178,12 +178,12 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_exclusivo_no": {
-        "x": 173,
+        "x": 171,
         "y": 732,
         "page": 0
     },
     "check_moneda_soles": {
-        "x": 260,
+        "x": 259,
         "y": 732,
         "page": 0
     },
@@ -209,22 +209,22 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     },
     "direccion": {
         "x": 74,
-        "y": 560,
+        "y": 564,
         "page": 0
     },
     "urbanizacion": {
         "x": 384,
-        "y": 561,
+        "y": 564,
         "page": 0
     },
     "manzana": {
         "x": 279,
-        "y": 561,
+        "y": 564,
         "page": 0
     },
     "lote": {
         "x": 304,
-        "y": 561,
+        "y": 564,
         "page": 0
     },
     "codigo_postal": {
@@ -233,112 +233,112 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 0
     },
     "check_dependiente": {
-        "x": 35,
-        "y": 463,
+        "x": 34,
+        "y": 469,
         "page": 0
     },
     "check_independiente": {
-        "x": 88,
-        "y": 462,
+        "x": 85,
+        "y": 468,
         "page": 0
     },
     "empresa": {
-        "x": 229,
-        "y": 398,
+        "x": 223,
+        "y": 403,
         "page": 0
     },
     "cargo_ocupacion": {
-        "x": 274,
-        "y": 443,
+        "x": 250,
+        "y": 448,
         "page": 0
     },
     "ingreso_mensual": {
         "x": 66,
-        "y": 297,
+        "y": 303,
         "page": 0
     },
     "ingreso_bruto_mensual": {
         "x": 155,
-        "y": 298,
+        "y": 303,
         "page": 0
     },
     "ruc_empresa_digits": {
-        "startX": 74,
-        "y": 396,
+        "startX": 81,
+        "y": 403,
         "spacing": 9.7,
         "page": 0
     },
     "ruc_propio_digits": {
-        "startX": 74,
-        "y": 397,
+        "startX": 81,
+        "y": 403,
         "spacing": 9.7,
         "page": 0
     },
     "telefono_empresa": {
-        "x": 439,
-        "y": 300,
+        "x": 429,
+        "y": 304,
         "page": 0
     },
     "fecha_ingreso_laboral_digits": {
-        "startX": 175,
-        "y": 325,
+        "startX": 174,
+        "y": 332,
         "spacing": 5.7,
         "page": 0
     },
     "direccion_empresa": {
         "x": 76,
-        "y": 345,
+        "y": 350,
         "page": 0
     },
     "nombres_conyuge": {
-        "x": 411,
-        "y": 205,
+        "x": 401,
+        "y": 209,
         "page": 0
     },
     "apellido_pa_conyuge": {
         "x": 49,
-        "y": 205,
+        "y": 209,
         "page": 0
     },
     "apellido_mat_conyuge": {
         "x": 229,
-        "y": 205,
+        "y": 209,
         "page": 0
     },
     "conyuge_dni_digits": {
-        "startX": 340,
-        "y": 227,
-        "spacing": 9.7,
+        "startX": 329,
+        "y": 232,
+        "spacing": 8.8,
         "page": 0
     },
     "conyuge_ocupacion": {
-        "x": 489,
-        "y": 87,
+        "x": 482,
+        "y": 92,
         "page": 0
     },
     "conyuge_ingreso_mensual": {
-        "x": 65,
-        "y": 61,
+        "x": 70,
+        "y": 65,
         "page": 0
     },
     "conyuge_telefono": {
         "x": 461,
-        "y": 153,
+        "y": 157,
         "page": 0
     },
     "conyuge_nacionalidad": {
-        "x": 278,
-        "y": 189,
+        "x": 267,
+        "y": 192,
         "page": 0
     },
     "check_dni_conyuge": {
-        "x": 33,
-        "y": 225,
+        "x": 34,
+        "y": 231,
         "page": 0
     },
     "check_carnet_conyuge": {
-        "x": 158,
-        "y": 225,
+        "x": 161,
+        "y": 231,
         "page": 0
     },
     "activo_auto": {
@@ -348,27 +348,27 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
     },
     "activo_inmueble": {
         "x": 156,
-        "y": 750,
+        "y": 753,
         "page": 1
     },
     "activo_ahorros": {
         "x": 156,
-        "y": 735,
+        "y": 738,
         "page": 1
     },
     "activo_plazofijo": {
         "x": 156,
-        "y": 720,
+        "y": 723,
         "page": 1
     },
     "activo_otros": {
         "x": 156,
-        "y": 707,
+        "y": 709,
         "page": 1
     },
     "total_activos": {
         "x": 156,
-        "y": 693,
+        "y": 694,
         "page": 1
     },
     "pasivo_tarjetas": {
@@ -457,8 +457,8 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 1
     },
     "tasa": {
-        "x": 250,
-        "y": 487,
+        "x": 249,
+        "y": 491,
         "page": 1
     },
     "plazo_meses": {
@@ -467,62 +467,63 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
         "page": 1
     },
     "correo_envio": {
-        "x": 83,
-        "y": 352,
+        "x": 120,
+        "y": 358,
         "page": 1
     },
     "firma_titular_nombre": {
-        "x": 56,
+        "x": 41,
         "y": 621,
-        "page": 8
+        "page": 7
     },
     "firma_titular_doc": {
-        "x": 59,
+        "x": 61,
         "y": 579,
-        "page": 8
+        "page": 7
     },
     "firma_conyuge_nombre": {
-        "x": 252,
+        "x": 233,
         "y": 622,
-        "page": 8
+        "page": 7
     },
     "firma_conyuge_doc": {
         "x": 252,
         "y": 579,
-        "page": 8
+        "page": 7
     },
     "cronograma_monto": {
         "x": 160,
         "y": 765,
-        "page": 8
+        "page": 7
     },
     "cronograma_cuotas": {
         "x": 160,
         "y": 750,
-        "page": 8
+        "page": 7
     },
     "cronograma_fecha": {
         "x": 160,
         "y": 735,
-        "page": 8
+        "page": 7
     },
     "monto_solicitado": {
-        "x": 119,
-        "y": 487,
+        "x": 110,
+        "y": 491,
         "page": 1
     },
     "cuota_mensual": {
-        "x": 373,
-        "y": 451,
+        "x": 372,
+        "y": 455,
         "page": 1
     },
     "cuenta_abono_digits": {
-        "startX": 285,
-        "y": 542,
-        "spacing": 8.7,
+        "startX": 292,
+        "y": 547,
+        "spacing": 9.1,
         "page": 1
     }
-};
+}
+;
 
   coordsString = '';
 
@@ -606,7 +607,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     try {
       const loadingTask = pdfjsLib.getDocument({
-        url: '/pdf/contrato_template_v2.pdf',
+        url: '/pdf/contrato_template_v3.pdf',
         cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
         cMapPacked: true,
         standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
@@ -617,7 +618,7 @@ export class PdfCalibrator implements OnInit, AfterViewInit {
       this.renderCurrentPage();
     } catch (err) {
       console.error('Error cargando PDF', err);
-      alert('Error cargando PDF. Asegúrese de que /pdf/contrato_template_v2.pdf existe.');
+      alert('Error cargando PDF. Asegúrese de que /pdf/contrato_template_v3.pdf existe.');
     }
   }
 

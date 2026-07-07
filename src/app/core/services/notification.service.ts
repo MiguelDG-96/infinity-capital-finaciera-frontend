@@ -88,8 +88,8 @@ export class NotificationService {
     // Primera carga inmediata
     this.fetchAndUpdate();
 
-    // Luego cada 60 segundos
-    this.pollingSubscription = interval(60_000).pipe(
+    // Luego cada 180 segundos (3 minutos) para no saturar el servidor
+    this.pollingSubscription = interval(180_000).pipe(
       switchMap(() => forkJoin({
         pagos: this.fetchPagos(),
         retiros: this.fetchRetiros(),
