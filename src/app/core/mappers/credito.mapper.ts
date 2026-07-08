@@ -160,6 +160,7 @@ export class CreditoMapper {
       observacion: dto.observacion,
       imagenComprobante: dto.imagenComprobante,
       montoPagadoCliente: dto.montoPagadoCliente,
+      montoEnRevision: dto.montoEnRevision,
       comentarioRechazo: dto.comentarioRechazo
     };
   }

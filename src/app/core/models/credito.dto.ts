@@ -182,6 +182,7 @@ export interface CuotaDTO {
   observacion?: string;
   imagenComprobante?: string;
   montoPagadoCliente?: number;
+  montoEnRevision?: number;
   comentarioRechazo?: string;
 }
 

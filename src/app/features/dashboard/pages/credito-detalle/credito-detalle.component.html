@@ -504,7 +504,7 @@
                     <td class="text-center">
                       <!-- CLIENTE: botón subir comprobante -->
                       @if (!isAdminMode() && credito()?.estado === 'ACTIVO') {
-                        @if (cuota.estadoCuota === 'PAGADO') {
+                        @if (cuota.estadoCuota === 'PAGADO' && (!cuota.montoPagadoCliente || cuota.totalCuota <= cuota.montoPagadoCliente)) {
                           <div class="flex items-center justify-center gap-1">
                             <lucide-icon
                               name="check-circle-2"
@@ -551,7 +551,7 @@
                             </button>
                           }
 
-                          @if (cuota.estadoCuota !== 'PAGADO' && cuota.estadoCuota !== 'REVISION') {
+                          @if ((cuota.estadoCuota !== 'PAGADO' || (cuota.montoPagadoCliente && cuota.totalCuota > cuota.montoPagadoCliente)) && cuota.estadoCuota !== 'REVISION') {
                             <button
                               class="btn btn-ghost btn-xs text-success"
                               (click)="abrirSubirComprobante(cuota)"
@@ -1311,7 +1311,7 @@
             <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">
               <span class="text-xs opacity-60">Monto Declarado</span>
               <span class="font-black text-primary text-lg">{{
-                cuotaSeleccionada()?.montoPagadoCliente | currency: 'S/ '
+                (cuotaSeleccionada()?.montoEnRevision || cuotaSeleccionada()?.montoPagadoCliente) | currency: 'S/ '
               }}</span>
             </div>
             <div class="flex justify-between items-center p-3 bg-base-200/50 rounded-2xl">

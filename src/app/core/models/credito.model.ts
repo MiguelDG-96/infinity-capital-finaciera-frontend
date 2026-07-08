@@ -133,6 +133,7 @@ export interface Cuota {
   observacion?: string;
   imagenComprobante?: string;
   montoPagadoCliente?: number;
+  montoEnRevision?: number;
   comentarioRechazo?: string;
 }
 

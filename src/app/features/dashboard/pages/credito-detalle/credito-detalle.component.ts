@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { CreditoService } from '../../../../core/services/credito.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { Credito, Cuota } from '../../../../core/models/credito.model';
 import { ContratoPdfService } from '../../../../core/services/contrato-pdf.service';
 import { EstadoCuentaPdfService } from '../../../../core/services/estado-cuenta-pdf.service';
@@ -37,11 +38,18 @@ export class CreditoDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private creditoService = inject(CreditoService);
+  private authService = inject(AuthService);
   private pdfService = inject(ContratoPdfService);
   private estadoCuentaPdfService = inject(EstadoCuentaPdfService);
   private cartaNoAdeudoPdfService = inject(CartaNoAdeudoPdfService);
   private cartaCobranzaPdfService = inject(CartaCobranzaPdfService);
   private toastService = inject(ToastService);
+
+  // True cuando el usuario logueado es ADMIN o TRABAJADOR (pueden aprobar pagos directamente)
+  readonly isPagoDirecto = computed(() => {
+    const rol = this.authService.currentUserData()?.rol?.toUpperCase() || '';
+    return rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR' || rol === 'ADMIN' || rol === 'TRABAJADOR';
+  });
 
   readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
@@ -298,19 +306,37 @@ export class CreditoDetalleComponent implements OnInit {
       return;
     }
 
+    // Admin y Trabajador aprueban el pago directo sin pasar por flujo de revisión
+    const esPagoDirecto = this.isPagoDirecto();
     this.subiendoComprobante.set(true);
     this.creditoService.registrarPagoRevision(
       cuota.id,
       this.comprobanteForm.monto,
       this.comprobanteForm.metodoPago,
       this.comprobanteForm.numeroComprobante,
-      this.comprobanteArchivo || new File([''], 'empty.txt', { type: 'text/plain' }), // Dummy file for FormData if needed, but backend takes required=false
+      this.comprobanteArchivo || new File([''], 'empty.txt', { type: 'text/plain' }),
       this.comprobanteForm.fechaPago
     ).subscribe({
       next: (resp) => {
-        this.subiendoComprobante.set(false);
-        this.mostrarModalSubirComprobante.set(false);
-        this.cargarDetalle(this.credito()!.id);
+        if (esPagoDirecto) {
+          // Admin/Trabajador aprueban automáticamente sin revisión
+          this.creditoService.verificarPago(cuota.id).subscribe({
+            next: () => {
+              this.subiendoComprobante.set(false);
+              this.mostrarModalSubirComprobante.set(false);
+              this.cargarDetalle(this.credito()!.id);
+            },
+            error: (err) => {
+              this.subiendoComprobante.set(false);
+              alert(err.error?.error || 'El pago se registró pero no se pudo aprobar automáticamente.');
+              this.cargarDetalle(this.credito()!.id);
+            }
+          });
+        } else {
+          this.subiendoComprobante.set(false);
+          this.mostrarModalSubirComprobante.set(false);
+          this.cargarDetalle(this.credito()!.id);
+        }
       },
       error: (err) => {
         this.subiendoComprobante.set(false);
