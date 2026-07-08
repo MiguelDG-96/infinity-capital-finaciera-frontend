@@ -236,6 +236,7 @@ export class CreditoService {
     interesesVencidos: number;
     moraTotal: number;
     deudaTotalAProrratear: number;
+    tasaOriginal: number;
   }> {
     return this.http.get<any>(`${this.apiUrl}/creditos/admin/${creditoId}/refinanciamiento-resumen`);
   }

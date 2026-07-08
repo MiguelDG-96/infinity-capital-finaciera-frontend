@@ -33,6 +33,7 @@ export class RefinanciamientoModalComponent {
     interesesVencidos: number;
     moraTotal: number;
     deudaTotalAProrratear: number;
+    tasaOriginal: number;
   } | null>(null);
 
   // Formulario
@@ -69,6 +70,9 @@ export class RefinanciamientoModalComponent {
     this.creditoService.obtenerResumenRefinanciamiento(id).subscribe({
       next: (res) => {
         this.resumen.set(res);
+        if (res.tasaOriginal) {
+          this.nuevaTasa.set(res.tasaOriginal);
+        }
         this.cargandoResumen.set(false);
       },
       error: (err) => {
@@ -92,7 +96,7 @@ export class RefinanciamientoModalComponent {
     
     let nEncontrado = 0;
     let mejorDiferencia = Infinity;
-    const MAX_CUOTAS = 60; // Límite razonable
+    const MAX_CUOTAS = 72; // Límite razonable
 
     for (let n = 1; n <= MAX_CUOTAS; n++) {
       const tem = tasa / 100;
