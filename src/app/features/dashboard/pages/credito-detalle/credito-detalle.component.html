@@ -472,7 +472,7 @@
                     </td>
                     <td class="text-center">
                       <div class="font-black text-sm text-base-content">
-                        {{ cuota.totalCuota | currency: 'S/ ' }}
+                        {{ getTotalCuotaReal(cuota) | currency: 'S/ ' }}
                       </div>
                       @if (cuota.montoPagadoCliente) {
                         <div class="text-[9px] text-success font-bold mt-0.5">
@@ -480,11 +480,11 @@
                         </div>
                         @if (
                           cuota.estadoCuota === 'PAGADO_PARCIAL' ||
-                          cuota.totalCuota > cuota.montoPagadoCliente
+                          getTotalCuotaReal(cuota) > cuota.montoPagadoCliente
                         ) {
                           <div class="text-[9px] text-error font-bold leading-tight">
                             Resta:
-                            {{ cuota.totalCuota - cuota.montoPagadoCliente | currency: 'S/ ' }}
+                            {{ getTotalCuotaReal(cuota) - cuota.montoPagadoCliente | currency: 'S/ ' }}
                           </div>
                         }
                       }
@@ -504,7 +504,7 @@
                     <td class="text-center">
                       <!-- CLIENTE: botón subir comprobante -->
                       @if (!isAdminMode() && credito()?.estado === 'ACTIVO') {
-                        @if (cuota.estadoCuota === 'PAGADO' && (!cuota.montoPagadoCliente || cuota.totalCuota <= cuota.montoPagadoCliente)) {
+                        @if (cuota.estadoCuota === 'PAGADO' && (!cuota.montoPagadoCliente || getTotalCuotaReal(cuota) <= cuota.montoPagadoCliente)) {
                           <div class="flex items-center justify-center gap-1">
                             <lucide-icon
                               name="check-circle-2"
@@ -538,7 +538,7 @@
                         }
                       }
 
-                      <!-- ADMIN: botones de acción -->
+                          <!-- ADMIN: botones de acción -->
                       @if (isAdminMode()) {
                         <div class="flex justify-center gap-1">
                           @if (cuota.estadoCuota === 'PAGADO') {
@@ -551,7 +551,7 @@
                             </button>
                           }
 
-                          @if ((cuota.estadoCuota !== 'PAGADO' || (cuota.montoPagadoCliente && cuota.totalCuota > cuota.montoPagadoCliente)) && cuota.estadoCuota !== 'REVISION') {
+                          @if ((cuota.estadoCuota !== 'PAGADO' || (cuota.montoPagadoCliente && getTotalCuotaReal(cuota) > cuota.montoPagadoCliente)) && cuota.estadoCuota !== 'REVISION') {
                             <button
                               class="btn btn-ghost btn-xs text-success"
                               (click)="abrirSubirComprobante(cuota)"

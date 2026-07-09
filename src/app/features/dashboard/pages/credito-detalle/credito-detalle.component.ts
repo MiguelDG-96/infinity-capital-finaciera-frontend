@@ -213,9 +213,10 @@ export class CreditoDetalleComponent implements OnInit {
   pagarCuota(cuota: Cuota) {
     if (cuota.estadoCuota === 'PAGADO' || this.procesando()) return;
 
-    if (confirm(`¿Deseas pagar la cuota #${cuota.numeroCuota} por un total de S/ ${cuota.totalCuota}?`)) {
+    const totalReal = this.getTotalCuotaReal(cuota);
+    if (confirm(`¿Deseas pagar la cuota #${cuota.numeroCuota} por un total de S/ ${totalReal}?`)) {
       this.procesando.set(true);
-      this.creditoService.pagarCuota(cuota.id, cuota.totalCuota, 'SALDO_BILLETERA').subscribe({
+      this.creditoService.pagarCuota(cuota.id, totalReal, 'SALDO_BILLETERA').subscribe({
         next: () => {
           this.procesando.set(false);
           this.cargarDetalle(this.credito()!.id);
@@ -232,7 +233,8 @@ export class CreditoDetalleComponent implements OnInit {
 
   abrirSubirComprobante(cuota: Cuota) {
     this.cuotaSeleccionada.set(cuota);
-    const montoPendiente = Math.max(0, (cuota.totalCuota || 0) - (cuota.montoPagadoCliente || 0));
+    const totalReal = this.getTotalCuotaReal(cuota);
+    const montoPendiente = Math.max(0, totalReal - (cuota.montoPagadoCliente || 0));
     this.comprobanteForm = {
       monto: Number(montoPendiente.toFixed(2)),
       metodoPago: 'YAPE',
@@ -420,9 +422,10 @@ export class CreditoDetalleComponent implements OnInit {
     const cred = this.credito();
     if (!cred) return;
 
+    const totalReal = this.getTotalCuotaReal(cuota);
     // Convert total to words simple logic (fallback to string concatenation if complex)
-    const intPart = Math.floor(cuota.montoPagadoCliente || cuota.totalCuota);
-    const decimalPart = Math.round(((cuota.montoPagadoCliente || cuota.totalCuota) - intPart) * 100);
+    const intPart = Math.floor(cuota.montoPagadoCliente || totalReal);
+    const decimalPart = Math.round(((cuota.montoPagadoCliente || totalReal) - intPart) * 100);
     
     // Preparar los conceptos (Capital, Interés, Seguro, Mora, etc)
     const conceptos = [];
@@ -437,7 +440,7 @@ export class CreditoDetalleComponent implements OnInit {
 
     // Ajuste si hay monto pagado diferente al total (solo para que cuadre el recibo visual)
     const totalConceptos = conceptos.reduce((sum, item) => sum + item.value, 0);
-    const montoRealPagado = cuota.montoPagadoCliente || cuota.totalCuota;
+    const montoRealPagado = cuota.montoPagadoCliente || totalReal;
     const diferenciaRedondeo = Number((montoRealPagado - totalConceptos).toFixed(2));
 
     if (Math.abs(diferenciaRedondeo) > 0) {
@@ -956,6 +959,34 @@ export class CreditoDetalleComponent implements OnInit {
       return dif > 0.01 ? dif : 0;
     }
     return 0;
+  }
+
+  /**
+   * Calcula el total real de la cuota sumando capital + interés + penalidad + cargo_refinanciamiento.
+   * Corrige el bug del backend donde, al generar cuotas de créditos refinanciados con penalidad,
+   * el total_cuota guardado no incluía el cargo_refinanciamiento.
+   * Si el total_cuota de la BD ya cuadra con la suma, se devuelve tal cual.
+   * Si hay discrepancia de más de 0.01, se usa la suma correcta.
+   */
+  getTotalCuotaReal(cuota: Cuota): number {
+    const refin = this.getCargoRefinanciamientoVisual(cuota);
+    const totalCalculado = Number((
+      (cuota.capital || 0) +
+      (cuota.interes || 0) +
+      (cuota.seguro || 0) +
+      (cuota.comision || 0) +
+      (cuota.penalidad || 0) +
+      refin
+    ).toFixed(2));
+
+    const totalBD = cuota.totalCuota || 0;
+
+    // Si la BD ya tiene el valor correcto, usarlo directamente
+    if (Math.abs(totalCalculado - totalBD) <= 0.01) return totalBD;
+
+    // Si hay discrepancia, el total calculado es el correcto
+    // (el backend olvidó sumar el cargo_refinanciamiento en cuotas con penalidad)
+    return totalCalculado;
   }
 
   getProximoVencimiento(): Date | null {
