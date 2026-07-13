@@ -1,86 +1,125 @@
-<div class="relative w-full overflow-hidden min-h-[600px] flex items-center justify-center p-4 md:p-8">
-  
+<div
+  class="relative w-full overflow-hidden min-h-[550px] flex items-center justify-center p-4 md:p-8"
+>
   <!-- Full Background Image -->
   <div class="absolute inset-0 z-0">
-    <img src="/hero/banner/hero.png" alt="Background" class="w-full h-full object-cover object-center" />
-    <!-- Gradient overlay to ensure the left card and text look good, and right side stays visible -->
-    <div class="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent"></div>
+    <img
+      src="/hero/banner/hero.png"
+      alt="Background"
+      class="w-full h-full object-cover object-[75%_center] md:object-center"
+    />
+    <!-- Gradient overlay: top-to-bottom on mobile, left-to-right on desktop -->
+    <div
+      class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-white/90 via-white/40 to-transparent md:from-white/70 md:via-white/10 md:to-transparent"
+    ></div>
+    <!-- Difuminado de abajo hacia arriba -->
+    <div class="absolute inset-x-0 bottom-0 h-24 md:h-40 bg-gradient-to-t from-white via-white/60 to-transparent z-0"></div>
   </div>
-  
+
   <!-- Main Container -->
-  <div class="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 mt-8">
-    
+  <div
+    class="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 -mt-80 md:-mt-18"
+  >
     <!-- Left Glass Card -->
-    <div class="w-full lg:w-1/2 bg-white/50  border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2.5rem] p-6 md:p-10 z-20 flex flex-col justify-center">
-      
+    <div
+      class="w-full lg:w-1/2 bg-white/30 border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2.5rem] px-6 py-3 md:px-10 md:py-6 z-20 flex flex-col justify-center"
+    >
       <!-- Pill Badge -->
-      <div class="bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 rounded-full uppercase w-fit mb-5 tracking-wider shadow-md">
+      <div
+        class="bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 rounded-full uppercase w-fit mb-5 tracking-wider shadow-md"
+      >
         Créditos para cumplir tus metas
       </div>
-      
+
       <!-- Title -->
-      <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-5 leading-[1.1] tracking-tight">
+      <h1
+        class="text-2xl md:text-4xl lg:text-4xl font-extrabold text-gray-900 mb-5 leading-[1.1] tracking-tight"
+      >
         Impulsamos tus sueños, <br />
         <span class="text-red-600">financiamos tu futuro.</span>
       </h1>
-      
+
       <!-- Subtitle -->
-      <p class="text-gray-600 text-xs md:text-sm lg:text-base mb-8 max-w-xl leading-relaxed">
-        Soluciones financieras rápidas, seguras y accesibles para personas y empresas que quieren crecer.
+      <p class="text-gray-600 text-xs md:text-sm lg:text-base mb-6 max-w-xl leading-relaxed">
+        Soluciones financieras rápidas, seguras y accesibles para personas y empresas que quieren
+        crecer.
       </p>
-      
+
       <!-- Features Row -->
       <div class="flex flex-col sm:flex-row gap-3 mb-8">
         <!-- Feature 1 -->
-        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+        <div
+          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+        >
           <div class="text-red-600">
             <lucide-icon name="zap" [size]="18" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Aprobación<br/>rápida</span>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+            >Aprobación<br />rápida</span
+          >
         </div>
         <!-- Feature 2 -->
-        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+        <div
+          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+        >
           <div class="text-red-600">
             <lucide-icon name="shield-check" [size]="18" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Seguridad<br/>garantizada</span>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+            >Seguridad<br />garantizada</span
+          >
         </div>
         <!-- Feature 3 -->
-        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+        <div
+          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+        >
           <div class="text-red-600">
             <lucide-icon name="headset" [size]="18" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Asesoría<br/>personalizada</span>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+            >Asesoría<br />personalizada</span
+          >
         </div>
       </div>
-      
+
       <!-- Buttons -->
       <div class="flex flex-col sm:flex-row items-center gap-3">
-        <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto" routerLink="/register">
+        <button
+          class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto"
+          routerLink="/register"
+        >
           Solicitar préstamo
           <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
         </button>
-        <button class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto">
+        <button
+          class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto"
+        >
           Conoce más
           <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
         </button>
       </div>
     </div>
-    
+
     <!-- Right Section (Empty except for floating card so BG is visible) -->
-    <div class="w-full lg:w-1/2 relative z-10 flex items-end justify-end mt-8 lg:mt-0 min-h-[300px]">
-      
+    <div
+      class="w-full lg:w-1/2 relative z-10 flex items-end justify-end mt-8 lg:mt-0 min-h-[300px]"
+    >
       <!-- Floating Glass Card positioned over the background image -->
-      <div class="absolute bottom-4 right-4 md:bottom-10 md:right-10 bg-white/90 backdrop-blur-xl border border-white p-4 rounded-2xl shadow-2xl z-30 flex items-center gap-3 transition-transform hover:-translate-y-2">
-        <div class="bg-red-50 p-3 rounded-xl text-red-600 border border-red-100 flex items-center justify-center">
+      <div
+        class="absolute bottom-4 right-4 md:bottom-0 md:right-0 bg-white/90 backdrop-blur-xl border border-white p-4 rounded-2xl shadow-2xl z-30 flex items-center gap-3 transition-transform hover:-translate-y-2"
+      >
+        <div
+          class="bg-red-50 p-3 rounded-xl text-red-600 border border-red-100 flex items-center justify-center"
+        >
           <lucide-icon name="shield-check" [size]="20" [strokeWidth]="2.5"></lucide-icon>
         </div>
         <div class="pr-2">
-          <p class="font-bold text-gray-900 text-xs leading-tight">Confianza que<br/>te impulsa</p>
-          <p class="text-red-600 font-bold text-[9px] mt-1 uppercase tracking-wide">Más de 5,000<br/>clientes satisfechos</p>
+          <p class="font-bold text-gray-900 text-xs leading-tight">Confianza que<br />te impulsa</p>
+          <p class="text-red-600 font-bold text-[9px] mt-1 uppercase tracking-wide">
+            Más de 5,000<br />clientes satisfechos
+          </p>
         </div>
       </div>
-      
     </div>
   </div>
 </div>
