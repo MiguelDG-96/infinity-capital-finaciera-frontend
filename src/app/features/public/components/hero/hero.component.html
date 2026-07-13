@@ -1,89 +1,86 @@
-<div
-  class="relative w-full overflow-hidden bg-gray-100 cursor-grab active:cursor-grabbing select-none"
-  (touchstart)="onTouchStart($event)"
-  (touchend)="onTouchEnd($event)"
-  (mousedown)="onMouseDown($event)"
-  (mouseup)="onMouseUp($event)"
-  (mouseleave)="onMouseUp($event)"
->
-  <!-- Carousel Track -->
-  <div
-    class="flex w-full transition-transform duration-700 ease-in-out h-[600px]"
-    [style.transform]="'translateX(-' + currentSlide() * 100 + '%)'"
-  >
-    <!-- Slide Items -->
-    @for (slide of slides; track slide.title; let i = $index) {
-      <div
-        class="w-full h-full flex-shrink-0 flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-16 lg:px-24 relative pb-12 md:pb-0"
-        [ngClass]="slide.bgColor"
-      >
-        <!-- Left Content: Text -->
-        <div
-          class="w-full md:w-1/2 flex flex-col justify-center h-1/2 md:h-full z-10 pl-0 md:pl-12 text-center md:text-left"
-        >
-          <!-- Title Animation -->
-          <h1
-            class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 transition-all duration-1000 transform leading-tight"
-            [ngClass]="[
-              currentSlide() === i ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0',
-              slide.textTitleColor,
-            ]"
-          >
-            {{ slide.title }}
-          </h1>
-
-          <!-- Subtitle Animation (Delayed) -->
-          <p
-            class="text-lg md:text-2xl mb-6 md:mb-8 transition-all duration-1000 delay-200 transform leading-snug"
-            [ngClass]="[
-              currentSlide() === i ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0',
-              slide.textSubtitleColor,
-            ]"
-          >
-            {{ slide.subtitle }}
-          </p>
-
-          <!-- CTA Button Animation (More Delayed) -->
-          <div class="flex justify-center md:justify-start">
-            <button
-              class="w-fit bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 md:py-4 md:px-10 rounded-full shadow-lg transition-all duration-1000 delay-500 transform text-sm md:text-base"
-              [ngClass]="
-                currentSlide() === i ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'
-              "
-              routerLink="/register"
-            >
-              Solicítalo aquí
-            </button>
+<div class="relative w-full overflow-hidden min-h-[600px] flex items-center justify-center p-4 md:p-8">
+  
+  <!-- Full Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img src="/hero/banner/hero.png" alt="Background" class="w-full h-full object-cover object-center" />
+    <!-- Gradient overlay to ensure the left card and text look good, and right side stays visible -->
+    <div class="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent"></div>
+  </div>
+  
+  <!-- Main Container -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 mt-8">
+    
+    <!-- Left Glass Card -->
+    <div class="w-full lg:w-1/2 bg-white/50  border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2.5rem] p-6 md:p-10 z-20 flex flex-col justify-center">
+      
+      <!-- Pill Badge -->
+      <div class="bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 rounded-full uppercase w-fit mb-5 tracking-wider shadow-md">
+        Créditos para cumplir tus metas
+      </div>
+      
+      <!-- Title -->
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-5 leading-[1.1] tracking-tight">
+        Impulsamos tus sueños, <br />
+        <span class="text-red-600">financiamos tu futuro.</span>
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-gray-600 text-xs md:text-sm lg:text-base mb-8 max-w-xl leading-relaxed">
+        Soluciones financieras rápidas, seguras y accesibles para personas y empresas que quieren crecer.
+      </p>
+      
+      <!-- Features Row -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <!-- Feature 1 -->
+        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+          <div class="text-red-600">
+            <lucide-icon name="zap" [size]="18" [strokeWidth]="2.5"></lucide-icon>
           </div>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Aprobación<br/>rápida</span>
         </div>
-
-        <!-- Right Content: Image -->
-        <div
-          class="flex md:flex w-full md:w-1/2 h-1/2 md:h-full items-center justify-center relative pt-8 md:pt-0"
-        >
-          @if (slide.image) {
-            <img
-              [src]="slide.image"
-              alt="Hero Banner"
-              class="max-h-full max-w-full object-contain transition-all duration-1000 transform"
-              [ngClass]="
-                currentSlide() === i ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'
-              "
-            />
-          }
+        <!-- Feature 2 -->
+        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+          <div class="text-red-600">
+            <lucide-icon name="shield-check" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+          </div>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Seguridad<br/>garantizada</span>
+        </div>
+        <!-- Feature 3 -->
+        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1">
+          <div class="text-red-600">
+            <lucide-icon name="headset" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+          </div>
+          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight">Asesoría<br/>personalizada</span>
         </div>
       </div>
-    }
-  </div>
-
-  <!-- Navigation Dots -->
-  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
-    @for (slide of slides; track slide.title; let i = $index) {
-      <button
-        (click)="goToSlide(i)"
-        class="h-3 rounded-full transition-all duration-300"
-        [ngClass]="currentSlide() === i ? 'bg-red-600 w-10' : 'bg-gray-400 w-3 hover:bg-gray-600'"
-      ></button>
-    }
+      
+      <!-- Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-3">
+        <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto" routerLink="/register">
+          Solicitar préstamo
+          <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
+        </button>
+        <button class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto">
+          Conoce más
+          <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Right Section (Empty except for floating card so BG is visible) -->
+    <div class="w-full lg:w-1/2 relative z-10 flex items-end justify-end mt-8 lg:mt-0 min-h-[300px]">
+      
+      <!-- Floating Glass Card positioned over the background image -->
+      <div class="absolute bottom-4 right-4 md:bottom-10 md:right-10 bg-white/90 backdrop-blur-xl border border-white p-4 rounded-2xl shadow-2xl z-30 flex items-center gap-3 transition-transform hover:-translate-y-2">
+        <div class="bg-red-50 p-3 rounded-xl text-red-600 border border-red-100 flex items-center justify-center">
+          <lucide-icon name="shield-check" [size]="20" [strokeWidth]="2.5"></lucide-icon>
+        </div>
+        <div class="pr-2">
+          <p class="font-bold text-gray-900 text-xs leading-tight">Confianza que<br/>te impulsa</p>
+          <p class="text-red-600 font-bold text-[9px] mt-1 uppercase tracking-wide">Más de 5,000<br/>clientes satisfechos</p>
+        </div>
+      </div>
+      
+    </div>
   </div>
 </div>
