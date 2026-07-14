@@ -1,0 +1,133 @@
+<div class="relative w-full overflow-hidden min-h-screen">
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img src="/products/creditos-personales.png" alt="Fondo Créditos" class="w-full h-full object-cover object-[75%_center] md:object-[65%_center]" />
+    <!-- Gradient overlay similar to Hero to ensure text is readable -->
+    <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-white/95 via-white/80 md:via-white/50 to-transparent"></div>
+    <!-- Bottom fade to blend with next section -->
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-0"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-12 flex flex-col items-start justify-center min-h-screen">
+    
+    <!-- Top Left: Préstamo a tu medida Pill -->
+    <div class="bg-red-600 text-white text-[10px] sm:text-[11px] font-bold px-4 py-2 rounded-full uppercase w-fit mb-6 tracking-wider shadow-md">
+      Préstamo a tu medida
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl lg:text-[4rem] font-extrabold text-[#0A1A2F] mb-6 leading-[1.1] tracking-tight max-w-3xl">
+      Créditos Personales <br />
+      <span class="text-red-600">rápidos y seguros.</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="text-gray-600 text-sm md:text-base lg:text-lg mb-6 max-w-xl leading-relaxed font-medium">
+      Soluciones financieras rápidas para tus necesidades personales. Obtén liquidez inmediata con tasas preferenciales y plazos flexibles que se adaptan a tu capacidad de pago sin papeleos interminables.
+    </p>
+
+    <!-- 3 Features Middle Section (Responsive) -->
+    <div class="w-full max-w-2xl mb-8">
+      <!-- On mobile: flex-col (separate cards). On desktop: unified white row with dividers -->
+      <div class="flex flex-col md:flex-row gap-2 md:gap-0 md:bg-white/95 md:backdrop-blur-xl md:rounded-[2rem] md:shadow-xl md:border md:border-white/60 p-0 md:p-2">
+        
+        <!-- Feature 1 -->
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md md:bg-transparent rounded-[1.5rem] md:rounded-none p-5 md:p-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-50 p-2 rounded-full text-red-600 flex-shrink-0">
+            <lucide-icon name="zap" [size]="24" [strokeWidth]="2.5"></lucide-icon>
+          </div>
+          <p class="text-xs md:text-[13px] lg:text-sm font-bold text-gray-800 leading-tight">
+            Aprobación y desembolso en <br class="hidden md:block" />
+            <span class="text-red-600">menos de 24 horas.</span>
+          </p>
+        </div>
+        
+        <!-- Divider -->
+        <div class="hidden md:block w-px bg-gray-200 my-6"></div>
+
+        <!-- Feature 2 -->
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md md:bg-transparent rounded-[1.5rem] md:rounded-none p-5 md:p-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-50 p-2.5 rounded-full text-red-600 flex-shrink-0">
+            <lucide-icon name="calendar-days" [size]="24" [strokeWidth]="2.5"></lucide-icon>
+          </div>
+          <p class="text-xs md:text-[13px] lg:text-sm font-bold text-gray-800 leading-tight">
+            Plazos sumamente flexibles desde <span class="text-red-600">6</span> hasta <span class="text-red-600">48 meses.</span>
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <div class="hidden md:block w-px bg-gray-200 my-6"></div>
+
+        <!-- Feature 3 -->
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md md:bg-transparent rounded-[1.5rem] md:rounded-none p-5 md:p-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-50 p-2.5 rounded-full text-red-600 flex-shrink-0 text-2xl font-black italic text-center w-[44px] h-[44px] flex items-center justify-center">
+            %
+          </div>
+          <p class="text-xs md:text-[13px] lg:text-sm font-bold text-gray-800 leading-tight">
+            Tasas de interés desde <span class="text-red-600">12%</span> mensual.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Buttons & Floating Card -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-16 relative w-full lg:w-auto">
+      <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto text-lg">
+        Solicitar ahora
+        <lucide-icon name="arrow-right" [size]="20" [strokeWidth]="3"></lucide-icon>
+      </button>
+      <button class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-md hover:shadow-lg w-full sm:w-auto text-lg">
+        Simular cuotas
+      </button>
+    </div>
+
+    <!-- Bottom 4 Features Section -->
+    <div class="w-full mt-auto bg-white/95 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white p-6 md:p-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x lg:divide-gray-100">
+        
+        <div class="flex items-center gap-5 lg:px-8">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="shield" [size]="36" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Seguridad garantizada</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Tus datos siempre protegidos.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-5 lg:px-8">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="headset" [size]="36" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Asesoría personalizada</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Te acompañamos en todo el proceso.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-5 lg:px-8">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="handshake" [size]="36" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Sin papeleos innecesarios</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Proceso 100% digital y simple.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-5 lg:px-8">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="lock" [size]="36" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Transparencia total</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Condiciones claras desde el inicio.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

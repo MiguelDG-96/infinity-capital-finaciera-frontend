@@ -22,7 +22,8 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/public-layout/public-layout.component').then(m => m.PublicLayoutComponent),
     children: [
       { path: '', loadComponent: () => import('./features/public/landing/landing.component').then(m => m.LandingComponent) },
-      { path: 'simulator', loadComponent: () => import('./features/public/simulator/simulator.component').then(m => m.SimulatorComponent) }
+      { path: 'simulator', loadComponent: () => import('./features/public/simulator/simulator.component').then(m => m.SimulatorComponent) },
+      { path: 'creditos-personales', loadComponent: () => import('./features/public/components/products/product-detail/product-detail.component').then(m => m.ProductDetailComponent) }
     ]
   },
   {

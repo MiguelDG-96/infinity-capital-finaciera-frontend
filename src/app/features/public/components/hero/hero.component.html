@@ -18,7 +18,7 @@
 
   <!-- Main Container -->
   <div
-    class="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 -mt-80 md:-mt-18"
+    class="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 -mt-80 md:-mt-18"
   >
     <!-- Left Glass Card -->
     <div
@@ -33,9 +33,9 @@
 
       <!-- Title -->
       <h1
-        class="text-2xl md:text-4xl lg:text-4xl font-extrabold text-gray-900 mb-5 leading-[1.1] tracking-tight"
+        class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-5 leading-[1.1] tracking-tight"
       >
-        Impulsamos tus sueños, <br />
+        Impulsamos tus sueños,<br />
         <span class="text-red-600">financiamos tu futuro.</span>
       </h1>
 
@@ -86,15 +86,16 @@
       <div class="flex flex-col sm:flex-row items-center gap-3">
         <button
           class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto"
-          routerLink="/register"
+          routerLink="/simulator"
         >
-          Solicitar préstamo
+          Simular préstamo
           <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
         </button>
         <button
           class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto"
+          routerLink="/register"
         >
-          Conoce más
+          Registrate
           <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
         </button>
       </div>
