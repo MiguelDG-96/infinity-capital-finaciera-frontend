@@ -6,7 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './product-detail.component.html'
 })
 export class ProductDetailComponent {}

@@ -136,6 +136,40 @@ export class CreditoDetalleComponent implements OnInit {
     return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
   });
 
+  saldoPendienteReal = computed(() => {
+    const cred = this.credito();
+    if (!cred) return 0;
+    
+    if (cred.debeActualidad > 0) return cred.debeActualidad;
+
+    const hoy = new Date();
+    const cuotasVencidas = cred.cuotas.filter(c => 
+      c.estadoCuota === 'MORA' || 
+      (c.estadoCuota === 'PENDIENTE' && new Date(c.fechaVencimiento) < hoy)
+    );
+    
+    if (cuotasVencidas.length > 0) {
+       let total = 0;
+       cuotasVencidas.forEach(c => {
+         total += this.getTotalCuotaReal(c) - (c.montoPagadoCliente || 0);
+       });
+       return total;
+    }
+    
+    return 0;
+  });
+
+  puedeEnviarCartaCobranza = computed(() => {
+    const cred = this.credito();
+    if (!cred || !this.isAdminMode()) return false;
+    
+    if (cred.estado === 'MORA' || cred.estado === 'ATRASADO') return true;
+    if (this.saldoPendienteReal() > 0) return true;
+    if (cred.diasAtraso && cred.diasAtraso > 0) return true;
+    
+    return false;
+  });
+
   ngOnInit() {
     this.isAdminMode.set(this.route.snapshot.url.some(segment => segment.path === 'admin'));
     this.route.paramMap.subscribe(params => {
