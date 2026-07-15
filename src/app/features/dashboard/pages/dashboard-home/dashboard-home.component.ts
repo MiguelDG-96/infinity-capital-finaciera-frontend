@@ -11,11 +11,12 @@ import { TransaccionVirtual, CuentaVirtual } from '../../../../core/models/bille
 import { Credito } from '../../../../core/models/credito.model';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { QrModalComponent } from '../../../../shared/components/qr-modal/qr-modal.component';
 
 @Component({
   selector: 'app-dashboard-home',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink],
+  imports: [CommonModule, LucideAngularModule, RouterLink, QrModalComponent],
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.css',
 })
@@ -42,6 +43,10 @@ export class DashboardHomeComponent implements OnInit {
   solicitudesPendientes = signal(0);
   retirosPendientes = signal(0);
   numCreditosActivos = signal(0);
+
+  // QR Modal
+  showQrModal = signal(false);
+  qrToGenerate = signal('https://infiny-capital.com');
 
   private tesoreriaService = inject(TesoreriaService);
 
@@ -94,5 +99,13 @@ export class DashboardHomeComponent implements OnInit {
     const activo = this.creditos()[0];
     if (!activo || !activo.cuotas) return null;
     return activo.cuotas.find(q => q.estadoCuota === 'PENDIENTE' || q.estadoCuota === 'MORA');
+  }
+
+  openQrGenerator() {
+    this.showQrModal.set(true);
+  }
+
+  closeQrModal() {
+    this.showQrModal.set(false);
   }
 }

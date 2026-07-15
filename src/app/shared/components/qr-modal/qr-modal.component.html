@@ -1,0 +1,120 @@
+<div
+  class="modal modal-bottom sm:modal-middle"
+  [class.modal-open]="isOpen()"
+  role="dialog"
+>
+  <div
+    class="modal-box p-0 overflow-hidden max-w-lg bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-2xl max-h-[95vh] sm:max-h-[90vh] flex flex-col"
+  >
+    <!-- Header -->
+    <div
+      class="p-6 bg-gradient-to-r from-red-700 to-red-900 text-white flex justify-between items-center shadow-lg"
+    >
+      <div class="flex items-center gap-3">
+        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+          <lucide-icon [img]="QrCode" [size]="20"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="font-black text-xl uppercase tracking-tighter">
+            {{ title() }}
+          </h3>
+          <p
+            class="text-[10px] text-white/70 font-medium uppercase tracking-widest"
+          >
+            Capital Financiera Oficial
+          </p>
+        </div>
+      </div>
+      <button
+        (click)="closeModal()"
+        class="btn btn-ghost btn-circle text-white hover:bg-white/20"
+      >
+        <lucide-icon [img]="X" [size]="24"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Content (Scrollable) -->
+    <div
+      class="p-6 sm:p-8 flex flex-col items-center overflow-y-auto custom-scrollbar flex-grow"
+    >
+      <div
+        class="relative w-full aspect-square max-w-[240px] sm:max-w-[280px] md:max-w-[320px] bg-gray-50 dark:bg-gray-900/50 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700 flex items-center justify-center p-4 group transition-all duration-500 hover:border-red-500/50"
+      >
+        @if (isLoading()) {
+          <div class="flex flex-col items-center gap-4">
+            <span
+              class="loading loading-spinner loading-lg text-primary"
+            ></span>
+            <p
+              class="text-xs font-bold text-gray-400 uppercase tracking-widest animate-pulse"
+            >
+              Generando Código...
+            </p>
+          </div>
+        } @else if (qrDataUrl()) {
+          <img
+            [src]="qrDataUrl()"
+            alt="QR Code Preview"
+            class="w-full h-full object-contain rounded-2xl shadow-xl animate-in zoom-in duration-300"
+          />
+        }
+
+        <!-- Decorative corners -->
+        <div
+          class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-gray-300 dark:border-gray-600 rounded-tl-sm group-hover:border-red-500 transition-colors"
+        ></div>
+        <div
+          class="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-gray-300 dark:border-gray-600 rounded-tr-sm group-hover:border-red-500 transition-colors"
+        ></div>
+        <div
+          class="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-gray-300 dark:border-gray-600 rounded-bl-sm group-hover:border-red-500 transition-colors"
+        ></div>
+        <div
+          class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-gray-300 dark:border-gray-600 rounded-br-sm group-hover:border-red-500 transition-colors"
+        ></div>
+      </div>
+
+      <div class="mt-6 sm:mt-8 text-center space-y-2">
+        <h4 class="text-gray-900 dark:text-white font-bold text-lg">
+          QR de Alta Resolución
+        </h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs px-4">
+          Código generado en formato PNG (1000x1000px) con logo corporativo
+          integrado y alta corrección de errores.
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="grid grid-cols-2 gap-3 w-full mt-6 sm:mt-8 mb-2">
+        <button
+          (click)="downloadQR()"
+          [disabled]="isLoading() || !qrDataUrl()"
+          class="btn btn-primary h-14 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+        >
+          <lucide-icon [img]="Download" [size]="20"></lucide-icon>
+          Descargar
+        </button>
+        <button
+          (click)="shareQR()"
+          [disabled]="isLoading() || !qrDataUrl()"
+          class="btn bg-transparent border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white h-14 rounded-2xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-none"
+        >
+          <lucide-icon [img]="Share2" [size]="20"></lucide-icon>
+          Compartir
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div
+      class="bg-gray-50 dark:bg-gray-900/50 px-8 py-4 border-t border-gray-100 dark:border-gray-800 flex justify-center"
+    >
+      <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+        Infinity Capital Financiera &copy; 2026
+      </p>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="closeModal()">close</button>
+  </form>
+</div>

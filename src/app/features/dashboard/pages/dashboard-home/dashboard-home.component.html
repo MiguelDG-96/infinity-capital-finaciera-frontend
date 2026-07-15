@@ -199,10 +199,16 @@
             <h1 class="text-3xl font-black text-base-content uppercase tracking-tight">Panel de Control Gerencial</h1>
             <p class="text-sm opacity-50 font-medium">Resumen global de operaciones y solicitudes pendientes.</p>
         </div>
-        <button (click)="cargarMetricasAdmin()" class="btn btn-ghost btn-sm gap-2" [disabled]="cargando()">
-            <span *ngIf="cargando()" class="loading loading-spinner loading-xs"></span>
-            Refrescar Datos
-        </button>
+        <div class="flex items-center gap-2">
+            <button (click)="openQrGenerator()" class="btn btn-sm bg-red-700 hover:bg-red-800 text-white border-none gap-2 shadow-lg shadow-red-900/10">
+                <lucide-icon name="qr-code" class="w-4 h-4"></lucide-icon>
+                <span class="hidden sm:inline">Generar QR</span>
+            </button>
+            <button (click)="cargarMetricasAdmin()" class="btn btn-ghost btn-sm gap-2" [disabled]="cargando()">
+                <span *ngIf="cargando()" class="loading loading-spinner loading-xs"></span>
+                Refrescar Datos
+            </button>
+        </div>
     </div>
 
     <!-- Metricas Globales -->
@@ -294,3 +300,11 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de QR -->
+<app-qr-modal
+  [isOpen]="showQrModal()"
+  [qrText]="qrToGenerate()"
+  title="QR Oficial Corporativo"
+  (onClose)="closeQrModal()">
+</app-qr-modal>
