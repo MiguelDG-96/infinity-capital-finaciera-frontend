@@ -959,11 +959,46 @@ export class ContratoPdfService {
     const headers = ["Cuota", "Vencimiento", "Días", "Capital", "Interés", "Comis.", "Seguros", "Cuota Mensual"];
 
     // Datos Financieros
+    // IMPORTANTE: se pasa la fechaDesembolso real para que el cronograma
+    // siempre muestre el mismo día de pago que el que está en la BD.
+    //
+    // Java puede serializar LocalDate como: string "2026-04-14", array [2026,4,14] o Date.
+    // Manejamos todos los casos para evitar Invalid Date.
+    const parseFechaDesembolso = (raw: any): Date | undefined => {
+        if (!raw) return undefined;
+        // Array Java: [year, month, day] donde month es 1-based
+        if (Array.isArray(raw) && raw.length >= 3) {
+            return new Date(raw[0], raw[1] - 1, raw[2]);
+        }
+        // String ISO "yyyy-mm-dd" — sin hora para evitar offset UTC
+        if (typeof raw === 'string') {
+            const parts = raw.slice(0, 10).split('-');
+            if (parts.length === 3) {
+                return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            }
+        }
+        // Date object o timestamp numérico
+        const d = new Date(raw);
+        return isNaN(d.getTime()) ? undefined : d;
+    };
+    const fechaBaseContrato = parseFechaDesembolso(data.fechaDesembolso);
+
+    // Formateador manual dd/mm/yyyy — NO usa toLocaleDateString para evitar
+    // "Invalid Date" y diferencias de locale entre sistemas operativos.
+    const formatFecha = (d: Date): string => {
+        if (!d || isNaN(d.getTime())) return '—';
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    };
+
     const cuotas = FinancieroHelper.calcularAmortizacionFrancesa(
         data.montoAprobado || data.montoCredito || 0,
         data.plazoMeses || 12,
         data.tasaAprobada || data.tem || 5,
-        data.periodoGracia || 0
+        data.periodoGracia || 0,
+        fechaBaseContrato
     );
 
     // Colores corporativos (Rojo)
@@ -1023,7 +1058,7 @@ export class ContratoPdfService {
         // El cargo por refinanciamiento se muestra en la columna de Comisiones
         const rowData = [
             String(c.numero),
-            c.fecha.toLocaleDateString('es-PE'),
+            formatFecha(c.fecha),
             "30",
             `S/ ${c.capital.toFixed(2)}`,
             `S/ ${c.interes.toFixed(2)}`,
