@@ -5,7 +5,6 @@ import { ProductsComponent } from '../components/products/products.component';
 import { StoreComponent } from '../components/store/store.component';
 import { DigitalChannelsComponent } from '../components/digital-channels/digital-channels.component';
 import { InfinyCapitalInfoComponent } from '../components/infinycapital-info/infinycapital-info.component';
-import { BenefitsComponent } from '../components/benefits/benefits.component';
 import { LocationComponent } from '../components/location/location.component';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -20,7 +19,6 @@ import { LucideAngularModule } from 'lucide-angular';
     StoreComponent, 
     DigitalChannelsComponent, 
     InfinyCapitalInfoComponent, 
-    BenefitsComponent,
     LocationComponent,
     LucideAngularModule
   ],
@@ -30,7 +28,6 @@ import { LucideAngularModule } from 'lucide-angular';
     <app-store></app-store>
     <app-digital-channels></app-digital-channels>
     <app-infinycapital-info></app-infinycapital-info>
-    <app-benefits></app-benefits>
     <app-location></app-location>
     <section class="py-24 bg-white border-t border-gray-100">
       <div class="container mx-auto px-4 text-center">

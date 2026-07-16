@@ -216,10 +216,11 @@ export class AdminCrearCreditoComponent implements OnInit {
         this.cargando = false;
         this.cdr.detectChanges();
         if (cliente) {
-          // Parsear datosSolicitud si existe para obtener nombres y apellidos exactos
+          // Parsear datosSolicitud si existe para obtener nombres, apellidos y sexo
           let nombres = cliente.usuario?.nombreCompleto?.split(' ')[0] || '';
           let apellidoPaterno = '';
           let apellidoMaterno = '';
+          let sexoExtra = '';
 
           if (cliente.datosSolicitud) {
             try {
@@ -227,6 +228,7 @@ export class AdminCrearCreditoComponent implements OnInit {
               if (extra.nombres) nombres = extra.nombres;
               if (extra.apellidoPaterno) apellidoPaterno = extra.apellidoPaterno;
               if (extra.apellidoMaterno) apellidoMaterno = extra.apellidoMaterno;
+              if (extra.sexo) sexoExtra = extra.sexo;
             } catch (e) {
               console.error('Error parseando datosSolicitud:', e);
             }
@@ -239,6 +241,7 @@ export class AdminCrearCreditoComponent implements OnInit {
             nombres: nombres,
             apellidoPaterno: apellidoPaterno,
             apellidoMaterno: apellidoMaterno,
+            sexo: cliente.sexo || sexoExtra || 'MASCULINO',
             email: cliente.usuario?.email || '',
             fechaNacimiento: cliente.fechaNacimiento || '',
             celular: cliente.celular || cliente.telefono || '',
@@ -251,7 +254,7 @@ export class AdminCrearCreditoComponent implements OnInit {
             rucEmpresa: cliente.rucEmpresa || '',
             telefonoEmpresa: cliente.telefonoEmpresa || '',
             direccionEmpresa: cliente.direccionEmpresa || '',
-            departamento: '', // Deberían extraerse de domicilio si es posible, por ahora se dejan igual o se mapean si existen en la BD
+            departamento: '',
           });
           
           this.mostrarExitoTemporal('Cliente recurrente encontrado. Datos autocompletados.');

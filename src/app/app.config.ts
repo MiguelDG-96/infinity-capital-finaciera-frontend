@@ -45,7 +45,8 @@ import {
   Store,
   Handshake,
   Gavel,
-  QrCode
+  QrCode,
+  ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -81,7 +82,8 @@ export const appConfig: ApplicationConfig = {
         UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign, Printer,
         ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
         Paperclip, Save, Coins, FileBarChart2,
-        UserCircle, MailCheck, Camera, Image,ArrowUpDown,ArrowUp,ArrowDown,Ban, BookOpen, CalendarCheck, FileX2, FileCheck2, Fingerprint, ShieldPlus, Share2, CheckSquare, MailWarning, MailQuestion, LoaderCircle, CircleDashed, PartyPopper,Headset, Store, Handshake, Gavel, QrCode
+        UserCircle, MailCheck, Camera, Image,ArrowUpDown,ArrowUp,ArrowDown,Ban, BookOpen, CalendarCheck, FileX2, FileCheck2, Fingerprint, ShieldPlus, Share2, CheckSquare, MailWarning, MailQuestion, LoaderCircle, CircleDashed, PartyPopper,Headset, Store, Handshake, Gavel, QrCode,
+        ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet
       })
     )
   ]

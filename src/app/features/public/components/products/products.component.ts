@@ -32,7 +32,8 @@ export class ProductsComponent {
     {
       title: 'Créditos para Empresa',
       subtitle: 'Financiamiento a la medida para tu empresa.',
-      iconName: 'building'
+      iconName: 'building',
+      link: '/creditos-empresas'
     },
     {
       title: 'Créditos Hipotecarios',

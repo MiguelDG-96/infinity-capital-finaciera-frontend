@@ -1,0 +1,193 @@
+<div class="relative w-full overflow-hidden min-h-screen">
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img src="/products/creditos-empresas.png" alt="Fondo Créditos Empresas" class="w-full h-full object-cover object-[75%_center] md:object-[65%_center]" />
+    <!-- Gradient overlay similar to Hero to ensure text is readable -->
+    <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-white/95 via-white/80 md:via-white/50 to-transparent"></div>
+    <!-- Bottom fade to blend with next section -->
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-0"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-[90rem] mx-auto px-4 md:px-8 pt-8 pb-12 flex flex-col items-start justify-center min-h-screen">
+    
+    <!-- Top Left: FINANCIAMIENTO INTELIGENTE Pill -->
+    <div class="bg-red-600 text-white text-[10px] sm:text-[11px] font-bold px-4 py-2 rounded-lg md:rounded-xl uppercase w-fit mb-6 tracking-wider shadow-md flex items-center gap-2">
+      <lucide-icon name="building-2" [size]="16" [strokeWidth]="2.5"></lucide-icon>
+      FINANCIAMIENTO INTELIGENTE
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl lg:text-[5rem] font-black text-[#0A1A2F] mb-4 leading-[1] tracking-tight max-w-3xl">
+      CRÉDITOS <br />
+      <span class="text-red-600">PARA EMPRESAS</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <h2 class="text-xl md:text-2xl lg:text-3xl font-extrabold text-[#0A1A2F] mb-5 max-w-2xl leading-snug">
+      El impulso que tu negocio necesita para <span class="text-red-600">seguir creciendo.</span>
+    </h2>
+    <div class="w-16 h-1 bg-red-600 mb-6"></div>
+
+    <!-- Text -->
+    <p class="text-gray-700 text-sm md:text-base lg:text-lg mb-8 max-w-xl leading-relaxed font-medium">
+      Accede a financiamiento empresarial con una evaluación personalizada y un proceso claro, rápido y seguro.
+    </p>
+
+    <!-- 3 Features Middle Section (Responsive) -->
+    <div class="w-full max-w-4xl mb-8">
+      <!-- 3 Features -->
+      <div class="flex flex-col md:flex-row md:items-center md:bg-white md:rounded-[1.5rem] md:shadow-lg md:border md:border-gray-100 p-0 md:py-1 md:px-2 w-full">
+        
+        <!-- Feature 1 -->
+        <div class="flex flex-row items-center gap-3 bg-white rounded-2xl md:rounded-none py-3 px-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-600 text-white w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">
+            <lucide-icon name="file-text" [size]="28" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div class="flex flex-col">
+            <h4 class="text-[13px] lg:text-[14px] font-bold text-[#0A1A2F] leading-[1.1] mb-1">Documentación <br> de la empresa</h4>
+            <p class="text-[11px] text-gray-500 font-medium leading-snug">Representantes, Ficha RUC <br class="hidden xl:block"> y documentos societarios.</p>
+          </div>
+        </div>
+        
+        <!-- Divider -->
+        <div class="hidden md:block w-[1px] h-16 bg-gray-200"></div>
+
+        <!-- Feature 2 -->
+        <div class="flex flex-row items-center gap-3 bg-white rounded-2xl md:rounded-none py-3 px-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-600 text-white w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">
+            <lucide-icon name="trending-up" [size]="28" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div class="flex flex-col">
+            <h4 class="text-[13px] lg:text-[14px] font-bold text-[#0A1A2F] leading-[1.1] mb-1">Información <br> financiera</h4>
+            <p class="text-[11px] text-gray-500 font-medium leading-snug">Reportes tributarios, PDT <br class="hidden xl:block"> y sustento de ingresos.</p>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="hidden md:block w-[1px] h-16 bg-gray-200"></div>
+
+        <!-- Feature 3 -->
+        <div class="flex flex-row items-center gap-3 bg-white rounded-2xl md:rounded-none py-3 px-4 shadow-sm md:shadow-none flex-1">
+          <div class="bg-red-600 text-white w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">
+            <lucide-icon name="building-2" [size]="28" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div class="flex flex-col">
+            <h4 class="text-[13px] lg:text-[14px] font-bold text-[#0A1A2F] leading-[1.1] mb-1">Respaldo <br> patrimonial</h4>
+            <p class="text-[11px] text-gray-500 font-medium leading-snug">Documentación del inmueble <br class="hidden xl:block"> y créditos vigentes.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Buttons & Floating Info -->
+    <div class="flex flex-col md:flex-row items-center gap-6 mb-16 relative w-full lg:w-auto">
+      <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto text-[15px] cursor-pointer"
+      routerLink="/login">
+        <lucide-icon name="file-text" [size]="20" [strokeWidth]="2.5"></lucide-icon>
+        Solicitar evaluación
+        <lucide-icon name="arrow-right" [size]="20" [strokeWidth]="3"></lucide-icon>
+      </button>
+      <button (click)="toggleRequisitos()" class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-sm hover:shadow-md w-full sm:w-auto text-[15px] cursor-pointer">
+        <lucide-icon name="clipboard-list" [size]="20" [strokeWidth]="2"></lucide-icon>
+        Ver requisitos
+      </button>
+      
+      <div class="flex items-center gap-3 text-gray-600 max-w-sm mt-4 md:mt-0">
+        <lucide-icon name="lock" [size]="24" class="text-gray-400 flex-shrink-0"></lucide-icon>
+        <p class="text-[11px] font-medium leading-tight">Tus datos están 100% protegidos.<br>Evaluación rápida y confidencial.</p>
+      </div>
+    </div>
+
+    <!-- Bottom 4 Features Section -->
+    <div class="w-full mt-auto bg-white/95 backdrop-blur-2xl rounded-[2.5rem] shadow-xl border border-gray-100 p-6 md:p-8 max-w-6xl">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x lg:divide-gray-200">
+        
+        <div class="flex items-center gap-4 lg:px-6">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="target" [size]="32" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Evaluación personalizada</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Analizamos tu empresa y sus necesidades.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 lg:px-6">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="shield" [size]="32" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Proceso seguro y rápido</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Resolvemos tu solicitud de manera ágil y confiable.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 lg:px-6">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="headset" [size]="32" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Atención empresarial</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Asesores especializados en cada etapa.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 lg:px-6">
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="award" [size]="32" [strokeWidth]="2"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-bold text-[#0A1A2F] text-[13px] mb-0.5">Condiciones transparentes</h4>
+            <p class="text-[11px] text-gray-500 font-medium">Te brindamos claridad y confianza siempre.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Requisitos Modal -->
+<div *ngIf="showRequisitos" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" (click)="toggleRequisitos()">
+  <!-- Modal Content (click.stop to prevent closing when clicking inside) -->
+  <div class="bg-gray-50 rounded-[2rem] shadow-2xl w-full max-w-[80rem] max-h-[90vh] overflow-y-auto relative p-6 md:p-8" (click)="$event.stopPropagation()">
+    <!-- Close button -->
+    <button (click)="toggleRequisitos()" class="absolute top-6 right-6 text-gray-400 hover:text-gray-800 transition-colors z-10 bg-white rounded-full p-2 shadow-sm">
+      <lucide-icon name="x" [size]="24" [strokeWidth]="2"></lucide-icon>
+    </button>
+    
+    <h3 class="text-2xl md:text-3xl font-black text-[#0A1A2F] mb-8 text-center">Requisitos para tu Crédito</h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div *ngFor="let req of requisitos; let i = index" class="bg-white border border-gray-100 rounded-[1.5rem] p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow relative min-h-[180px]">
+        
+        <!-- Top Icon in red faint circle -->
+        <div class="bg-red-50 text-red-600 w-[50px] h-[50px] rounded-full flex items-center justify-center mb-4 border border-red-100">
+          <lucide-icon [name]="req.icon" [size]="28" [strokeWidth]="1.5"></lucide-icon>
+        </div>
+        
+        <!-- Number & Title Container -->
+        <div class="flex items-start gap-2 mb-2 w-full">
+          <!-- Number circle -->
+          <div class="bg-red-600 text-white w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
+            {{ i + 1 }}
+          </div>
+          <!-- Title text -->
+          <h4 class="text-[13px] font-bold text-[#0A1A2F] leading-tight text-left flex-1">{{ req.text }}</h4>
+        </div>
+        
+        <!-- Subtext if exists -->
+        <p *ngIf="req.subtext" class="text-[11px] text-gray-500 font-medium leading-tight text-left ml-6 w-full">{{ req.subtext }}</p>
+        
+        <!-- Bottom Checkmark icon (light grey) -->
+        <div class="mt-auto pt-4 w-full flex justify-center">
+          <div class="bg-gray-100 text-gray-400 w-6 h-6 rounded-full flex items-center justify-center">
+            <lucide-icon name="check" [size]="14" [strokeWidth]="3"></lucide-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

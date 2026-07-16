@@ -4,9 +4,9 @@ import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
-  selector: 'app-product-detail',
+  selector: 'app-creditos-personales',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
-  templateUrl: './product-detail.component.html'
+  imports: [CommonModule, LucideAngularModule, RouterLink],
+  templateUrl: './creditos-personales.component.html'
 })
-export class ProductDetailComponent {}
+export class CreditosPersonalesComponent {}

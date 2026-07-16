@@ -73,11 +73,13 @@
 
     <!-- Buttons & Floating Card -->
     <div class="flex flex-col sm:flex-row items-center gap-4 mb-16 relative w-full lg:w-auto">
-      <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto text-lg">
+      <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto text-lg cursor-pointer"
+      routerLink="/login">
         Solicitar ahora
         <lucide-icon name="arrow-right" [size]="20" [strokeWidth]="3"></lucide-icon>
       </button>
-      <button class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-md hover:shadow-lg w-full sm:w-auto text-lg">
+      <button class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all shadow-md hover:shadow-lg w-full sm:w-auto text-lg cursor-pointer"
+      routerLink="/simulator">
         Simular cuotas
       </button>
     </div>
