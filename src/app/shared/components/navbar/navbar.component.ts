@@ -4,15 +4,17 @@ import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { PRODUCTS_DATA, DIGITAL_CHANNELS_DATA, BENEFITS_DATA } from '../../../core/constants/menu-data';
 import { ThemeService } from '../../../core/services/theme.service';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, ScrollRevealDirective],
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
   constructor(public themeService: ThemeService) {}
+
   // Mobile Menu State
   isMobileMenuOpen = signal(false);
   

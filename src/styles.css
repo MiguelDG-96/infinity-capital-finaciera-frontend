@@ -128,3 +128,96 @@ html {
 .theme-transitioning * {
   transition: none !important;
 }
+
+/* ── Scroll Reveal Animations (Keyframe-based, no race conditions) ── */
+
+/* Estado inicial oculto para todos los elementos reveal */
+.reveal-base {
+  opacity: 0;
+  --reveal-delay: 0ms;
+  will-change: opacity, transform;
+}
+
+/* Keyframes para cada tipo de animación */
+@keyframes anim-reveal-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes anim-reveal-down {
+  from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes anim-reveal-left {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes anim-reveal-right {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes anim-reveal-scale {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes anim-reveal-zoom-up {
+  from { opacity: 0; transform: translateY(40px) scale(0.88); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Las animaciones usan var(--reveal-delay) para respetar las clases delay-* */
+.reveal-base.is-visible.reveal-up {
+  animation-name: anim-reveal-up;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-base.is-visible.reveal-down {
+  animation-name: anim-reveal-down;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-base.is-visible.reveal-left {
+  animation-name: anim-reveal-left;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-base.is-visible.reveal-right {
+  animation-name: anim-reveal-right;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-base.is-visible.reveal-scale {
+  animation-name: anim-reveal-scale;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-base.is-visible.reveal-zoom-up {
+  animation-name: anim-reveal-zoom-up;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* Staggering Delays — definen --reveal-delay en el elemento */
+.delay-100  { --reveal-delay: 100ms; }
+.delay-200  { --reveal-delay: 200ms; }
+.delay-300  { --reveal-delay: 300ms; }
+.delay-400  { --reveal-delay: 400ms; }
+.delay-500  { --reveal-delay: 500ms; }
+.delay-600  { --reveal-delay: 600ms; }
+.delay-700  { --reveal-delay: 700ms; }
+.delay-800  { --reveal-delay: 800ms; }
+.delay-900  { --reveal-delay: 900ms; }
+.delay-1000 { --reveal-delay: 1000ms; }
+.delay-1100 { --reveal-delay: 1100ms; }
+.delay-1200 { --reveal-delay: 1200ms; }

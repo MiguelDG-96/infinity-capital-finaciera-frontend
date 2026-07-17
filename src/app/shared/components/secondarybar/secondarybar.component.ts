@@ -2,11 +2,12 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { PRODUCTS_DATA, DIGITAL_CHANNELS_DATA, BENEFITS_DATA, ProductUpdated } from '../../../core/constants/menu-data';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-secondarybar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, ScrollRevealDirective],
   templateUrl: './secondarybar.component.html',
 })
 export class SecondarybarComponent {

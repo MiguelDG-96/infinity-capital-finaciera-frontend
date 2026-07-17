@@ -1,4 +1,4 @@
-<header class="bg-base-100 border-b border-base-content/5 py-4 relative z-50 transition-colors duration-300">
+<header appScrollReveal="reveal-down" delay="delay-100" class="bg-base-100 border-b border-base-content/5 py-4 relative z-50 transition-colors duration-300">
   <div class="container mx-auto px-4 flex justify-between items-center text-base-content">
     <!-- Left Side: Hamburger & Logo -->
     <div class="flex items-center gap-4">
@@ -80,9 +80,10 @@
       </div>
     </div>
   </div>
+</header>
 
-  <!-- Mobile Menu Overlay -->
-  <div
+<!-- Mobile Menu Overlay -->
+<div
     *ngIf="isMobileMenuOpen()"
     class="lg:hidden fixed inset-0 bg-black/50 z-40"
     (click)="toggleMobileMenu()"
@@ -281,4 +282,3 @@
       </div>
     </div>
   </div>
-</header>

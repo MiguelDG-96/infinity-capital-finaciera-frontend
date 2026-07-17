@@ -10,10 +10,12 @@ interface Product {
   link?: string;
 }
 
+import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
+
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink],
+  imports: [CommonModule, LucideAngularModule, RouterLink, ScrollRevealDirective],
   templateUrl: './products.component.html',
 })
 export class ProductsComponent {

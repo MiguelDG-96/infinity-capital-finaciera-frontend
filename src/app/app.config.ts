@@ -59,7 +59,7 @@ export const appConfig: ApplicationConfig = {
     provideCharts(withDefaultRegisterables()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withInMemoryScrolling({ 
-      scrollPositionRestoration: 'enabled',
+      scrollPositionRestoration: 'top',
       anchorScrolling: 'enabled'
     })),
     provideHttpClient(
