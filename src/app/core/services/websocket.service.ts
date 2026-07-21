@@ -18,16 +18,27 @@ export interface AppNotification {
   providedIn: 'root'
 })
 export class WebsocketService {
-  private client: Client;
+  private client: Client | null = null;
   private readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
   
   // Señal que guarda las últimas notificaciones
   readonly notifications = signal<AppNotification[]>([]);
+  
+  // Señal para logout forzado
+  readonly forceLogoutEvent = signal<any>(null);
 
   constructor() {
+    // La conexión se hará en connect() para tener el token
+  }
+
+  connect(token: string) {
+    if (this.client && this.client.active) return;
+    
     this.client = new Client({
-      // Como no tenemos proxy para ws:// usamos sockjs que va sobre http
       webSocketFactory: () => new SockJS(`${environment.apiUrl}/ws`),
+      connectHeaders: {
+        Authorization: `Bearer ${token}`
+      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -36,29 +47,52 @@ export class WebsocketService {
     this.client.onConnect = (frame: IFrame) => {
       console.log('✅ Conectado a WebSockets', frame);
       
-      // Suscribirse al tópico de notificaciones para los administradores
-      this.client.subscribe('/topic/notificaciones', (message: Message) => {
+      this.client?.subscribe('/topic/notificaciones', (message: Message) => {
         if (message.body) {
           const payload = JSON.parse(message.body);
           this.handleNotification(payload);
         }
       });
+      
+      this.subscribeToForceLogout(token);
     };
 
     this.client.onStompError = (frame: IFrame) => {
       console.error('❌ Broker reportó error: ' + frame.headers['message']);
       console.error('Detalles: ' + frame.body);
     };
+
+    this.client.activate();
   }
 
-  connect() {
-    if (!this.client.active) {
-      this.client.activate();
+  private subscribeToForceLogout(token: string): void {
+    try {
+      const parts = token.split('.');
+      if (parts.length >= 2) {
+        const payload = JSON.parse(decodeURIComponent(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join('')));
+        
+        const userId = payload.sub; // En InfinityCapital el subject suele ser el email, wait, in InfinityCapital is 'sub' email or id? Let's check AuthMapper or use payload.id
+        // We will just use 'sub' and maybe 'id'
+        const id = payload.id || payload.userId || payload.sub;
+        if (id && this.client) {
+          this.client.subscribe('/topic/logout/' + id, (message: Message) => {
+            const body = JSON.parse(message.body);
+            if (body.action === 'logout') {
+              // Emit event
+              this.forceLogoutEvent.set(body);
+            }
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error decoding token for WS logout', e);
     }
   }
 
   disconnect() {
-    if (this.client.active) {
+    if (this.client && this.client.active) {
       this.client.deactivate();
     }
   }
