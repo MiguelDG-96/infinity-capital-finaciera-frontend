@@ -53,12 +53,25 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    // Escuchar logout forzado
+    effect(() => {
+      const logoutEvent = this.websocketService.forceLogoutEvent();
+      if (logoutEvent) {
+        alert(logoutEvent.mensaje || 'Tu sesión ha sido cerrada remotamente.');
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   ngOnInit() {
+    const authData = this.authService.currentUser();
     const rol = this.authService.currentUserData()?.rol;
     if (rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR') {
-      this.websocketService.connect();
+      if (authData?.accessToken) {
+        this.websocketService.connect(authData.accessToken);
+      }
       this.notificationService.iniciarPolling();
       // Mostrar alerta de cobranza pendiente — esperar a que el polling tenga datos (máx 10s)
       this.esperarYMostrarCobranza();
