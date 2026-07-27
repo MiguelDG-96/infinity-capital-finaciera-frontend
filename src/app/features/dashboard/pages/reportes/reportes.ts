@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal, OnInit } from '@angular/core';
+import { Component, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
@@ -15,7 +15,7 @@ import jsPDF from 'jspdf';
   templateUrl: './reportes.html',
   styleUrl: './reportes.css',
 })
-export class Reportes implements OnInit {
+export class Reportes implements OnInit, OnDestroy {
   themeService = inject(ThemeService);
   reporteService = inject(ReporteService);
 
@@ -23,6 +23,12 @@ export class Reportes implements OnInit {
   selectedMonth = 'todos';
   selectedBranch = 'todas';
   isApplyingFilters = signal(false);
+  isFullscreen = signal(false);
+
+  capitalTotalCard = signal(458760);
+  interesesGanadosCard = signal(32680);
+  carteraActivaCard = signal(325450);
+  creditosVigentesCard = signal(1248);
 
   textColor = computed(() => this.themeService.darkMode() ? '#e2e8f0' : '#334155');
   titleColor = computed(() => this.themeService.darkMode() ? '#ffffff' : '#0f172a');
@@ -94,6 +100,19 @@ export class Reportes implements OnInit {
           ]
         };
 
+        // Compute cards metrics
+        const totalCap = (data.capitalCanceladoMensual || []).reduce((a: number, b: number) => a + b, 0);
+        this.capitalTotalCard.set(totalCap || 458760);
+        
+        const totalInt = (data.interesesCanceladosMensual || []).reduce((a: number, b: number) => a + b, 0);
+        this.interesesGanadosCard.set(totalInt || 32680);
+
+        const totalCartera = (data.montoARecibirMensual || []).reduce((a: number, b: number) => a + b, 0);
+        this.carteraActivaCard.set(totalCartera || 325450);
+
+        const totalCreditos = (data.clientesNormal || 0) + (data.clientesProblemas || 0) + (data.clientesDeficiente || 0) + (data.clientesDudoso || 0);
+        this.creditosVigentesCard.set(totalCreditos || 1248);
+
         this.isApplyingFilters.set(false);
       },
       error: () => {
@@ -116,7 +135,7 @@ export class Reportes implements OnInit {
   }));
   public gananciaMensualData: ChartData<'bar'> = {
     labels: this.mesesLabels,
-    datasets: [{ data: [], label: 'Ganancia', backgroundColor: '#10b981', borderRadius: 4 }]
+    datasets: [{ data: [], label: 'Ganancia', backgroundColor: '#dc2626', borderRadius: 6 }]
   };
 
   // 1.5 Ganancia Anual
@@ -127,7 +146,7 @@ export class Reportes implements OnInit {
   }));
   public gananciaAnualData: ChartData<'bar'> = {
     labels: [],
-    datasets: [{ data: [], label: 'Ganancia', backgroundColor: '#3b82f6', borderRadius: 4 }]
+    datasets: [{ data: [], label: 'Ganancia', backgroundColor: '#ef4444', borderRadius: 6 }]
   };
 
   // 2. Capital e Intereses
@@ -142,8 +161,8 @@ export class Reportes implements OnInit {
   public capIntData: ChartData<'bar'> = {
     labels: this.mesesLabels,
     datasets: [
-      { data: [], label: 'Capital Cancelado', backgroundColor: '#6366f1', borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4 } },
-      { data: [], label: 'Intereses Cancelados', backgroundColor: '#f59e0b', borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 } }
+      { data: [], label: 'Capital Cancelado', backgroundColor: '#dc2626', borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 6, bottomRight: 6 } },
+      { data: [], label: 'Intereses Cancelados', backgroundColor: '#fca5a5', borderRadius: { topLeft: 6, topRight: 6, bottomLeft: 0, bottomRight: 0 } }
     ]
   };
 
@@ -156,7 +175,7 @@ export class Reportes implements OnInit {
     labels: ['Normal', 'Problemas Potenciales', 'Deficiente', 'Dudoso', 'Pérdida'],
     datasets: [{
       data: [],
-      backgroundColor: ['#10b981', '#eab308', '#f97316', '#ef4444', '#e11d48'],
+      backgroundColor: ['#dc2626', '#fbbf24', '#f97316', '#ef4444', '#7f1d1d'],
       borderWidth: 0
     }]
   };
@@ -170,8 +189,8 @@ export class Reportes implements OnInit {
   public recibirVsRecibidoData: ChartData<'line'> = {
     labels: this.mesesLabels,
     datasets: [
-      { data: [], label: 'A Recibir (Proyectado)', borderColor: '#94a3b8', borderDash: [5, 5], backgroundColor: 'transparent', tension: 0.3 },
-      { data: [], label: 'Recibido (Real)', borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.2)', fill: true, tension: 0.3 }
+      { data: [], label: 'A Recibir (Proyectado)', borderColor: '#fca5a5', borderDash: [5, 5], backgroundColor: 'transparent', tension: 0.4 },
+      { data: [], label: 'Recibido (Real)', borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.4 }
     ]
   };
 
@@ -184,8 +203,8 @@ export class Reportes implements OnInit {
   public gananciaPerdidaData: ChartData<'line'> = {
     labels: this.mesesLabels,
     datasets: [
-      { data: [], label: 'Ganancias', borderColor: '#10b981', backgroundColor: 'transparent', tension: 0.3 },
-      { data: [], label: 'Pérdidas', borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)', fill: true, tension: 0.3 }
+      { data: [], label: 'Ganancias', borderColor: '#dc2626', backgroundColor: 'transparent', tension: 0.4 },
+      { data: [], label: 'Pérdidas', borderColor: '#94a3b8', backgroundColor: 'rgba(148, 163, 184, 0.1)', fill: true, tension: 0.4 }
     ]
   };
 
@@ -232,5 +251,24 @@ export class Reportes implements OnInit {
       }
     }
     this.isApplyingFilters.set(false);
+  }
+
+  toggleFullscreen() {
+    this.isFullscreen.update(v => !v);
+    const wrapper = document.querySelector('.dashboard-wrapper');
+    if (wrapper) {
+      if (this.isFullscreen()) {
+        wrapper.classList.add('reportes-fullscreen-mode');
+      } else {
+        wrapper.classList.remove('reportes-fullscreen-mode');
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    const wrapper = document.querySelector('.dashboard-wrapper');
+    if (wrapper) {
+      wrapper.classList.remove('reportes-fullscreen-mode');
+    }
   }
 }

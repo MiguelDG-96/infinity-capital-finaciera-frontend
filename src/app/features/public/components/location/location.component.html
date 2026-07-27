@@ -1,86 +1,141 @@
-<section id="location" class="py-20 bg-gray-50 overflow-hidden">
-  <div class="container mx-auto px-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col lg:flex-row gap-12 items-center">
-        <!-- Left: Text Info -->
-        <div class="w-full lg:w-1/3 text-center lg:text-left">
-          <div class="inline-block bg-red-100 text-red-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
-            Ubicación
+<section id="location" class="relative w-full overflow-hidden min-h-[550px] py-16 md:py-24 flex flex-col items-center justify-center px-4 md:px-8">
+  <!-- Full Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src="/ubicacion/ubicacion-bg.png"
+      alt="Background Ubicación"
+      class="w-full h-full object-cover object-center"
+      onerror="this.style.display='none'"
+    />
+    <!-- Gradient overlay to ensure text readability -->
+    <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-white/95 via-white/80 to-white/40 md:from-white/95 md:via-white/70 md:to-white/10"></div>
+    <div class="absolute inset-x-0 bottom-0 h-32 md:h-48 bg-gradient-to-t from-white via-white/80 to-transparent z-0"></div>
+    <div class="absolute inset-x-0 top-0 h-32 md:h-48 bg-gradient-to-b from-white via-white/80 to-transparent z-0"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-[1400px] mx-auto">
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
+      <!-- Left: Text Info Glass Card -->
+      <div class="w-full lg:w-[45%] bg-white/30 border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2.5rem] px-6 py-8 md:px-10 md:py-10 flex flex-col justify-center relative overflow-hidden">
+        
+        <!-- Decorative subtle gradient blob inside the card -->
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-red-100/50 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 text-center lg:text-left">
+          <!-- Pill Badge -->
+          <div class="inline-block bg-red-600 text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 shadow-md shadow-red-600/20">
+            <lucide-icon name="map-pin" class="inline-block mr-1 -mt-0.5" [size]="12"></lucide-icon> Nuestra Ubicación
           </div>
-          <h2 class="text-4xl font-black text-gray-900 mb-6 tracking-tight leading-none">
+          
+          <h2 class="text-3xl md:text-4xl lg:text-[40px] font-extrabold text-gray-900 mb-4 tracking-tight leading-[1.1]">
             Visítanos en <br> <span class="text-red-600">nuestra oficina</span>
           </h2>
-          <p class="text-gray-500 mb-8 font-medium">
-            Estamos listos para recibirte y brindarte la mejor asesoría financiera personalizada.
+          
+          <p class="text-gray-700 mb-8 font-medium text-sm leading-relaxed max-w-sm mx-auto lg:mx-0">
+            Estamos listos para atenderte y brindarte la mejor asesoría financiera personalizada.
           </p>
 
-          <div class="space-y-6">
-            <div class="flex items-start gap-4 justify-center lg:justify-start">
-              <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 border border-gray-100">
-                <lucide-icon name="map-pin" class="text-red-600" size="20"></lucide-icon>
+          <div class="space-y-3">
+            <!-- Box: Dirección -->
+            <div class="flex items-start gap-4 bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-white transition-transform hover:-translate-y-1">
+              <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-red-100 text-red-600">
+                <lucide-icon name="map-pin" [size]="18" [strokeWidth]="2.5"></lucide-icon>
               </div>
-              <div class="text-left">
-                <h4 class="font-bold text-gray-900 text-sm">Dirección</h4>
-                <p class="text-gray-500 text-sm">{{ businessAddress }}</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4 justify-center lg:justify-start">
-              <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 border border-gray-100">
-                <lucide-icon name="clock" class="text-red-600" size="20"></lucide-icon>
-              </div>
-              <div class="text-left">
-                <h4 class="font-bold text-gray-900 text-sm">Horario de Atención</h4>
-                <p class="text-gray-500 text-sm">Lunes a Viernes: 8:00 AM - 7:00 PM</p>
-                <p class="text-gray-500 text-sm">Sábados: 8:00 AM - 1:00 PM</p>
+              <div class="text-left pt-0.5">
+                <h4 class="font-bold text-gray-900 text-xs">Dirección</h4>
+                <p class="text-gray-600 text-[13px] mt-1 font-medium leading-snug">{{ businessAddress }}</p>
               </div>
             </div>
 
-            <div class="flex items-start gap-4 justify-center lg:justify-start">
-              <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 border border-gray-100">
-                <lucide-icon name="phone" class="text-red-600" size="20"></lucide-icon>
+            <!-- Box: Horario -->
+            <div class="flex items-start gap-4 bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-white transition-transform hover:-translate-y-1">
+              <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-red-100 text-red-600">
+                <lucide-icon name="clock" [size]="18" [strokeWidth]="2.5"></lucide-icon>
               </div>
-              <div class="text-left">
-                <h4 class="font-bold text-gray-900 text-sm">Contacto</h4>
-                <p class="text-gray-500 text-sm">+51 954 862 745</p>
-                <p class="text-gray-500 text-sm">contacto@infinycapital.com</p>
+              <div class="text-left pt-0.5">
+                <h4 class="font-bold text-gray-900 text-xs">Horario de Atención</h4>
+                <p class="text-gray-600 text-[13px] mt-1 font-medium leading-snug">Lunes a Viernes: 8:00 AM - 7:00 PM<br>Sábados: 8:00 AM - 1:00 PM</p>
+              </div>
+            </div>
+
+            <!-- Box: Contacto -->
+            <div class="flex items-start gap-4 bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-white transition-transform hover:-translate-y-1">
+              <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-red-100 text-red-600">
+                <lucide-icon name="phone-call" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+              </div>
+              <div class="text-left pt-0.5">
+                <h4 class="font-bold text-gray-900 text-xs">Contacto</h4>
+                <p class="text-gray-600 text-[13px] mt-1 font-medium leading-snug">+51 954 862 745<br>contacto&#64;infinycapital.com</p>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Right: Map -->
-        <div class="w-full lg:w-2/3 relative group">
-          <div class="absolute -inset-1 bg-gradient-to-r from-red-600 to-red-400 rounded-[2.5rem] blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
-          <div class="relative bg-white p-2 rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 h-[450px]">
-            <iframe
-              [src]="mapUrl | safeUrl"
-              class="w-full h-full rounded-[2rem] grayscale-[20%] contrast-[1.1] hover:grayscale-0 transition-all duration-700"
-              style="border:0;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+          
+          <div class="mt-8">
+             <a href="https://maps.app.goo.gl/vBjyvpXeWCnT8N9x8" target="_blank" class="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 cursor-pointer">
+               <lucide-icon name="map" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+               CÓMO LLEGAR
+               <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3" class="ml-1"></lucide-icon>
+             </a>
           </div>
         </div>
       </div>
 
-      <!-- Photo Gallery Section -->
-      <div class="mt-20">
-        <div class="flex items-center gap-4 mb-10">
-          <div class="h-[1px] flex-1 bg-gray-200"></div>
-          <h3 class="text-xl font-black text-gray-900 px-4 uppercase tracking-widest italic">Nuestra Oficina</h3>
-          <div class="h-[1px] flex-1 bg-gray-200"></div>
+      <!-- Right: Map -->
+      <div class="w-full lg:w-[55%] relative group flex flex-col">
+        <!-- Floating badge on map (Optional styling) -->
+        <div class="absolute top-6 right-6 z-20 flex gap-2">
+            <button type="button" (click)="setMapType('m')"
+              [ngClass]="{'bg-red-600 text-white border-red-600': mapType === 'm', 'bg-white text-gray-800 border-gray-100': mapType !== 'm'}"
+              class="px-4 py-2 rounded-xl font-bold text-xs shadow-lg border transition-colors cursor-pointer focus:outline-none">
+              Mapa
+            </button>
+            <button type="button" (click)="setMapType('k')"
+              [ngClass]="{'bg-red-600 text-white border-red-600': mapType === 'k', 'bg-white text-gray-800 border-gray-100': mapType !== 'k'}"
+              class="px-4 py-2 rounded-xl font-bold text-xs shadow-lg border transition-colors cursor-pointer focus:outline-none">
+              Satélite
+            </button>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div *ngFor="let photo of officePhotos" 
-               class="group relative aspect-video md:aspect-square overflow-hidden rounded-[2rem] shadow-md border-4 border-white transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-red-900/10">
-            <img [src]="photo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Oficina Infiny">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                <lucide-icon name="eye" class="text-white" size="20"></lucide-icon>
-              </div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-red-600/30 to-red-400/30 rounded-3xl md:rounded-[3rem] blur-xl opacity-50 group-hover:opacity-70 transition duration-700 pointer-events-none"></div>
+        <div class="relative bg-white/50 backdrop-blur-sm p-1 md:p-3 rounded-3xl md:rounded-[3rem] shadow-2xl border border-white w-full h-[450px] md:h-[500px] lg:h-full lg:min-h-[550px] flex-1">
+          <iframe
+            [src]="mapUrl | safeUrl"
+            class="w-full h-full rounded-[1.3rem] md:rounded-[2.5rem] grayscale-[10%] contrast-[1.05] hover:grayscale-0 transition-all duration-700 bg-gray-100"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Gallery Section -->
+    <div class="mt-24 relative z-10">
+      <div class="flex items-center gap-4 mb-10 justify-center w-full max-w-4xl mx-auto">
+        <div class="h-[1px] flex-1 bg-gray-300"></div>
+        <div class="w-1.5 h-1.5 rounded-full bg-red-600"></div>
+        <h3 class="text-xl md:text-2xl font-black text-gray-900 px-2 md:px-4 uppercase tracking-widest italic flex items-center gap-2 whitespace-nowrap">
+          Nuestra <span class="text-red-600">Oficina</span>
+        </h3>
+        <div class="w-1.5 h-1.5 rounded-full bg-red-600"></div>
+        <div class="h-[1px] flex-1 bg-gray-300"></div>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div *ngFor="let photo of officePhotos; let i = index" 
+             class="group relative aspect-[4/3] overflow-hidden rounded-3xl shadow-lg border-4 border-white transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-900/15 bg-white">
+          <img [src]="photo" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Oficina Infiny">
+          
+          <!-- Bottom Info Bar (similar to mockup) -->
+          <div class="absolute inset-x-2 bottom-2 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 shadow-sm border border-gray-100 flex items-center justify-center gap-2">
+             <lucide-icon name="image" class="text-red-600" [size]="14"></lucide-icon>
+             <span class="text-[10px] font-bold text-gray-800">Vista {{ i + 1 }}</span>
+          </div>
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 delay-100">
+              <lucide-icon name="eye" class="text-white" size="20"></lucide-icon>
             </div>
           </div>
         </div>

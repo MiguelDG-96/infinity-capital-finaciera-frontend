@@ -1,65 +1,5 @@
 # CapitalFinanceFrontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.5.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
----
-
 ## Estándares de Diseño UI
 
 ### 1. Modales Estándar (Componentes Formularios y Vistas)
@@ -130,4 +70,73 @@ Para acciones destructivas o críticas puntuales que requieren una confirmación
     </div>
   </div>
 </div>
+```
+
+---
+
+## 🗄️ Administración de Base de Datos
+
+### Eliminar un Crédito completo (con todos sus datos relacionados)
+
+> ⚠️ **IRREVERSIBLE** — Ejecutar solo cuando sea estrictamente necesario. El orden importa por las llaves foráneas.
+
+**Flujo obligatorio (hijo → padre):**
+
+```
+movimientos  →  depende de cuotas y creditos
+requisitos   →  depende de creditos
+cuotas       →  depende de creditos
+creditos     →  tabla principal (eliminar al final)
+```
+
+**SQL — Reemplazar `<ID>` con el id del crédito a eliminar:**
+
+```sql
+START TRANSACTION;
+
+-- 1. Desvincular créditos refinanciados que apunten a este (si existen)
+UPDATE creditos SET credito_origen_id = NULL WHERE credito_origen_id = <ID>;
+
+-- 2. Eliminar movimientos (pagos, desembolsos, ajustes)
+DELETE FROM movimientos WHERE credito_id = <ID>;
+
+-- 3. Eliminar requisitos/documentos del crédito
+DELETE FROM requisitos WHERE credito_id = <ID>;
+
+-- 4. Eliminar cuotas del cronograma
+DELETE FROM cuotas WHERE credito_id = <ID>;
+
+-- 5. Eliminar el crédito (siempre al último)
+DELETE FROM creditos WHERE id = <ID>;
+
+-- ✅ Confirmar si todo salió bien
+COMMIT;
+
+-- ❌ Revertir si algo falló
+-- ROLLBACK;
+```
+
+---
+
+### Anular un Pago de Cuota manualmente
+
+Cuando se elimina un movimiento de pago directamente en BD, hay que revertir también la cuota y el saldo del crédito:
+
+```sql
+-- 1. Revertir el estado de la cuota
+UPDATE cuotas SET
+    estado_cuota         = 'PENDIENTE',
+    monto_pagado_cliente = 0,
+    fecha_pago           = NULL,
+    metodo_pago          = NULL,
+    numero_comprobante   = NULL
+WHERE id = <ID_CUOTA>;
+
+-- 2. Restaurar el saldo del crédito (sumar capital de esa cuota)
+UPDATE creditos
+SET debe_actualidad = debe_actualidad + (SELECT capital FROM cuotas WHERE id = <ID_CUOTA>)
+WHERE id = <ID_CREDITO>;
+
+-- 3. Eliminar el/los movimiento(s) del pago
+DELETE FROM movimientos WHERE cuota_id = <ID_CUOTA>;
 ```

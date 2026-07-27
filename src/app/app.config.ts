@@ -17,7 +17,7 @@ import {
   Wallet, Send, Info, TrendingDown, List, Landmark, Trash, AlertTriangle, Calendar,
   CheckCircle, ArrowLeft, MessageSquare, BellOff, ArrowDownLeft, ArrowUpRight,
   History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2,
-  MapPinHouse, Percent, Layers, Edit2, Edit3, PlusCircle, Settings2, Download,
+  MapPinHouse, Percent, Layers, Edit2, Edit3, PlusCircle, Settings2, Download, Maximize, Minimize,
   Key, Package, Truck, Users, Building, ShoppingCart, Folder, Box, Building2, Calculator, CalendarDays, IdCard,
   UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw,
   CircleDollarSign, Printer, ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
@@ -46,7 +46,9 @@ import {
   Handshake,
   Gavel,
   QrCode,
-  ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet
+  ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet,
+  PhoneCall,
+  Map
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -77,13 +79,13 @@ export const appConfig: ApplicationConfig = {
         Send, Info, TrendingDown, List, Landmark, Trash, AlertTriangle, Calendar,
         CheckCircle, ArrowLeft, MessageSquare, BellOff, ArrowDownLeft, ArrowUpRight,
         History, Infinity, FileText, PieChart, Activity, AlertOctagon, XCircle, Trash2, MapPinHouse,
-        Percent, Layers, Edit2, Edit3, Settings2, Download,
+        Percent, Layers, Edit2, Edit3, Settings2, Download, Maximize, Minimize,
         Key, Package, Truck, Users, Building, Building2, ShoppingCart, Folder, Box, Calculator, CalendarDays, Wallet, CreditCard, IdCard,
         UserPlus, UserCheck, UserX, UserCog, Upload, Filter, RefreshCcw, CircleDollarSign, Printer,
         ScanEye, Receipt, ImagePlus, ImageOff, ExternalLink, ShieldAlert, GripVertical,
         Paperclip, Save, Coins, FileBarChart2,
         UserCircle, MailCheck, Camera, Image,ArrowUpDown,ArrowUp,ArrowDown,Ban, BookOpen, CalendarCheck, FileX2, FileCheck2, Fingerprint, ShieldPlus, Share2, CheckSquare, MailWarning, MailQuestion, LoaderCircle, CircleDashed, PartyPopper,Headset, Store, Handshake, Gavel, QrCode,
-        ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet
+        ClipboardList, Target, Contact, FileBadge2, BarChart2, FileSpreadsheet, PhoneCall, Map
       })
     )
   ]
