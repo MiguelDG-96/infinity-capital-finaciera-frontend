@@ -1,5 +1,5 @@
 <div
-  class="relative w-full overflow-hidden min-h-[550px] flex items-center justify-center p-4 md:p-8"
+  class="relative w-full overflow-hidden min-h-0 md:min-h-[550px] flex flex-col justify-start md:justify-center p-2 md:p-8 pt-3 md:pt-8"
 >
   <!-- Full Background Image -->
   <div class="absolute inset-0 z-0">
@@ -18,11 +18,11 @@
 
   <!-- Main Container -->
   <div
-    class="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 -mt-80 md:-mt-18"
+    class="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4 mt-0 md:-mt-18"
   >
     <!-- Left Glass Card -->
     <div
-      class="w-full lg:w-1/2 bg-white/30 border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2.5rem] px-6 py-3 md:px-10 md:py-6 z-20 flex flex-col justify-center"
+      class="w-full lg:w-1/2 bg-white/70 border border-white/60 shadow-[0_8px_32px_0_rgba(220,38,38,0.08)] rounded-[2rem] md:rounded-[2.5rem] px-3.5 py-4 md:px-10 md:py-6 z-20 flex flex-col justify-center"
     >
       <!-- Pill Badge -->
       <div
@@ -48,64 +48,69 @@
       </p>
 
       <!-- Features Row -->
-      <div appScrollReveal="reveal-up" delay="delay-300" class="flex flex-col sm:flex-row gap-3 mb-8">
+      <div appScrollReveal="reveal-up" delay="delay-300" class="flex flex-row gap-1.5 md:gap-3 mb-6 md:mb-8">
         <!-- Feature 1 -->
         <div
-          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+          class="flex items-center gap-1 md:gap-2 bg-white/80 backdrop-blur-md rounded-xl p-1.5 md:p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
         >
-          <div class="text-red-600">
-            <lucide-icon name="zap" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="zap" [size]="14" class="md:hidden"></lucide-icon>
+            <lucide-icon name="zap" [size]="18" class="hidden md:block" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+          <span class="text-[8px] sm:text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
             >Aprobación<br />rápida</span
           >
         </div>
         <!-- Feature 2 -->
         <div
-          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+          class="flex items-center gap-1 md:gap-2 bg-white/80 backdrop-blur-md rounded-xl p-1.5 md:p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
         >
-          <div class="text-red-600">
-            <lucide-icon name="shield-check" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="shield-check" [size]="14" class="md:hidden"></lucide-icon>
+            <lucide-icon name="shield-check" [size]="18" class="hidden md:block" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+          <span class="text-[8px] sm:text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
             >Seguridad<br />garantizada</span
           >
         </div>
         <!-- Feature 3 -->
         <div
-          class="flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
+          class="flex items-center gap-1 md:gap-2 bg-white/80 backdrop-blur-md rounded-xl p-1.5 md:p-2.5 shadow-sm border border-white flex-1 transition-transform hover:-translate-y-1"
         >
-          <div class="text-red-600">
-            <lucide-icon name="headset" [size]="18" [strokeWidth]="2.5"></lucide-icon>
+          <div class="text-red-600 flex-shrink-0">
+            <lucide-icon name="headset" [size]="14" class="md:hidden"></lucide-icon>
+            <lucide-icon name="headset" [size]="18" class="hidden md:block" [strokeWidth]="2.5"></lucide-icon>
           </div>
-          <span class="text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
+          <span class="text-[8px] sm:text-[10px] md:text-xs font-bold text-gray-800 leading-tight"
             >Asesoría<br />personalizada</span
           >
         </div>
       </div>
 
       <!-- Buttons -->
-      <div appScrollReveal="reveal-up" delay="delay-400" class="flex flex-col sm:flex-row items-center gap-3">
+      <div appScrollReveal="reveal-up" delay="delay-400" class="flex flex-row items-center gap-2 md:gap-3">
         <button
-          class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 w-full sm:w-auto cursor-pointer"
+          class="bg-red-600 hover:bg-red-700 text-white px-3 py-2.5 md:px-6 md:py-3 rounded-xl text-xs md:text-sm font-bold flex items-center justify-center gap-1.5 md:gap-2 transition-all shadow-lg shadow-red-600/30 flex-1 cursor-pointer"
           routerLink="/simulator"
         >
           Simular préstamo
-          <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
+          <lucide-icon name="arrow-right" [size]="14" class="md:hidden"></lucide-icon>
+          <lucide-icon name="arrow-right" [size]="16" class="hidden md:block" [strokeWidth]="3"></lucide-icon>
         </button>
         <button
-          class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto cursor-pointer"
+          class="bg-white/90 hover:bg-white text-gray-900 border border-gray-200 px-3 py-2.5 md:px-6 md:py-3 rounded-xl text-xs md:text-sm font-bold flex items-center justify-center gap-1.5 md:gap-2 transition-all shadow-sm flex-1 cursor-pointer"
           routerLink="/register"
         >
           Registrate
-          <lucide-icon name="arrow-right" [size]="16" [strokeWidth]="3"></lucide-icon>
+          <lucide-icon name="arrow-right" [size]="14" class="md:hidden"></lucide-icon>
+          <lucide-icon name="arrow-right" [size]="16" class="hidden md:block" [strokeWidth]="3"></lucide-icon>
         </button>
       </div>
     </div>
 
     <!-- Right Section (Empty except for floating card so BG is visible) -->
     <div
-      class="w-full lg:w-1/2 relative z-10 flex items-end justify-end mt-8 lg:mt-0 min-h-[300px]"
+      class="hidden lg:flex lg:w-1/2 relative z-10 items-end justify-end mt-0 min-h-[300px]"
     >
       <!-- Floating Glass Card positioned over the background image -->
       <div

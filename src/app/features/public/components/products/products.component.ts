@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, User, Store, Building, Home, ArrowRight } from 'lucide-angular';
@@ -19,6 +19,34 @@ import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reve
   templateUrl: './products.component.html',
 })
 export class ProductsComponent {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+
+  // Drag to Scroll Logic
+  isDown = false;
+  startX = 0;
+  scrollLeft = 0;
+
+  onMouseDown(e: MouseEvent) {
+    this.isDown = true;
+    this.startX = e.pageX - this.scrollContainer.nativeElement.offsetLeft;
+    this.scrollLeft = this.scrollContainer.nativeElement.scrollLeft;
+  }
+
+  onMouseLeave() {
+    this.isDown = false;
+  }
+
+  onMouseUp() {
+    this.isDown = false;
+  }
+
+  onMouseMove(e: MouseEvent) {
+    if (!this.isDown) return;
+    e.preventDefault();
+    const x = e.pageX - this.scrollContainer.nativeElement.offsetLeft;
+    const walk = (x - this.startX) * 2; // Scroll-fast
+    this.scrollContainer.nativeElement.scrollLeft = this.scrollLeft - walk;
+  }
   products: Product[] = [
     {
       title: 'Créditos Personales',
