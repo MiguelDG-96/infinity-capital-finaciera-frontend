@@ -144,7 +144,7 @@ export class EditCuotaModalComponent implements OnInit {
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, anular pago',
       cancelButtonText: 'Cancelar'
-    }).then((result) => {
+    }).then((result: any) => {
       if (result.isConfirmed) {
         this.cargando = true;
         this.creditoService.anularPago(this.cuota.id).subscribe({
