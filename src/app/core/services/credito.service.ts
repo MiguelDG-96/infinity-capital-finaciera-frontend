@@ -251,4 +251,8 @@ export class CreditoService {
   marcarCuotasPuntuales(creditoId: number, cuotaIds: number[]): Observable<any> {
     return this.http.post(`${this.apiUrl}/creditos/admin/${creditoId}/marcar-puntuales`, { cuotaIds });
   }
+
+  anularPago(cuotaId: number): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/cuotas/${cuotaId}/anular-pago`, {});
+  }
 }

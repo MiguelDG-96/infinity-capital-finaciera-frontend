@@ -5,6 +5,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Cuota, Credito } from '../../../../core/models/credito.model';
 import { CreditoService } from '../../../../core/services/credito.service';
 import { UpdateCuotaRequestDTO } from '../../../../core/models/credito.dto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-cuota-modal',
@@ -129,6 +130,34 @@ export class EditCuotaModalComponent implements OnInit {
         this.cargando = false;
         this.showConfirmModal = false;
         alert(err.error?.mensaje || 'Error al actualizar la cuota');
+      }
+    });
+  }
+
+  confirmarAnularPago() {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡Vas a anular este pago! La cuota volverá a estar PENDIENTE y se eliminarán los movimientos de caja asociados. Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, anular pago',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cargando = true;
+        this.creditoService.anularPago(this.cuota.id).subscribe({
+          next: (resp) => {
+            this.cargando = false;
+            Swal.fire('Anulado', resp.mensaje, 'success');
+            this.guardadoExitoso.emit();
+          },
+          error: (err) => {
+            this.cargando = false;
+            Swal.fire('Error', err.error?.error || 'No se pudo anular el pago', 'error');
+          }
+        });
       }
     });
   }
