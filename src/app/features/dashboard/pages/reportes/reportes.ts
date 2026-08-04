@@ -6,7 +6,10 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { ReporteService } from '../../../../core/services/reporte.service';
+import { CreditoService } from '../../../../core/services/credito.service';
 import jsPDF from 'jspdf';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-reportes',
@@ -18,6 +21,7 @@ import jsPDF from 'jspdf';
 export class Reportes implements OnInit, OnDestroy {
   themeService = inject(ThemeService);
   reporteService = inject(ReporteService);
+  creditoService = inject(CreditoService);
 
   selectedYear = '2026';
   selectedMonth = 'todos';
@@ -251,6 +255,208 @@ export class Reportes implements OnInit, OnDestroy {
       }
     }
     this.isApplyingFilters.set(false);
+  }
+
+  exportarExcelDeudas() {
+    this.isApplyingFilters.set(true);
+    this.creditoService.obtenerCarteraGeneral().subscribe({
+      next: async (creditos) => {
+        try {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Reporte Deudas');
+
+          try {
+            const logoRes = await fetch('/logo/LOGO-INFINY.png');
+            if (logoRes.ok) {
+              const logoBlob = await logoRes.blob();
+              const logoBuffer = await logoBlob.arrayBuffer();
+              const logoId = workbook.addImage({
+                buffer: logoBuffer,
+                extension: 'png',
+              });
+              worksheet.addImage(logoId, {
+                tl: { col: 0, row: 0 },
+                ext: { width: 180, height: 60 }
+              });
+            }
+          } catch (e) {
+            console.warn('No se pudo cargar el logo', e);
+          }
+
+          worksheet.mergeCells('A1:T5');
+          const titleCell = worksheet.getCell('A1');
+          titleCell.value = 'FORMATO PARA COBRANZA BLANCA';
+          titleCell.font = { size: 24, bold: true, color: { argb: 'FF003366' } };
+          titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+          const columnas = [
+            { key: 'fechaReporte', titulo: 'FECHA DE REPORTE', width: 18 },
+            { key: 'codigoEntidad', titulo: 'CODIGO ENTIDAD', width: 18 },
+            { key: 'numeroCredito', titulo: 'NUMERO DEL CREDITO', width: 22 },
+            { key: 'tipoDocumentoId', titulo: 'TIPO DOCUMENTO ID', width: 18 },
+            { key: 'numeroDocumento', titulo: 'NUMERO DOCUMENTO ID', width: 22 },
+            { key: 'tipoDeudor', titulo: 'TIPO DE DEUDOR', width: 18 },
+            { key: 'nombre', titulo: 'APELLIDOS Y NOMBRES/RAZÓN SOCIAL', width: 40 },
+            { key: 'direccion', titulo: 'DIRECCIÓN', width: 40 },
+            { key: 'distrito', titulo: 'DISTRITO', width: 20 },
+            { key: 'departamento', titulo: 'DEPARTAMENTO', width: 20 },
+            { key: 'fechaVencimiento', titulo: 'FECHA DE VENCIMIENTO', width: 22 },
+            { key: 'tipoDocumento', titulo: 'TIPO DE DOCUMENTO', width: 20 },
+            { key: 'moneda', titulo: 'TIPO DE MONEDA', width: 18 },
+            { key: 'monto', titulo: 'MONTO DE LA DEUDA', width: 20 },
+            { key: 'condicion', titulo: 'CONDICIÓN DE LA DEUDA', width: 22 },
+            { key: 'email', titulo: 'EMAIL DEL DEUDOR', width: 30 },
+            { key: 'tipoArchivo', titulo: 'TIPO DE ARCHIVO', width: 18 },
+            { key: 'provincia', titulo: 'NOMBRE DE PROVINCIA', width: 22 },
+            { key: 'concepto', titulo: 'CONCEPTO DE LA DEUDA', width: 25 }
+          ];
+
+          worksheet.getRow(6).values = columnas.map(c => c.titulo);
+          
+          worksheet.getRow(6).eachCell((cell, colNumber) => {
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFB91C78' }
+            };
+            cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+            cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            const colInfo = columnas[colNumber - 1];
+            if (colInfo) {
+              worksheet.getColumn(colNumber).width = colInfo.width;
+            }
+          });
+
+
+
+          const formatearFecha = (fechaInput: any) => {
+            if (!fechaInput) return '';
+            const d = new Date(fechaInput);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const anio = d.getFullYear();
+            return `${dia}/${mes}/${anio}`;
+          };
+
+          const fechaHoy = formatearFecha(new Date());
+          
+          creditos.forEach((credito) => {
+            const cliente = credito.cliente || {} as any;
+            
+            let extra = {} as any;
+            if (cliente.datosSolicitud) {
+              try {
+                extra = typeof cliente.datosSolicitud === 'string' 
+                            ? JSON.parse(cliente.datosSolicitud) 
+                            : cliente.datosSolicitud;
+              } catch(e) {}
+            }
+
+            let nombreFormateado = cliente.nombre || credito.nombreCliente || '';
+            const isJuridica = cliente.tipoPersona === 'JURIDICA' || cliente.tipoDocumento === 'RUC';
+            
+            if (!isJuridica && (extra.apellidoPaterno || extra.nombres)) {
+              const paterno = extra.apellidoPaterno || '';
+              const materno = extra.apellidoMaterno || '';
+              const nombres = extra.nombres || '';
+              nombreFormateado = `${paterno} ${materno} ${nombres}`.replace(/\s+/g, ' ').trim();
+            }
+            
+            const rowData = {
+              fechaReporte: fechaHoy,
+              codigoEntidad: 'INF-CAPITAL',
+              numeroCredito: credito.id?.toString(),
+              tipoDocumentoId: cliente.tipoDocumento === 'DNI' ? '1' : (cliente.tipoDocumento === 'RUC' ? '6' : '3'), // 3 para CE, etc.
+              numeroDocumento: cliente.numeroDocumento || '',
+              tipoDeudor: '1', // 1: Titular/Directo
+              nombre: nombreFormateado,
+              direccion: cliente.direccion || cliente.domicilio || extra.direccion || '',
+              distrito: cliente.distrito || extra.distrito || '',
+              departamento: cliente.departamento || extra.departamento || '',
+              fechaVencimiento: formatearFecha(credito.fechaVencimiento),
+              tipoDocumento: 'PG', // PG = Pagaré (Tipo de comprobante)
+              moneda: (credito.moneda && credito.moneda.toUpperCase().includes('DOL')) ? '2' : '1', // 1: Soles, 2: Dólares
+              monto: credito.debeActualidad || 0,
+              condicion: '', // En blanco si es moroso regular, P protestado, J judicial, C castigado
+              email: cliente.usuario?.email || '',
+              tipoArchivo: 'XLSX',
+              provincia: cliente.provincia || extra.provincia || '',
+              concepto: credito.tipoCredito || 'PRESTAMO'
+            };
+            
+            worksheet.addRow(columnas.map(col => (rowData as any)[col.key]));
+          });
+
+          // LEYENDA (Separada de la tabla principal)
+          const startColLeyenda = 22; // Columna V
+          let rowLeyenda = 6;
+          
+          const addLeyendaHeader = (texto: string) => {
+            const cell = worksheet.getCell(rowLeyenda, startColLeyenda);
+            cell.value = texto;
+            cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF003366' } };
+            cell.alignment = { horizontal: 'center' };
+            worksheet.getColumn(startColLeyenda).width = 25;
+            worksheet.getColumn(startColLeyenda + 1).width = 25;
+            worksheet.mergeCells(rowLeyenda, startColLeyenda, rowLeyenda, startColLeyenda + 1);
+            rowLeyenda++;
+          };
+
+          const addLeyendaItem = (clave: string, valor: string) => {
+            worksheet.getCell(rowLeyenda, startColLeyenda).value = clave;
+            worksheet.getCell(rowLeyenda, startColLeyenda).font = { bold: true };
+            worksheet.getCell(rowLeyenda, startColLeyenda + 1).value = valor;
+            rowLeyenda++;
+          };
+
+          addLeyendaHeader('LEYENDA DE CÓDIGOS');
+          
+          addLeyendaItem('TIPO DOCUMENTO ID:', '');
+          addLeyendaItem('1', 'DNI');
+          addLeyendaItem('3', 'Carnet de extranjería');
+          addLeyendaItem('6', 'RUC');
+          
+          rowLeyenda++;
+          addLeyendaItem('TIPO DE DEUDOR:', '');
+          addLeyendaItem('1', 'Directo (Deudor)');
+          addLeyendaItem('2', 'Indirecto (Aval)');
+
+          rowLeyenda++;
+          addLeyendaItem('TIPO DE DOCUMENTO:', '');
+          addLeyendaItem('BV', 'Boleta de Venta');
+          addLeyendaItem('FA', 'Factura');
+          addLeyendaItem('LT', 'Letra');
+          addLeyendaItem('PG', 'Pagaré');
+          addLeyendaItem('RC', 'Recibo');
+
+          rowLeyenda++;
+          addLeyendaItem('TIPO DE MONEDA:', '');
+          addLeyendaItem('1', 'Soles');
+          addLeyendaItem('2', 'Dólares');
+          
+          rowLeyenda++;
+          addLeyendaItem('CONDICIÓN DE LA DEUDA:', '');
+          addLeyendaItem('(Vacío)', 'Moroso');
+          addLeyendaItem('P', 'Protestado');
+          addLeyendaItem('J', 'Judicial');
+          addLeyendaItem('C', 'Castigado');
+
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer as any], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          saveAs(blob, `Reporte_Deudas_${fechaHoy}.xlsx`);
+          
+        } catch (error) {
+          console.error('Error al generar Excel', error);
+        } finally {
+          this.isApplyingFilters.set(false);
+        }
+      },
+      error: (err) => {
+        console.error('Error obteniendo datos para Excel', err);
+        this.isApplyingFilters.set(false);
+      }
+    });
   }
 
   toggleFullscreen() {

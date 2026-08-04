@@ -18,10 +18,18 @@
       
       <!-- Botones de Acción -->
       <div class="flex gap-2">
-        <button class="btn btn-outline btn-sm shadow-sm gap-2 border-red-500/30 hover:bg-red-600 hover:border-red-600 hover:text-white" (click)="exportarPdf()">
-          <lucide-icon name="download" size="16"></lucide-icon>
-          Exportar PDF
-        </button>
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-outline btn-sm shadow-sm gap-2 border-red-500/30 hover:bg-red-600 hover:border-red-600 hover:text-white">
+            <lucide-icon name="download" size="16"></lucide-icon>
+            Exportar
+          </div>
+          <ul tabindex="0" class="dropdown-content z-[20] menu p-2 shadow bg-base-100 rounded-box w-52" 
+              [class.bg-slate-800]="themeService.darkMode()" 
+              [class.text-white]="themeService.darkMode()">
+            <li><a (click)="exportarPdf()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Actual (PDF)</a></li>
+            <li><a (click)="exportarExcelDeudas()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Reporte Deudas (Excel)</a></li>
+          </ul>
+        </div>
 
         @if (!isFullscreen()) {
           <button class="btn btn-outline btn-sm shadow-sm gap-2 border-red-500/30 hover:bg-red-600 hover:border-red-600 hover:text-white" (click)="toggleFullscreen()">
