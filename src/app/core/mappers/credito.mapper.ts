@@ -235,21 +235,17 @@ export class CreditoMapper {
     // Usar el mayor entre lo que dice el backend y lo que calculamos nosotros
     credito.diasAtraso = Math.max(dto.diasAtraso || 0, maxDiasAtraso);
 
-    // Calcular la calificación real solo para contratos activos
-    if (['ACTIVO', 'MORA', 'ATRASADO'].includes(credito.estado)) {
-      if (credito.diasAtraso <= 8) {
-        credito.calificacionCrediticia = 'NORMAL';
-      } else if (credito.diasAtraso <= 30) {
-        credito.calificacionCrediticia = 'PROBLEMAS_POTENCIALES';
-      } else if (credito.diasAtraso <= 60) {
-        credito.calificacionCrediticia = 'DEFICIENTE';
-      } else if (credito.diasAtraso <= 120) {
-        credito.calificacionCrediticia = 'DUDOSO';
-      } else {
-        credito.calificacionCrediticia = 'PERDIDA';
-      }
+    // Calcular la calificación real basándose en los días de atraso (para todos los estados)
+    if (credito.diasAtraso <= 8) {
+      credito.calificacionCrediticia = 'NORMAL';
+    } else if (credito.diasAtraso <= 30) {
+      credito.calificacionCrediticia = 'PROBLEMAS_POTENCIALES';
+    } else if (credito.diasAtraso <= 60) {
+      credito.calificacionCrediticia = 'DEFICIENTE';
+    } else if (credito.diasAtraso <= 120) {
+      credito.calificacionCrediticia = 'DUDOSO';
     } else {
-      credito.calificacionCrediticia = undefined;
+      credito.calificacionCrediticia = 'PERDIDA';
     }
 
     return credito;

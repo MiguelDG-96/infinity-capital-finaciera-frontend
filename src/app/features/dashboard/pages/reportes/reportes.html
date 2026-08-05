@@ -23,11 +23,27 @@
             <lucide-icon name="download" size="16"></lucide-icon>
             Exportar
           </div>
-          <ul tabindex="0" class="dropdown-content z-[20] menu p-2 shadow bg-base-100 rounded-box w-52" 
+          <ul tabindex="0" class="dropdown-content z-[20] menu p-2 shadow bg-base-100 rounded-box w-60" 
               [class.bg-slate-800]="themeService.darkMode()" 
               [class.text-white]="themeService.darkMode()">
-            <li><a (click)="exportarPdf()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Actual (PDF)</a></li>
-            <li><a (click)="exportarExcelDeudas()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Reporte Deudas (Excel)</a></li>
+            <li><a (click)="exportarPdf()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()"><lucide-icon name="file-text" size="16"></lucide-icon> Actual (PDF)</a></li>
+            <li><a (click)="exportarExcelDeudas()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()"><lucide-icon name="file-spreadsheet" size="16"></lucide-icon> Cartera General (Excel)</a></li>
+            <li>
+              <details>
+                <summary class="hover:bg-base-200 text-red-500" [class.hover:bg-slate-700]="themeService.darkMode()">
+                  <lucide-icon name="alert-circle" size="16"></lucide-icon> Calificación SBS (Excel)
+                </summary>
+                <ul class="pl-2 mt-1">
+                  <li><a (click)="exportarExcelNormal()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Normal (0-8 días)</a></li>
+                  <li><a (click)="exportarExcelProblemasPotenciales()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Prob. Potenciales (9-30)</a></li>
+                  <li><a (click)="exportarExcelDeficiente()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Deficiente (31-60)</a></li>
+                  <li><a (click)="exportarExcelDudoso()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Dudoso (61-120)</a></li>
+                  <li><a (click)="exportarExcelPerdida()" class="hover:bg-base-200" [class.hover:bg-slate-700]="themeService.darkMode()">Pérdida (>120 días)</a></li>
+                </ul>
+              </details>
+            </li>
+            <li><a (click)="exportarExcelCuotasVencidas()" class="hover:bg-base-200 text-orange-500" [class.hover:bg-slate-700]="themeService.darkMode()"><lucide-icon name="calendar-x" size="16"></lucide-icon> Cuotas Vencidas (Excel)</a></li>
+            <li><a (click)="exportarExcelAlDia()" class="hover:bg-base-200 text-emerald-500" [class.hover:bg-slate-700]="themeService.darkMode()"><lucide-icon name="check-circle" size="16"></lucide-icon> Clientes Al Día (Excel)</a></li>
           </ul>
         </div>
 

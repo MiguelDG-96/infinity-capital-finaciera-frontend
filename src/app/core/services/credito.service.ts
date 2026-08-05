@@ -140,6 +140,12 @@ export class CreditoService {
     );
   }
 
+  obtenerCarteraPorCalificacion(calificacion: string): Observable<Credito[]> {
+    return this.http.get<CreditoDTOResponse[]>(`${this.apiUrl}/creditos/admin/reportes/por-calificacion?calificacion=${calificacion}`).pipe(
+      map(dtos => dtos.map(dto => CreditoMapper.toCreditoDomain(dto)))
+    );
+  }
+
   crearCreditoDirecto(request: any): Observable<SolicitudCreditoResponseDTO> {
     return this.http.post<SolicitudCreditoResponseDTO>(`${this.apiUrl}/creditos/admin/directo`, request);
   }
