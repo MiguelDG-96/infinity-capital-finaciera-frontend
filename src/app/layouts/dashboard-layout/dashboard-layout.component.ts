@@ -47,9 +47,10 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
       const notifs = this.websocketService.notifications();
       if (notifs.length > 0) {
         const last = notifs[0];
+        // Solo recargamos los endpoints si la notificación es de un tipo relacionado a ellos
+        // O lo hacemos siempre, pero NO la marcamos como leída aquí.
         if (!last.leida) {
           this.notificationService.recargar();
-          this.websocketService.marcarComoLeida(last.id);
         }
       }
     });
@@ -69,13 +70,17 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     const authData = this.authService.currentUser();
     const rol = this.authService.currentUserData()?.rol;
     if (rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR') {
-      if (authData?.accessToken) {
-        this.websocketService.connect(authData.accessToken);
-      }
       this.notificationService.iniciarPolling();
-      // Mostrar alerta de cobranza pendiente — esperar a que el polling tenga datos (máx 10s)
+      this.notificationService.iniciarPollingProspectos();
       this.esperarYMostrarCobranza();
     }
+
+    // Fix: desbloquear AudioContext en el primer clic del usuario (cualquier clic).
+    // Chrome requiere que AudioContext se cree dentro de un gesto del usuario.
+    // Con { once: true } el listener se auto-elimina después del primer clic.
+    document.addEventListener('click', () => {
+      this.notificationService.initAudio();
+    }, { once: true });
   }
 
   private esperarYMostrarCobranza(intentos = 0) {

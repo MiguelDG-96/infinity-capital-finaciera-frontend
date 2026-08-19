@@ -65,14 +65,12 @@
       }
     </button>
 
-    <!-- Notificaciones -->
+    <!-- Notificaciones (Campanita) -->
     <button class="btn btn-ghost btn-sm btn-circle indicator" aria-label="Notificaciones" (click)="onToggleNotifications()">
-      @if (notificationService.totalNotificaciones() > 0) {
+      @if (totalNotificaciones > 0) {
         <span class="badge badge-error badge-xs indicator-item font-bold animate-pulse">
-          {{ notificationService.totalNotificaciones() }}
+          {{ totalNotificaciones }}
         </span>
-      } @else {
-        <span class="badge badge-primary badge-xs indicator-item"></span>
       }
       <lucide-icon name="bell" size="20" strokeWidth="1.8"></lucide-icon>
     </button>

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HeroComponent } from '../components/hero/hero.component';
 import { ProductsComponent } from '../components/products/products.component';
-import { StoreComponent } from '../components/store/store.component';
+
 import { DigitalChannelsComponent } from '../components/digital-channels/digital-channels.component';
 import { InfinyCapitalInfoComponent } from '../components/infinycapital-info/infinycapital-info.component';
 import { LocationComponent } from '../components/location/location.component';
 import { LucideAngularModule } from 'lucide-angular';
+import { InversionistasComponent } from '../components/inversionistas/inversionistas.component';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { LucideAngularModule } from 'lucide-angular';
     RouterLink,
     HeroComponent,
     ProductsComponent,
-    StoreComponent,
+    InversionistasComponent,
     DigitalChannelsComponent,
     InfinyCapitalInfoComponent,
     LocationComponent,

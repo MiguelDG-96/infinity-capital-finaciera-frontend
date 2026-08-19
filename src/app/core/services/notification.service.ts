@@ -6,6 +6,17 @@ import { interval, Subscription, forkJoin, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
+export interface AppNotification {
+  id: string;
+  tipo: string;
+  mensaje: string;
+  monto?: number;
+  moneda?: string;
+  fecha: Date;
+  leida: boolean;
+  prospectoId?: number; // Para navegar al detalle del prospecto
+}
+
 export interface PagoRevisionItem {
   cuotaId: number;
   creditoId: number;
@@ -67,12 +78,24 @@ export class NotificationService {
   private _solicitudesPendientes = signal<SolicitudPendienteItem[]>([]);
   private pollingSubscription: Subscription | null = null;
 
+  // ── Notificaciones en tiempo real via polling (reemplaza WebSocket) ──
+  private _realtimeNotifications = signal<AppNotification[]>([]);
+  private _lastProspectosCount = -1; // -1 = primera carga, no notificar
+  private prospectoPollingSubscription: Subscription | null = null;
+
   readonly isOpen = this._isOpen.asReadonly();
   readonly pagosEnRevision = this._pagosEnRevision.asReadonly();
   readonly retirosPendientes = this._retirosPendientes.asReadonly();
   readonly pendientesCobranza = this._pendientesCobranza.asReadonly();
   readonly solicitudesPendientes = this._solicitudesPendientes.asReadonly();
-  readonly totalNotificaciones = computed(() => this._pagosEnRevision().length + this._retirosPendientes().length + this._pendientesCobranza().length + this._solicitudesPendientes().length);
+  readonly realtimeNotifications = this._realtimeNotifications.asReadonly();
+  readonly totalNotificaciones = computed(() =>
+    this._pagosEnRevision().length +
+    this._retirosPendientes().length +
+    this._pendientesCobranza().length +
+    this._solicitudesPendientes().length +
+    this._realtimeNotifications().filter(n => !n.leida).length
+  );
 
   open() { this._isOpen.set(true); }
   close() { this._isOpen.set(false); }
@@ -108,10 +131,82 @@ export class NotificationService {
   detenerPolling() {
     this.pollingSubscription?.unsubscribe();
     this.pollingSubscription = null;
+    this.prospectoPollingSubscription?.unsubscribe();
+    this.prospectoPollingSubscription = null;
+    // NO limpiamos _realtimeNotifications ni _lastProspectosCount aquí.
+    // Esas son persistentes durante toda la sesión del usuario.
     this._pagosEnRevision.set([]);
     this._retirosPendientes.set([]);
     this._pendientesCobranza.set([]);
     this._solicitudesPendientes.set([]);
+  }
+
+  /**
+   * Inicia un polling de 30s que detecta nuevos prospectos de inversión.
+   * Cuando el número crece respecto a la última consulta, dispara una notificación visible.
+   * Funciona sin WebSocket ni configuración de NGINX.
+   */
+  iniciarPollingProspectos() {
+    if (this.prospectoPollingSubscription) return;
+
+    // Carga inicial silenciosa (establecer baseline)
+    this.checkProspectos(true);
+
+    this.prospectoPollingSubscription = interval(30_000).subscribe(() => {
+      this.checkProspectos(false);
+    });
+  }
+
+  // IDs de prospectos ya notificados — evita duplicados si el orden del API cambia
+  private _notifiedProspectoIds = new Set<number>();
+
+  private checkProspectos(silencioso: boolean) {
+    this.http.get<any[]>(`${this.apiUrl}/inversionistas-prospectos`).pipe(
+      catchError(() => of([] as any[]))
+    ).subscribe(prospectos => {
+      const count = prospectos.length;
+
+      if (!silencioso && this._lastProspectosCount >= 0 && count > this._lastProspectosCount) {
+        // Los nuevos están al FINAL del array (los más recientes tienen ID más alto)
+        const diff = count - this._lastProspectosCount;
+        const nuevos = prospectos.slice(-diff); // ← slice del final, no del inicio
+
+        nuevos.forEach((p: any) => {
+          // Evitar notificar dos veces al mismo prospecto
+          if (this._notifiedProspectoIds.has(p.id)) return;
+          this._notifiedProspectoIds.add(p.id);
+
+          const notif: AppNotification = {
+            id: Math.random().toString(36).substring(2, 9),
+            tipo: 'NUEVO_PROSPECTO',
+            mensaje: `Nuevo prospecto: ${p.nombres} ${p.apellidoPaterno} — S/ ${p.montoInversion?.toLocaleString('es-PE') ?? '?'}`,
+            monto: p.montoInversion,
+            moneda: 'S/.',
+            fecha: new Date(),
+            leida: false,
+            prospectoId: p.id
+          };
+          this._realtimeNotifications.update(prev => [notif, ...prev].slice(0, 50));
+        });
+        this.playNotificationSound();
+      } else if (silencioso) {
+        // En la carga silenciosa inicial, registrar todos los IDs conocidos
+        prospectos.forEach((p: any) => this._notifiedProspectoIds.add(p.id));
+      }
+
+      this._lastProspectosCount = count;
+    });
+
+  }
+
+  marcarRealtimeLeida(id: string) {
+    this._realtimeNotifications.update(prev =>
+      prev.map(n => n.id === id ? { ...n, leida: true } : n)
+    );
+  }
+
+  limpiarRealtimeNotifications() {
+    this._realtimeNotifications.set([]);
   }
 
   recargar() {
@@ -121,6 +216,13 @@ export class NotificationService {
   irAlCredito(creditoId: number) {
     this.close();
     this.router.navigate(['/dashboard/admin/cartera', creditoId]);
+  }
+
+  irAlProspecto(prospectoId: number) {
+    this.close();
+    this.router.navigate(['/dashboard/admin/inversionistas'], {
+      queryParams: { detalle: prospectoId }
+    });
   }
 
   irATesoreria() {
@@ -158,29 +260,52 @@ export class NotificationService {
     }
   }
 
+  // AudioContext cacheado — se inicializa en el primer gesto del usuario
+  private audioCtx: AudioContext | null = null;
+
+  /**
+   * Debe llamarse desde un evento de usuario (click) para desbloquear el audio.
+   * Llamar desde el botón de la campanita.
+   */
+  initAudio() {
+    if (this.audioCtx) {
+      // Si estaba suspendido (tab inactiva), lo reanudamos
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+      return;
+    }
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioContextClass) {
+      this.audioCtx = new AudioContextClass();
+    }
+  }
+
   private playNotificationSound() {
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) return;
-      
-      const ctx = new AudioContextClass();
+      if (!this.audioCtx || this.audioCtx.state === 'closed') return;
+      if (this.audioCtx.state === 'suspended') {
+        // No podemos reproducir sin gesto — omitimos silenciosamente
+        return;
+      }
+      const ctx = this.audioCtx;
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
 
       osc.connect(gainNode);
       gainNode.connect(ctx.destination);
 
-      // Sonido tipo "campanita" / "ding"
+      // Campanita: A5 → A6 rápido, fade out suave
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // Nota A5
-      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // Sube rápido a A6
-      
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1);
+
       gainNode.gain.setValueAtTime(0, ctx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
 
       osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.5);
+      osc.stop(ctx.currentTime + 0.6);
     } catch (e) {
       console.warn('Audio play failed', e);
     }

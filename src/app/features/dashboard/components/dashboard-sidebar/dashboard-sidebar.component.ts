@@ -101,6 +101,12 @@ export class DashboardSidebarComponent implements OnInit {
             isReady: true
           });
           items.push({
+            label: 'Prospectos Inversionistas',
+            icon: 'building',
+            route: '/dashboard/admin/inversionistas',
+            isReady: true
+          });
+          items.push({
             label: 'Control de IPs',
             icon: 'shield-alert',
             route: '/dashboard/admin/ips',

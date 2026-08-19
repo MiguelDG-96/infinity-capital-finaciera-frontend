@@ -1,0 +1,232 @@
+<div class="p-6 md:p-8 animate-fade-in-up">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-bold text-base-content mb-2 flex items-center gap-3">
+        <lucide-icon name="building" class="w-8 h-8 text-primary"></lucide-icon>
+        Prospectos de Inversionistas
+      </h1>
+      <p class="text-base-content/70">Gestión de solicitudes para nuevos socios capitalistas.</p>
+    </div>
+  </div>
+
+  <!-- Filters & Search -->
+  <div class="bg-base-100 p-4 rounded-xl shadow-sm border border-base-content/10 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+    <div class="relative w-full sm:w-96">
+      <lucide-icon name="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-base-content/40"></lucide-icon>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nombre, DNI o correo..." 
+        class="input input-bordered w-full pl-10 focus:border-primary focus:outline-none"
+      >
+    </div>
+    
+    <button (click)="cargarProspectos()" class="btn btn-ghost text-primary w-full sm:w-auto">
+      <lucide-icon name="clock" class="w-5 h-5"></lucide-icon> Refrescar
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-20">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredProspectos.length === 0" class="bg-base-100 rounded-2xl shadow-sm border border-base-content/10 p-12 text-center">
+    <div class="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+      <lucide-icon name="alert-circle" class="w-10 h-10 text-base-content/40"></lucide-icon>
+    </div>
+    <h3 class="text-xl font-bold text-base-content mb-2">No hay prospectos encontrados</h3>
+    <p class="text-base-content/60">No se encontraron solicitudes que coincidan con la búsqueda.</p>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading && filteredProspectos.length > 0" class="bg-base-100 rounded-xl shadow-sm border border-base-content/10 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead class="bg-base-200/50">
+          <tr>
+            <th class="font-bold text-base-content/70 py-4">Inversionista</th>
+            <th class="font-bold text-base-content/70 py-4">Contacto</th>
+            <th class="font-bold text-base-content/70 py-4">Propuesta</th>
+            <th class="font-bold text-base-content/70 py-4">Fecha</th>
+            <th class="font-bold text-base-content/70 py-4">Estado</th>
+            <th class="font-bold text-base-content/70 py-4 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredProspectos" class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar placeholder">
+                  <div class="bg-primary/10 text-primary rounded-full w-10">
+                    <span class="font-bold">{{ p.nombres.charAt(0) }}</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="font-bold text-base-content">{{ p.nombres }} {{ p.apellidoPaterno }} {{ p.apellidoMaterno }}</div>
+                  <div class="text-xs text-base-content/60">DNI: {{ p.dni }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm font-medium text-base-content">{{ p.email }}</div>
+              <div class="text-xs text-base-content/60">{{ p.telefono }}</div>
+            </td>
+            <td>
+              <div class="text-sm font-bold text-green-600">S/ {{ p.montoInversion | number:'1.2-2' }}</div>
+              <div class="text-xs text-base-content/60">{{ p.plazo }} meses</div>
+            </td>
+            <td>
+              <div class="text-sm text-base-content">{{ p.fechaCreacion | date:'dd/MM/yyyy' }}</div>
+              <div class="text-xs text-base-content/60">{{ p.fechaCreacion | date:'HH:mm' }}</div>
+            </td>
+            <td>
+              <div class="badge" 
+                   [ngClass]="{
+                     'badge-warning': p.estado === 'PENDIENTE',
+                     'badge-info': p.estado === 'CONTACTADO',
+                     'badge-error': p.estado === 'DESCARTADO',
+                     'badge-success': p.estado === 'APROBADO'
+                   }">
+                {{ p.estado }}
+              </div>
+            </td>
+            <td>
+              <div class="flex justify-center gap-2">
+                <button (click)="openDetalleModal(p)" class="btn btn-sm btn-info btn-square tooltip tooltip-top" data-tip="Ver Detalles">
+                  <lucide-icon name="eye" class="w-4 h-4 text-white"></lucide-icon>
+                </button>
+                <button *ngIf="p.estado === 'CONTACTADO' || p.estado === 'PENDIENTE'" (click)="cambiarEstado(p.id!, 'APROBADO')" class="btn btn-sm btn-success btn-square tooltip tooltip-top" data-tip="Aprobar">
+                  <lucide-icon name="check-circle" class="w-4 h-4 text-white"></lucide-icon>
+                </button>
+                <button *ngIf="p.estado !== 'DESCARTADO' && p.estado !== 'APROBADO'" (click)="cambiarEstado(p.id!, 'DESCARTADO')" class="btn btn-sm btn-error btn-square tooltip tooltip-top" data-tip="Descartar">
+                  <lucide-icon name="x-circle" class="w-4 h-4 text-white"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Detalle Prospecto Modal -->
+<div *ngIf="isDetalleModalOpen && selectedProspecto" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
+  <div class="bg-base-100 w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in-up">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between p-6 border-b border-base-content/10 bg-base-200/50">
+      <div class="flex items-center gap-4">
+        <div class="bg-primary/10 p-3 rounded-full">
+          <lucide-icon name="user" class="w-6 h-6 text-primary"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-base-content">Detalle de Inversionista</h3>
+          <p class="text-sm text-base-content/60">ID: {{ selectedProspecto.id }} | Solicitado: {{ selectedProspecto.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+      </div>
+      <button (click)="closeDetalleModal()" class="btn btn-sm btn-circle btn-ghost">
+        <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="p-6 overflow-y-auto space-y-6">
+      <!-- Status Badge -->
+      <div class="flex justify-between items-center bg-base-200/50 p-4 rounded-xl border border-base-content/5">
+        <span class="font-semibold text-base-content/70">Estado Actual:</span>
+        <div class="badge badge-lg" 
+             [ngClass]="{
+               'badge-warning': selectedProspecto.estado === 'PENDIENTE',
+               'badge-info': selectedProspecto.estado === 'CONTACTADO',
+               'badge-error': selectedProspecto.estado === 'DESCARTADO',
+               'badge-success': selectedProspecto.estado === 'APROBADO'
+             }">
+          {{ selectedProspecto.estado }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Info Personal -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-base-content flex items-center gap-2 border-b border-base-content/10 pb-2">
+            <lucide-icon name="user" class="w-4 h-4 text-primary"></lucide-icon> Información Personal
+          </h4>
+          <div class="space-y-3">
+            <div>
+              <p class="text-xs text-base-content/50 font-semibold uppercase">Nombres Completos</p>
+              <p class="font-medium">{{ selectedProspecto.nombres }} {{ selectedProspecto.apellidoPaterno }} {{ selectedProspecto.apellidoMaterno }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-base-content/50 font-semibold uppercase">Documento de Identidad</p>
+              <p class="font-medium">{{ selectedProspecto.dni }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Contacto -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-base-content flex items-center gap-2 border-b border-base-content/10 pb-2">
+            <lucide-icon name="phone" class="w-4 h-4 text-primary"></lucide-icon> Datos de Contacto
+          </h4>
+          <div class="space-y-3">
+            <div>
+              <p class="text-xs text-base-content/50 font-semibold uppercase">Correo Electrónico</p>
+              <p class="font-medium flex items-center gap-2">
+                <lucide-icon name="mail" class="w-3 h-3 text-base-content/40"></lucide-icon>
+                <a href="mailto:{{ selectedProspecto.email }}" class="text-primary hover:underline">{{ selectedProspecto.email }}</a>
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-base-content/50 font-semibold uppercase">Celular</p>
+              <p class="font-medium flex items-center gap-2">
+                <lucide-icon name="phone" class="w-3 h-3 text-base-content/40"></lucide-icon>
+                <a href="https://wa.me/{{ selectedProspecto.telefono.replace('+', '') }}" target="_blank" class="text-primary hover:underline">{{ selectedProspecto.telefono }}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Propuesta -->
+        <div class="space-y-4 md:col-span-2">
+          <h4 class="font-bold text-base-content flex items-center gap-2 border-b border-base-content/10 pb-2">
+            <lucide-icon name="landmark" class="w-4 h-4 text-primary"></lucide-icon> Propuesta de Inversión
+          </h4>
+          <div class="grid grid-cols-2 gap-4 bg-primary/5 p-4 rounded-xl border border-primary/10">
+            <div>
+              <p class="text-xs text-primary/70 font-semibold uppercase">Monto a Invertir</p>
+              <p class="text-2xl font-bold text-primary">S/ {{ selectedProspecto.montoInversion | number:'1.2-2' }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-primary/70 font-semibold uppercase">Plazo Esperado</p>
+              <p class="text-xl font-bold text-base-content">{{ selectedProspecto.plazo }} meses</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- Modal Footer / Actions -->
+    <div class="p-6 border-t border-base-content/10 bg-base-200/30 flex flex-wrap justify-between items-center gap-4">
+      <button (click)="closeDetalleModal()" class="btn btn-ghost">Cerrar</button>
+      
+      <div class="flex gap-2">
+        <button *ngIf="selectedProspecto.estado === 'PENDIENTE'" (click)="cambiarEstado(selectedProspecto.id!, 'CONTACTADO')" class="btn btn-info text-white">
+          <lucide-icon name="phone" class="w-4 h-4"></lucide-icon> Marcar Contactado
+        </button>
+        <button *ngIf="selectedProspecto.estado !== 'DESCARTADO' && selectedProspecto.estado !== 'APROBADO'" (click)="cambiarEstado(selectedProspecto.id!, 'DESCARTADO')" class="btn btn-error text-white">
+          <lucide-icon name="x-circle" class="w-4 h-4"></lucide-icon> Descartar
+        </button>
+        <button *ngIf="selectedProspecto.estado === 'CONTACTADO' || selectedProspecto.estado === 'PENDIENTE'" (click)="cambiarEstado(selectedProspecto.id!, 'APROBADO')" class="btn btn-success text-white">
+          <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon> Aprobar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

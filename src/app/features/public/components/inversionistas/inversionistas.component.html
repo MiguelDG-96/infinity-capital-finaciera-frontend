@@ -1,0 +1,246 @@
+<div class="container mx-auto px-2 relative py-12">
+  <!-- Card Wrapper (Relative for Ribbon positioning) -->
+  <div class="relative z-10 max-w-6xl mx-auto">
+    <!-- Ribbon Tag -->
+    <div class="absolute top-2 -left-1 z-30 filter">
+      <div class="bg-blue-600 text-lg text-white font-bold py-1 px-8 rounded-tl-xl rounded-r-2xl relative">
+        Inversionistas
+        <!-- Fold Triangle Effect -->
+        <div class="absolute left-0 top-full w-1 h-1 rounded-bl-xl bg-blue-800 clip-elipse"></div>
+      </div>
+    </div>
+
+    <!-- Card Container -->
+    <div class="bg-base-100 rounded-[1.5rem] shadow-sm drop-shadow-md overflow-hidden md:flex border border-base-content/10 relative z-10">
+      
+      <!-- Left Column: Content -->
+      <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 pt-24 md:pt-16 flex flex-col justify-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-base-content mb-4 leading-tight">
+          Haz crecer tu capital de forma <br />
+          <span class="text-primary">segura y rentable</span>
+        </h2>
+        
+        <p class="text-base-content/70 mb-6 text-lg">
+          Únete a InfinyCapital como socio inversionista y accede a rendimientos superiores respaldados por nuestro portafolio de créditos.
+        </p>
+
+        <h3 class="font-bold text-lg mb-4 text-base-content/80">Requisitos para participar:</h3>
+
+        <ul class="space-y-4 mb-8">
+          <li class="flex items-start gap-3">
+            <div class="bg-primary/10 p-1.5 rounded-full mt-0.5">
+              <lucide-icon name="trending-up" class="w-4 h-4 text-primary"></lucide-icon>
+            </div>
+            <div>
+              <span class="block font-semibold text-base-content">Capital mínimo de inversión</span>
+              <span class="text-sm text-base-content/60">Aporte inicial para garantizar la viabilidad de los proyectos.</span>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="bg-primary/10 p-1.5 rounded-full mt-0.5">
+              <lucide-icon name="shield-check" class="w-4 h-4 text-primary"></lucide-icon>
+            </div>
+            <div>
+              <span class="block font-semibold text-base-content">Verificación de Identidad (KYC)</span>
+              <span class="text-sm text-base-content/60">DNI/Pasaporte vigente y comprobante de domicilio.</span>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="bg-primary/10 p-1.5 rounded-full mt-0.5">
+              <lucide-icon name="file-text" class="w-4 h-4 text-primary"></lucide-icon>
+            </div>
+            <div>
+              <span class="block font-semibold text-base-content">Sustento de origen de fondos</span>
+              <span class="text-sm text-base-content/60">Documentos que acrediten el origen lícito del capital.</span>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="bg-primary/10 p-1.5 rounded-full mt-0.5">
+              <lucide-icon name="check-circle-2" class="w-4 h-4 text-primary"></lucide-icon>
+            </div>
+            <div>
+              <span class="block font-semibold text-base-content">Acuerdo de Confidencialidad</span>
+              <span class="text-sm text-base-content/60">Firma de NDA para proteger nuestra información.</span>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="bg-primary/10 p-1.5 rounded-full mt-0.5">
+              <lucide-icon name="building" class="w-4 h-4 text-primary"></lucide-icon>
+            </div>
+            <div>
+              <span class="block font-semibold text-base-content">Entrevista de Perfilamiento</span>
+              <span class="text-sm text-base-content/60">Breve reunión para alinear expectativas de retorno.</span>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Button -->
+        <button
+          (click)="openModal()"
+          class="bg-[#FF7A00] hover:bg-[#ff6a00] text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 h-14 w-full sm:w-auto text-lg flex items-center justify-center gap-3 mt-auto"
+        >
+          Postular como Inversionista
+          <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Right Column: Image / Illustration -->
+      <div class="hidden md:flex w-full md:w-1/2 bg-red-800 relative overflow-hidden items-center justify-center min-h-[400px]">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-80 h-80 bg-blue-600 rounded-full translate-x-1/3 -translate-y-1/3 opacity-20 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary rounded-full -translate-x-1/3 translate-y-1/3 opacity-20 blur-3xl"></div>
+
+        <!-- Illustration -->
+        <div class="relative z-10 p-8 transform transition-transform hover:scale-105 duration-500">
+          <div class="relative w-80 h-64">
+            
+            <!-- Main Chart Card -->
+            <div class="absolute inset-0 bg-base-100 rounded-2xl shadow-2xl p-6 flex flex-col justify-between border border-white/10 z-20">
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-base-content font-bold text-lg">Proyección de Retorno</span>
+                <span class="text-green-500 font-bold bg-green-500/10 px-2 py-1 rounded text-xs">+18.5%</span>
+              </div>
+              
+              <!-- Bars -->
+              <div class="flex items-end gap-3 h-32 mt-4">
+                <div class="w-full bg-blue-100 rounded-t-md h-1/4 relative group">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Q1</div>
+                </div>
+                <div class="w-full bg-blue-200 rounded-t-md h-2/4 relative group">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Q2</div>
+                </div>
+                <div class="w-full bg-blue-400 rounded-t-md h-3/4 relative group">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Q3</div>
+                </div>
+                <div class="w-full bg-primary rounded-t-md h-full relative group shadow-lg shadow-primary/20">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity text-primary">Q4</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Badge -->
+            <div class="absolute -right-8 -top-8 bg-base-100 rounded-xl p-2 shadow-xl z-30 animate-bounce border border-base-content/10" style="animation-duration: 3s;">
+              <div class="flex items-center gap-3">
+                <div class="bg-green-100 p-2 rounded-full">
+                  <lucide-icon name="shield-check" class="text-green-600 w-6 h-6"></lucide-icon>
+                </div>
+                <div>
+                  <p class="text-xs text-base-content/60 font-medium">Capital</p>
+                  <p class="text-sm font-bold text-base-content">Protegido</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Document Element -->
+            <div class="absolute -left-15 bottom-8 bg-base-100 rounded-xl p-3 shadow-xl z-10 animate-bounce transform -rotate-6 border border-base-content/10" style="animation-duration: 3s; animation-delay: 1s;">
+               <lucide-icon name="file-chart-column" class="text-red-500 w-8 h-8"></lucide-icon>
+            </div>
+
+            <!-- Document Element -->
+            <div class="absolute -left-15 bottom-30 bg-base-100 rounded-xl p-3 shadow-xl z-10 animate-bounce transform -rotate-6 border border-base-content/10" style="animation-duration: 3s; animation-delay: 2s;">
+               <lucide-icon name="ChartNoAxesCombined" class="text-green-500 w-8 h-8"></lucide-icon>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-base-100 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in-up">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-6 border-b border-base-content/10 bg-base-200/50">
+      <h3 class="text-xl font-bold text-base-content">Formulario de Inversionista</h3>
+      <button (click)="closeModal()" class="btn btn-sm btn-circle btn-ghost">
+        <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+    
+    <!-- Body (Scrollable) -->
+    <div class="p-6 overflow-y-auto">
+      <form *ngIf="!isSuccess" (ngSubmit)="onSubmitForm()" #investorForm="ngForm" class="space-y-4 animate-fade-in">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Nombres -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Nombres</span></label>
+            <input type="text" [(ngModel)]="formData.nombres" name="nombres" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="Ej. Juan Carlos" />
+          </div>
+
+          <!-- Apellido Paterno -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Apellido Paterno</span></label>
+            <input type="text" [(ngModel)]="formData.apellidoPaterno" name="apellidoPaterno" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="Ej. Pérez" />
+          </div>
+
+          <!-- Apellido Materno -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Apellido Materno</span></label>
+            <input type="text" [(ngModel)]="formData.apellidoMaterno" name="apellidoMaterno" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="Ej. Gómez" />
+          </div>
+
+          <!-- DNI -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">DNI / Documento</span></label>
+            <input type="text" [(ngModel)]="formData.dni" name="dni" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="Nro de documento" />
+          </div>
+
+          <!-- Correo -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Correo Electrónico</span></label>
+            <input type="email" [(ngModel)]="formData.email" name="email" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="correo@ejemplo.com" />
+          </div>
+
+          <!-- Celular -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Celular</span></label>
+            <input type="tel" [(ngModel)]="formData.telefono" name="telefono" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="+51 999 999 999" />
+          </div>
+
+          <!-- Monto Inversion -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Monto de Inversión (S/)</span></label>
+            <input type="number" [(ngModel)]="formData.montoInversion" name="montoInversion" required class="input input-bordered focus:border-primary focus:outline-none w-full" placeholder="0.00" />
+          </div>
+
+          <!-- Plazo -->
+          <div class="form-control">
+            <label class="label"><span class="label-text font-medium text-base-content/80">Plazo Esperado</span></label>
+            <select [(ngModel)]="formData.plazo" name="plazo" class="select select-bordered focus:border-primary focus:outline-none w-full">
+              <option value="6">6 meses</option>
+              <option value="12">12 meses</option>
+              <option value="24">24 meses</option>
+              <option value="mas">Más de 24 meses</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Footer / Action -->
+        <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-base-content/10">
+          <button type="button" (click)="closeModal()" class="btn btn-ghost font-semibold">Cancelar</button>
+          <button type="submit" [disabled]="!investorForm.form.valid || isSubmitting" class="btn btn-primary text-white font-bold px-8">
+            <span *ngIf="isSubmitting" class="loading loading-spinner loading-sm"></span>
+            {{ isSubmitting ? 'Enviando...' : 'Enviar Solicitud' }}
+          </button>
+        </div>
+      </form>
+
+      <!-- Success State -->
+      <div *ngIf="isSuccess" class="py-12 text-center animate-fade-in-up">
+        <div class="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+          <lucide-icon name="check-circle-2" class="w-10 h-10 text-green-600"></lucide-icon>
+        </div>
+        <h3 class="text-2xl font-bold text-base-content mb-4">¡Solicitud Enviada con Éxito!</h3>
+        <p class="text-base-content/70 max-w-md mx-auto mb-8 text-lg">
+          ¡Gracias por tu interés! Un asesor de InfinityCapital se pondrá en contacto contigo a la brevedad para agendar la entrevista.
+        </p>
+        <button (click)="closeModal()" class="btn btn-primary px-8 text-white font-bold">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

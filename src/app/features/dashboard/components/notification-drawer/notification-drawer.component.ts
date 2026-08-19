@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { WebsocketService } from '../../../../core/services/websocket.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class NotificationDrawerComponent implements OnInit, OnDestroy {
   notificationService = inject(NotificationService);
+  websocketService = inject(WebsocketService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -33,9 +35,7 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     this.notificationService.close();
   }
 
-  ngOnDestroy() {
-    this.notificationService.detenerPolling();
-  }
+  ngOnDestroy() { /* El layout gestiona el ciclo de vida del polling */ }
 
   irAlCredito(creditoId: number) {
     this.notificationService.irAlCredito(creditoId);
@@ -58,5 +58,9 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
 
   recargar() {
     this.notificationService.recargar();
+  }
+
+  limpiarNotificacionesWS() {
+    this.websocketService.limpiarNotificaciones();
   }
 }

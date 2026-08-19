@@ -10,6 +10,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { CreditoService } from '../../../../core/services/credito.service';
+import { WebsocketService } from '../../../../core/services/websocket.service';
 import { Credito } from '../../../../core/models/credito.model';
 import { environment } from '../../../../../environments/environment';
 
@@ -33,8 +34,13 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
   constructor(
     public themeService: ThemeService,
     public notificationService: NotificationService,
-    public authService: AuthService
+    public authService: AuthService,
+    public websocketService: WebsocketService
   ) {}
+
+  get totalNotificaciones(): number {
+    return this.notificationService.totalNotificaciones() + this.websocketService.notifications().filter(n => !n.leida).length;
+  }
 
   get userFullName(): string {
     return this.authService.currentUserData()?.nombreCompleto || 'Usuario';
@@ -72,6 +78,7 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
   onToggleDarkMode() { this.themeService.toggleDarkMode(); }
 
   onToggleNotifications() {
+    this.notificationService.initAudio(); // ← desbloquea el audio en el primer clic
     this.notificationService.toggle();
     if (this.notificationService.isOpen()) {
       this.notificationService.recargar();
@@ -122,7 +129,7 @@ export class DashboardNavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard/admin/cartera', creditoId]);
   }
 
-  ngOnDestroy() { this.notificationService.detenerPolling(); }
+  ngOnDestroy() { /* El layout gestiona el ciclo de vida del polling */ }
 
   hideDropdown() { setTimeout(() => this.showDropdown.set(false), 200); }
 }

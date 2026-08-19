@@ -42,6 +42,52 @@
   <!-- Contenido de Notificaciones -->
   <div class="h-[calc(100%-64px)] overflow-y-auto p-4 custom-scrollbar space-y-3">
 
+    <!-- Sección: Notificaciones Generales (Tiempo real via polling) -->
+    @if (notificationService.realtimeNotifications().length > 0) {
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-warning flex items-center gap-1.5">
+            <lucide-icon name="zap" size="12"></lucide-icon>
+            Notificaciones en tiempo real
+          </p>
+          <button class="text-[9px] text-base-content/50 hover:text-base-content underline" (click)="notificationService.limpiarRealtimeNotifications()">
+            Limpiar
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          @for (notif of notificationService.realtimeNotifications(); track notif.id) {
+            <div
+              class="group flex flex-col gap-2 rounded-2xl bg-warning/10 hover:bg-warning/15 border border-warning/20 p-3 text-left transition-all w-full cursor-pointer"
+              [class.opacity-50]="notif.leida"
+              (click)="notif.prospectoId ? notificationService.irAlProspecto(notif.prospectoId) : notificationService.marcarRealtimeLeida(notif.id)"
+            >
+              <!-- Fila superior -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2 flex-1 min-w-0">
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-warning/20 text-warning">
+                    <lucide-icon name="trending-up" size="18"></lucide-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-bold text-base-content truncate">Nuevo Prospecto Inversionista</p>
+                    <p class="text-[10px] text-base-content/50">{{ notif.fecha | date:'HH:mm' }}</p>
+                  </div>
+                </div>
+                @if (!notif.leida) {
+                  <span class="badge badge-warning badge-xs font-bold shrink-0 mt-0.5 animate-pulse">NUEVO</span>
+                }
+              </div>
+
+              <!-- Detalle -->
+              <div class="pl-11 space-y-1">
+                <p class="text-[11px] text-base-content/80 leading-relaxed">{{ notif.mensaje }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
     <!-- Sección: Pagos en Revisión (solo admin/trabajador) -->
     @if (isAdmin) {
       @if (notificationService.pagosEnRevision().length > 0 || notificationService.retirosPendientes().length > 0 || notificationService.pendientesCobranza().length > 0 || notificationService.solicitudesPendientes().length > 0) {
