@@ -383,7 +383,7 @@
                   <th class="text-center">Vencimiento</th>
                   <th class="text-center">Capital</th>
                   <th class="text-center">Interés</th>
-                  <th class="text-center">Mora</th>
+                  <th class="text-center">Penalidad</th>
                   <th class="text-center">Refin.</th>
                   <th class="text-center">Cuota Total</th>
                   <th class="text-center">Estado</th>
@@ -444,7 +444,7 @@
                         @if (getMoraVisual(cuota) > 0) {
                           <span class="text-error font-bold"
                             >+{{ getMoraVisual(cuota) | currency: 'S/ ' }}
-                            <span class="text-[9px] opacity-70">MORA</span></span
+                            <span class="text-[9px] opacity-70">PENALIDAD</span></span
                           >
                         }
                         @if (cuota.penalidad && cuota.penalidad > 0) {

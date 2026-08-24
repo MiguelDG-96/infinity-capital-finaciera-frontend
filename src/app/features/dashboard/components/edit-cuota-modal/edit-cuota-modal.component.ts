@@ -45,33 +45,20 @@ export class EditCuotaModalComponent implements OnInit {
   calcularSugerencia() {
     if (!this.credito || !this.credito.cuotas) return;
     
-    // Sumar capital de todas las cuotas vencidas (estado PENDIENTE o PAGADO_PARCIAL y fecha vencida)
-    const hoy = new Date();
-    hoy.setHours(0,0,0,0);
-    
-    let capitalVencido = 0;
+    let capitalPendienteTotal = 0;
     for (const c of this.credito.cuotas) {
-      if (c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'PAGADO_PARCIAL') {
-        const fechaVenc = new Date(c.fechaVencimiento);
-        fechaVenc.setHours(0,0,0,0);
-        
-        // El usuario quiere incluir solo las vencidas.
-        // Si usamos la fecha del componente, podríamos estar editando una cuota actual.
-        // Simulamos la sugerencia basados en la fecha del sistema o del Vencimiento actual.
-        if (fechaVenc < hoy) {
-          capitalVencido += (c.capital || 0);
-        }
+      if (c.estadoCuota === 'PENDIENTE' || c.estadoCuota === 'PAGADO_PARCIAL' || c.estadoCuota === 'MORA') {
+        capitalPendienteTotal += (c.capital || 0);
       }
     }
     
-    // Si la cuota actual está vencida y no se sumó porque le cambiaron el estado manualmente:
-    const dVenc = new Date(this.cuota.fechaVencimiento);
-    dVenc.setHours(0,0,0,0);
-    if (dVenc < hoy && this.cuota.estadoCuota !== 'PENDIENTE' && this.cuota.estadoCuota !== 'PAGADO_PARCIAL') {
-       capitalVencido += (this.cuota.capital || 0);
+    // Si la cuota actual está siendo editada y por alguna razón no estaba en los estados anteriores, 
+    // pero se le va a aplicar mora, la sumamos (aunque normalmente ya debería estar cubierta arriba)
+    if (this.cuota.estadoCuota !== 'PENDIENTE' && this.cuota.estadoCuota !== 'PAGADO_PARCIAL' && this.cuota.estadoCuota !== 'MORA') {
+       capitalPendienteTotal += (this.cuota.capital || 0);
     }
     
-    this.penalidadSugerida = capitalVencido * 0.06;
+    this.penalidadSugerida = capitalPendienteTotal * 0.06;
   }
 
   usarPenalidadSugerida() {
