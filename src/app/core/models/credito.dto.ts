@@ -108,6 +108,8 @@ export interface SolicitudPendienteResponseDTO {
   nombreCliente: string;
   tipoDocumento: string;
   numeroDocumento: string;
+  telefono?: string;
+  celular?: string;
   domicilio: string;
   montoSolicitado: number;
   monedaNombre: string;

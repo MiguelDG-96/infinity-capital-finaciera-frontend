@@ -131,6 +131,8 @@ export class CreditoMapper {
       creditoId: dto.creditoId,
       nombreCliente: dto.nombreCliente,
       documento: `${dto.tipoDocumento} - ${dto.numeroDocumento}`,
+      telefono: dto.telefono,
+      celular: dto.celular,
       domicilio: dto.domicilio,
       montoSolicitado: dto.montoSolicitado,
       prestamo: `${dto.tipoCreditoNombre} (${dto.monedaNombre})`,

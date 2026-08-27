@@ -96,6 +96,8 @@ export interface SolicitudPendiente {
   creditoId: number;
   nombreCliente: string;
   documento: string; // Combined tipo + numero
+  telefono?: string;
+  celular?: string;
   domicilio: string;
   montoSolicitado: number;
   prestamo: string; // Combined tipoCreditoNombre + monedaNombre

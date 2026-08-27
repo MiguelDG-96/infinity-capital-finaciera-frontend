@@ -59,11 +59,6 @@
           <tr *ngFor="let p of filteredProspectos" class="hover:bg-base-200/30 transition-colors border-b border-base-content/5">
             <td>
               <div class="flex items-center gap-3">
-                <div class="avatar placeholder">
-                  <div class="bg-primary/10 text-primary rounded-full w-10">
-                    <span class="font-bold">{{ p.nombres.charAt(0) }}</span>
-                  </div>
-                </div>
                 <div>
                   <div class="font-bold text-base-content">{{ p.nombres }} {{ p.apellidoPaterno }} {{ p.apellidoMaterno }}</div>
                   <div class="text-xs text-base-content/60">DNI: {{ p.dni }}</div>

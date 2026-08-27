@@ -1,4 +1,4 @@
-import { Component, signal, output, inject, OnInit } from '@angular/core';
+import { Component, signal, output, input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -25,6 +25,7 @@ export class DashboardSidebarComponent implements OnInit {
   
   userData = this.authService.currentUserData;
   collapsed = signal(false);
+  isOpen = input<boolean>(false);
   closeSidebar = output<void>();
 
   // Lista de módulos cargados desde el backend

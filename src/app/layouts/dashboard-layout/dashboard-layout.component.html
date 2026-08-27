@@ -9,10 +9,12 @@
   >
     <!-- ══════════ SIDEBAR ══════════ -->
     <div
-      [class.hidden]="!sidebarOpen()"
-      class="lg:flex"
+      class="lg:flex lg:relative z-[60]"
     >
-      <app-dashboard-sidebar (closeSidebar)="closeSidebar()" />
+      <app-dashboard-sidebar 
+        [isOpen]="sidebarOpen()"
+        (closeSidebar)="closeSidebar()" 
+      />
     </div>
 
     <!-- ══════════ CONTENIDO PRINCIPAL ══════════ -->
