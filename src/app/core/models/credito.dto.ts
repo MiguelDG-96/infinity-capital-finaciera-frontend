@@ -55,6 +55,8 @@ export interface SolicitudCreditoRequestDTO {
   // Contacto
   telefono?: string;
   celular?: string;
+  contactoFamiliarNombre?: string;
+  contactoFamiliarCelular?: string;
 
   // Datos Persona Jurídica
   razonSocialJuridica?: string;

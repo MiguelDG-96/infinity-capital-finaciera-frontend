@@ -32,6 +32,23 @@
     </div>
   </div>
 
+  <!-- Alertas del cliente -->
+  <div class="alert alert-warning shadow-lg animate-fade-in" *ngIf="clienteAdvertencia && clienteAdvertenciaTipo === 'warning'">
+    <lucide-icon name="alert-triangle" class="w-6 h-6 shrink-0"></lucide-icon>
+    <div>
+      <h3 class="font-bold">Aviso</h3>
+      <div class="text-sm">{{ clienteAdvertencia }}</div>
+    </div>
+  </div>
+
+  <div class="alert alert-error shadow-lg animate-fade-in text-error-content" *ngIf="clienteAdvertencia && clienteAdvertenciaTipo === 'error'">
+    <lucide-icon name="alert-circle" class="w-6 h-6 shrink-0"></lucide-icon>
+    <div>
+      <h3 class="font-bold">¡CUIDADO! Riesgo Crediticio</h3>
+      <div class="text-sm">{{ clienteAdvertencia }}</div>
+    </div>
+  </div>
+
   <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="space-y-8">
 
     <!-- 1. Datos Personales -->
@@ -161,6 +178,18 @@
           <label class="label"><span class="label-text font-bold">Grado Instrucción</span></label>
           <input type="text" formControlName="gradoInstruccion" class="input input-bordered bg-base-200/30"
             placeholder="Opcional" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Contacto Familiar</span></label>
+          <input type="text" formControlName="contactoFamiliarNombre" class="input input-bordered bg-base-200/30"
+            placeholder="Nombre del familiar (Opcional)" />
+        </div>
+
+        <div class="form-control">
+          <label class="label"><span class="label-text font-bold">Celular Familiar</span></label>
+          <input type="text" formControlName="contactoFamiliarCelular" class="input input-bordered bg-base-200/30"
+            placeholder="Opcional" (input)="soloNumeros($event, 'contactoFamiliarCelular')" />
         </div>
 
       </div>

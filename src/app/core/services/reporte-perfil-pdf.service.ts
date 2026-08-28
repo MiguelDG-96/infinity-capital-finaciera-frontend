@@ -122,7 +122,7 @@ export class ReportePerfilPdfService {
       ['Nacionalidad',      this.fmt(c.nacionalidad)],
       ['Celular',           this.fmt(c.celular)],
       ['Teléfono',          this.fmt(c.telefono)],
-      ['Correo',            this.fmt(c.usuario?.email)],
+      ['Correo',            this.fmt(c.usuario?.email || c.email)],
       ['Vive Casa Propia',  c.viveCasaPropia === true ? 'Sí' : (c.viveCasaPropia === false ? 'No' : '--')],
       ['Canal Edo. Cuenta', this.fmt(c.canalEstadoCuenta)],
       ['Contacto Familiar', this.fmt(c.contactoFamiliarNombre)],

@@ -37,6 +37,9 @@ export class AdminCrearCreditoComponent implements OnInit {
   
   errorToast = false;
   mensajeErrorToast = '';
+
+  clienteAdvertencia = '';
+  clienteAdvertenciaTipo: 'warning' | 'error' = 'warning';
   
   private get DRAFT_KEY(): string {
     const user = this.authService.currentUserData();
@@ -124,6 +127,8 @@ export class AdminCrearCreditoComponent implements OnInit {
       estadoCivil: ['SOLTERO'],
       gradoInstruccion: ['SECUNDARIA'],
       numeroDependientes: [0],
+      contactoFamiliarNombre: [''],
+      contactoFamiliarCelular: [''],
 
       // Condicional Jurídica
       razonSocialJuridica: [''],
@@ -211,6 +216,7 @@ export class AdminCrearCreditoComponent implements OnInit {
     }
 
     this.cargando = true;
+    this.clienteAdvertencia = '';
     this.clienteService.buscarPorDocumento(documento).subscribe({
       next: (cliente) => {
         this.cargando = false;
@@ -247,6 +253,8 @@ export class AdminCrearCreditoComponent implements OnInit {
             celular: cliente.celular || cliente.telefono || '',
             telefono: cliente.telefono || '',
             estadoCivil: cliente.estadoCivil || 'SOLTERO',
+            contactoFamiliarNombre: cliente.contactoFamiliarNombre || '',
+            contactoFamiliarCelular: cliente.contactoFamiliarCelular || '',
             situacionLaboral: cliente.situacionLaboral || 'DEPENDIENTE',
             empresa: cliente.empresa || '',
             cargoOcupacion: cliente.cargoOcupacion || '',
@@ -258,6 +266,31 @@ export class AdminCrearCreditoComponent implements OnInit {
           });
           
           this.mostrarExitoTemporal('Cliente recurrente encontrado. Datos autocompletados.');
+
+          // Verificar si tiene créditos activos o atrasados
+          if (cliente.estado === 'MOROSO') {
+            this.clienteAdvertencia = 'Este cliente tiene calificación de MOROSO en el sistema base.';
+            this.clienteAdvertenciaTipo = 'error';
+          }
+
+          this.creditoService.obtenerCarteraGeneral().subscribe({
+            next: (cartera) => {
+              const creditosActivos = cartera.filter(c => c.cliente?.numeroDocumento === documento && c.estado !== 'PAGADO' && c.estado !== 'RECHAZADO' && c.estado !== 'RESUELTO' && c.estado !== 'REFINANCIADO');
+              
+              if (creditosActivos.length > 0) {
+                const conAtraso = creditosActivos.some(c => (c.diasAtraso ?? 0) > 0 || c.estado === 'ATRASADO' || c.estado === 'MORA');
+                
+                if (conAtraso || cliente.estado === 'MOROSO') {
+                  this.clienteAdvertencia = `¡CUIDADO! Este cliente ya tiene ${creditosActivos.length} crédito(s) activo(s) y presenta DÍAS DE ATRASO en sus pagos.`;
+                  this.clienteAdvertenciaTipo = 'error';
+                } else if (!this.clienteAdvertencia) {
+                  this.clienteAdvertencia = `Aviso: Este cliente ya tiene ${creditosActivos.length} crédito(s) activo(s). Verifique si tiene capacidad para uno nuevo.`;
+                  this.clienteAdvertenciaTipo = 'warning';
+                }
+              }
+              this.cdr.detectChanges();
+            }
+          });
         }
       },
       error: (err) => {
