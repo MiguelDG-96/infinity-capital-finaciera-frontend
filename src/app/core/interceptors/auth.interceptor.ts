@@ -62,17 +62,32 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return throwError(() => error);
         }
 
-        if (!auth?.refreshToken) {
+        const currentAuth = authService.currentUser();
+
+        if (!currentAuth?.refreshToken) {
           authService.logout();
           router.navigate(['/login']);
           return throwError(() => error);
+        }
+
+        const requestToken = req.headers.get('Authorization')?.replace('Bearer ', '');
+        
+        if (currentAuth.accessToken && requestToken && requestToken !== currentAuth.accessToken) {
+          const retryRequest = req.clone({
+            setHeaders: {
+              Authorization: `Bearer ${currentAuth.accessToken}`,
+              'X-Authorization': `Bearer ${currentAuth.accessToken}`
+            },
+            context: req.context.set(IS_RETRY_REQUEST, true)
+          });
+          return next(retryRequest);
         }
 
         if (!isRefreshing) {
           isRefreshing = true;
           refreshTokenSubject.next(null);
 
-          return authService.refreshToken(auth.refreshToken).pipe(
+          return authService.refreshToken(currentAuth.refreshToken).pipe(
             switchMap((newAuth) => {
               isRefreshing = false;
               refreshTokenSubject.next(newAuth.accessToken);

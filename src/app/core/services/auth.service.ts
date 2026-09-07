@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, map } from 'rxjs';
+import { Observable, tap, map, catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AutenticacionRequestDto } from '../dtos/autenticacion-request.dto';
 import { AutenticacionResponseDto } from '../dtos/autenticacion-response.dto';
@@ -168,9 +168,31 @@ export class AuthService {
   }
 
   logout(): void {
+    const stored = localStorage.getItem('auth_token');
+    let refreshToken: string | null = null;
+    if (stored) {
+      try {
+        const auth: AuthModel = JSON.parse(stored);
+        refreshToken = auth.refreshToken ?? null;
+      } catch (_) {}
+    }
+
+    // Limpiamos el estado local de inmediato para que la UI cambie al instante
     localStorage.removeItem('auth_token');
     this.status.set(null);
     this.profilePhotoUrl.set(null);
+
+    // Notificamos al backend para invalidar el refreshToken en la BD.
+    // Si la petición falla (sin red, token ya expirado, etc.) ignoramos el error
+    // porque el usuario ya está deslogueado localmente.
+    if (refreshToken) {
+      this.http.post(
+        `${environment.apiUrl}/autenticacion/logout`,
+        { refreshToken }
+      ).pipe(
+        catchError(() => of(null))
+      ).subscribe();
+    }
   }
 
   private saveToStorage(auth: AuthModel): void {
