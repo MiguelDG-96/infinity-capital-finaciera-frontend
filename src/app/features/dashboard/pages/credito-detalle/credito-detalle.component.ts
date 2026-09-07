@@ -54,7 +54,7 @@ export class CreditoDetalleComponent implements OnInit {
   readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   credito = signal<Credito | null>(null);
-  creditoOrigen = signal<Credito | null>(null); // Para ver el cronograma anterior
+  cuotasOrigen = signal<Cuota[]>([]); // Para ver el cronograma anterior
   viendoCronogramaAnterior = signal<boolean>(false); // Tab state
 
   isAdminMode = signal<boolean>(false);
@@ -119,7 +119,7 @@ export class CreditoDetalleComponent implements OnInit {
   pageSize = 10;
 
   cuotasActivas = computed(() => {
-    return this.viendoCronogramaAnterior() && this.creditoOrigen() ? this.creditoOrigen()!.cuotas : (this.credito()?.cuotas || []);
+    return this.viendoCronogramaAnterior() && this.cuotasOrigen().length > 0 ? this.cuotasOrigen() : (this.credito()?.cuotas || []);
   });
 
   paginatedCuotas = computed(() => {
@@ -176,7 +176,7 @@ export class CreditoDetalleComponent implements OnInit {
       const id = Number(params.get('id'));
       if (id) {
         this.viendoCronogramaAnterior.set(false);
-        this.creditoOrigen.set(null);
+        this.cuotasOrigen.set([]);
         this.cargarDetalle(id);
       }
     });
@@ -197,13 +197,14 @@ export class CreditoDetalleComponent implements OnInit {
         // Si el crédito tiene un origen (fue refinanciado de uno anterior), cargamos ese historial
         if (c.creditoOrigenId) {
            const obsOrigen = this.isAdminMode()
-             ? this.creditoService.obtenerCreditoPorIdAdmin(c.creditoOrigenId)
-             : this.creditoService.obtenerCreditoPorId(c.creditoOrigenId);
+             ? this.creditoService.obtenerCronogramaAdmin(c.creditoOrigenId)
+             : this.creditoService.obtenerCronograma(c.creditoOrigenId);
              
            obsOrigen.subscribe({
-             next: (origen) => {
-                this.creditoOrigen.set(origen);
-             }
+             next: (cuotas) => {
+                this.cuotasOrigen.set(cuotas);
+             },
+             error: (err) => console.error('Error cargando historial antiguo:', err)
            });
         }
 

@@ -462,7 +462,11 @@ export class Reportes implements OnInit, OnDestroy {
   exportarExcelPorCalificacion(calificacion: string) {
     this.isApplyingFilters.set(true);
     this.creditoService.obtenerCarteraPorCalificacion(calificacion).subscribe({
-      next: (creditos) => {
+      next: (creditosData) => {
+        const creditos = calificacion === 'NORMAL' 
+          ? creditosData.filter((c: any) => c.estado === 'ACTIVO')
+          : creditosData;
+
         const columnas = [
           { key: 'fechaReporte', titulo: 'FECHA DE REPORTE', width: 18 },
           { key: 'codigoEntidad', titulo: 'CODIGO ENTIDAD', width: 18 },
