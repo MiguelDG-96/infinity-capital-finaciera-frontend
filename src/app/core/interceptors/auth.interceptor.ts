@@ -4,15 +4,28 @@ import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
 import { Router } from '@angular/router';
 import { catchError, throwError, switchMap, filter, take, Observable } from 'rxjs';
-import { REFRESH_FAILED, isRefreshing, refreshTokenSubject, resetRefreshState, setRefreshing } from './refresh-state';
+import { REFRESH_FAILED, isRefreshing, refreshTokenSubject, setRefreshing } from './refresh-state';
 
 /**
  * Token de contexto para identificar peticiones que ya han sido reintentadas
  */
 export const IS_RETRY_REQUEST = new HttpContextToken<boolean>(() => false);
 
-let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null>(null);
+/** Endpoints que nunca deben llevar el token ni disparar un refresh */
+const isAuthEndpoint = (url: string): boolean =>
+  url.includes('/autenticacion/login') ||
+  url.includes('/autenticacion/refresh') ||
+  url.includes('/autenticacion/logout') ||
+  url.includes('/autenticacion/registro');
+
+const withToken = (req: HttpRequest<unknown>, token: string, isRetry = false) =>
+  req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+      'X-Authorization': `Bearer ${token}`
+    },
+    context: isRetry ? req.context.set(IS_RETRY_REQUEST, true) : req.context
+  });
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -29,118 +42,80 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       filter(token => token !== null),
       take(1),
       switchMap((token) => {
-        const retryRequest = req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token}`,
-            'X-Authorization': `Bearer ${token}`
-          },
-          context: req.context.set(IS_RETRY_REQUEST, true)
-        });
-        return next(retryRequest);
+        if (token === REFRESH_FAILED) {
+          return throwError(() => new Error('Refresh failed'));
+        }
+        return next(withToken(req, token!, true));
       })
     );
-}
 
-let request = req;
-if (auth?.accessToken) {
-  request = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${auth.accessToken}`,
-      'X-Authorization': `Bearer ${auth.accessToken}`
-    }
-  });
-}
+  const cerrarSesion = () => {
+    authService.logout();
+    router.navigate(['/login']);
+  };
 
-return next(request).pipe(
-  catchError((error: HttpErrorResponse) => {
-    if (error.status === 401) {
-      // Ya se reintentó con un token fresco: la sesión no es recuperable
-      if (req.context.get(IS_RETRY_REQUEST)) {
-        cerrarSesion();
-        return throwError(() => error);
-      }
-
-      if (!auth?.refreshToken) {
-        authService.logout();
-        router.navigate(['/login']);
-        return throwError(() => error);
-      }
-
-      const requestToken = req.headers.get('Authorization')?.replace('Bearer ', '');
-
-      if (currentAuth.accessToken && requestToken && requestToken !== currentAuth.accessToken) {
-        const retryRequest = req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${currentAuth.accessToken}`,
-            'X-Authorization': `Bearer ${currentAuth.accessToken}`
-          },
-          context: req.context.set(IS_RETRY_REQUEST, true)
-        });
-        return next(retryRequest);
-      }
-
-      // Otra petición arrancó el refresh mientras esta estaba en vuelo
-      if (isRefreshing()) {
-        return waitForRefresh();
-      }
-
-      setRefreshing(true);
-      refreshTokenSubject.next(null);
-
-      return authService.refreshToken(auth.refreshToken).pipe(
-        switchMap((newAuth) => {
-          isRefreshing = false;
-          refreshTokenSubject.next(newAuth.accessToken);
-
-          const retryRequest = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${newAuth.accessToken}`,
-              'X-Authorization': `Bearer ${newAuth.accessToken}`
-            },
-            context: req.context.set(IS_RETRY_REQUEST, true)
-          });
-          return next(retryRequest);
-        }),
-        catchError((refreshError) => {
-          isRefreshing = false;
-          refreshTokenSubject.next(null);
-          authService.logout();
-          router.navigate(['/login']);
-          return throwError(() => refreshError);
-        })
-      );
-    } else {
-      return refreshTokenSubject.pipe(
-        filter(token => token !== null),
-        take(1),
-        switchMap((token) => {
-          const retryRequest = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${token}`,
-              'X-Authorization': `Bearer ${token}`
-            },
-            context: req.context.set(IS_RETRY_REQUEST, true)
-          });
-          return next(retryRequest);
-        })
-      );
-    }
+  // Si ya hay un refresh en curso, todas las peticiones nuevas esperan su resultado
+  if (isRefreshing()) {
+    return waitForRefresh();
   }
 
-      if (error.status === 403) {
-  if (error.error?.mensaje?.includes('IP ha sido bloqueada')) {
-    router.navigate(['/access-denied']);
-  }
-}
+  const auth = authService.currentUser();
+  const request = auth?.accessToken ? withToken(req, auth.accessToken) : req;
 
-if (error.status === 429) {
-  toast.show('Has excedido el límite de intentos. Espera 1 minuto e inténtalo de nuevo.', 'warning');
-}
+  return next(request).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        // Ya se reintentó con un token fresco: la sesión no es recuperable
+        if (req.context.get(IS_RETRY_REQUEST)) {
+          cerrarSesion();
+          return throwError(() => error);
+        }
 
-return throwError(() => error);
+        const currentAuth = authService.currentUser();
+        if (!currentAuth?.refreshToken) {
+          cerrarSesion();
+          return throwError(() => error);
+        }
+
+        // Otra petición ya refrescó el token mientras esta viajaba con el viejo:
+        // basta reintentar con el vigente, sin gastar otro refresh.
+        const tokenEnviado = request.headers.get('Authorization')?.replace('Bearer ', '');
+        if (currentAuth.accessToken && tokenEnviado && tokenEnviado !== currentAuth.accessToken) {
+          return next(withToken(req, currentAuth.accessToken, true));
+        }
+
+        // Otra petición arrancó el refresh mientras esta estaba en vuelo
+        if (isRefreshing()) {
+          return waitForRefresh();
+        }
+
+        setRefreshing(true);
+        refreshTokenSubject.next(null);
+
+        return authService.refreshToken(currentAuth.refreshToken).pipe(
+          switchMap((newAuth) => {
+            setRefreshing(false);
+            refreshTokenSubject.next(newAuth.accessToken);
+            return next(withToken(req, newAuth.accessToken!, true));
+          }),
+          catchError((refreshError) => {
+            setRefreshing(false);
+            refreshTokenSubject.next(REFRESH_FAILED);
+            cerrarSesion();
+            return throwError(() => refreshError);
+          })
+        );
+      }
+
+      if (error.status === 403 && error.error?.mensaje?.includes('IP ha sido bloqueada')) {
+        router.navigate(['/access-denied']);
+      }
+
+      if (error.status === 429) {
+        toast.show('Has excedido el límite de intentos. Espera 1 minuto e inténtalo de nuevo.', 'warning');
+      }
+
+      return throwError(() => error);
     })
   );
 };
-
-// Reexportado para conveniencia de quien importe el interceptor
-export { resetRefreshState };
