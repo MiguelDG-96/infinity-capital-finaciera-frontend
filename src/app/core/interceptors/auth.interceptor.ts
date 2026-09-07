@@ -10,7 +10,7 @@ import { catchError, throwError, switchMap, BehaviorSubject, filter, take } from
 export const IS_RETRY_REQUEST = new HttpContextToken<boolean>(() => false);
 
 let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null>(null);
+const refreshTokenSubject = new BehaviorSubject<string | null | boolean>(null);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -28,6 +28,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       filter(token => token !== null),
       take(1),
       switchMap((token) => {
+        if (token === false) {
+          return throwError(() => new Error('Token refresh failed'));
+        }
         const retryRequest = req.clone({
           setHeaders: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +88,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             }),
             catchError((refreshError) => {
               isRefreshing = false;
-              refreshTokenSubject.next(null);
+              refreshTokenSubject.next(false);
               authService.logout();
               router.navigate(['/login']);
               return throwError(() => refreshError);
@@ -96,6 +99,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             filter(token => token !== null),
             take(1),
             switchMap((token) => {
+              if (token === false) {
+                return throwError(() => new Error('Token refresh failed'));
+              }
               const retryRequest = req.clone({
                 setHeaders: {
                   Authorization: `Bearer ${token}`,
