@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+
 import { CreditoService } from '../../../../core/services/credito.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Credito, Cuota } from '../../../../core/models/credito.model';
@@ -90,6 +91,7 @@ export class CreditoDetalleComponent implements OnInit {
   comprobanteData = signal<ComprobanteData | null>(null);
 
   nivelCobranzaSelect = signal<number>(1);
+
   destinatarioCobranzaSelect = signal<'TITULAR' | 'GARANTE'>('TITULAR');
   emailCobranzaInput = signal<string>('');
   enviandoCorreoCobranza = signal<boolean>(false);
