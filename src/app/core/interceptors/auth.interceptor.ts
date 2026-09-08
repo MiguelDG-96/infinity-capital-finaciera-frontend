@@ -1,148 +1,118 @@
-import { HttpInterceptorFn, HttpErrorResponse, HttpContextToken } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse, HttpContextToken, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 import { Router } from '@angular/router';
-import { catchError, throwError, switchMap, BehaviorSubject, filter, take } from 'rxjs';
+import { catchError, throwError, switchMap, filter, take, Observable } from 'rxjs';
+import { REFRESH_FAILED, isRefreshing, refreshTokenSubject, setRefreshing } from './refresh-state';
 
 /**
  * Token de contexto para identificar peticiones que ya han sido reintentadas
  */
 export const IS_RETRY_REQUEST = new HttpContextToken<boolean>(() => false);
 
-let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null | boolean>(null);
+/** Endpoints que nunca deben llevar el token ni disparar un refresh */
+const isAuthEndpoint = (url: string): boolean =>
+  url.includes('/autenticacion/login') ||
+  url.includes('/autenticacion/refresh') ||
+  url.includes('/autenticacion/logout') ||
+  url.includes('/autenticacion/registro');
+
+const withToken = (req: HttpRequest<unknown>, token: string, isRetry = false) =>
+  req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+      'X-Authorization': `Bearer ${token}`
+    },
+    context: isRetry ? req.context.set(IS_RETRY_REQUEST, true) : req.context
+  });
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const auth = authService.currentUser();
+  const toast = inject(ToastService);
 
-  // No añadir token si es la ruta de login o refresh
-  if (req.url.includes('/autenticacion/login') || req.url.includes('/autenticacion/refresh')) {
+  if (isAuthEndpoint(req.url)) {
     return next(req);
   }
 
-  // Si ya se está refrescando un token, esperamos a que termine para todas las nuevas peticiones
-  if (isRefreshing) {
-    return refreshTokenSubject.pipe(
+  /** Espera a que termine el refresh en curso y reintenta con el token nuevo */
+  const waitForRefresh = (): Observable<any> =>
+    refreshTokenSubject.pipe(
       filter(token => token !== null),
       take(1),
       switchMap((token) => {
-        if (token === false) {
-          return throwError(() => new Error('Token refresh failed'));
+        if (token === REFRESH_FAILED) {
+          return throwError(() => new Error('Refresh failed'));
         }
-        const retryRequest = req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token}`,
-            'X-Authorization': `Bearer ${token}`
-          },
-          context: req.context.set(IS_RETRY_REQUEST, true)
-        });
-        return next(retryRequest);
+        return next(withToken(req, token!, true));
       })
     );
+
+  const cerrarSesion = () => {
+    authService.logout();
+    router.navigate(['/login']);
+  };
+
+  // Si ya hay un refresh en curso, todas las peticiones nuevas esperan su resultado
+  if (isRefreshing()) {
+    return waitForRefresh();
   }
 
-  let request = req;
-  if (auth?.accessToken) {
-    request = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${auth.accessToken}`,
-        'X-Authorization': `Bearer ${auth.accessToken}`
-      }
-    });
-  }
+  const auth = authService.currentUser();
+  const request = auth?.accessToken ? withToken(req, auth.accessToken) : req;
 
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
+        // Ya se reintentó con un token fresco: la sesión no es recuperable
         if (req.context.get(IS_RETRY_REQUEST)) {
-          authService.logout();
-          router.navigate(['/login']);
+          cerrarSesion();
           return throwError(() => error);
         }
 
         const currentAuth = authService.currentUser();
-
         if (!currentAuth?.refreshToken) {
-          authService.logout();
-          router.navigate(['/login']);
+          cerrarSesion();
           return throwError(() => error);
         }
 
-        const requestToken = req.headers.get('Authorization')?.replace('Bearer ', '');
-        
-        if (currentAuth.accessToken && requestToken && requestToken !== currentAuth.accessToken) {
-          const retryRequest = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${currentAuth.accessToken}`,
-              'X-Authorization': `Bearer ${currentAuth.accessToken}`
-            },
-            context: req.context.set(IS_RETRY_REQUEST, true)
-          });
-          return next(retryRequest);
+        // Otra petición ya refrescó el token mientras esta viajaba con el viejo:
+        // basta reintentar con el vigente, sin gastar otro refresh.
+        const tokenEnviado = request.headers.get('Authorization')?.replace('Bearer ', '');
+        if (currentAuth.accessToken && tokenEnviado && tokenEnviado !== currentAuth.accessToken) {
+          return next(withToken(req, currentAuth.accessToken, true));
         }
 
-        if (!isRefreshing) {
-          isRefreshing = true;
-          refreshTokenSubject.next(null);
-
-          return authService.refreshToken(currentAuth.refreshToken).pipe(
-            switchMap((newAuth) => {
-              isRefreshing = false;
-              refreshTokenSubject.next(newAuth.accessToken);
-              
-              const retryRequest = req.clone({
-                setHeaders: {
-                  Authorization: `Bearer ${newAuth.accessToken}`,
-                  'X-Authorization': `Bearer ${newAuth.accessToken}`
-                },
-                context: req.context.set(IS_RETRY_REQUEST, true)
-              });
-              return next(retryRequest);
-            }),
-            catchError((refreshError) => {
-              isRefreshing = false;
-              refreshTokenSubject.next(false);
-              authService.logout();
-              router.navigate(['/login']);
-              return throwError(() => refreshError);
-            })
-          );
-        } else {
-          return refreshTokenSubject.pipe(
-            filter(token => token !== null),
-            take(1),
-            switchMap((token) => {
-              if (token === false) {
-                return throwError(() => new Error('Token refresh failed'));
-              }
-              const retryRequest = req.clone({
-                setHeaders: {
-                  Authorization: `Bearer ${token}`,
-                  'X-Authorization': `Bearer ${token}`
-                },
-                context: req.context.set(IS_RETRY_REQUEST, true)
-              });
-              return next(retryRequest);
-            })
-          );
+        // Otra petición arrancó el refresh mientras esta estaba en vuelo
+        if (isRefreshing()) {
+          return waitForRefresh();
         }
+
+        setRefreshing(true);
+        refreshTokenSubject.next(null);
+
+        return authService.refreshToken(currentAuth.refreshToken).pipe(
+          switchMap((newAuth) => {
+            setRefreshing(false);
+            refreshTokenSubject.next(newAuth.accessToken);
+            return next(withToken(req, newAuth.accessToken!, true));
+          }),
+          catchError((refreshError) => {
+            setRefreshing(false);
+            refreshTokenSubject.next(REFRESH_FAILED);
+            cerrarSesion();
+            return throwError(() => refreshError);
+          })
+        );
       }
 
-      if (error.status === 403) {
-        if (error.error?.mensaje?.includes('IP ha sido bloqueada')) {
-          router.navigate(['/access-denied']);
-        }
+      if (error.status === 403 && error.error?.mensaje?.includes('IP ha sido bloqueada')) {
+        router.navigate(['/access-denied']);
       }
 
       if (error.status === 429) {
-        // Here we could use a Toast service if we had one.
-        // For now, an alert will suffice or we can let the UI catch it, but the guide
-        // specifically says "El Interceptor global debe capturar... mostrar un Toast".
-        // Let's create a simple custom toast by injecting it, or just use window.alert if none is available.
-        // Actually, we'll just log it and the UI can show a toast or we can use native alert as a fallback.
-        alert('Has excedido el límite de intentos. Espera 1 minuto e inténtalo de nuevo.');
+        toast.show('Has excedido el límite de intentos. Espera 1 minuto e inténtalo de nuevo.', 'warning');
       }
 
       return throwError(() => error);

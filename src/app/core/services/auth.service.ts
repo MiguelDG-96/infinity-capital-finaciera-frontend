@@ -9,6 +9,7 @@ import { VerificacionRequestDto } from '../dtos/verificacion-request.dto';
 import { OlvideContrasenaRequestDto, RestablecerContrasenaRequestDto } from '../dtos/recuperacion-contrasena.dto';
 import { AuthModel } from '../models/auth.model';
 import { AuthMapper } from '../mappers/auth.mapper';
+import { resetRefreshState } from '../interceptors/refresh-state';
 
 @Injectable({
   providedIn: 'root'
@@ -168,23 +169,16 @@ export class AuthService {
   }
 
   logout(): void {
-    const stored = localStorage.getItem('auth_token');
-    let refreshToken: string | null = null;
-    if (stored) {
-      try {
-        const auth: AuthModel = JSON.parse(stored);
-        refreshToken = auth.refreshToken ?? null;
-      } catch (_) {}
-    }
+    const refreshToken = this.status()?.refreshToken;
 
-    // Limpiamos el estado local de inmediato para que la UI cambie al instante
+    // Limpiar el estado local primero para que ninguna petición en curso
+    // vuelva a usar el token revocado.
     localStorage.removeItem('auth_token');
     this.status.set(null);
     this.profilePhotoUrl.set(null);
+    resetRefreshState();
 
-    // Notificamos al backend para invalidar el refreshToken en la BD.
-    // Si la petición falla (sin red, token ya expirado, etc.) ignoramos el error
-    // porque el usuario ya está deslogueado localmente.
+    // Revocar la sesión en el backend (best-effort, no bloquea el logout).
     if (refreshToken) {
       this.http.post(
         `${environment.apiUrl}/autenticacion/logout`,
