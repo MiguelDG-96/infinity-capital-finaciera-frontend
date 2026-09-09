@@ -162,18 +162,27 @@
               Refinanciar Crédito
             </a>
           </li>
-
+          <li>
+            <a
+              (click)="abrirModalCorregirPagos(); removeFocus($event)"
+              class="hover:bg-info/10 hover:text-info"
+            >
+              <lucide-icon name="check-square" class="w-4 h-4 mr-2 text-info"></lucide-icon>
+              Corregir Pagos
+            </a>
+          </li>
         </ul>
       </div>
-      <button
-        class="btn btn-info btn-sm text-white shadow-lg shadow-info/20"
-        (click)="abrirModalCorregirPagos()"
-        *ngIf="isAdminMode() && (credito()?.estado === 'ACTIVO' || credito()?.estado === 'PAGADO')"
-      >
-        <lucide-icon name="check-square" class="w-4 h-4 mr-1"></lucide-icon>
-        Corregir Pagos
-      </button>
 
+      <button
+        class="btn btn-ghost btn-sm"
+        [routerLink]="
+          isAdminMode() ? '/dashboard/admin/cartera' : '/dashboard/creditos/mis-creditos'
+        "
+      >
+        <lucide-icon name="arrow-left" class="w-4 h-4 mr-1"></lucide-icon>
+        Volver
+      </button>
     </div>
     <div class="flex gap-2" *ngIf="credito()?.estado !== 'ACTIVO'">
       <div
