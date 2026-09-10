@@ -53,6 +53,9 @@ export class DashboardSidebarComponent implements OnInit {
     'cobranza': '/dashboard/admin/cobranza',
     'admin/cobranza': '/dashboard/admin/cobranza',
     '/dashboard/admin/cobranza': '/dashboard/admin/cobranza',
+    'calendario': '/dashboard/admin/calendario',
+    'admin/calendario': '/dashboard/admin/calendario',
+    '/dashboard/admin/calendario': '/dashboard/admin/calendario'
   };
 
   ngOnInit() {
@@ -82,6 +85,8 @@ export class DashboardSidebarComponent implements OnInit {
               route = '/dashboard/admin/ayuda';
             } else if (lowerRuta.includes('cobranza') || lowerNombre.includes('cobranza')) {
               route = '/dashboard/admin/cobranza';
+            } else if (lowerRuta.includes('calendario') || lowerNombre.includes('calendario')) {
+              route = '/dashboard/admin/calendario';
             }
           }
           
@@ -95,6 +100,15 @@ export class DashboardSidebarComponent implements OnInit {
         
 
         if (this.userData()?.rol === 'ROLE_ADMIN') {
+          // Calendario y otras opciones fijas (solo si no vinieron ya de la BD)
+          if (!items.some(i => i.route === '/dashboard/admin/calendario')) {
+            items.push({
+              label: 'Calendario',
+              icon: 'calendar-days',
+              route: '/dashboard/admin/calendario',
+              isReady: true
+            });
+          }
           items.push({
             label: 'Evaluar Cliente',
             icon: 'activity',

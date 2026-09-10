@@ -1,0 +1,234 @@
+<div class="h-full flex flex-col gap-6 animate-fade-in relative">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-base-content tracking-tight">Calendario de Vencimientos</h1>
+      <p class="text-sm text-base-content/70 mt-1">Control visual de cuotas por cobrar y morosidad.</p>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <!-- Leyenda rápida -->
+      <div class="hidden lg:flex items-center gap-3 mr-4 text-xs font-medium bg-base-200 px-3 py-1.5 rounded-full">
+        <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 rounded-full bg-error"></div> Vencida</span>
+        <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 rounded-full bg-warning"></div> Hoy</span>
+        <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 rounded-full bg-info"></div> Futura</span>
+        <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 rounded-full bg-success"></div> Pagada</span>
+      </div>
+      
+      <button class="btn btn-sm btn-outline" (click)="irAHoy()" [disabled]="cargando()">
+        <lucide-icon name="calendar-days" class="w-4 h-4"></lucide-icon> Hoy
+      </button>
+      <div class="join">
+        <button class="btn btn-sm join-item" (click)="mesAnterior()" [disabled]="cargando()">
+          <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
+        </button>
+        <div class="btn btn-sm join-item pointer-events-none min-w-[140px] font-semibold text-sm">
+          {{ MESES[mesActual()] }} {{ anioActual() }}
+        </div>
+        <button class="btn btn-sm join-item" (click)="mesSiguiente()" [disabled]="cargando()">
+          <lucide-icon name="chevron-right" class="w-4 h-4"></lucide-icon>
+        </button>
+      </div>
+      <!-- Selector de año rápido -->
+      <select 
+        class="select select-sm select-bordered ml-2" 
+        [ngModel]="anioActual()" 
+        (ngModelChange)="anioActual.set($event); diaSeleccionado.set(null)"
+        [disabled]="cargando()">
+        @for (anio of getAniosDisponibles(); track anio) {
+          <option [value]="anio">{{ anio }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="flex-1 flex flex-col items-center justify-center py-20 text-base-content/50">
+      <span class="loading loading-spinner loading-lg mb-4 text-primary"></span>
+      <p>Cargando cartera de créditos...</p>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-error">
+      <lucide-icon name="alert-circle" class="w-5 h-5"></lucide-icon>
+      <span>{{ error() }}</span>
+      <button class="btn btn-sm" (click)="cargarCartera()">Reintentar</button>
+    </div>
+  } @else {
+    <!-- Contenido principal -->
+    <div class="flex flex-col lg:flex-row gap-6 flex-1 items-start">
+      
+      <!-- Lado Izquierdo: Calendario y Resumen -->
+      <div class="flex-1 flex flex-col gap-6 w-full lg:w-auto overflow-x-auto pb-4">
+        
+        <!-- Resumen del mes -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-base-100 rounded-2xl p-4 shadow-sm border border-base-200">
+            <div class="text-xs text-base-content/60 font-semibold mb-1 uppercase tracking-wider">Total Cuotas</div>
+            <div class="text-2xl font-bold">{{ resumenMes().total }}</div>
+          </div>
+          <div class="bg-error/10 rounded-2xl p-4 shadow-sm border border-error/20">
+            <div class="text-xs text-error font-semibold mb-1 uppercase tracking-wider">Vencidas</div>
+            <div class="text-2xl font-bold text-error">{{ resumenMes().vencidas }}</div>
+          </div>
+          <div class="bg-base-100 rounded-2xl p-4 shadow-sm border border-base-200">
+            <div class="text-xs text-base-content/60 font-semibold mb-1 uppercase tracking-wider">Pendientes</div>
+            <div class="text-2xl font-bold text-base-content">{{ resumenMes().pendientes }}</div>
+          </div>
+          <div class="bg-success/10 rounded-2xl p-4 shadow-sm border border-success/20">
+            <div class="text-xs text-success font-semibold mb-1 uppercase tracking-wider">Pagadas</div>
+            <div class="text-2xl font-bold text-success">{{ resumenMes().pagadas }}</div>
+          </div>
+        </div>
+
+        <!-- Grid del Calendario -->
+        <div class="bg-base-100 rounded-2xl shadow-sm border border-base-200 overflow-hidden min-w-[700px]">
+          <!-- Cabecera Días -->
+          <div class="grid grid-cols-7 border-b border-base-200 bg-base-200/50">
+            @for (dia of DIAS_SEMANA; track dia) {
+              <div class="text-center py-3 text-sm font-semibold text-base-content/70 uppercase tracking-wide">
+                {{ dia }}
+              </div>
+            }
+          </div>
+          
+          <!-- Celdas -->
+          <div class="grid grid-cols-7 auto-rows-[minmax(100px,auto)] bg-base-200 gap-[1px]">
+            @for (dia of diasDelMes(); track $index) {
+              @if (dia === null) {
+                <div class="bg-base-100"></div>
+              } @else {
+                <div 
+                  class="bg-base-100 p-2 relative group cursor-pointer hover:bg-base-200/50 transition-colors flex flex-col items-center justify-start gap-1"
+                  [class.ring-2]="esSeleccionado(dia)"
+                  [class.ring-primary]="esSeleccionado(dia)"
+                  [class.ring-inset]="esSeleccionado(dia)"
+                  [class.z-10]="esSeleccionado(dia)"
+                  (click)="seleccionarDia(dia)"
+                >
+                  <!-- Número de día -->
+                  <div class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium
+                    {{ esHoy(dia) ? 'bg-primary text-primary-content font-bold shadow-md' : 'text-base-content/80 group-hover:text-base-content' }}">
+                    {{ dia }}
+                  </div>
+                  
+                  <!-- Indicador de Cuotas -->
+                  @if (getCuotasDia(dia).length > 0) {
+                    <div class="mt-1 badge badge-sm font-bold shadow-sm {{ getBadgeClass(getColorDia(dia)) }}">
+                      {{ getCuotasDia(dia).length }} cuota{{ getCuotasDia(dia).length > 1 ? 's' : '' }}
+                    </div>
+                  }
+                  
+                  <!-- Puntos visuales para cantidad visual (max 3) -->
+                  @if (getCuotasDia(dia).length > 0) {
+                     <div class="flex flex-wrap justify-center gap-1 mt-auto pb-1 w-full px-2">
+                       @for (c of getCuotasDia(dia).slice(0, Math.min(3, getCuotasDia(dia).length)); track c.cuotaId) {
+                         <div class="w-2 h-2 rounded-full shadow-sm opacity-80" 
+                              [class.bg-error]="estaVencida(c)"
+                              [class.bg-warning]="!estaVencida(c) && esHoy(dia) && c.estadoCuota !== 'PAGADO'"
+                              [class.bg-info]="!estaVencida(c) && !esHoy(dia) && c.estadoCuota !== 'PAGADO'"
+                              [class.bg-success]="c.estadoCuota === 'PAGADO'">
+                         </div>
+                       }
+                       @if (getCuotasDia(dia).length > 3) {
+                         <div class="w-2 h-2 rounded-full bg-base-content/20 flex items-center justify-center">
+                           <span class="text-[6px] text-base-content/60 font-bold">+</span>
+                         </div>
+                       }
+                     </div>
+                  }
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Lateral: Detalles del Día Seleccionado -->
+      @if (diaSeleccionado()) {
+        <div class="w-full lg:w-[400px] shrink-0 bg-base-100 rounded-2xl shadow-lg border border-base-200 flex flex-col h-[calc(100vh-140px)] sticky top-6 overflow-hidden animate-slide-in-right">
+          <!-- Cabecera del Panel -->
+          <div class="p-4 border-b border-base-200 flex items-center justify-between bg-base-200/30">
+            <div>
+              <h3 class="font-bold text-lg text-base-content flex items-center gap-2">
+                <lucide-icon name="calendar-clock" class="w-5 h-5 text-primary"></lucide-icon>
+                Detalle del Día
+              </h3>
+              <p class="text-sm text-base-content/70 capitalize mt-0.5">{{ getDiaLabel(diaSeleccionado()!) }}</p>
+            </div>
+            <button class="btn btn-ghost btn-sm btn-square rounded-full text-base-content/50 hover:text-base-content" (click)="cerrarPanel()">
+              <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+            </button>
+          </div>
+          
+          <!-- Lista de Cuotas -->
+          <div class="flex-1 overflow-y-auto p-4 space-y-3 relative">
+            @if (cuotasDiaSeleccionado().length === 0) {
+              <div class="flex flex-col items-center justify-center h-full text-center opacity-50 pb-10">
+                <lucide-icon name="check-circle" class="w-12 h-12 mb-3 text-success"></lucide-icon>
+                <p class="font-medium text-lg">Día libre</p>
+                <p class="text-sm">No hay cuotas programadas para cobrar este día.</p>
+              </div>
+            } @else {
+              @for (cuota of cuotasDiaSeleccionado(); track cuota.cuotaId) {
+                <div class="group relative bg-base-100 rounded-xl border p-4 shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden
+                            {{ estaVencida(cuota) ? 'border-error/30 hover:border-error/50' : 'border-base-200 hover:border-primary/50' }}"
+                     (click)="irAlCredito(cuota.creditoId)">
+                  
+                  <!-- Raya de color a la izquierda -->
+                  <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-colors
+                              {{ estaVencida(cuota) ? 'bg-error' : (cuota.estadoCuota === 'PAGADO' ? 'bg-success' : 'bg-primary') }}">
+                  </div>
+                  
+                  <div class="flex justify-between items-start pl-2">
+                    <div class="flex-1 min-w-0 pr-3">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xs font-bold text-base-content/50 uppercase tracking-widest">CUOTA {{ cuota.numeroCuota }}</span>
+                        <div class="badge badge-sm font-semibold {{ getEstadoBadge(cuota.estadoCuota) }}">
+                          {{ cuota.estadoCuota }}
+                        </div>
+                        @if (estaVencida(cuota) && cuota.estadoCuota !== 'MORA') {
+                           <div class="badge badge-sm badge-error text-xs font-bold shadow-sm">VENCIDA</div>
+                        }
+                      </div>
+                      <h4 class="font-bold text-base-content truncate" [title]="cuota.clienteNombre">
+                        {{ cuota.clienteNombre }}
+                      </h4>
+                      <div class="flex items-center gap-2 mt-2 text-xs text-base-content/60">
+                        <lucide-icon name="credit-card" class="w-3.5 h-3.5"></lucide-icon>
+                        <span class="font-medium">{{ cuota.clienteDocumento }}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="text-right shrink-0">
+                      <div class="text-xs text-base-content/50 uppercase font-semibold mb-0.5">Monto</div>
+                      <div class="font-bold text-base text-base-content">
+                        S/ {{ formatMonto(cuota.monto) }}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Hover overlay (ir) -->
+                  <div class="absolute right-3 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-primary-content p-1.5 rounded-full shadow-md">
+                    <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+          
+          <!-- Footer del Panel -->
+          @if (cuotasDiaSeleccionado().length > 0) {
+            <div class="p-4 border-t border-base-200 bg-base-200/20">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-semibold text-base-content/60">Total del día:</span>
+                <span class="text-lg font-bold text-primary">
+                  S/ {{ formatMonto(totalMontoDiaSeleccionado()) }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

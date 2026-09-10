@@ -51,6 +51,7 @@ export const routes: Routes = [
       { path: 'admin/personal', loadComponent: () => import('./features/dashboard/pages/admin-personal/admin-personal.component').then(m => m.AdminPersonalComponent) },
       { path: 'admin/tesoreria', loadComponent: () => import('./features/dashboard/pages/admin-tesoreria/admin-tesoreria.component').then(m => m.AdminTesoreriaComponent) },
       { path: 'admin/cobranza', loadComponent: () => import('./features/dashboard/pages/admin-cobranza/admin-cobranza.component').then(m => m.AdminCobranzaComponent) },
+      { path: 'admin/calendario', loadComponent: () => import('./features/dashboard/pages/admin-calendario/admin-calendario.component').then(m => m.AdminCalendarioComponent) },
       { path: 'admin/inversionistas', loadComponent: () => import('./features/dashboard/pages/admin-inversionistas/admin-inversionistas.component').then(m => m.AdminInversionistasComponent) },
       { path: 'admin/ayuda', loadComponent: () => import('./features/dashboard/pages/admin-ayuda/admin-ayuda').then(m => m.AdminAyuda) },
       // Reportes
