@@ -61,6 +61,10 @@ export class CreditoDetalleComponent implements OnInit {
   isAdminMode = signal<boolean>(false);
   cargando = signal<boolean>(true);
   error = signal<string | null>(null);
+
+  /** IDs de créditos donde ya se ejecutó la detección de mora en esta sesión.
+   *  Evita llamadas repetidas al endpoint si el admin abre el mismo crédito varias veces. */
+  private readonly moraYaAplicadaIds = new Set<number>();
   errorRegistrarPago = signal<string | null>(null);
   procesando = signal<boolean>(false);
   descargando = signal<boolean>(false);
@@ -192,43 +196,96 @@ export class CreditoDetalleComponent implements OnInit {
 
     obs.subscribe({
       next: (c) => {
-        this.credito.set(c);
-        this.cargando.set(false);
-        this.currentPage.set(1);
-        
-        // Si el crédito tiene un origen (fue refinanciado de uno anterior), cargamos ese historial
-        if (c.creditoOrigenId) {
-           const obsOrigen = this.isAdminMode()
-             ? this.creditoService.obtenerCronogramaAdmin(c.creditoOrigenId)
-             : this.creditoService.obtenerCronograma(c.creditoOrigenId);
-             
-           obsOrigen.subscribe({
-             next: (cuotas) => {
-                this.cuotasOrigen.set(cuotas);
-             },
-             error: (err) => console.error('Error cargando historial antiguo:', err)
-           });
-        }
-
-        // Verificar si es cliente recurrente (más de un crédito)
-        if (c.documento) {
-          const obsCartera = this.isAdminMode() 
-            ? this.creditoService.obtenerCarteraGeneral() 
-            : this.creditoService.obtenerMisCreditos();
-            
-          obsCartera.subscribe({
-            next: (cartera) => {
-              const creditosDelCliente = cartera.filter(cred => cred.documento === c.documento);
-              this.isClienteRecurrente.set(creditosDelCliente.length > 1);
-            }
+        // ── Auto-detectar mora pendiente de aplicar (solo admin) ──────────────
+        // Si hay cuotas vencidas > 3 días sin penalidad/mora aplicada,
+        // disparar el endpoint para persistirlo en la BD y recargar.
+        if (this.isAdminMode() && c.estado === 'ACTIVO' && !this.moraYaAplicadaIds.has(id)) {
+          const hoy = new Date();
+          hoy.setHours(0, 0, 0, 0);
+          const tienePendientesMora = (c.cuotas || []).some(cuota => {
+            if (cuota.estadoCuota !== 'PENDIENTE' && cuota.estadoCuota !== 'PAGADO_PARCIAL') return false;
+            if (!cuota.fechaVencimiento) return false;
+            const fv = new Date(cuota.fechaVencimiento);
+            fv.setHours(0, 0, 0, 0);
+            const dias = Math.floor((hoy.getTime() - fv.getTime()) / (1000 * 60 * 60 * 24));
+            return dias > 0;
           });
+
+          if (tienePendientesMora) {
+            // Marcar como ya procesado ANTES de llamar para evitar llamadas paralelas
+            this.moraYaAplicadaIds.add(id);
+            this.creditoService.ejecutarDeteccionMora().subscribe({
+              next: () => this.cargarDetalleInterno(id),
+              error: () => this.cargarDetalleInterno(id)
+            });
+            return;
+          }
         }
+        this.cargarDetalleInterno(id, c);
       },
       error: (err) => {
         this.error.set('Error al cargar el detalle del crédito.');
         this.cargando.set(false);
       }
     });
+  }
+
+  /** Carga real del detalle una vez que ya se aplicó mora (o si no había que aplicar) */
+  private cargarDetalleInterno(id: number, creditoYaCargado?: any) {
+    if (creditoYaCargado) {
+      // Caso en que no hubo mora pendiente: usar los datos ya cargados
+      this.credito.set(creditoYaCargado);
+      this.cargando.set(false);
+      this.currentPage.set(1);
+      this.cargarDatosSecundarios(creditoYaCargado);
+      return;
+    }
+
+    // Caso en que se disparó mora: recargar desde el backend
+    const obs = this.isAdminMode()
+      ? this.creditoService.obtenerCreditoPorIdAdmin(id)
+      : this.creditoService.obtenerCreditoPorId(id);
+
+    obs.subscribe({
+      next: (c) => {
+        this.credito.set(c);
+        this.cargando.set(false);
+        this.currentPage.set(1);
+        this.cargarDatosSecundarios(c);
+      },
+      error: () => {
+        this.error.set('Error al cargar el detalle del crédito.');
+        this.cargando.set(false);
+      }
+    });
+  }
+
+  /** Carga historial de crédito origen y verifica si es cliente recurrente */
+  private cargarDatosSecundarios(c: any) {
+    if (c.creditoOrigenId) {
+      const obsOrigen = this.isAdminMode()
+        ? this.creditoService.obtenerCronogramaAdmin(c.creditoOrigenId)
+        : this.creditoService.obtenerCronograma(c.creditoOrigenId);
+
+      obsOrigen.subscribe({
+        next: (cuotas) => this.cuotasOrigen.set(cuotas),
+        error: (err) => console.error('Error cargando historial antiguo:', err)
+      });
+    }
+
+    if (c.documento) {
+      const obsCartera = this.isAdminMode()
+        ? this.creditoService.obtenerCarteraGeneral()
+        : this.creditoService.obtenerMisCreditos();
+
+      obsCartera.subscribe({
+        next: (cartera) => {
+          const creditosDelCliente = cartera.filter(cred => cred.documento === c.documento);
+          this.isClienteRecurrente.set(creditosDelCliente.length > 1);
+        }
+      });
+    }
+
   }
 
   obtenerNombreCorto(nombreCompleto?: string): string {
@@ -984,6 +1041,40 @@ export class CreditoDetalleComponent implements OnInit {
     return dif > 0.01 ? dif : 0;
   }
 
+  /**
+   * Retorna la penalidad real a mostrar en la tabla.
+   * Si el backend ya la tiene guardada (> 0), la devuelve directamente.
+   * Si el backend aún no la aplicó (= 0) pero la cuota está vencida > 3 días,
+   * calcula el 6% del capital pendiente total de todas las cuotas no pagadas.
+   */
+  getPenalidadVisual(cuota: Cuota): number {
+    // Si el backend ya la tiene guardada, usarla
+    if (cuota.penalidad && cuota.penalidad > 0) return cuota.penalidad;
+
+    // Solo cuotas activas vencidas (no pagadas, no postergadas)
+    const estadosActivos = ['PENDIENTE', 'PAGADO_PARCIAL', 'MORA'];
+    if (!estadosActivos.includes(cuota.estadoCuota)) return 0;
+
+    // Verificar si tiene más de 3 días de atraso
+    if (!cuota.fechaVencimiento) return 0;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaVenc = new Date(cuota.fechaVencimiento);
+    fechaVenc.setHours(0, 0, 0, 0);
+    const diasAtraso = Math.floor((hoy.getTime() - fechaVenc.getTime()) / (1000 * 60 * 60 * 24));
+    if (diasAtraso <= 3) return 0;
+
+    // Calcular 6% del capital pendiente total (igual que el backend)
+    const cuotas = this.credito()?.cuotas || [];
+    const capitalPendienteTotal = cuotas
+      .filter(c => estadosActivos.includes(c.estadoCuota))
+      .reduce((sum, c) => sum + (c.capital || 0), 0);
+
+    return capitalPendienteTotal > 0
+      ? Number((capitalPendienteTotal * 0.06).toFixed(2))
+      : 0;
+  }
+
   getCargoRefinanciamientoVisual(cuota: Cuota): number {
     if (cuota.cargoRefinanciamiento && cuota.cargoRefinanciamiento > 0) return cuota.cargoRefinanciamiento;
     
@@ -1007,12 +1098,13 @@ export class CreditoDetalleComponent implements OnInit {
    */
   getTotalCuotaReal(cuota: Cuota): number {
     const refin = this.getCargoRefinanciamientoVisual(cuota);
+    const penalidad = this.getPenalidadVisual(cuota);
     const totalCalculado = Number((
       (cuota.capital || 0) +
       (cuota.interes || 0) +
       (cuota.seguro || 0) +
       (cuota.comision || 0) +
-      (cuota.penalidad || 0) +
+      penalidad +
       refin
     ).toFixed(2));
 

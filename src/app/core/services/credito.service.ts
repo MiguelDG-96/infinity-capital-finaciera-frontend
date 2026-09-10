@@ -261,4 +261,13 @@ export class CreditoService {
   anularPago(cuotaId: number): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/cuotas/${cuotaId}/anular-pago`, {});
   }
+
+  /**
+   * Dispara manualmente la detección de mora y penalidades en el backend.
+   * Aplica 6% de penalidad y cambia estado a MORA en cuotas vencidas > 3 días.
+   * Equivale al cron de las 12:05 AM pero invocable en cualquier momento.
+   */
+  ejecutarDeteccionMora(): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/creditos/admin/ejecutar-mora`, {});
+  }
 }

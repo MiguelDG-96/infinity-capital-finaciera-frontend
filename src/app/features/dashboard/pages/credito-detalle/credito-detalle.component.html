@@ -450,14 +450,14 @@
                             <span class="text-[9px] opacity-70">PENALIDAD</span></span
                           >
                         }
-                        @if (cuota.penalidad && cuota.penalidad > 0) {
+                        @if (getPenalidadVisual(cuota) > 0) {
                           <span class="text-error font-bold"
-                            >+{{ cuota.penalidad | currency: 'S/ ' }}
+                            >+{{ getPenalidadVisual(cuota) | currency: 'S/ ' }}
                             <span class="text-[9px] opacity-70">PEN.</span></span
                           >
                         }
                         @if (
-                          getMoraVisual(cuota) === 0 && (!cuota.penalidad || cuota.penalidad === 0)
+                          getMoraVisual(cuota) === 0 && getPenalidadVisual(cuota) === 0
                         ) {
                           <span class="opacity-20">-</span>
                         }

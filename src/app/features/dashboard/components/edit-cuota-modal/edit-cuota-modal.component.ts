@@ -40,6 +40,7 @@ export class EditCuotaModalComponent implements OnInit {
       penalidad: this.cuota.penalidad || 0
     };
     this.calcularSugerencia();
+    this.autoAplicarPenalidadSiCorresponde();
   }
 
   calcularSugerencia() {
@@ -59,6 +60,33 @@ export class EditCuotaModalComponent implements OnInit {
     }
     
     this.penalidadSugerida = capitalPendienteTotal * 0.06;
+  }
+
+  /**
+   * Aplica automáticamente la penalidad si:
+   * 1. La cuota está en MORA y su penalidad es 0 (el backend no la aplicó aún).
+   * 2. La cuota está PENDIENTE/PAGADO_PARCIAL pero ya venció hace más de 3 días.
+   * En ambos casos se calcula la penalidad sugerida y se carga en el campo.
+   */
+  private autoAplicarPenalidadSiCorresponde() {
+    if (!this.cuota.fechaVencimiento) return;
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaVenc = new Date(this.cuota.fechaVencimiento);
+    fechaVenc.setHours(0, 0, 0, 0);
+    const diasAtraso = Math.floor((hoy.getTime() - fechaVenc.getTime()) / (1000 * 60 * 60 * 24));
+
+    const estaVencida =
+      (this.cuota.estadoCuota === 'MORA') ||
+      ((this.cuota.estadoCuota === 'PENDIENTE' || this.cuota.estadoCuota === 'PAGADO_PARCIAL') && diasAtraso > 3);
+
+    const sinPenalidad = !this.cuota.penalidad || this.cuota.penalidad === 0;
+
+    if (estaVencida && sinPenalidad && diasAtraso > 3 && this.penalidadSugerida > 0) {
+      this.editReq.penalidad = Number(this.penalidadSugerida.toFixed(2));
+      this.editReq.estadoCuota = 'MORA';
+    }
   }
 
   usarPenalidadSugerida() {
