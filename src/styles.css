@@ -41,9 +41,9 @@ html {
 
 /* ─── Tema claro corporativo: Infinity Capital ─── */
 [data-theme="infinity-light"] {
-  --color-base-100: oklch(98% 0.005 20);
-  --color-base-200: oklch(94% 0.008 20);
-  --color-base-300: oklch(88% 0.012 20);
+  --color-base-100: oklch(99% 0 0); /* Blanco casi puro */
+  --color-base-200: oklch(96% 0 0); /* Gris claro neutral */
+  --color-base-300: oklch(98.045% 0.00293 307.109 / 0.824); /* Gris medio neutral */
   --color-base-content: oklch(15% 0.01 20);
 
   --color-primary: oklch(50% 0.22 27);
@@ -75,8 +75,8 @@ html {
   --radius-box: 0.75rem;
 
   /* Scrollbar */
-  --scrollbar-thumb: oklch(70% 0.02 20);
-  --scrollbar-track: oklch(96% 0.005 20);
+  --scrollbar-thumb: oklch(70% 0 0);
+  --scrollbar-track: oklch(96% 0 0);
 }
 
 /* ─── Tema oscuro corporativo: Infinity Capital ─── */

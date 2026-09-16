@@ -1,0 +1,124 @@
+<section class="mis-inv">
+
+  <!-- Header -->
+  <div class="mis-inv__header">
+    <div class="mis-inv__title-group">
+      <lucide-icon name="coins" [size]="24"></lucide-icon>
+      <h1>Mis Inversiones</h1>
+    </div>
+    <a routerLink="/dashboard/inversiones/solicitar" class="btn-primary">
+      <lucide-icon name="plus" [size]="16"></lucide-icon>
+      Nueva Inversión
+    </a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    @for (filtro of filtros; track filtro) {
+      <button
+        class="filtro-btn"
+        [class.active]="filtroActivo() === filtro"
+        (click)="setFiltro(filtro)">
+        {{ filtro }}
+      </button>
+    }
+  </div>
+
+  <!-- Skeleton -->
+  @if (cargando()) {
+    <div class="skeleton-list">
+      @for (i of [1,2,3]; track i) {
+        <div class="skeleton-row"></div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="error-banner">
+      <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+      {{ error() }}
+      <button (click)="cargarInversiones()" class="btn-retry">Reintentar</button>
+    </div>
+  } @else if (inversionesFiltradas().length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="inbox" [size]="48"></lucide-icon>
+      <p>No hay inversiones con estado <strong>{{ filtroActivo() }}</strong>.</p>
+    </div>
+  } @else {
+
+    <!-- Tabla Desktop -->
+    <div class="table-wrapper">
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Monto Invertido</th>
+            <th>Plazo</th>
+            <th>Tasa</th>
+            <th>Inicio</th>
+            <th>Vencimiento</th>
+            <th>Interés</th>
+            <th>Total Final</th>
+            <th>Progreso</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (inv of inversionesFiltradas(); track inv.id; let i = $index) {
+            <tr>
+              <td class="td-num">{{ i + 1 }}</td>
+              <td class="td-monto">{{ formatCurrency(inv.monto, inv.moneda) }}</td>
+              <td>{{ inv.plazoMeses }} meses</td>
+              <td class="td-tasa">{{ inv.tasaAnual }}%</td>
+              <td>{{ inv.fechaInicio }}</td>
+              <td>
+                {{ inv.fechaVencimiento }}
+                <small class="{{ getDiasClass(inv.diasRestantes) }}">
+                  {{ getDiasLabel(inv.diasRestantes) }}
+                </small>
+              </td>
+              <td class="td-interes">+{{ formatCurrency(inv.interesProyectado, inv.moneda) }}</td>
+              <td class="td-total">{{ formatCurrency(inv.montoFinal, inv.moneda) }}</td>
+              <td class="td-progress">
+                <div class="mini-progress">
+                  <div class="mini-progress__fill" [style.width.%]="inv.progresoPorc"></div>
+                </div>
+                <span class="mini-pct">{{ inv.progresoPorc }}%</span>
+              </td>
+              <td>
+                <span class="inv-badge {{ getEstadoClass(inv.estado) }}">{{ inv.estado }}</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cards Mobile -->
+    <div class="mobile-cards">
+      @for (inv of inversionesFiltradas(); track inv.id) {
+        <div class="mobile-card">
+          <div class="mobile-card__top">
+            <span class="mobile-card__monto">{{ formatCurrency(inv.monto, inv.moneda) }}</span>
+            <span class="inv-badge {{ getEstadoClass(inv.estado) }}">{{ inv.estado }}</span>
+          </div>
+          <div class="mobile-card__row">
+            <span>Plazo: <strong>{{ inv.plazoMeses }} meses</strong></span>
+            <span>Tasa: <strong>{{ inv.tasaAnual }}%</strong></span>
+          </div>
+          <div class="mobile-card__row">
+            <span>Vence: <strong>{{ inv.fechaVencimiento }}</strong></span>
+            <span class="{{ getDiasClass(inv.diasRestantes) }}">{{ getDiasLabel(inv.diasRestantes) }}</span>
+          </div>
+          <div class="mini-progress">
+            <div class="mini-progress__fill" [style.width.%]="inv.progresoPorc"></div>
+          </div>
+          <div class="mobile-card__bottom">
+            <span>+{{ formatCurrency(inv.interesProyectado, inv.moneda) }} intereses</span>
+            <span class="mobile-card__total">Total: {{ formatCurrency(inv.montoFinal, inv.moneda) }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+  }
+
+</section>

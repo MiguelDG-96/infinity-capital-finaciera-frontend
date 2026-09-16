@@ -56,6 +56,11 @@ export const routes: Routes = [
       { path: 'admin/ayuda', loadComponent: () => import('./features/dashboard/pages/admin-ayuda/admin-ayuda').then(m => m.AdminAyuda) },
       // Reportes
       { path: 'reportes', loadComponent: () => import('./features/dashboard/pages/reportes/reportes').then(m => m.Reportes) },
+      // Rutas de Inversionista
+      { path: 'inversiones/home', loadComponent: () => import('./features/dashboard/pages/inversionista-home/inversionista-home.component').then(m => m.InversionistaHomeComponent) },
+      { path: 'inversiones/mis-inversiones', loadComponent: () => import('./features/dashboard/pages/mis-inversiones/mis-inversiones.component').then(m => m.MisInversionesComponent) },
+      { path: 'inversiones/simulador', loadComponent: () => import('./features/dashboard/pages/simulador-inversionista/simulador-inversionista.component').then(m => m.SimuladorInversionistaComponent) },
+      { path: 'inversiones/solicitar', loadComponent: () => import('./features/dashboard/pages/solicitar-inversion/solicitar-inversion.component').then(m => m.SolicitarInversionComponent) },
       // Perfil de usuario
       { path: 'perfil', loadComponent: () => import('./features/dashboard/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
 

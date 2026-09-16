@@ -1,0 +1,294 @@
+/* ────────────────────────────────────────────────────────────────────────────
+   INVERSIONISTA HOME — Compatible con modo claro y oscuro
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:host { display: block; width: 100%; }
+
+.inv-home {
+  --gold:       #d97706;
+  --gold-light: #fbbf24;
+  --emerald:    #059669;
+  --blue:       #2563eb;
+  --purple:     #7c3aed;
+  --surface:    rgba(255, 255, 255, 0.7);
+  --border:     rgba(0, 0, 0, 0.05);
+  --text-muted: rgba(0, 0, 0, 0.5);
+  --text-main:  #111827;
+  --card-bg:    #ffffff;
+
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: 'Inter', sans-serif;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.inv-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.inv-header__left { display: flex; align-items: center; gap: 1rem; }
+.inv-header__icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(217,119,6,0.3);
+}
+.inv-header__title {
+  font-size: 1.5rem; font-weight: 700; margin: 0;
+  color: var(--text-main);
+}
+.inv-header__sub { margin: 0; font-size: 0.875rem; color: var(--text-muted); }
+.inv-header__actions { display: flex; gap: 0.75rem; align-items: center; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1.25rem; border-radius: 10px;
+  font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #fff; border: none; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(217,119,6,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217,119,6,0.4); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1.25rem; border-radius: 10px;
+  font-size: 0.875rem; font-weight: 500; text-decoration: none;
+  color: var(--gold); border: 1.5px solid var(--gold);
+  background: transparent; transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(217,119,6,0.08); }
+
+.btn-retry {
+  background: transparent; border: 1px solid currentColor;
+  color: inherit; padding: 0.3rem 0.75rem;
+  border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-left: 0.75rem;
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────────── */
+.skeleton-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.skeleton-card {
+  height: 110px; border-radius: 16px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── Error ─────────────────────────────────────────────────────────────────── */
+.error-banner {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 1rem 1.25rem; border-radius: 12px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+  color: #dc2626; font-size: 0.9rem;
+}
+
+/* ── Metrics Grid ─────────────────────────────────────────────────────────── */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+.metric-card {
+  position: relative;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.25rem 1.5rem; border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.metric-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+.metric-card__icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.metric-card__content { display: flex; flex-direction: column; gap: 0.2rem; flex: 1; }
+.metric-card__label {
+  font-size: 0.72rem; color: var(--text-muted); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.metric-card__value { font-size: 1.35rem; font-weight: 700; line-height: 1.2; }
+.metric-card__glow {
+  display: none; /* Ocultar el glow en modo claro porque mancha el fondo de rosado/rojo */
+}
+
+/* Variantes */
+.metric-card--gold   .metric-card__icon  { background: rgba(217,119,6,0.12); color: var(--gold); }
+.metric-card--gold   .metric-card__value { color: var(--gold); }
+.metric-card--gold   .metric-card__glow  { background: var(--gold); }
+
+.metric-card--emerald .metric-card__icon  { background: rgba(5,150,105,0.12); color: var(--emerald); }
+.metric-card--emerald .metric-card__value { color: var(--emerald); }
+.metric-card--emerald .metric-card__glow  { background: var(--emerald); }
+
+.metric-card--blue  .metric-card__icon  { background: rgba(37,99,235,0.12); color: var(--blue); }
+.metric-card--blue  .metric-card__value { color: var(--blue); }
+.metric-card--blue  .metric-card__glow  { background: var(--blue); }
+
+.metric-card--purple .metric-card__icon  { background: rgba(124,58,237,0.12); color: var(--purple); }
+.metric-card--purple .metric-card__value { color: var(--purple); }
+.metric-card--purple .metric-card__glow  { background: var(--purple); }
+
+/* ── Estado Chips ─────────────────────────────────────────────────────────── */
+.estado-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.estado-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 1rem; border-radius: 999px;
+  font-size: 0.82rem; font-weight: 500; border: 1.5px solid;
+}
+.estado-chip--activa   { background: rgba(5,150,105,0.1);  color: #059669; border-color: rgba(5,150,105,0.3); }
+.estado-chip--vencida  { background: rgba(217,119,6,0.1);  color: #d97706; border-color: rgba(217,119,6,0.3); }
+.estado-chip--liquidada{ background: rgba(124,58,237,0.1); color: #7c3aed; border-color: rgba(124,58,237,0.3); }
+
+/* ── Section Header ───────────────────────────────────────────────────────── */
+.section-header { display: flex; align-items: center; justify-content: space-between; }
+.section-title { font-size: 1.1rem; font-weight: 600; margin: 0; color: var(--text-main); }
+.ver-todo {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.85rem; color: var(--gold); text-decoration: none; transition: opacity 0.2s;
+}
+.ver-todo:hover { opacity: 0.75; }
+
+/* ── Empty State ──────────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  padding: 3rem; text-align: center; border-radius: 16px;
+  border: 1.5px dashed var(--border); color: var(--text-muted);
+}
+
+/* ── Investment List ─────────────────────────────────────────────────────── */
+.inv-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.inv-card {
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: 1.1rem 1.5rem; border-radius: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  transition: all 0.2s; flex-wrap: wrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.inv-card:hover { border-color: rgba(217,119,6,0.3); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+.inv-card__left { display: flex; align-items: center; gap: 0.875rem; min-width: 200px; flex: 1; }
+.inv-card__icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(217,119,6,0.1); color: var(--gold);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.inv-card__monto  { font-size: 1rem; font-weight: 700; display: block; color: var(--text-main); }
+.inv-card__detalle{ font-size: 0.78rem; color: var(--text-muted); display: block; }
+
+.inv-card__center { flex: 2; min-width: 160px; display: flex; flex-direction: column; gap: 0.4rem; }
+.progress-bar { height: 6px; border-radius: 3px; background: rgba(0,0,0,0.08); overflow: hidden; }
+.progress-bar__fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #d97706, #059669); transition: width 0.8s ease; }
+.progress-label { font-size: 0.75rem; font-weight: 500; }
+
+.dias-ok      { color: #059669; }
+.dias-alerta  { color: #d97706; }
+.dias-critico { color: #dc2626; }
+.dias-vencido { color: #b91c1c; }
+
+.inv-card__right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; min-width: 120px; }
+.inv-card__interes { font-size: 0.875rem; font-weight: 600; color: var(--emerald); }
+
+/* ── Badges ─────────────────────────────────────────────────────────────── */
+.inv-badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.badge-activa    { background: rgba(5,150,105,0.12);  color: #059669; }
+.badge-vencida   { background: rgba(217,119,6,0.12);  color: #d97706; }
+.badge-liquidada { background: rgba(124,58,237,0.12); color: #7c3aed; }
+.badge-cancelada { background: rgba(220,38,38,0.12);  color: #dc2626; }
+
+/* ── MODO OSCURO ─────────────────────────────────────────────────────────── */
+:host-context([data-theme="infinity-dark"]) {
+  .inv-home {
+    --gold:       #f5c542;
+    --emerald:    #10b981;
+    --blue:       #3b82f6;
+    --purple:     #8b5cf6;
+    --surface:    rgba(255,255,255,0.04);
+    --border:     rgba(255,255,255,0.08);
+    --text-muted: rgba(255,255,255,0.5);
+    --text-main:  #f1f5f9;
+    --card-bg:    rgba(255,255,255,0.05);
+  }
+
+  .inv-header__title {
+    background: linear-gradient(135deg, #f5c542, #a3e635);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .metric-card {
+    box-shadow: none;
+    background: rgba(255,255,255,0.04);
+  }
+  
+  .metric-card__glow {
+    display: block;
+    position: absolute; right: -30px; top: -30px;
+    width: 120px; height: 120px; border-radius: 50%;
+    opacity: 0.1; filter: blur(30px);
+  }
+  
+  .metric-card--gold   .metric-card__icon { background: rgba(245,197,66,0.15); color: #f5c542; }
+  .metric-card--gold   .metric-card__value { color: #f5c542; }
+  .metric-card--emerald .metric-card__icon { background: rgba(16,185,129,0.15); color: #10b981; }
+  .metric-card--emerald .metric-card__value { color: #10b981; }
+  .metric-card--blue  .metric-card__icon { background: rgba(59,130,246,0.15); color: #3b82f6; }
+  .metric-card--blue  .metric-card__value { color: #3b82f6; }
+  .metric-card--purple .metric-card__icon { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+  .metric-card--purple .metric-card__value { color: #8b5cf6; }
+
+  .estado-chip--activa    { background: rgba(16,185,129,0.12); color: #34d399; border-color: rgba(16,185,129,0.3); }
+  .estado-chip--vencida   { background: rgba(245,197,66,0.12);  color: #f5c542; border-color: rgba(245,197,66,0.3); }
+  .estado-chip--liquidada { background: rgba(139,92,246,0.12);  color: #a78bfa; border-color: rgba(139,92,246,0.3); }
+
+  .inv-card { box-shadow: none; background: rgba(255,255,255,0.04); }
+  .inv-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(245,197,66,0.25); }
+  .inv-card__icon  { background: rgba(245,197,66,0.12); color: #f5c542; }
+  
+  .progress-bar    { background: rgba(255,255,255,0.08); }
+  .skeleton-card   { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+
+  .badge-activa    { background: rgba(16,185,129,0.15); color: #34d399; }
+  .badge-vencida   { background: rgba(245,197,66,0.15); color: #f5c542; }
+  .badge-liquidada { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  .badge-cancelada { background: rgba(239,68,68,0.15);  color: #fca5a5; }
+
+  .dias-ok      { color: #34d399; }
+  .dias-alerta  { color: #fbbf24; }
+  .dias-critico { color: #f87171; }
+  .dias-vencido { color: #ef4444; }
+
+  .empty-state { border-color: rgba(255,255,255,0.08); }
+  .error-banner { color: #fca5a5; }
+  
+  .btn-ghost { color: #f5c542; border-color: #f5c542; }
+  .btn-ghost:hover { background: rgba(245,197,66,0.1); }
+
+  .inv-header__icon { background: linear-gradient(135deg, #f5c542, #f59e0b); color: #1a1a1a; }
+  .btn-primary { background: linear-gradient(135deg, #f5c542, #f59e0b); color: #1a1a1a; }
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .inv-home { padding: 1rem; }
+  .inv-header { flex-direction: column; align-items: flex-start; }
+  .inv-card { flex-direction: column; align-items: flex-start; }
+  .inv-card__right { align-items: flex-start; }
+}

@@ -1,0 +1,156 @@
+<section class="inv-home">
+
+  <!-- ── HEADER ─────────────────────────────────────────────────────────── -->
+  <div class="inv-header">
+    <div class="inv-header__left">
+      <div class="inv-header__icon">
+        <lucide-icon name="trending-up" [size]="28"></lucide-icon>
+      </div>
+      <div>
+        <h1 class="inv-header__title">Mi Portal de Inversiones</h1>
+        <p class="inv-header__sub">Bienvenido, <strong>{{ userData()?.nombreCompleto ?? 'Inversionista' }}</strong></p>
+      </div>
+    </div>
+    <div class="inv-header__actions">
+      <a routerLink="/dashboard/inversiones/simulador" class="btn-ghost">
+        <lucide-icon name="calculator" [size]="16"></lucide-icon>
+        Simulador
+      </a>
+      <a routerLink="/dashboard/inversiones/solicitar" class="btn-primary">
+        <lucide-icon name="plus" [size]="16"></lucide-icon>
+        Nueva Inversión
+      </a>
+    </div>
+  </div>
+
+  <!-- ── SKELETON / ERROR ───────────────────────────────────────────────── -->
+  @if (cargando()) {
+    <div class="skeleton-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="error-banner">
+      <lucide-icon name="alert-circle" [size]="20"></lucide-icon>
+      {{ error() }}
+      <button (click)="cargarDatos()" class="btn-retry">Reintentar</button>
+    </div>
+  } @else {
+
+  <!-- ── TARJETAS MÉTRICAS ───────────────────────────────────────────────── -->
+  <div class="metrics-grid">
+
+    <div class="metric-card metric-card--gold">
+      <div class="metric-card__icon">
+        <lucide-icon name="coins" [size]="24"></lucide-icon>
+      </div>
+      <div class="metric-card__content">
+        <span class="metric-card__label">Capital Invertido</span>
+        <span class="metric-card__value">{{ formatCurrency(resumen()?.capitalTotalInvertido ?? 0) }}</span>
+      </div>
+      <div class="metric-card__glow"></div>
+    </div>
+
+    <div class="metric-card metric-card--emerald">
+      <div class="metric-card__icon">
+        <lucide-icon name="trending-up" [size]="24"></lucide-icon>
+      </div>
+      <div class="metric-card__content">
+        <span class="metric-card__label">Intereses Proyectados</span>
+        <span class="metric-card__value">{{ formatCurrency(resumen()?.interesesProyectadosActivos ?? 0) }}</span>
+      </div>
+      <div class="metric-card__glow"></div>
+    </div>
+
+    <div class="metric-card metric-card--blue">
+      <div class="metric-card__icon">
+        <lucide-icon name="wallet" [size]="24"></lucide-icon>
+      </div>
+      <div class="metric-card__content">
+        <span class="metric-card__label">Total al Vencimiento</span>
+        <span class="metric-card__value">{{ formatCurrency(resumen()?.montoTotalFinalProyectado ?? 0) }}</span>
+      </div>
+      <div class="metric-card__glow"></div>
+    </div>
+
+    <div class="metric-card metric-card--purple">
+      <div class="metric-card__icon">
+        <lucide-icon name="check-circle" [size]="24"></lucide-icon>
+      </div>
+      <div class="metric-card__content">
+        <span class="metric-card__label">Intereses Ganados</span>
+        <span class="metric-card__value">{{ formatCurrency(resumen()?.interesesGanadosHistorico ?? 0) }}</span>
+      </div>
+      <div class="metric-card__glow"></div>
+    </div>
+
+  </div>
+
+  <!-- ── CONTADORES DE ESTADO ────────────────────────────────────────────── -->
+  <div class="estado-row">
+    <div class="estado-chip estado-chip--activa">
+      <lucide-icon name="activity" [size]="14"></lucide-icon>
+      <strong>{{ resumen()?.inversionesActivas ?? 0 }}</strong> Activas
+    </div>
+    <div class="estado-chip estado-chip--vencida">
+      <lucide-icon name="clock" [size]="14"></lucide-icon>
+      <strong>{{ resumen()?.inversionesVencidas ?? 0 }}</strong> Vencidas
+    </div>
+    <div class="estado-chip estado-chip--liquidada">
+      <lucide-icon name="check" [size]="14"></lucide-icon>
+      <strong>{{ resumen()?.inversionesLiquidadas ?? 0 }}</strong> Liquidadas
+    </div>
+  </div>
+
+  <!-- ── ÚLTIMAS INVERSIONES ─────────────────────────────────────────────── -->
+  <div class="section-header">
+    <h2 class="section-title">Inversiones Recientes</h2>
+    <a routerLink="/dashboard/inversiones/mis-inversiones" class="ver-todo">
+      Ver todas <lucide-icon name="arrow-right" [size]="14"></lucide-icon>
+    </a>
+  </div>
+
+  @if (inversiones().length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="piggy-bank" [size]="48"></lucide-icon>
+      <p>Aún no tienes inversiones registradas.</p>
+      <a routerLink="/dashboard/inversiones/solicitar" class="btn-primary">
+        Realizar mi primera inversión
+      </a>
+    </div>
+  } @else {
+    <div class="inv-list">
+      @for (inv of inversiones(); track inv.id) {
+        <div class="inv-card">
+          <div class="inv-card__left">
+            <div class="inv-card__icon">
+              <lucide-icon name="bar-chart-2" [size]="20"></lucide-icon>
+            </div>
+            <div class="inv-card__info">
+              <span class="inv-card__monto">{{ formatCurrency(inv.monto, inv.moneda) }}</span>
+              <span class="inv-card__detalle">{{ inv.plazoMeses }} meses · {{ inv.tasaAnual }}% anual</span>
+            </div>
+          </div>
+
+          <div class="inv-card__center">
+            <div class="progress-bar">
+              <div class="progress-bar__fill" [style.width.%]="inv.progresoPorc"></div>
+            </div>
+            <span class="progress-label {{ getDiasClass(inv.diasRestantes) }}">
+              {{ getDiasLabel(inv.diasRestantes) }}
+            </span>
+          </div>
+
+          <div class="inv-card__right">
+            <span class="inv-badge {{ getEstadoClass(inv.estado) }}">{{ inv.estado }}</span>
+            <span class="inv-card__interes">+{{ formatCurrency(inv.interesProyectado, inv.moneda) }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  } <!-- end else cargando -->
+
+</section>

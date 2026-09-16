@@ -1,0 +1,169 @@
+<section class="solicitar">
+
+  <!-- Pantalla de éxito -->
+  @if (enviado()) {
+    <div class="success-screen">
+      <div class="success-icon">
+        <lucide-icon name="check-circle" [size]="56"></lucide-icon>
+      </div>
+      <h2>¡Inversión Registrada!</h2>
+      <p>Tu solicitud de inversión ha sido procesada exitosamente. Nuestro equipo validará los datos y activará tu inversión.</p>
+      <button (click)="irAMisInversiones()" class="btn-primary">
+        <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+        Ver Mis Inversiones
+      </button>
+    </div>
+  } @else {
+
+  <!-- Header -->
+  <div class="sol-header">
+    <a routerLink="/dashboard/inversiones/home" class="back-link">
+      <lucide-icon name="arrow-left" [size]="16"></lucide-icon> Volver
+    </a>
+    <h1>Nueva Inversión</h1>
+    <p>Selecciona un plan y configura los detalles de tu inversión</p>
+  </div>
+
+  <div class="sol-layout">
+
+    <!-- Formulario -->
+    <div class="sol-form">
+
+      <!-- Selección de Plan -->
+      <div class="form-section">
+        <h3 class="form-section__title">
+          <lucide-icon name="layers" [size]="16"></lucide-icon>
+          Elige un Plan
+        </h3>
+        <div class="planes-grid">
+          @for (plan of planes; track plan.meses; let i = $index) {
+            <button
+              class="plan-card"
+              [class.active]="planSeleccionado() === i"
+              (click)="seleccionarPlan(i)">
+              <span class="plan-card__label">{{ plan.descripcion }}</span>
+              <span class="plan-card__plazo">{{ plan.label }}</span>
+              <span class="plan-card__tasa">{{ plan.tasa }}% anual</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Moneda -->
+      <div class="form-section">
+        <h3 class="form-section__title">
+          <lucide-icon name="globe" [size]="16"></lucide-icon>
+          Moneda
+        </h3>
+        <div class="moneda-row">
+          @for (m of monedas; track m.codigo) {
+            <button
+              class="moneda-btn"
+              [class.active]="moneda() === m.codigo"
+              (click)="moneda.set(m.codigo)">
+              {{ m.simbolo }} {{ m.codigo }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Monto -->
+      <div class="form-section">
+        <h3 class="form-section__title">
+          <lucide-icon name="dollar-sign" [size]="16"></lucide-icon>
+          Monto a Invertir
+        </h3>
+        <div class="amount-input">
+          <span class="amount-input__prefix">{{ simbolo }}</span>
+          <input
+            type="number"
+            [ngModel]="monto()"
+            (ngModelChange)="monto.set($event)"
+            placeholder="5000"
+            min="100"
+            step="100"
+            class="amount-input__field" />
+        </div>
+        <span class="field-hint">Monto mínimo: {{ simbolo }} 100.00</span>
+      </div>
+
+      <!-- Observaciones -->
+      <div class="form-section">
+        <h3 class="form-section__title">
+          <lucide-icon name="message-square" [size]="16"></lucide-icon>
+          Observaciones (opcional)
+        </h3>
+        <textarea
+          [ngModel]="observaciones()"
+          (ngModelChange)="observaciones.set($event)"
+          placeholder="Agrega alguna nota o comentario..."
+          rows="3"
+          class="sim-textarea"></textarea>
+      </div>
+
+      <!-- Error -->
+      @if (errorMsg()) {
+        <div class="error-banner">
+          <lucide-icon name="alert-circle" [size]="16"></lucide-icon>
+          {{ errorMsg() }}
+        </div>
+      }
+
+      <!-- Submit -->
+      <button (click)="submitForm()" class="btn-submit" [disabled]="enviando()">
+        @if (enviando()) {
+          <lucide-icon name="loader-circle" [size]="16"></lucide-icon>
+          Procesando...
+        } @else {
+          <lucide-icon name="check" [size]="16"></lucide-icon>
+          Confirmar Inversión
+        }
+      </button>
+
+    </div>
+
+    <!-- Panel de resumen -->
+    <div class="sol-summary">
+      <h3 class="summary-title">Resumen de tu Inversión</h3>
+
+      <div class="summary-row">
+        <span class="summary-label">Capital Invertido</span>
+        <span class="summary-val">{{ formatCurrency(monto()) }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Plazo</span>
+        <span class="summary-val">{{ plazoMeses() }} meses</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Tasa Anual</span>
+        <span class="summary-val summary-val--gold">{{ tasaAnual() }}%</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Fecha de Vencimiento</span>
+        <span class="summary-val">{{ fechaVencimiento() }}</span>
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-row summary-row--interes">
+        <span class="summary-label">Interés Proyectado</span>
+        <span class="summary-val summary-val--green">+ {{ formatCurrency(interesProyectado()) }}</span>
+      </div>
+
+      <div class="summary-total">
+        <span>Recibirás al vencer</span>
+        <span class="summary-total__val">{{ formatCurrency(montoFinal()) }}</span>
+      </div>
+
+      <div class="summary-note">
+        <lucide-icon name="info" [size]="14"></lucide-icon>
+        Los intereses se calculan con método de interés simple.
+        El pago se realizará al cumplirse el plazo.
+      </div>
+    </div>
+
+  </div>
+
+  } <!-- end else enviado -->
+
+</section>

@@ -55,7 +55,14 @@ export class DashboardSidebarComponent implements OnInit {
     '/dashboard/admin/cobranza': '/dashboard/admin/cobranza',
     'calendario': '/dashboard/admin/calendario',
     'admin/calendario': '/dashboard/admin/calendario',
-    '/dashboard/admin/calendario': '/dashboard/admin/calendario'
+    '/dashboard/admin/calendario': '/dashboard/admin/calendario',
+    // Rutas Inversionista
+    'inversiones/home': '/dashboard/inversiones/home',
+    'mis inversiones': '/dashboard/inversiones/mis-inversiones',
+    'inversiones/mis-inversiones': '/dashboard/inversiones/mis-inversiones',
+    'inversiones/simulador': '/dashboard/inversiones/simulador',
+    'simulador': '/dashboard/inversiones/simulador',
+    'inversiones/solicitar': '/dashboard/inversiones/solicitar'
   };
 
   ngOnInit() {
@@ -129,6 +136,14 @@ export class DashboardSidebarComponent implements OnInit {
           });
         }
 
+        // Menú fijo para ROLE_INVERSIONISTA (si los módulos no vinieron del backend)
+        if (this.userData()?.rol === 'ROLE_INVERSIONISTA' && items.length === 0) {
+          items.push({ label: 'Mi Portal', icon: 'trending-up', route: '/dashboard/inversiones/home', isReady: true });
+          items.push({ label: 'Mis Inversiones', icon: 'coins', route: '/dashboard/inversiones/mis-inversiones', isReady: true });
+          items.push({ label: 'Simulador', icon: 'calculator', route: '/dashboard/inversiones/simulador', isReady: true });
+          items.push({ label: 'Solicitar Inversión', icon: 'plus-circle', route: '/dashboard/inversiones/solicitar', isReady: true });
+        }
+
         this.dynamicMenuItems.set(items);
         this.isLoading.set(false);
       },
@@ -150,7 +165,20 @@ export class DashboardSidebarComponent implements OnInit {
       'box': 'layers',
       'chart-pie': 'pie-chart',
       'chart-bar': 'bar-chart',
-      'chart-line': 'activity'
+      'chart-line': 'trending-up',
+      'coins': 'coins',
+      'calculator': 'calculator',
+      'circle-dollar-sign': 'circle-dollar-sign',
+      // FontAwesome icons sin equivalente directo en Lucide
+      'hand-holding-dollar': 'circle-dollar-sign',
+      'hand-holding-usd':    'circle-dollar-sign',
+      'money-bill':          'banknote',
+      'money-bill-wave':     'banknote',
+      'vault':               'landmark',
+      'users-gear':          'user-cog',
+      'wallet':              'wallet',
+      'chart-column':        'bar-chart-2',
+      'chart-mixed':         'trending-up'
     };
     return iconMap[icon] || icon;
   }
