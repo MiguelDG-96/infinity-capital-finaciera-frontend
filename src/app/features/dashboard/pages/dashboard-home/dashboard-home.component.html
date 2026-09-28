@@ -18,36 +18,38 @@
     </div>
 
     <!-- Main Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Balance Card -->
-        <div class="card bg-primary text-primary-content shadow-xl scale-100 hover:scale-[1.02] transition-transform cursor-pointer overflow-hidden border-none"
+        <div class="card bg-primary text-primary-content shadow-xl cursor-pointer overflow-hidden border-none"
+             appHover3d
              routerLink="/dashboard/billetera">
             <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
-            <div class="card-body p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-sm font-bold opacity-80 uppercase tracking-widest">Mi Billetera</span>
-                    <lucide-icon name="credit-card" class="w-6 h-6 opacity-60"></lucide-icon>
+            <div class="card-body px-4 pt-2 pb-4">
+                <div class="flex justify-between items-start">
+                    <span class="text-sm font-bold opacity-80 uppercase tracking-widest pt-1">Mi Billetera</span>
+                    <div class="w-12 h-12 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-5 -mr-4">
+                        <dotlottie-wc src="animated/Money-Wallet.lottie" autoplay loop style="width: 140%; height: 140%; margin: -20%;"></dotlottie-wc>
+                    </div>
                 </div>
                 <div class="space-y-1">
                     <p class="text-3xl font-black">
                         {{ (saldo()?.saldo || 0) | currency:'S/ ' }}
                     </p>
-                    <p class="text-xs opacity-60">
-                        {{ saldo()?.moneda || 'Pueblo de Dios' }} - Gestión en vivo
-                    </p>
                 </div>
-                <div class="card-actions justify-end mt-4">
+                <div class="card-actions justify-end mt-1">
                     <div class="badge badge-outline border-white/20 text-white text-[10px] font-bold">DETALLE</div>
                 </div>
             </div>
         </div>
 
         <!-- Next Payment Card -->
-        <div class="card bg-base-100 shadow-xl border border-base-content/5 relative group hover:border-primary/20 transition-all">
-            <div class="card-body p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-xs font-bold opacity-50 uppercase tracking-widest">Próximo Pago</span>
-                    <lucide-icon name="calendar" class="w-5 h-5 text-warning"></lucide-icon>
+        <div class="card bg-base-100 shadow-xl border border-base-content/5 relative group hover:border-primary/20" appHover3d>
+            <div class="card-body px-6 pt-2 pb-6">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-bold opacity-50 uppercase tracking-widest pt-1">Próximo Pago</span>
+                    <div class="w-12 h-12 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-5 -mr-4">
+                        <dotlottie-wc src="animated/calendar.lottie" autoplay loop style="width: 160%; height: 160%; margin: -20%;"></dotlottie-wc>
+                    </div>
                 </div>
                 <div class="space-y-1" *ngIf="getProximoPago() as cuota">
                     <p class="text-2xl font-bold">{{ cuota.totalCuota | currency:'S/ ' }}</p>
@@ -63,11 +65,13 @@
         </div>
 
         <!-- Stats Card 1: Active Loans -->
-        <div class="card bg-base-100 shadow-xl border border-base-content/5">
-            <div class="card-body p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-xs font-bold opacity-50 uppercase tracking-widest">Préstamos Activos</span>
-                    <lucide-icon name="briefcase" class="w-5 h-5 text-primary"></lucide-icon>
+        <div class="card bg-base-100 shadow-xl border border-base-content/5" appHover3d>
+            <div class="card-body px-6 pt-2 pb-6">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-bold opacity-50 uppercase tracking-widest pt-1">Préstamos Activos</span>
+                    <div class="w-12 h-12 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-5 -mr-7">
+                        <dotlottie-wc src="animated/Money-Bag.lottie" autoplay loop style="width: 100%; height: 100%; margin: -10%;"></dotlottie-wc>
+                    </div>
                 </div>
                 <div class="text-2xl font-bold">{{ creditos().length }}</div>
                 <div class="flex items-center gap-1 text-[10px] text-success mt-1">
@@ -77,19 +81,7 @@
             </div>
         </div>
 
-        <!-- Stats Card 2: Savings/Goal -->
-        <div class="card bg-base-100 shadow-xl border border-base-content/5">
-            <div class="card-body p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-xs font-bold opacity-50 uppercase tracking-widest">Progreso Total</span>
-                    <lucide-icon name="pie-chart" class="w-5 h-5 text-secondary"></lucide-icon>
-                </div>
-                <div class="text-2xl font-bold">-- %</div>
-                <div class="w-full bg-base-200 h-1.5 rounded-full mt-2">
-                    <div class="bg-secondary h-1.5 rounded-full w-1/3"></div>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <!-- Center Content Grid -->
@@ -143,20 +135,26 @@
 
         <!-- Right Side: Credit Card Style or Info -->
         <div class="space-y-6">
-            <div class="card bg-base-800 text-base-content shadow-xl border border-base-content/10 overflow-hidden relative group">
+            <div class="card bg-base-800 text-base-content shadow-xl border border-base-content/10 overflow-hidden relative group" appHover3d>
                 <div class="card-body p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <lucide-icon name="shield" class="w-8 h-8 text-primary"></lucide-icon>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="w-14 h-14 flex-shrink-0">
+                            <dotlottie-wc src="animated/Money-Wallet.lottie" autoplay loop style="width: 100%; height: 100%;"></dotlottie-wc>
+                        </div>
                         <span class="text-[10px] font-black opacity-30 tracking-[4px]">PLATINUM</span>
                     </div>
-                    <div class="space-y-8">
+                    <div class="space-y-6">
                       <div class="font-mono text-xl tracking-[4px] opacity-70">
                         **** **** **** {{ (saldo()?.id || 1024) }}
+                      </div>
+                      <div>
+                        <div class="text-[10px] opacity-40 uppercase mb-0.5">Saldo disponible</div>
+                        <p class="text-3xl font-black">{{ (saldo()?.saldo || 0) | currency:'S/ ' }}</p>
                       </div>
                       <div class="flex justify-between items-end">
                         <div>
                           <div class="text-[10px] opacity-40 uppercase mb-1">Titular</div>
-                          <div class="text-sm font-bold uppercase tracking-wider">MI CUENTA VIRTUAL</div>
+                          <div class="text-sm font-bold uppercase tracking-wider">{{ nombreCorto() }}</div>
                         </div>
                         <div class="text-right">
                           <div class="text-[10px] opacity-40 uppercase mb-1">Vence</div>

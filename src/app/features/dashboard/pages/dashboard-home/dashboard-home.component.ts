@@ -1,6 +1,6 @@
 // src/app/features/dashboard/pages/dashboard-home/dashboard-home.component.ts
 
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { BilleteraService } from '../../../../core/services/billetera.service';
@@ -12,13 +12,15 @@ import { Credito } from '../../../../core/models/credito.model';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QrModalComponent } from '../../../../shared/components/qr-modal/qr-modal.component';
+import { Hover3dDirective } from '../../../../shared/directives/hover3d.directive';
 
 @Component({
   selector: 'app-dashboard-home',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterLink, QrModalComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, QrModalComponent, Hover3dDirective],
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardHomeComponent implements OnInit {
   private billeteraService = inject(BilleteraService);
@@ -36,6 +38,14 @@ export class DashboardHomeComponent implements OnInit {
     if (!user) return false;
     const rolesAdmin = ['ADMIN', 'ROLE_ADMIN', 'TRABAJADOR', 'ROLE_TRABAJADOR'];
     return rolesAdmin.includes(user.rol);
+  });
+
+  // Nombre corto: primer nombre + primer apellido
+  nombreCorto = computed(() => {
+    const user = this.authService.currentUserData();
+    if (!user?.nombreCompleto) return 'Mi Cuenta';
+    const partes = user.nombreCompleto.trim().split(/\s+/);
+    return partes.length >= 2 ? `${partes[0]} ${partes[1]}` : partes[0];
   });
 
   // Métricas Admin
