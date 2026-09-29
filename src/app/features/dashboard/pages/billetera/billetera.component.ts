@@ -1,6 +1,6 @@
 // src/app/features/dashboard/pages/billetera/billetera.component.ts
 
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { BilleteraService } from '../../../../core/services/billetera.service';
@@ -16,7 +16,8 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormsModule } from '@angu
   standalone: true,
   imports: [CommonModule, LucideAngularModule, ReactiveFormsModule, FormsModule],
   templateUrl: './billetera.component.html',
-  styleUrl: './billetera.component.css'
+  styleUrl: './billetera.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class BilleteraComponent implements OnInit {
   private billeteraService = inject(BilleteraService);

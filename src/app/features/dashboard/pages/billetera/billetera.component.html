@@ -23,46 +23,52 @@
 
     <!-- Balance Card -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-1 card bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-xl overflow-hidden relative group">
-            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-                <lucide-icon name="wallet" class="w-32 h-32"></lucide-icon>
+        <div class="md:col-span-1 card bg-primary text-primary-content shadow-xl overflow-hidden relative group">
+            <div class="absolute -bottom-8 -right-2 w-30 h-40 opacity-10 pointer-events-none">
+                <img src="logo/logo-white.svg" alt="Logo" class="w-full h-full object-contain">
             </div>
-            <div class="card-body">
+            <div class="card-body px-4 pt-2 pb-4 relative z-10">
                 <div class="flex justify-between items-start">
                     <span class="text-lg opacity-80">Saldo Disponible</span>
-                    <lucide-icon name="info" class="w-5 h-5 opacity-50 cursor-help"></lucide-icon>
+                    <div class="w-16 h-16 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-5 -mr-4">
+                        <dotlottie-wc src="animated/Money-Wallet.lottie" autoplay loop style="width: 140%; height: 140%; margin: -20%;"></dotlottie-wc>
+                    </div>
                 </div>
-                <div class="my-4">
-                    <span class="text-4xl font-black">{{ (saldo()?.saldo || 0) | currency:'S/ ' }}</span>
+                <div class="my-0">
+                    <span class="text-3xl font-black">{{ (saldo()?.saldo || 0) | currency:'S/ ' }}</span>
                     <span class="text-sm ml-2 opacity-70">{{ saldo()?.moneda || 'PEN' }}</span>
                 </div>
-                <div class="card-actions justify-end mt-4">
+                <div class="card-actions justify-end mt-2">
                     <p class="text-xs opacity-60">Última actualización: {{ (saldo()?.ultimaActualizacion | date:'short') || 'Cargando...' }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Mini Stats -->
-        <div class="card bg-base-200 shadow-sm border border-base-content/5">
-            <div class="card-body p-4 flex flex-row items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center text-success">
-                    <lucide-icon name="trending-up" class="w-6 h-6"></lucide-icon>
-                </div>
-                <div>
-                    <h3 class="text-sm font-medium opacity-60">Total Abonos</h3>
-                    <p class="text-xl font-bold">---</p>
+        <div class="card bg-base-200 shadow-sm border border-base-content/5 text-success">
+            <div class="card-body px-6 pt-2 pb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-medium opacity-60">Total Abonos</h3>
+                        <p class="text-2xl font-bold mt-1 text-success">---</p>
+                    </div>
+                    <div class="w-16 h-16 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-5 -mr-4">
+                        <dotlottie-wc src="animated/Money-Bag-2.lottie" autoplay loop style="width: 80%; height: 80%; margin: 0%;"></dotlottie-wc>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="card bg-base-200 shadow-sm border border-base-content/5 text-error">
-            <div class="card-body p-4 flex flex-row items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-error/10 flex items-center justify-center">
-                    <lucide-icon name="trending-down" class="w-6 h-6"></lucide-icon>
-                </div>
-                <div>
-                    <h3 class="text-sm font-medium opacity-60">Total Retiros</h3>
-                    <p class="text-xl font-bold">---</p>
+            <div class="card-body px-6 pt-2 pb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-medium opacity-60">Total Retiros</h3>
+                        <p class="text-2xl font-bold mt-1 text-error">---</p>
+                    </div>
+                    <div class="w-16 h-16 md:w-24 md:h-24 flex-shrink-0 overflow-hidden -mt-2 -mr-4">
+                        <dotlottie-wc src="animated/Money-Transfer.lottie" autoplay loop style="width: 120%; height: 120%; margin: -25%;"></dotlottie-wc>
+                    </div>
                 </div>
             </div>
         </div>
