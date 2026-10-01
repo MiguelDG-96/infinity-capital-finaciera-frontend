@@ -10,6 +10,7 @@ import { CreditoService } from '../../../../core/services/credito.service';
 import jsPDF from 'jspdf';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import { ReporteVencidasPdfService } from '../../../../core/services/reporte-vencidas-pdf.service';
 
 @Component({
   selector: 'app-reportes',
@@ -22,6 +23,7 @@ export class Reportes implements OnInit, OnDestroy {
   themeService = inject(ThemeService);
   reporteService = inject(ReporteService);
   creditoService = inject(CreditoService);
+  reporteVencidasPdfService = inject(ReporteVencidasPdfService);
 
   selectedYear = '2026';
   selectedMonth = 'todos';
@@ -594,6 +596,24 @@ export class Reportes implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error obteniendo datos para Excel', err);
+        this.isApplyingFilters.set(false);
+      }
+    });
+  }
+
+  exportarCuotasVencidasGeneralPdf() {
+    this.isApplyingFilters.set(true);
+    this.creditoService.obtenerCarteraGeneral().subscribe({
+      next: (creditos) => {
+        this.reporteVencidasPdfService.generarReporte(creditos).then(() => {
+          this.isApplyingFilters.set(false);
+        }).catch(err => {
+          console.error('Error generando PDF de deudas vencidas', err);
+          this.isApplyingFilters.set(false);
+        });
+      },
+      error: (err) => {
+        console.error('Error obteniendo datos', err);
         this.isApplyingFilters.set(false);
       }
     });

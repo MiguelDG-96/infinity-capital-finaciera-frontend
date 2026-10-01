@@ -9,7 +9,7 @@ registerLocaleData(localeEsPE, 'es-PE');
 import { 
   LucideAngularModule, Search, MapPin, User, Lock, PiggyBank, CreditCard, Banknote, 
   Shield, BarChart3, BarChart, RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, 
-  Monitor, Laptop, Award, ShoppingBag, Rocket, Menu, X, Plus, Minus, ChevronLeft, 
+  Monitor, Laptop, Award, ShoppingBag, Rocket, Menu, PanelLeft, X, Plus, Minus, ChevronLeft, 
   Briefcase, GraduationCap, HandCoins, CheckCircle2, Wifi, ShieldCheck, CalendarClock, 
   Globe, Check, Clock, Zap, Heart, Star, Sparkles, TrendingUp, ArrowRight, Gift, 
   Facebook, Instagram, Linkedin, Youtube, Phone, Home, ArrowLeftRight, Wrench, 
@@ -76,7 +76,7 @@ export const appConfig: ApplicationConfig = {
       LucideAngularModule.pick({ 
         Search, MapPin, User, Lock, PiggyBank, Banknote, Shield, BarChart3, BarChart,
         RefreshCw, Lightbulb, ChevronRight, ChevronDown, Smartphone, Monitor, Laptop, 
-        Award, ShoppingBag, Rocket, Menu, X, Plus, PlusCircle, Minus, ChevronLeft, Briefcase, 
+        Award, ShoppingBag, Rocket, Menu, PanelLeft, X, Plus, PlusCircle, Minus, ChevronLeft, Briefcase, 
         GraduationCap, HandCoins, CheckCircle2, Wifi, ShieldCheck, Globe, CalendarClock, 
         Check, Clock, Zap, Heart, Star, Sparkles, TrendingUp, ArrowRight, Gift, 
         Facebook, Instagram, Linkedin, Youtube, Phone, Home, ArrowLeftRight, Wrench, 
