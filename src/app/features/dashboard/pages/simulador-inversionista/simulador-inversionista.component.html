@@ -20,22 +20,6 @@
     <!-- Panel de configuración -->
     <div class="sim-controls">
 
-      <!-- Moneda -->
-      <div class="control-group">
-        <label>Moneda</label>
-        <div class="moneda-selector">
-          @for (m of monedas; track m.codigo) {
-            <button
-              class="moneda-btn"
-              [class.active]="moneda() === m.codigo"
-              (click)="moneda.set(m.codigo)">
-              <span>{{ m.simbolo }}</span>
-              {{ m.nombre }}
-            </button>
-          }
-        </div>
-      </div>
-
       <!-- Monto -->
       <div class="control-group">
         <label>Monto a Invertir</label>
@@ -64,13 +48,16 @@
 
       <!-- Tasa -->
       <div class="control-group">
-        <label>Tasa de Interés Anual</label>
+        <label>Tasa de Interés Anual (TEA)</label>
         <div class="tasa-display {{ tasaClase }}">
           <input type="number" [ngModel]="tasaAnual()" (ngModelChange)="tasaAnual.set($event)" min="0.1" max="20" step="0.5" class="tasa-input" />
           <span class="tasa-symbol">%</span>
         </div>
-        <input type="range" [ngModel]="tasaAnual()" (ngModelChange)="tasaAnual.set($event)" min="0.5" max="15" step="0.5" class="sim-range" />
-        <div class="range-labels"><span>0.5%</span><span>15%</span></div>
+        <div style="font-size: 0.85rem; color: #777; margin-top: 6px; margin-bottom: 8px;">
+          Tasa Efectiva Mensual (TEM): <strong>{{ tasaMensualPorcentaje() }}%</strong>
+        </div>
+        <input type="range" [ngModel]="tasaAnual()" (ngModelChange)="tasaAnual.set($event)" min="0.5" max="50" step="0.5" class="sim-range" />
+        <div class="range-labels"><span>0.5%</span><span>50%</span></div>
       </div>
 
     </div>

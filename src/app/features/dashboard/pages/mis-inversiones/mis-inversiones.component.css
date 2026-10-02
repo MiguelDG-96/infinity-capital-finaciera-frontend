@@ -1,13 +1,13 @@
 :host { display: block; }
 
 .mis-inv {
-  --gold:      #d97706;
+  --gold:      var(--color-primary);
   --emerald:   #059669;
   --surface:   #ffffff;
   --border:    rgba(0,0,0,0.08);
   --muted:     rgba(0,0,0,0.5);
   --text-main: #111827;
-  --hover-bg:  rgba(0,0,0,0.03);
+  --hover-bg:  rgba(0,0,0,0.015);
 
   padding: 2rem;
   max-width: 1300px;
@@ -34,11 +34,11 @@
 .btn-primary {
   display: inline-flex; align-items: center; gap: 0.5rem;
   padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.875rem; font-weight: 600;
-  text-decoration: none; background: linear-gradient(135deg, #d97706, #f59e0b);
-  color: #fff; border: none; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 14px rgba(217,119,6,0.25);
+  text-decoration: none; background: var(--color-primary);
+  color: var(--color-primary-content); border: none; cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 25%, transparent);
 }
-.btn-primary:hover { transform: translateY(-2px); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px color-mix(in srgb, var(--color-primary) 35%, transparent); }
 .btn-retry {
   background: transparent; border: 1px solid currentColor;
   color: inherit; padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-left: 0.75rem;
@@ -52,7 +52,7 @@
   color: var(--muted); cursor: pointer; transition: all 0.2s;
 }
 .filtro-btn.active, .filtro-btn:hover {
-  background: rgba(217,119,6,0.08); border-color: var(--gold); color: var(--gold);
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent); border-color: var(--gold); color: var(--gold);
 }
 
 /* Skeleton */
@@ -103,7 +103,7 @@ td small { display: block; font-size: 0.72rem; }
 
 /* Progress */
 .mini-progress { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 0.25rem; }
-.mini-progress__fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #d97706, #059669); }
+.mini-progress__fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--color-primary), #059669); }
 .mini-pct { font-size: 0.72rem; color: var(--muted); }
 
 /* Dias colors */
@@ -115,7 +115,7 @@ td small { display: block; font-size: 0.72rem; }
 /* Badges */
 .inv-badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 .badge-activa    { background: rgba(5,150,105,0.12);  color: #059669; }
-.badge-vencida   { background: rgba(217,119,6,0.12);  color: #d97706; }
+.badge-vencida   { background: color-mix(in srgb, var(--color-primary) 12%, transparent);  color: var(--color-primary); }
 .badge-liquidada { background: rgba(124,58,237,0.12); color: #7c3aed; }
 .badge-cancelada { background: rgba(220,38,38,0.12);  color: #dc2626; }
 
@@ -134,13 +134,13 @@ td small { display: block; font-size: 0.72rem; }
 
 /* ── MODO OSCURO ─────────────────────────────────────────────────────────── */
 :host-context([data-theme="infinity-dark"]) .mis-inv {
-  --gold:      #f5c542;
+  --gold:      var(--color-primary);
   --emerald:   #10b981;
   --surface:   rgba(255,255,255,0.04);
   --border:    rgba(255,255,255,0.08);
   --muted:     rgba(255,255,255,0.5);
   --text-main: #f1f5f9;
-  --hover-bg:  rgba(255,255,255,0.04);
+  --hover-bg:  rgba(255,255,255,0.02);
 }
 :host-context([data-theme="infinity-dark"]) .table-wrapper { background: transparent; }
 :host-context([data-theme="infinity-dark"]) .inv-table thead th { background: rgba(255,255,255,0.02); }
@@ -149,7 +149,7 @@ td small { display: block; font-size: 0.72rem; }
 :host-context([data-theme="infinity-dark"]) .error-banner  { color: #fca5a5; }
 :host-context([data-theme="infinity-dark"]) .btn-primary   { color: #1a1a1a; }
 :host-context([data-theme="infinity-dark"]) .badge-activa  { background: rgba(16,185,129,0.15); color: #34d399; }
-:host-context([data-theme="infinity-dark"]) .badge-vencida { background: rgba(245,197,66,0.15); color: #f5c542; }
+:host-context([data-theme="infinity-dark"]) .badge-vencida { background: color-mix(in srgb, var(--color-primary) 15%, transparent); color: var(--color-primary); }
 :host-context([data-theme="infinity-dark"]) .badge-liquidada { background: rgba(139,92,246,0.15); color: #a78bfa; }
 :host-context([data-theme="infinity-dark"]) .badge-cancelada { background: rgba(239,68,68,0.15); color: #fca5a5; }
 :host-context([data-theme="infinity-dark"]) .dias-ok       { color: #34d399; }

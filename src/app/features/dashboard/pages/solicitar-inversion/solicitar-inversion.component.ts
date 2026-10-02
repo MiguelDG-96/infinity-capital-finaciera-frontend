@@ -19,13 +19,12 @@ export class SolicitarInversionComponent {
 
   // Planes predefinidos
   planes = [
-    { label: '6 Meses',  meses: 6,  tasa: 2.0,  descripcion: 'Plan Corto Plazo' },
     { label: '1 Año',    meses: 12, tasa: 3.0,  descripcion: 'Plan Estándar ⭐' },
     { label: '2 Años',   meses: 24, tasa: 4.5,  descripcion: 'Plan Largo Plazo' },
     { label: '3 Años',   meses: 36, tasa: 6.0,  descripcion: 'Plan Premium' },
   ];
 
-  planSeleccionado = signal(1); // índice del plan (por defecto Plan Estándar)
+  planSeleccionado = signal(0); // índice del plan (por defecto Plan Estándar)
 
   monto       = signal(5000);
   plazoMeses  = signal(12);
@@ -34,18 +33,25 @@ export class SolicitarInversionComponent {
   observaciones = signal('');
 
   monedas = [
-    { codigo: 'PEN', simbolo: 'S/.' },
-    { codigo: 'USD', simbolo: '$' },
-    { codigo: 'EUR', simbolo: '€' },
+    { codigo: 'PEN', simbolo: 'S/.' }
   ];
 
   enviando  = signal(false);
   enviado   = signal(false);
   errorMsg  = signal<string | null>(null);
 
-  // Cálculo en tiempo real
+  tasaMensual = computed(() => {
+    return Math.pow(1 + (this.tasaAnual() / 100), 1 / 12) - 1;
+  });
+
+  tasaMensualPorcentaje = computed(() => {
+    return (this.tasaMensual() * 100).toFixed(2);
+  });
+
+  // Cálculo en tiempo real con interés compuesto (TEM)
   interesProyectado = computed(() => {
-    return +(this.monto() * (this.tasaAnual() / 100) * (this.plazoMeses() / 12)).toFixed(2);
+    const total = this.monto() * Math.pow(1 + this.tasaMensual(), this.plazoMeses());
+    return +(total - this.monto()).toFixed(2);
   });
 
   montoFinal = computed(() => +(this.monto() + this.interesProyectado()).toFixed(2));

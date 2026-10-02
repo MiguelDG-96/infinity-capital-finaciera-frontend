@@ -26,17 +26,23 @@ export class SimuladorInversionistaComponent {
   tasaAnual  = signal(3);
   moneda     = signal('PEN');
 
-  plazosDisponibles = [3, 6, 12, 18, 24, 36];
+  plazosDisponibles = [12, 24];
   monedas = [
-    { codigo: 'PEN', simbolo: 'S/.', nombre: 'Sol Peruano' },
-    { codigo: 'USD', simbolo: '$',   nombre: 'Dólar' },
-    { codigo: 'EUR', simbolo: '€',   nombre: 'Euro' },
+    { codigo: 'PEN', simbolo: 'S/.', nombre: 'Sol Peruano' }
   ];
 
-  // Computed: cálculo del interés simple
+  tasaMensual = computed(() => {
+    return Math.pow(1 + (this.tasaAnual() / 100), 1 / 12) - 1;
+  });
+
+  tasaMensualPorcentaje = computed(() => {
+    return (this.tasaMensual() * 100).toFixed(2);
+  });
+
+  // Computed: cálculo del interés compuesto (TEM)
   interesTotal = computed(() => {
-    const plazoAnios = this.plazoMeses() / 12;
-    return +(this.monto() * (this.tasaAnual() / 100) * plazoAnios).toFixed(2);
+    const total = this.monto() * Math.pow(1 + this.tasaMensual(), this.plazoMeses());
+    return +(total - this.monto()).toFixed(2);
   });
 
   montoFinal = computed(() => +(this.monto() + this.interesTotal()).toFixed(2));
@@ -46,14 +52,15 @@ export class SimuladorInversionistaComponent {
   // Datos del gráfico de barras (proyección mensual)
   proyeccion = computed<PuntoProyeccion[]>(() => {
     const puntos: PuntoProyeccion[] = [];
-    const tasaMensual = this.tasaAnual() / 100 / 12;
+    const tem = this.tasaMensual();
     for (let mes = 1; mes <= this.plazoMeses(); mes++) {
-      const interesAcumulado = +(this.monto() * tasaMensual * mes).toFixed(2);
+      const totalMes = this.monto() * Math.pow(1 + tem, mes);
+      const interesAcumulado = +(totalMes - this.monto()).toFixed(2);
       puntos.push({
         mes,
         capitalAcumulado: this.monto(),
         interesAcumulado,
-        total: +(this.monto() + interesAcumulado).toFixed(2)
+        total: +totalMes.toFixed(2)
       });
     }
     return puntos;
