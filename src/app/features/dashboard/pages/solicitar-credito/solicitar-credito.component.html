@@ -135,27 +135,32 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Tipo de Persona</label
+                  >Tipo de Persona *</label
                 >
                 <select
                   formControlName="tipoPersona"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                  [class.select-error]="isFieldInvalid('tipoPersona')"
                 >
                   <option value="NATURAL">Persona Natural</option>
                   <option value="JURIDICA">Empresa (RUC 20)</option>
                 </select>
+                <p *ngIf="isFieldInvalid('tipoPersona')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
               </div>
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Producto</label
+                  >Producto *</label
                 >
                 <select
                   formControlName="tipoCreditoId"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                  [class.select-error]="isFieldInvalid('tipoCreditoId')"
                 >
+                  <option value="" disabled selected>Selecciona un tipo de crédito</option>
                   <option *ngFor="let t of tiposCredito" [value]="t.id">{{ t.nombre }}</option>
                 </select>
+                <p *ngIf="isFieldInvalid('tipoCreditoId')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
               </div>
             </div>
 
@@ -163,19 +168,22 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Moneda</label
+                  >Moneda *</label
                 >
                 <select
                   formControlName="monedaId"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                  [class.select-error]="isFieldInvalid('monedaId')"
                 >
+                  <option value="" disabled selected>Moneda</option>
                   <option *ngFor="let m of monedas" [value]="m.id">{{ m.simbolo }}</option>
                 </select>
+                <p *ngIf="isFieldInvalid('monedaId')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
               </div>
               <div class="form-control col-span-1">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Monto</label
+                  >Monto *</label
                 >
                 <div class="relative">
                   <span
@@ -186,25 +194,29 @@
                     type="number"
                     formControlName="montoSolicitado"
                     class="input input-bordered w-full bg-base-100 rounded-xl pl-8 pr-2 transition-all font-bold"
+                    [class.input-error]="isFieldInvalid('montoSolicitado')"
                   />
                 </div>
+                <p *ngIf="isFieldInvalid('montoSolicitado')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (mín. 100)</p>
               </div>
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Plazo</label
+                  >Plazo *</label
                 >
                 <input
                   type="number"
                   formControlName="plazoMeses"
                   class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
                   placeholder="Meses"
+                  [class.input-error]="isFieldInvalid('plazoMeses')"
                 />
+                <p *ngIf="isFieldInvalid('plazoMeses')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (1-60 meses)</p>
               </div>
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Gracia</label
+                  >Gracia (Meses)</label
                 >
                 <input
                   type="number"
@@ -218,7 +230,7 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Banco / Entidad Financiera</label
+                  >Banco / Entidad Financiera *</label
                 >
                 <div class="relative">
                   <lucide-icon
@@ -228,6 +240,7 @@
                   <select
                     formControlName="bancoDesembolso"
                     class="select select-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all font-bold"
+                    [class.select-error]="isFieldInvalid('bancoDesembolso')"
                   >
                     <option value="">Selecciona un Banco</option>
                     <option value="BCP">BCP</option>
@@ -254,29 +267,30 @@
               </div>
 
               <div class="form-control">
-              <label
-                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                >Cuenta / CCI para Desembolso</label
-              >
-              <div class="relative">
-                <lucide-icon
-                  name="wallet"
-                  class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"
-                ></lucide-icon>
-                <input
-                  type="text"
-                  formControlName="cuentaDesembolso"
-                  class="input input-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all"
-                  placeholder="Ingresa tu número de cuenta bancaria"
-                />
+                <label
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
+                  >Cuenta / CCI para Desembolso *</label
+                >
+                <div class="relative">
+                  <lucide-icon
+                    name="wallet"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"
+                  ></lucide-icon>
+                  <input
+                    type="text"
+                    formControlName="cuentaDesembolso"
+                    class="input input-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all"
+                    placeholder="Ingresa tu número de cuenta bancaria"
+                    [class.input-error]="isFieldInvalid('cuentaDesembolso')"
+                  />
+                </div>
+                <p
+                  *ngIf="isFieldInvalid('cuentaDesembolso')"
+                  class="text-[10px] text-error mt-2 font-medium"
+                >
+                  Este campo es obligatorio
+                </p>
               </div>
-              <p
-                *ngIf="isFieldInvalid('cuentaDesembolso')"
-                class="text-[10px] text-error mt-2 font-medium"
-              >
-                Este campo es obligatorio (mín. 10 caract.)
-              </p>
-            </div>
             </div>
           </div>
 
@@ -299,27 +313,31 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Tipo Documento</label
+                  >Tipo Documento *</label
                 >
                 <select
                   formControlName="tipoDocumento"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                  [class.select-error]="isFieldInvalid('tipoDocumento')"
                 >
                   <option value="DNI">DNI</option>
                   <option value="CARNET_EXTRANJERIA">Carnet Extranjería</option>
                   <option value="PASAPORTE">Pasaporte</option>
                 </select>
+                <p *ngIf="isFieldInvalid('tipoDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
               </div>
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Nro. Documento</label
+                  >Nro. Documento *</label
                 >
                 <input
                   type="text"
                   formControlName="numeroDocumento"
                   class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
+                  [class.input-error]="isFieldInvalid('numeroDocumento')"
                 />
+                <p *ngIf="isFieldInvalid('numeroDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (mín. 8 caracteres)</p>
               </div>
               <div class="form-control">
                 <label
@@ -352,7 +370,7 @@
                   formControlName="sexo"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
                 >
-                  <option value="" disabled selected>Seleccione...</option>
+                  <option value="">Seleccione...</option>
                   <option value="MASCULINO">Masculino</option>
                   <option value="FEMENINO">Femenino</option>
                 </select>
@@ -360,14 +378,16 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Estado Civil</label
+                  >Estado Civil *</label
                 >
                 <select
                   formControlName="estadoCivil"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
+                  [class.select-error]="isFieldInvalid('estadoCivil')"
                 >
                   <option *ngFor="let ec of estadosCiviles" [value]="ec">{{ ec }}</option>
                 </select>
+                <p *ngIf="isFieldInvalid('estadoCivil')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
               </div>
               <div class="form-control">
                 <label
@@ -384,7 +404,7 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Celular</label
+                  >Celular *</label
                 >
                 <div class="relative">
                   <lucide-icon
@@ -396,13 +416,14 @@
                     formControlName="celular"
                     class="input input-bordered w-full bg-base-100 rounded-xl pl-10 pr-4 transition-all font-bold"
                     placeholder="987654321"
+                    [class.input-error]="isFieldInvalid('celular')"
                   />
                 </div>
                 <p
                   *ngIf="isFieldInvalid('celular')"
                   class="text-[10px] text-error mt-2 font-medium"
                 >
-                  9 dígitos requeridos
+                  Este campo es obligatorio (9 dígitos)
                 </p>
               </div>
               <div class="form-control">
@@ -470,7 +491,7 @@
             <div class="form-control mb-6">
               <label
                 class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                >Dirección Completa *</label
+                >Dirección Completa</label
               >
               <input
                 type="text"
@@ -528,7 +549,7 @@
             <div class="form-control mt-6">
               <label
                 class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                >Referencia de Domicilio *</label
+                >Referencia de Domicilio</label
               >
               <input
                 type="text"
@@ -536,12 +557,6 @@
                 class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
                 placeholder="Ej: Frente a la comisaría, portón rojo"
               />
-              <p
-                *ngIf="isFieldInvalid('referencia')"
-                class="text-[10px] text-error mt-2 font-medium"
-              >
-                Este campo es obligatorio
-              </p>
             </div>
           </div>
 
@@ -639,7 +654,7 @@
               <div class="form-control">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Otros Ingresos Mensuales</label
+                  >Ingresos Mensuales</label
                 >
                 <div class="relative">
                   <span
@@ -679,7 +694,7 @@
                 <div class="form-control">
                   <label
                     class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Nombre de Empresa *</label
+                    >Nombre de Empresa</label
                   >
                   <input
                     type="text"
@@ -690,7 +705,7 @@
                 <div class="form-control">
                   <label
                     class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >RUC Empresa *</label
+                    >RUC Empresa</label
                   >
                   <input
                     type="text"
@@ -840,14 +855,14 @@
                   <lucide-icon name="heart" class="w-4 h-4"></lucide-icon>
                 </div>
                 <h3 class="text-sm font-black uppercase tracking-widest text-accent">
-                  Información del Cónyuge
+                  Información del Cónyuge (Opcional)
                 </h3>
               </div>
               <div class="space-y-6">
                 <div class="form-control">
                   <label
                     class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Nombres *</label
+                    >Nombres</label
                   >
                   <input
                     type="text"
@@ -859,7 +874,7 @@
                   <div class="form-control">
                     <label
                       class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Apellido Paterno *</label
+                      >Apellido Paterno</label
                     >
                     <input
                       type="text"
@@ -870,7 +885,7 @@
                   <div class="form-control">
                     <label
                       class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Apellido Materno *</label
+                      >Apellido Materno</label
                     >
                     <input
                       type="text"
@@ -883,7 +898,7 @@
                   <div class="form-control">
                     <label
                       class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Tipo Documento Cónyuge *</label
+                      >Tipo Documento Cónyuge</label
                     >
                     <select
                       formControlName="conyugeTipoDocumento"
@@ -897,7 +912,7 @@
                   <div class="form-control">
                     <label
                       class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Número Documento Cónyuge *</label
+                      >Número Documento Cónyuge</label
                     >
                     <input
                       type="text"
@@ -931,7 +946,7 @@
               <div class="form-control mb-8">
                 <label
                   class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-3 block"
-                  >¿Cómo deseas recibir tu Estado de Cuenta?</label
+                  >¿Cómo deseas recibir tu Estado de Cuenta? *</label
                 >
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label
@@ -963,25 +978,40 @@
                     <span class="text-xs font-bold">Dirección Física</span>
                   </label>
                 </div>
+                <p
+                  *ngIf="isFieldInvalid('canalEstadoCuenta')"
+                  class="text-[10px] text-error mt-2 font-medium"
+                >
+                  Este campo es obligatorio
+                </p>
               </div>
 
-              <label
-                class="flex items-start gap-4 cursor-pointer group p-4 rounded-2xl hover:bg-base-content/5 transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  formControlName="terminosAceptados"
-                  class="checkbox checkbox-primary checkbox-sm mt-1"
-                />
-                <span
-                  class="text-[11px] text-base-content/60 leading-relaxed group-hover:text-base-content transition-colors"
+              <div>
+                <label
+                  class="flex items-start gap-4 cursor-pointer group p-4 rounded-2xl hover:bg-base-content/5 transition-colors"
                 >
-                  Acepto los
-                  <span class="text-primary font-bold underline">Términos y Condiciones</span> y
-                  autorizo el tratamiento de mis datos personales según la ley vigente para la
-                  evaluación de mi solicitud de crédito.
-                </span>
-              </label>
+                  <input
+                    type="checkbox"
+                    formControlName="terminosAceptados"
+                    class="checkbox checkbox-primary checkbox-sm mt-1"
+                    [class.checkbox-error]="isFieldInvalid('terminosAceptados')"
+                  />
+                  <span
+                    class="text-[11px] text-base-content/60 leading-relaxed group-hover:text-base-content transition-colors"
+                  >
+                    Acepto los
+                    <span class="text-primary font-bold underline">Términos y Condiciones</span> y
+                    autorizo el tratamiento de mis datos personales según la ley vigente para la
+                    evaluación de mi solicitud de crédito. *
+                  </span>
+                </label>
+                <p
+                  *ngIf="isFieldInvalid('terminosAceptados')"
+                  class="text-[10px] text-error mt-1 px-4 font-medium"
+                >
+                  Debes aceptar los términos y condiciones para continuar
+                </p>
+              </div>
             </div>
 
             <!-- Global Error -->
@@ -1005,49 +1035,62 @@
           </div>
 
           <!-- Navigation Footer -->
-          <footer class="mt-12 flex items-center gap-4 pt-8 border-t border-base-content/5">
-            <button
-              type="button"
-              (click)="prevStep()"
-              *ngIf="currentStep > 1 && !exito"
-              class="px-6 py-3 rounded-xl font-bold text-base-content/50 hover:text-base-content transition-all flex items-center gap-2"
-            >
-              <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
-              Anterior
-            </button>
-            <div class="flex-1">
+          <footer class="mt-12 pt-8 border-t border-base-content/5">
+            <!-- Fila principal: Anterior | [espacio + basura] | Siguiente -->
+            <div class="flex items-center gap-2 sm:gap-4">
+              <!-- Botón Anterior -->
               <button
                 type="button"
-                (click)="limpiarFormulario()"
-                *ngIf="!exito"
-                class="px-4 py-2 text-xs rounded-lg font-bold text-error/60 hover:bg-error/10 hover:text-error transition-all flex items-center gap-2 ml-2"
-                title="Limpiar Formulario y Borrar Autoguardado"
+                (click)="prevStep()"
+                *ngIf="currentStep > 1 && !exito"
+                class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3 rounded-xl font-bold text-base-content/50 hover:text-base-content hover:bg-base-content/5 transition-all"
               >
-                <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
-                <span class="hidden sm:inline">Limpiar Todo</span>
+                <lucide-icon name="chevron-left" class="w-4 h-4 flex-shrink-0"></lucide-icon>
+                <span class="text-sm">Anterior</span>
+              </button>
+
+              <!-- Placeholder cuando no hay botón Anterior (step 1) -->
+              <div *ngIf="currentStep <= 1 || exito" class="flex-shrink-0 w-4"></div>
+
+              <!-- Basura (centro) -->
+              <div class="flex-1 flex justify-center">
+                <button
+                  type="button"
+                  (click)="limpiarFormulario()"
+                  *ngIf="!exito"
+                  class="p-2.5 rounded-lg text-error/50 hover:bg-error/10 hover:text-error transition-all flex items-center gap-1.5"
+                  title="Limpiar Formulario y Borrar Autoguardado"
+                >
+                  <lucide-icon name="trash-2" class="w-4 h-4 flex-shrink-0"></lucide-icon>
+                  <span class="hidden sm:inline text-xs font-bold">Limpiar Todo</span>
+                </button>
+              </div>
+
+              <!-- Botón Siguiente -->
+              <button
+                type="button"
+                (click)="nextStep()"
+                *ngIf="currentStep < totalSteps"
+                class="flex-shrink-0 bg-base-content text-base-100 px-5 sm:px-8 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-xl flex items-center gap-2 text-sm sm:text-base"
+              >
+                Siguiente
+                <lucide-icon name="chevron-right" class="w-4 h-4 flex-shrink-0"></lucide-icon>
+              </button>
+
+              <!-- Botón Enviar (último step) -->
+              <button
+                type="submit"
+                *ngIf="currentStep === totalSteps && !exito"
+                [disabled]="enviando"
+                class="flex-shrink-0 btn btn-primary px-6 sm:px-10 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20 text-sm sm:text-base"
+              >
+                <span *ngIf="!enviando" class="flex items-center gap-2">🚀 <span class="hidden xs:inline">Enviar </span>Solicitud</span>
+                <span *ngIf="enviando" class="flex items-center gap-2">
+                  <span class="loading loading-spinner h-5 w-5"></span>
+                  <span class="hidden sm:inline">Procesando...</span>
+                </span>
               </button>
             </div>
-            <button
-              type="button"
-              (click)="nextStep()"
-              *ngIf="currentStep < totalSteps"
-              class="bg-base-content text-base-100 px-8 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-xl flex items-center gap-2"
-            >
-              Siguiente
-              <lucide-icon name="chevron-right" class="w-4 h-4"></lucide-icon>
-            </button>
-            <button
-              type="submit"
-              *ngIf="currentStep === totalSteps && !exito"
-              [disabled]="enviando"
-              class="btn btn-primary px-10 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
-            >
-              <span *ngIf="!enviando" class="flex items-center gap-2"> 🚀 Enviar Solicitud </span>
-              <span *ngIf="enviando" class="flex items-center gap-2">
-                <span class="loading loading-spinner h-5 w-5"></span>
-                Procesando...
-              </span>
-            </button>
           </footer>
         </form>
       </div>

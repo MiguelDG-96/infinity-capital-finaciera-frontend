@@ -96,6 +96,7 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.notificationService.detenerPolling();
     this.websocketService.disconnect();
   }
 

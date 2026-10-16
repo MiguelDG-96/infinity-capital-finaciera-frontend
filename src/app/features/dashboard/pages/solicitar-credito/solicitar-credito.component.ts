@@ -138,125 +138,67 @@ export class SolicitarCreditoComponent implements OnInit {
 
   private initForm(): void {
     this.solicitudForm = this.fb.group({
-      // Paso 1: Crédito
-      tipoPersona: ['NATURAL', [Validators.required]],
-      tipoCreditoId: ['', [Validators.required]],
-      monedaId: ['', [Validators.required]],
-      montoSolicitado: [1000, [Validators.required, Validators.min(100), Validators.max(1000000)]],
-      plazoMeses: [12, [Validators.required, Validators.min(1), Validators.max(60)]],
-      periodoGracia: [0, [Validators.min(0), Validators.max(6)]],
-      bancoDesembolso: ['', [Validators.required]],
-      cuentaDesembolso: ['', [Validators.required]],
+      // Paso 1: Crédito — OBLIGATORIOS en backend (orElseThrow / se asignan al crédito)
+      tipoPersona:       ['NATURAL', [Validators.required]],
+      tipoCreditoId:     ['',        [Validators.required]],
+      monedaId:          ['',        [Validators.required]],
+      montoSolicitado:   [1000,      [Validators.required, Validators.min(100), Validators.max(1000000)]],
+      plazoMeses:        [12,        [Validators.required, Validators.min(1), Validators.max(60)]],
+      periodoGracia:     [0,         [Validators.min(0), Validators.max(6)]],
+      bancoDesembolso:   ['',        [Validators.required]],
+      cuentaDesembolso:  ['',        [Validators.required]],
 
-      // Paso 2: Identidad y Contacto
-      tipoDocumento: ['DNI', [Validators.required]],
-      numeroDocumento: ['', [Validators.required, Validators.pattern('^[0-9A-Z]+$'), Validators.minLength(8)]],
-      nacionalidad: ['PERUANA', [Validators.required]],
-      fechaNacimiento: ['', [Validators.required]],
-      sexo: ['', [Validators.required]],
-      estadoCivil: ['SOLTERO', [Validators.required]],
-      gradoInstruccion: ['SECUNDARIA', [Validators.required]],
-      celular: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
-      telefono: [''],
+      // Paso 2: Identidad — Obligatorios (identifican al cliente)
+      tipoDocumento:     ['DNI',     [Validators.required]],
+      numeroDocumento:   ['',        [Validators.required, Validators.pattern('^[0-9A-Z]+$'), Validators.minLength(8)]],
+      estadoCivil:       ['SOLTERO', [Validators.required]],
+      celular:           ['',        [Validators.required, Validators.pattern('^[0-9]{9}$')]],
+      // Opcionales (nullable en BD, guardados en JSON extra)
+      nacionalidad:      ['PERUANA'],
+      fechaNacimiento:   [''],
+      sexo:              [''],
+      gradoInstruccion:  ['SECUNDARIA'],
+      telefono:          [''],
 
-      // Paso 3: Ubicación
-      departamento: ['', [Validators.required]],
-      provincia: ['', [Validators.required]],
-      distrito: ['', [Validators.required]],
-      direccion: ['', [Validators.required, Validators.minLength(5)]],
-      urbanizacion: [''],
-      manzana: [''],
-      lote: [''],
-      codigoPostal: [''],
-      referencia: ['', [Validators.required]],
+      // Paso 3: Ubicación — todos opcionales (nullable en BD / JSON extra)
+      departamento:      [''],
+      provincia:         [''],
+      distrito:          [''],
+      direccion:         [''],
+      urbanizacion:      [''],
+      manzana:           [''],
+      lote:              [''],
+      codigoPostal:      [''],
+      referencia:        [''],
 
-      // Paso 4: Laboral
-      situacionLaboral: ['DEPENDIENTE', [Validators.required]],
-      cargoOcupacion: ['', [Validators.required]],
-      ingresoBrutoMensual: [0, [Validators.required, Validators.min(100)]],
-      fechaIngresoLaboral: ['', [Validators.required]],
-      rucPropio: [''],
-      
-      // Detalles empleador (Si es DEPENDIENTE)
-      empresa: [''],
-      rucEmpresa: [''],
-      direccionEmpresa: [''],
-      numeroDependientes: [0],
-      
-      // Jurídica (Condicional)
-      razonSocialJuridica: [''],
-      rucJuridico: [''],
-      representanteLegal: [''],
+      // Paso 4: Laboral — opcionales (nullable en BD / JSON extra)
+      situacionLaboral:      ['DEPENDIENTE'],
+      cargoOcupacion:        [''],
+      ingresoBrutoMensual:   [0],
+      fechaIngresoLaboral:   [''],
+      rucPropio:             [''],
+      empresa:               [''],
+      rucEmpresa:            [''],
+      direccionEmpresa:      [''],
+      numeroDependientes:    [0],
+      razonSocialJuridica:   [''],
+      rucJuridico:           [''],
+      representanteLegal:    [''],
 
-      // Paso 5: Garante y Cónyuge
-      nombresConyuge: [''],
-      apellidoPaConyuge: [''],
-      apellidoMatConyuge: [''],
-      conyugeTipoDocumento: ['DNI'],
-      conyugeNumeroDocumento: [''],
-      conyugeOcupacion: [''],
+      // Paso 5: Cónyuge / Garante — siempre opcionales (backend los ignora si están vacíos)
+      nombresConyuge:        [''],
+      apellidoPaConyuge:     [''],
+      apellidoMatConyuge:    [''],
+      conyugeTipoDocumento:  ['DNI'],
+      conyugeNumeroDocumento:[''],
+      conyugeOcupacion:      [''],
+      garanteNombre:         [''],
+      garanteDni:            [''],
+      garanteTelefono:       [''],
 
-      // Garante (Opcional)
-      garanteNombre: [''],
-      garanteDni: [''],
-      garanteTelefono: [''],
-      
-      // Finalización
-      canalEstadoCuenta: ['EMAIL', [Validators.required]],
-      terminosAceptados: [false, [Validators.requiredTrue]]
-    });
-
-    // Validaciones condicionales
-    this.solicitudForm.get('tipoPersona')?.valueChanges.subscribe(val => {
-      if (val === 'JURIDICA') {
-        this.solicitudForm.get('razonSocialJuridica')?.setValidators([Validators.required]);
-        this.solicitudForm.get('rucJuridico')?.setValidators([Validators.required, Validators.minLength(11)]);
-        this.solicitudForm.get('representanteLegal')?.setValidators([Validators.required]);
-      } else {
-        this.solicitudForm.get('razonSocialJuridica')?.clearValidators();
-        this.solicitudForm.get('rucJuridico')?.clearValidators();
-        this.solicitudForm.get('representanteLegal')?.clearValidators();
-      }
-      this.solicitudForm.get('razonSocialJuridica')?.updateValueAndValidity();
-      this.solicitudForm.get('rucJuridico')?.updateValueAndValidity();
-      this.solicitudForm.get('representanteLegal')?.updateValueAndValidity();
-    });
-
-    this.solicitudForm.get('estadoCivil')?.valueChanges.subscribe(val => {
-      if (['CASADO', 'CONVIVIENTE'].includes(val)) {
-        this.solicitudForm.get('nombresConyuge')?.setValidators([Validators.required]);
-        this.solicitudForm.get('apellidoPaConyuge')?.setValidators([Validators.required]);
-        this.solicitudForm.get('apellidoMatConyuge')?.setValidators([Validators.required]);
-        this.solicitudForm.get('conyugeNumeroDocumento')?.setValidators([Validators.required, Validators.minLength(8)]);
-      } else {
-        this.solicitudForm.get('nombresConyuge')?.clearValidators();
-        this.solicitudForm.get('apellidoPaConyuge')?.clearValidators();
-        this.solicitudForm.get('apellidoMatConyuge')?.clearValidators();
-        this.solicitudForm.get('conyugeNumeroDocumento')?.clearValidators();
-      }
-      this.solicitudForm.get('nombresConyuge')?.updateValueAndValidity();
-      this.solicitudForm.get('apellidoPaConyuge')?.updateValueAndValidity();
-      this.solicitudForm.get('apellidoMatConyuge')?.updateValueAndValidity();
-      this.solicitudForm.get('conyugeNumeroDocumento')?.updateValueAndValidity();
-    });
-
-    this.solicitudForm.get('situacionLaboral')?.valueChanges.subscribe(val => {
-      if (val === 'INDEPENDIENTE') {
-        this.solicitudForm.get('rucPropio')?.setValidators([Validators.required, Validators.minLength(11)]);
-        this.solicitudForm.get('empresa')?.clearValidators();
-        this.solicitudForm.get('rucEmpresa')?.clearValidators();
-      } else if (val === 'DEPENDIENTE') {
-        this.solicitudForm.get('rucPropio')?.clearValidators();
-        this.solicitudForm.get('empresa')?.setValidators([Validators.required]);
-        this.solicitudForm.get('rucEmpresa')?.setValidators([Validators.required, Validators.minLength(11)]);
-      } else {
-        this.solicitudForm.get('rucPropio')?.clearValidators();
-        this.solicitudForm.get('empresa')?.clearValidators();
-        this.solicitudForm.get('rucEmpresa')?.clearValidators();
-      }
-      this.solicitudForm.get('rucPropio')?.updateValueAndValidity();
-      this.solicitudForm.get('empresa')?.updateValueAndValidity();
-      this.solicitudForm.get('rucEmpresa')?.updateValueAndValidity();
+      // Finalización — OBLIGATORIOS (legal / asignados al crédito)
+      canalEstadoCuenta:  ['EMAIL', [Validators.required]],
+      terminosAceptados:  [false,   [Validators.requiredTrue]]
     });
   }
 
@@ -372,50 +314,29 @@ export class SolicitarCreditoComponent implements OnInit {
   }
 
   private canContinue(): boolean {
+    // Solo validamos los campos que el backend REALMENTE necesita (los demás son opcionales)
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
-      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'sexo', 'estadoCivil', 'gradoInstruccion', 'celular'],
-      3: ['distrito', 'direccion', 'referencia'],
-      4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral'],
-      5: ['terminosAceptados']
+      2: ['tipoDocumento', 'numeroDocumento', 'estadoCivil', 'celular'],
+      3: [], // Todos opcionales en BD
+      4: [], // Todos opcionales en BD
+      5: ['canalEstadoCuenta', 'terminosAceptados']
     };
 
     const fields = fieldsByStep[this.currentStep] || [];
-    let isValid = true;
-    fields.forEach(field => {
+    return fields.every(field => {
       const control = this.solicitudForm.get(field);
-      if (control && control.invalid) {
-        isValid = false;
-      }
+      return !control || control.valid;
     });
-
-    // Validaciones extra para JURIDICA en paso 1 o 4
-    if (this.currentStep === 4 && this.solicitudForm.get('tipoPersona')?.value === 'JURIDICA') {
-      if (this.solicitudForm.get('razonSocialJuridica')?.invalid || 
-          this.solicitudForm.get('rucJuridico')?.invalid ||
-          this.solicitudForm.get('representanteLegal')?.invalid) {
-        isValid = false;
-      }
-    }
-    
-    // Validaciones extra para DEPENDIENTE en paso 4
-    if (this.currentStep === 4 && this.solicitudForm.get('situacionLaboral')?.value === 'DEPENDIENTE') {
-      if (this.solicitudForm.get('empresa')?.invalid || 
-          this.solicitudForm.get('rucEmpresa')?.invalid) {
-        isValid = false;
-      }
-    }
-
-    return isValid;
   }
 
   private markStepAsTouched(): void {
     const fieldsByStep: { [key: number]: string[] } = {
       1: ['tipoPersona', 'tipoCreditoId', 'monedaId', 'montoSolicitado', 'plazoMeses', 'bancoDesembolso', 'cuentaDesembolso'],
-      2: ['tipoDocumento', 'numeroDocumento', 'nacionalidad', 'fechaNacimiento', 'sexo', 'estadoCivil', 'gradoInstruccion', 'celular', 'telefono'],
-      3: ['distrito', 'direccion', 'referencia'],
-      4: ['situacionLaboral', 'cargoOcupacion', 'ingresoBrutoMensual', 'fechaIngresoLaboral', 'rucPropio', 'empresa', 'rucEmpresa', 'direccionEmpresa', 'razonSocialJuridica', 'rucJuridico', 'representanteLegal'],
-      5: ['nombresConyuge', 'apellidoPaConyuge', 'apellidoMatConyuge', 'conyugeNumeroDocumento', 'garanteNombre', 'garanteDni', 'canalEstadoCuenta', 'terminosAceptados']
+      2: ['tipoDocumento', 'numeroDocumento', 'estadoCivil', 'celular'],
+      3: [],
+      4: [],
+      5: ['canalEstadoCuenta', 'terminosAceptados']
     };
     const fields = fieldsByStep[this.currentStep] || [];
     fields.forEach(field => this.solicitudForm.get(field)?.markAsTouched());

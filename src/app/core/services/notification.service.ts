@@ -1,6 +1,6 @@
 // src/app/core/services/notification.service.ts
 import { Injectable, signal, inject, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { interval, Subscription, forkJoin, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
@@ -162,7 +162,15 @@ export class NotificationService {
 
   private checkProspectos(silencioso: boolean) {
     this.http.get<any[]>(`${this.apiUrl}/inversionistas-prospectos`).pipe(
-      catchError(() => of([] as any[]))
+      catchError((err: HttpErrorResponse) => {
+        // Si la sesión ya no es válida, detener el polling de prospectos
+        // para evitar el bucle infinito de peticiones 401.
+        // El interceptor ya se encargará de hacer logout.
+        if (err.status === 401 || err.status === 403) {
+          this.detenerPollingProspectos();
+        }
+        return of([] as any[]);
+      })
     ).subscribe(prospectos => {
       const count = prospectos.length;
 
@@ -196,7 +204,12 @@ export class NotificationService {
 
       this._lastProspectosCount = count;
     });
+  }
 
+  /** Detiene únicamente el polling de prospectos (usado internamente en caso de 401). */
+  detenerPollingProspectos() {
+    this.prospectoPollingSubscription?.unsubscribe();
+    this.prospectoPollingSubscription = null;
   }
 
   marcarRealtimeLeida(id: string) {
@@ -315,7 +328,10 @@ export class NotificationService {
     return this.http.get<PagoRevisionItem[]>(
       `${this.apiUrl}/creditos/admin/pagos-en-revision`
     ).pipe(
-      catchError(() => of([] as PagoRevisionItem[]))
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401 || err.status === 403) this.detenerPolling();
+        return of([] as PagoRevisionItem[]);
+      })
     );
   }
 
@@ -323,7 +339,10 @@ export class NotificationService {
     return this.http.get<RetiroPendienteItem[]>(
       `${this.apiUrl}/tesoreria/retiros-pendientes`
     ).pipe(
-      catchError(() => of([] as RetiroPendienteItem[]))
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401 || err.status === 403) this.detenerPolling();
+        return of([] as RetiroPendienteItem[]);
+      })
     );
   }
 
@@ -331,7 +350,10 @@ export class NotificationService {
     return this.http.get<PendienteCobranzaItem[]>(
       `${this.apiUrl}/creditos/admin/pendientes-cobranza`
     ).pipe(
-      catchError(() => of([] as PendienteCobranzaItem[]))
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401 || err.status === 403) this.detenerPolling();
+        return of([] as PendienteCobranzaItem[]);
+      })
     );
   }
 
@@ -339,7 +361,10 @@ export class NotificationService {
     return this.http.get<SolicitudPendienteItem[]>(
       `${this.apiUrl}/creditos/solicitudes-pendientes`
     ).pipe(
-      catchError(() => of([] as SolicitudPendienteItem[]))
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401 || err.status === 403) this.detenerPolling();
+        return of([] as SolicitudPendienteItem[]);
+      })
     );
   }
 }
