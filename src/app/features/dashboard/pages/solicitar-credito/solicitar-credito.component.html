@@ -2,10 +2,8 @@
   <!-- Header -->
   <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex items-center gap-4">
-      <a
-        routerLink="/dashboard/creditos/mis-creditos"
-        class="w-10 h-10 bg-base-content/5 hover:bg-base-content/10 rounded-xl flex items-center justify-center text-base-content/60 hover:text-base-content transition-all"
-      >
+      <a routerLink="/dashboard/creditos/mis-creditos"
+        class="w-10 h-10 bg-base-content/5 hover:bg-base-content/10 rounded-xl flex items-center justify-center text-base-content/60 hover:text-base-content transition-all">
         <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
       </a>
       <div>
@@ -19,23 +17,14 @@
     <!-- Step Progress Desktop -->
     <div class="hidden md:flex items-center gap-2">
       <div *ngFor="let step of [1, 2, 3, 4, 5]" class="flex items-center gap-2">
-        <div
-          class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all duration-500"
-          [class.bg-primary]="currentStep >= step"
-          [class.text-primary-content]="currentStep >= step"
-          [class.bg-base-content/5]="currentStep < step"
-          [class.text-base-content/30]="currentStep < step"
-          [class.ring-4]="currentStep === step"
-          [class.ring-primary/20]="currentStep === step"
-        >
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all duration-500"
+          [class.bg-primary]="currentStep >= step" [class.text-primary-content]="currentStep >= step"
+          [class.bg-base-content/5]="currentStep < step" [class.text-base-content/30]="currentStep < step"
+          [class.ring-4]="currentStep === step" [class.ring-primary/20]="currentStep === step">
           {{ step }}
         </div>
-        <div
-          *ngIf="step < 5"
-          class="w-4 h-0.5 rounded-full"
-          [class.bg-primary]="currentStep > step"
-          [class.bg-base-content/5]="currentStep <= step"
-        ></div>
+        <div *ngIf="step < 5" class="w-4 h-0.5 rounded-full" [class.bg-primary]="currentStep > step"
+          [class.bg-base-content/5]="currentStep <= step"></div>
       </div>
     </div>
   </header>
@@ -45,35 +34,23 @@
     <aside class="lg:col-span-3 self-start top-24">
       <div class="bg-base-100/50 backdrop-blur-xl border border-base-content/10 rounded-3xl p-6">
         <div class="space-y-6">
-          <div
-            *ngFor="let step of [1, 2, 3, 4, 5]; let i = index"
-            class="flex items-center gap-4 transition-all duration-300 cursor-pointer"
-            (click)="currentStep = step"
-            [class.opacity-40]="currentStep < step"
-          >
+          <div *ngFor="let step of [1, 2, 3, 4, 5]; let i = index"
+            class="flex items-center gap-4 transition-all duration-300 cursor-pointer" (click)="currentStep = step"
+            [class.opacity-40]="currentStep < step">
             <div
               class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm transition-all shadow-lg"
-              [class.bg-primary]="currentStep >= step"
-              [class.text-primary-content]="currentStep >= step"
-              [class.bg-base-content/5]="currentStep < step"
-              [class.text-base-content/40]="currentStep < step"
-              [class.ring-4]="currentStep === step"
-              [class.ring-primary/20]="currentStep === step"
-            >
+              [class.bg-primary]="currentStep >= step" [class.text-primary-content]="currentStep >= step"
+              [class.bg-base-content/5]="currentStep < step" [class.text-base-content/40]="currentStep < step"
+              [class.ring-4]="currentStep === step" [class.ring-primary/20]="currentStep === step">
               <lucide-icon *ngIf="currentStep > step" name="check" class="w-5 h-5"></lucide-icon>
               <span *ngIf="currentStep <= step">{{ step }}</span>
             </div>
             <div>
-              <p
-                class="text-[10px] font-bold uppercase tracking-widest text-base-content/40 mb-0.5"
-              >
+              <p class="text-[10px] font-bold uppercase tracking-widest text-base-content/40 mb-0.5">
                 Paso {{ step }}
               </p>
-              <p
-                class="text-xs font-black transition-colors"
-                [class.text-base-content]="currentStep === step"
-                [class.text-base-content/40]="currentStep !== step"
-              >
+              <p class="text-xs font-black transition-colors" [class.text-base-content]="currentStep === step"
+                [class.text-base-content/40]="currentStep !== step">
                 {{ ['Configuración', 'Identidad', 'Ubicación', 'Laboral', 'Finalizar'][i] }}
               </p>
             </div>
@@ -81,25 +58,21 @@
         </div>
 
         <!-- Simulator Summary Mini -->
-        <div
-          *ngIf="cuotaEstimada > 0"
-          class="mt-12 pt-8 border-t border-base-content/5 animate-in fade-in slide-in-from-bottom-4 duration-500"
-        >
+        <div *ngIf="cuotaEstimada > 0"
+          class="mt-12 pt-8 border-t border-base-content/5 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-4">
             Resumen Estimado
           </p>
           <div class="space-y-3">
             <div class="flex justify-between items-center">
               <span class="text-xs text-base-content/60">Cuota Mensual</span>
-              <span class="text-lg font-black text-accent"
-                >{{ getSimboloMoneda() }} {{ cuotaEstimada | number:'1.2-2' }}</span
-              >
+              <span class="text-lg font-black text-accent">{{ getSimboloMoneda() }} {{ cuotaEstimada | number:'1.2-2'
+                }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-xs text-base-content/60">Total a Pagar</span>
-              <span class="text-xs font-bold text-base-content"
-                >{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span
-              >
+              <span class="text-xs font-bold text-base-content">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2'
+                }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-xs text-base-content/60">Tasa (TEM)</span>
@@ -112,15 +85,10 @@
 
     <!-- Main Form Area -->
     <div class="lg:col-span-6">
-      <div
-        class="bg-base-100/40 backdrop-blur-xl border border-base-content/10 rounded-3xl shadow-2xl"
-      >
+      <div class="bg-base-100/40 backdrop-blur-xl border border-base-content/10 rounded-3xl shadow-2xl">
         <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="p-6 md:p-10">
           <!-- STEP 1: CONFIGURACIÓN -->
-          <div
-            *ngIf="currentStep === 1"
-            class="animate-in fade-in slide-in-from-right-4 duration-300"
-          >
+          <div *ngIf="currentStep === 1" class="animate-in fade-in slide-in-from-right-4 duration-300">
             <div class="mb-8">
               <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
                 <lucide-icon name="settings" class="w-7 h-7 text-primary"></lucide-icon>
@@ -133,115 +101,85 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Tipo de Persona *</label
-                >
-                <select
-                  formControlName="tipoPersona"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Tipo de
+                  Persona *</label>
+                <select formControlName="tipoPersona"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                  [class.select-error]="isFieldInvalid('tipoPersona')"
-                >
+                  [class.select-error]="isFieldInvalid('tipoPersona')">
                   <option value="NATURAL">Persona Natural</option>
                   <option value="JURIDICA">Empresa (RUC 20)</option>
                 </select>
-                <p *ngIf="isFieldInvalid('tipoPersona')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
+                <p *ngIf="isFieldInvalid('tipoPersona')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio</p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Producto *</label
-                >
-                <select
-                  formControlName="tipoCreditoId"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Producto
+                  *</label>
+                <select formControlName="tipoCreditoId"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                  [class.select-error]="isFieldInvalid('tipoCreditoId')"
-                >
+                  [class.select-error]="isFieldInvalid('tipoCreditoId')">
                   <option value="" disabled selected>Selecciona un tipo de crédito</option>
                   <option *ngFor="let t of tiposCredito" [value]="t.id">{{ t.nombre }}</option>
                 </select>
-                <p *ngIf="isFieldInvalid('tipoCreditoId')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
+                <p *ngIf="isFieldInvalid('tipoCreditoId')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio</p>
               </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Moneda *</label
-                >
-                <select
-                  formControlName="monedaId"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Moneda
+                  *</label>
+                <select formControlName="monedaId"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                  [class.select-error]="isFieldInvalid('monedaId')"
-                >
+                  [class.select-error]="isFieldInvalid('monedaId')">
                   <option value="" disabled selected>Moneda</option>
                   <option *ngFor="let m of monedas" [value]="m.id">{{ m.simbolo }}</option>
                 </select>
-                <p *ngIf="isFieldInvalid('monedaId')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
+                <p *ngIf="isFieldInvalid('monedaId')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio</p>
               </div>
               <div class="form-control col-span-1">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Monto *</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Monto
+                  *</label>
                 <div class="relative">
                   <span
-                    class="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none"
-                    >{{ getSimboloMoneda() }}</span
-                  >
-                  <input
-                    type="number"
-                    formControlName="montoSolicitado"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none">{{
+                    getSimboloMoneda() }}</span>
+                  <input type="number" formControlName="montoSolicitado"
                     class="input input-bordered w-full bg-base-100 rounded-xl pl-8 pr-2 transition-all font-bold"
-                    [class.input-error]="isFieldInvalid('montoSolicitado')"
-                  />
+                    [class.input-error]="isFieldInvalid('montoSolicitado')" />
                 </div>
-                <p *ngIf="isFieldInvalid('montoSolicitado')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (mín. 100)</p>
+                <p *ngIf="isFieldInvalid('montoSolicitado')" class="text-[10px] text-error mt-2 font-medium">Este campo
+                  es obligatorio (mín. 100)</p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Plazo *</label
-                >
-                <input
-                  type="number"
-                  formControlName="plazoMeses"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Plazo
+                  *</label>
+                <input type="number" formControlName="plazoMeses"
                   class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                  placeholder="Meses"
-                  [class.input-error]="isFieldInvalid('plazoMeses')"
-                />
-                <p *ngIf="isFieldInvalid('plazoMeses')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (1-60 meses)</p>
+                  placeholder="Meses" [class.input-error]="isFieldInvalid('plazoMeses')" />
+                <p *ngIf="isFieldInvalid('plazoMeses')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio (1-60 meses)</p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Gracia (Meses)</label
-                >
-                <input
-                  type="number"
-                  formControlName="periodoGracia"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                />
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Gracia
+                  (Meses)</label>
+                <input type="number" formControlName="periodoGracia"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Banco / Entidad Financiera *</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Banco /
+                  Entidad Financiera *</label>
                 <div class="relative">
-                  <lucide-icon
-                    name="building"
-                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"
-                  ></lucide-icon>
-                  <select
-                    formControlName="bancoDesembolso"
+                  <lucide-icon name="building"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"></lucide-icon>
+                  <select formControlName="bancoDesembolso"
                     class="select select-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all font-bold"
-                    [class.select-error]="isFieldInvalid('bancoDesembolso')"
-                  >
+                    [class.select-error]="isFieldInvalid('bancoDesembolso')">
                     <option value="">Selecciona un Banco</option>
                     <option value="BCP">BCP</option>
                     <option value="BBVA">BBVA Perú</option>
@@ -258,36 +196,23 @@
                     <option value="OTROS">Otros</option>
                   </select>
                 </div>
-                <p
-                  *ngIf="isFieldInvalid('bancoDesembolso')"
-                  class="text-[10px] text-error mt-2 font-medium"
-                >
+                <p *ngIf="isFieldInvalid('bancoDesembolso')" class="text-[10px] text-error mt-2 font-medium">
                   Este campo es obligatorio
                 </p>
               </div>
 
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Cuenta / CCI para Desembolso *</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Cuenta / CCI
+                  para Desembolso *</label>
                 <div class="relative">
-                  <lucide-icon
-                    name="wallet"
-                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"
-                  ></lucide-icon>
-                  <input
-                    type="text"
-                    formControlName="cuentaDesembolso"
+                  <lucide-icon name="wallet"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/40 z-10 pointer-events-none"></lucide-icon>
+                  <input type="text" formControlName="cuentaDesembolso"
                     class="input input-bordered w-full bg-base-100 rounded-xl pl-9 pr-4 transition-all"
                     placeholder="Ingresa tu número de cuenta bancaria"
-                    [class.input-error]="isFieldInvalid('cuentaDesembolso')"
-                  />
+                    [class.input-error]="isFieldInvalid('cuentaDesembolso')" />
                 </div>
-                <p
-                  *ngIf="isFieldInvalid('cuentaDesembolso')"
-                  class="text-[10px] text-error mt-2 font-medium"
-                >
+                <p *ngIf="isFieldInvalid('cuentaDesembolso')" class="text-[10px] text-error mt-2 font-medium">
                   Este campo es obligatorio
                 </p>
               </div>
@@ -295,10 +220,7 @@
           </div>
 
           <!-- STEP 2: IDENTIDAD -->
-          <div
-            *ngIf="currentStep === 2"
-            class="animate-in fade-in slide-in-from-right-4 duration-300"
-          >
+          <div *ngIf="currentStep === 2" class="animate-in fade-in slide-in-from-right-4 duration-300">
             <div class="mb-8">
               <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
                 <lucide-icon name="id-card" class="w-7 h-7 text-primary"></lucide-icon>
@@ -311,140 +233,92 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Tipo Documento *</label
-                >
-                <select
-                  formControlName="tipoDocumento"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Tipo
+                  Documento *</label>
+                <select formControlName="tipoDocumento"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                  [class.select-error]="isFieldInvalid('tipoDocumento')"
-                >
+                  [class.select-error]="isFieldInvalid('tipoDocumento')">
                   <option value="DNI">DNI</option>
                   <option value="CARNET_EXTRANJERIA">Carnet Extranjería</option>
                   <option value="PASAPORTE">Pasaporte</option>
                 </select>
-                <p *ngIf="isFieldInvalid('tipoDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
+                <p *ngIf="isFieldInvalid('tipoDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio</p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Nro. Documento *</label
-                >
-                <input
-                  type="text"
-                  formControlName="numeroDocumento"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Nro.
+                  Documento *</label>
+                <input type="text" formControlName="numeroDocumento"
                   class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                  [class.input-error]="isFieldInvalid('numeroDocumento')"
-                />
-                <p *ngIf="isFieldInvalid('numeroDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio (mín. 8 caracteres)</p>
+                  [class.input-error]="isFieldInvalid('numeroDocumento')" />
+                <p *ngIf="isFieldInvalid('numeroDocumento')" class="text-[10px] text-error mt-2 font-medium">Este campo
+                  es obligatorio (mín. 8 caracteres)</p>
               </div>
               <div class="form-control">
                 <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Nacionalidad</label
-                >
-                <input
-                  type="text"
-                  formControlName="nacionalidad"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Nacionalidad</label>
+                <input type="text" formControlName="nacionalidad"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Fecha Nacimiento</label
-                >
-                <input
-                  type="date"
-                  formControlName="fechaNacimiento"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                />
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Fecha
+                  Nacimiento</label>
+                <input type="date" formControlName="fechaNacimiento"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Sexo</label
-                >
-                <select
-                  formControlName="sexo"
-                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Sexo</label>
+                <select formControlName="sexo"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all">
                   <option value="">Seleccione...</option>
                   <option value="MASCULINO">Masculino</option>
                   <option value="FEMENINO">Femenino</option>
                 </select>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Estado Civil *</label
-                >
-                <select
-                  formControlName="estadoCivil"
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Estado Civil
+                  *</label>
+                <select formControlName="estadoCivil"
                   class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                  [class.select-error]="isFieldInvalid('estadoCivil')"
-                >
+                  [class.select-error]="isFieldInvalid('estadoCivil')">
                   <option *ngFor="let ec of estadosCiviles" [value]="ec">{{ ec }}</option>
                 </select>
-                <p *ngIf="isFieldInvalid('estadoCivil')" class="text-[10px] text-error mt-2 font-medium">Este campo es obligatorio</p>
+                <p *ngIf="isFieldInvalid('estadoCivil')" class="text-[10px] text-error mt-2 font-medium">Este campo es
+                  obligatorio</p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Grado Instrucción</label
-                >
-                <select
-                  formControlName="gradoInstruccion"
-                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Grado
+                  Instrucción</label>
+                <select formControlName="gradoInstruccion"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all">
                   <option *ngFor="let gi of gradosInstruccion" [value]="gi">{{ gi }}</option>
                 </select>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Celular *</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Celular
+                  *</label>
                 <div class="relative">
-                  <lucide-icon
-                    name="phone"
-                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/30 z-10 pointer-events-none"
-                  ></lucide-icon>
-                  <input
-                    type="text"
-                    formControlName="celular"
+                  <lucide-icon name="phone"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/30 z-10 pointer-events-none"></lucide-icon>
+                  <input type="text" formControlName="celular"
                     class="input input-bordered w-full bg-base-100 rounded-xl pl-10 pr-4 transition-all font-bold"
-                    placeholder="987654321"
-                    [class.input-error]="isFieldInvalid('celular')"
-                  />
+                    placeholder="987654321" [class.input-error]="isFieldInvalid('celular')" />
                 </div>
-                <p
-                  *ngIf="isFieldInvalid('celular')"
-                  class="text-[10px] text-error mt-2 font-medium"
-                >
+                <p *ngIf="isFieldInvalid('celular')" class="text-[10px] text-error mt-2 font-medium">
                   Este campo es obligatorio (9 dígitos)
                 </p>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Teléfono (Opcional)</label
-                >
-                <input
-                  type="text"
-                  formControlName="telefono"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                />
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Teléfono
+                  (Opcional)</label>
+                <input type="text" formControlName="telefono"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
               </div>
             </div>
           </div>
 
           <!-- STEP 3: UBICACIÓN -->
-          <div
-            *ngIf="currentStep === 3"
-            class="animate-in fade-in slide-in-from-right-4 duration-300"
-          >
+          <div *ngIf="currentStep === 3" class="animate-in fade-in slide-in-from-right-4 duration-300">
             <div class="mb-8">
               <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
                 <lucide-icon name="home" class="w-7 h-7 text-primary"></lucide-icon>
@@ -456,115 +330,67 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div class="form-control">
                 <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Departamento</label
-                >
-                <input
-                  type="text"
-                  formControlName="departamento"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Departamento</label>
+                <input type="text" formControlName="departamento"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
                 <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Provincia</label
-                >
-                <input
-                  type="text"
-                  formControlName="provincia"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Provincia</label>
+                <input type="text" formControlName="provincia"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
                 <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Distrito</label
-                >
-                <input
-                  type="text"
-                  formControlName="distrito"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Distrito</label>
+                <input type="text" formControlName="distrito"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
             </div>
             <div class="form-control mb-6">
-              <label
-                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                >Dirección Completa</label
-              >
-              <input
-                type="text"
-                formControlName="direccion"
+              <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Dirección
+                Completa</label>
+              <input type="text" formControlName="direccion"
                 class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                placeholder="Calle, Av., Jr., Nro."
-              />
+                placeholder="Calle, Av., Jr., Nro." />
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div class="form-control">
                 <label
-                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Urb/Sector</label
-                >
-                <input
-                  type="text"
-                  formControlName="urbanizacion"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Urb/Sector</label>
+                <input type="text" formControlName="urbanizacion"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
                 <label
-                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Mz.</label
-                >
-                <input
-                  type="text"
-                  formControlName="manzana"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Mz.</label>
+                <input type="text" formControlName="manzana"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
                 <label
-                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Lote</label
-                >
-                <input
-                  type="text"
-                  formControlName="lote"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Lote</label>
+                <input type="text" formControlName="lote"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
-                <label
-                  class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Cód. Postal</label
-                >
-                <input
-                  type="text"
-                  formControlName="codigoPostal"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                <label class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Cód.
+                  Postal</label>
+                <input type="text" formControlName="codigoPostal"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
             </div>
             <div class="form-control mt-6">
-              <label
-                class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                >Referencia de Domicilio</label
-              >
-              <input
-                type="text"
-                formControlName="referencia"
+              <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Referencia de
+                Domicilio</label>
+              <input type="text" formControlName="referencia"
                 class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                placeholder="Ej: Frente a la comisaría, portón rojo"
-              />
+                placeholder="Ej: Frente a la comisaría, portón rojo" />
             </div>
           </div>
 
           <!-- STEP 4: LABORAL -->
-          <div
-            *ngIf="currentStep === 4"
-            class="animate-in fade-in slide-in-from-right-4 duration-300"
-          >
+          <div *ngIf="currentStep === 4" class="animate-in fade-in slide-in-from-right-4 duration-300">
             <div class="mb-8">
               <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
                 <lucide-icon name="briefcase" class="w-7 h-7 text-primary"></lucide-icon>
@@ -576,52 +402,34 @@
             </div>
 
             <!-- JURIDICA SECTION -->
-            <div
-              *ngIf="solicitudForm.get('tipoPersona')?.value === 'JURIDICA'"
-              class="bg-accent/10 border border-accent/20 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300"
-            >
+            <div *ngIf="solicitudForm.get('tipoPersona')?.value === 'JURIDICA'"
+              class="bg-accent/10 border border-accent/20 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300">
               <div class="flex items-center gap-3 mb-6">
-                <div
-                  class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center"
-                >
+                <div class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
                   <lucide-icon name="building-2" class="w-4 h-4"></lucide-icon>
                 </div>
                 <h3 class="text-sm font-black uppercase tracking-widest">Datos de la Empresa</h3>
               </div>
               <div class="space-y-6">
                 <div class="form-control">
-                  <label
-                    class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Razón Social</label
-                  >
-                  <input
-                    type="text"
-                    formControlName="razonSocialJuridica"
-                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                  />
+                  <label class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Razón
+                    Social</label>
+                  <input type="text" formControlName="razonSocialJuridica"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="form-control">
-                    <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >RUC Empresa</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="rucJuridico"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                    />
+                    <label class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">RUC
+                      Empresa</label>
+                    <input type="text" formControlName="rucJuridico"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                   </div>
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Representante Legal</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="representanteLegal"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Representante
+                      Legal</label>
+                    <input type="text" formControlName="representanteLegal"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                   </div>
                 </div>
               </div>
@@ -629,160 +437,100 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Condición Laboral</label
-                >
-                <select
-                  formControlName="situacionLaboral"
-                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all"
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Condición
+                  Laboral</label>
+                <select formControlName="situacionLaboral"
+                  class="select select-bordered w-full bg-base-100 rounded-xl transition-all">
                   <option *ngFor="let sl of situacionesLaborales" [value]="sl">{{ sl }}</option>
                 </select>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Cargo / Ocupación</label
-                >
-                <input
-                  type="text"
-                  formControlName="cargoOcupacion"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Cargo /
+                  Ocupación</label>
+                <input type="text" formControlName="cargoOcupacion"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Ingresos Mensuales</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Ingresos
+                  Mensuales</label>
                 <div class="relative">
                   <span
-                    class="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none"
-                    >{{ getSimboloMoneda() }}</span
-                  >
-                  <input
-                    type="number"
-                    formControlName="ingresoBrutoMensual"
-                    class="input input-bordered w-full bg-base-100 rounded-xl pl-12 pr-4 transition-all font-bold"
-                  />
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 font-bold z-10 pointer-events-none">{{
+                    getSimboloMoneda() }}</span>
+                  <input type="number" formControlName="ingresoBrutoMensual"
+                    class="input input-bordered w-full bg-base-100 rounded-xl pl-12 pr-4 transition-all font-bold" />
                 </div>
               </div>
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Fecha Ingreso</label
-                >
-                <input
-                  type="date"
-                  formControlName="fechaIngresoLaboral"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                />
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Fecha
+                  Ingreso</label>
+                <input type="date" formControlName="fechaIngresoLaboral"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
               </div>
-              <div
-                *ngIf="solicitudForm.get('situacionLaboral')?.value === 'DEPENDIENTE'"
-                class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-primary/5 rounded-3xl border border-primary/10 animate-in slide-in-from-top-2 duration-300"
-              >
+              <div *ngIf="solicitudForm.get('situacionLaboral')?.value === 'DEPENDIENTE'"
+                class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-primary/5 rounded-3xl border border-primary/10 animate-in slide-in-from-top-2 duration-300">
                 <div class="md:col-span-2">
-                  <h3
-                    class="text-sm font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2"
-                  >
+                  <h3 class="text-sm font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
                     <lucide-icon name="building-2" class="w-4 h-4"></lucide-icon>
                     Detalles del Empleador
                   </h3>
                 </div>
                 <div class="form-control">
-                  <label
-                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Nombre de Empresa</label
-                  >
-                  <input
-                    type="text"
-                    formControlName="empresa"
-                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                  />
+                  <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Nombre de
+                    Empresa</label>
+                  <input type="text" formControlName="empresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                 </div>
                 <div class="form-control">
-                  <label
-                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >RUC Empresa</label
-                  >
-                  <input
-                    type="text"
-                    formControlName="rucEmpresa"
-                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                  />
+                  <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">RUC
+                    Empresa</label>
+                  <input type="text" formControlName="rucEmpresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                 </div>
                 <div class="form-control md:col-span-2">
-                  <label
-                    class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Dirección de Empresa</label
-                  >
-                  <input
-                    type="text"
-                    formControlName="direccionEmpresa"
-                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                  />
+                  <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Dirección
+                    de Empresa</label>
+                  <input type="text" formControlName="direccionEmpresa"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                 </div>
               </div>
 
               <div class="form-control">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >Carga Familiar (Dependientes)</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Carga
+                  Familiar (Dependientes)</label>
                 <div class="flex items-center gap-4">
-                  <button
-                    type="button"
-                    class="btn btn-circle btn-sm btn-outline border-base-content/20"
-                    (click)="
+                  <button type="button" class="btn btn-circle btn-sm btn-outline border-base-content/20" (click)="
                       solicitudForm.patchValue({
                         numeroDependientes: solicitudForm.get('numeroDependientes')?.value - 1,
                       })
-                    "
-                    [disabled]="solicitudForm.get('numeroDependientes')?.value <= 0"
-                  >
+                    " [disabled]="solicitudForm.get('numeroDependientes')?.value <= 0">
                     -
                   </button>
                   <span class="text-lg font-black w-8 text-center">{{
                     solicitudForm.get('numeroDependientes')?.value
-                  }}</span>
-                  <button
-                    type="button"
-                    class="btn btn-circle btn-sm btn-outline border-base-content/20"
-                    (click)="
+                    }}</span>
+                  <button type="button" class="btn btn-circle btn-sm btn-outline border-base-content/20" (click)="
                       solicitudForm.patchValue({
                         numeroDependientes: solicitudForm.get('numeroDependientes')?.value + 1,
                       })
-                    "
-                  >
+                    ">
                     +
                   </button>
                 </div>
               </div>
 
-              <div
-                *ngIf="solicitudForm.get('situacionLaboral')?.value === 'INDEPENDIENTE'"
-                class="md:col-span-2 animate-in slide-in-from-top-2 duration-300"
-              >
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                  >RUC Propio / Negocio</label
-                >
-                <input
-                  type="text"
-                  formControlName="rucPropio"
-                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                />
+              <div *ngIf="solicitudForm.get('situacionLaboral')?.value === 'INDEPENDIENTE'"
+                class="md:col-span-2 animate-in slide-in-from-top-2 duration-300">
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-2 block">RUC Propio /
+                  Negocio</label>
+                <input type="text" formControlName="rucPropio"
+                  class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
               </div>
             </div>
           </div>
 
           <!-- STEP 5: FINALIZAR -->
-          <div
-            *ngIf="currentStep === 5"
-            class="animate-in fade-in slide-in-from-right-4 duration-300"
-          >
+          <div *ngIf="currentStep === 5" class="animate-in fade-in slide-in-from-right-4 duration-300">
             <div class="mb-8">
               <h2 class="text-2xl font-black mb-2 flex items-center gap-3">
                 <lucide-icon name="sparkles" class="w-7 h-7 text-primary"></lucide-icon>
@@ -794,13 +542,9 @@
             </div>
 
             <!-- Garante (Opcional) -->
-            <div
-              class="collapse collapse-plus bg-base-content/5 border border-base-content/10 rounded-3xl mb-6"
-            >
+            <div class="collapse collapse-plus bg-base-content/5 border border-base-content/10 rounded-3xl mb-6">
               <input type="checkbox" />
-              <div
-                class="collapse-title text-sm font-black uppercase tracking-widest flex items-center gap-3"
-              >
+              <div class="collapse-title text-sm font-black uppercase tracking-widest flex items-center gap-3">
                 <lucide-icon name="user-check" class="w-4 h-4"></lucide-icon>
                 ¿Deseas agregar un Garante? (Opcional)
               </div>
@@ -808,50 +552,33 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 pb-2 px-1">
                   <div class="form-control md:col-span-2">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Nombre Completo del Garante</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="garanteNombre"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Nombre
+                      Completo del Garante</label>
+                    <input type="text" formControlName="garanteNombre"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
+                  </div>
+                  <div class="form-control">
+                    <label class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">DNI
+                      del Garante</label>
+                    <input type="text" formControlName="garanteDni"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                   </div>
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >DNI del Garante</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="garanteDni"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                    />
-                  </div>
-                  <div class="form-control">
-                    <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Celular del Garante</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="garanteTelefono"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Celular
+                      del Garante</label>
+                    <input type="text" formControlName="garanteTelefono"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all" />
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- CONYUGE SECTION -->
-            <div
-              *ngIf="['CASADO', 'CONVIVIENTE'].includes(solicitudForm.get('estadoCivil')?.value)"
-              class="bg-accent/5 border border-accent/10 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300"
-            >
+            <div *ngIf="['CASADO', 'CONVIVIENTE'].includes(solicitudForm.get('estadoCivil')?.value)"
+              class="bg-accent/5 border border-accent/10 rounded-3xl p-6 mb-8 animate-in zoom-in-95 duration-300">
               <div class="flex items-center gap-3 mb-6">
-                <div
-                  class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center"
-                >
+                <div class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
                   <lucide-icon name="heart" class="w-4 h-4"></lucide-icon>
                 </div>
                 <h3 class="text-sm font-black uppercase tracking-widest text-accent">
@@ -861,49 +588,32 @@
               <div class="space-y-6">
                 <div class="form-control">
                   <label
-                    class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                    >Nombres</label
-                  >
-                  <input
-                    type="text"
-                    formControlName="nombresConyuge"
-                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                  />
+                    class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Nombres</label>
+                  <input type="text" formControlName="nombresConyuge"
+                    class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Apellido Paterno</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="apellidoPaConyuge"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Apellido
+                      Paterno</label>
+                    <input type="text" formControlName="apellidoPaConyuge"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                   </div>
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Apellido Materno</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="apellidoMatConyuge"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Apellido
+                      Materno</label>
+                    <input type="text" formControlName="apellidoMatConyuge"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                   </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="form-control">
-                    <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Tipo Documento Cónyuge</label
-                    >
-                    <select
-                      formControlName="conyugeTipoDocumento"
-                      class="select select-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                    >
+                    <label class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Tipo
+                      Documento Cónyuge</label>
+                    <select formControlName="conyugeTipoDocumento"
+                      class="select select-bordered w-full bg-base-100 rounded-xl transition-all font-bold">
                       <option value="DNI">DNI</option>
                       <option value="CE">Carnet Extranjería</option>
                       <option value="PASAPORTE">Pasaporte</option>
@@ -911,25 +621,16 @@
                   </div>
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Número Documento Cónyuge</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="conyugeNumeroDocumento"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Número
+                      Documento Cónyuge</label>
+                    <input type="text" formControlName="conyugeNumeroDocumento"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                   </div>
                   <div class="form-control">
                     <label
-                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block"
-                      >Ocupación</label
-                    >
-                    <input
-                      type="text"
-                      formControlName="conyugeOcupacion"
-                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold"
-                    />
+                      class="text-[10px] font-bold text-base-content/50 uppercase tracking-widest mb-2 block">Ocupación</label>
+                    <input type="text" formControlName="conyugeOcupacion"
+                      class="input input-bordered w-full bg-base-100 rounded-xl transition-all font-bold" />
                   </div>
                 </div>
               </div>
@@ -937,97 +638,67 @@
 
             <!-- PREFERENCIAS Y LEGAL -->
             <div class="bg-base-content/5 rounded-3xl p-6 mb-8">
-              <h3
-                class="text-[10px] font-black uppercase tracking-widest text-base-content/40 mb-4"
-              >
+              <h3 class="text-[10px] font-black uppercase tracking-widest text-base-content/40 mb-4">
                 Preferencias y Legal
               </h3>
 
               <div class="form-control mb-8">
-                <label
-                  class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-3 block"
-                  >¿Cómo deseas recibir tu Estado de Cuenta? *</label
-                >
+                <label class="text-xs font-bold text-base-content/50 uppercase tracking-widest mb-3 block">¿Cómo deseas
+                  recibir tu Estado de Cuenta? *</label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label
                     class="flex items-center gap-3 cursor-pointer p-3 rounded-2xl border border-base-content/10 bg-base-100 hover:bg-base-200 transition-all"
                     [class.ring-2]="solicitudForm.get('canalEstadoCuenta')?.value === 'EMAIL'"
-                    [class.ring-primary]="solicitudForm.get('canalEstadoCuenta')?.value === 'EMAIL'"
-                  >
-                    <input
-                      type="radio"
-                      formControlName="canalEstadoCuenta"
-                      value="EMAIL"
-                      class="radio radio-primary radio-sm"
-                    />
+                    [class.ring-primary]="solicitudForm.get('canalEstadoCuenta')?.value === 'EMAIL'">
+                    <input type="radio" formControlName="canalEstadoCuenta" value="EMAIL"
+                      class="radio radio-primary radio-sm" />
                     <span class="text-xs font-bold">Correo Electrónico</span>
                   </label>
                   <label
                     class="flex items-center gap-3 cursor-pointer p-3 rounded-2xl border border-base-content/10 bg-base-100 hover:bg-base-200 transition-all"
-                    [class.ring-2]="solicitudForm.get('canalEstadoCuenta')?.value === 'FISICO'"
-                    [class.ring-primary]="
+                    [class.ring-2]="solicitudForm.get('canalEstadoCuenta')?.value === 'FISICO'" [class.ring-primary]="
                       solicitudForm.get('canalEstadoCuenta')?.value === 'FISICO'
-                    "
-                  >
-                    <input
-                      type="radio"
-                      formControlName="canalEstadoCuenta"
-                      value="FISICO"
-                      class="radio radio-primary radio-sm"
-                    />
+                    ">
+                    <input type="radio" formControlName="canalEstadoCuenta" value="FISICO"
+                      class="radio radio-primary radio-sm" />
                     <span class="text-xs font-bold">Dirección Física</span>
                   </label>
                 </div>
-                <p
-                  *ngIf="isFieldInvalid('canalEstadoCuenta')"
-                  class="text-[10px] text-error mt-2 font-medium"
-                >
+                <p *ngIf="isFieldInvalid('canalEstadoCuenta')" class="text-[10px] text-error mt-2 font-medium">
                   Este campo es obligatorio
                 </p>
               </div>
 
               <div>
                 <label
-                  class="flex items-start gap-4 cursor-pointer group p-4 rounded-2xl hover:bg-base-content/5 transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    formControlName="terminosAceptados"
+                  class="flex items-start gap-4 cursor-pointer group p-4 rounded-2xl hover:bg-base-content/5 transition-colors">
+                  <input type="checkbox" formControlName="terminosAceptados"
                     class="checkbox checkbox-primary checkbox-sm mt-1"
-                    [class.checkbox-error]="isFieldInvalid('terminosAceptados')"
-                  />
+                    [class.checkbox-error]="isFieldInvalid('terminosAceptados')" />
                   <span
-                    class="text-[11px] text-base-content/60 leading-relaxed group-hover:text-base-content transition-colors"
-                  >
+                    class="text-[11px] text-base-content/60 leading-relaxed group-hover:text-base-content transition-colors">
                     Acepto los
                     <span class="text-primary font-bold underline">Términos y Condiciones</span> y
                     autorizo el tratamiento de mis datos personales según la ley vigente para la
                     evaluación de mi solicitud de crédito. *
                   </span>
                 </label>
-                <p
-                  *ngIf="isFieldInvalid('terminosAceptados')"
-                  class="text-[10px] text-error mt-1 px-4 font-medium"
-                >
+                <p *ngIf="isFieldInvalid('terminosAceptados')" class="text-[10px] text-error mt-1 px-4 font-medium">
                   Debes aceptar los términos y condiciones para continuar
                 </p>
               </div>
             </div>
 
             <!-- Global Error -->
-            <div
-              *ngIf="error"
-              class="mb-6 p-4 bg-error/10 border border-error/20 rounded-xl text-error text-sm flex items-center gap-3 animate-in fade-in zoom-in-95"
-            >
+            <div *ngIf="error"
+              class="mb-6 p-4 bg-error/10 border border-error/20 rounded-xl text-error text-sm flex items-center gap-3 animate-in fade-in zoom-in-95">
               <lucide-icon name="alert-circle" class="w-5 h-5 shrink-0"></lucide-icon>
               {{ error }}
             </div>
 
             <!-- Success State -->
-            <div
-              *ngIf="exito"
-              class="mb-6 p-8 bg-success/10 border border-success/20 rounded-3xl text-success text-center animate-bounce-subtle"
-            >
+            <div *ngIf="exito"
+              class="mb-6 p-8 bg-success/10 border border-success/20 rounded-3xl text-success text-center animate-bounce-subtle">
               <lucide-icon name="check-circle" class="w-16 h-16 mx-auto mb-4"></lucide-icon>
               <h3 class="text-2xl font-black mb-2">¡Solicitud Enviada!</h3>
               <p class="text-sm opacity-80">Estamos procesando tu requerimiento. Redirigiendo...</p>
@@ -1039,12 +710,8 @@
             <!-- Fila principal: Anterior | [espacio + basura] | Siguiente -->
             <div class="flex items-center gap-2 sm:gap-4">
               <!-- Botón Anterior -->
-              <button
-                type="button"
-                (click)="prevStep()"
-                *ngIf="currentStep > 1 && !exito"
-                class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3 rounded-xl font-bold text-base-content/50 hover:text-base-content hover:bg-base-content/5 transition-all"
-              >
+              <button type="button" (click)="prevStep()" *ngIf="currentStep > 1 && !exito"
+                class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3 rounded-xl font-bold text-base-content/50 hover:text-base-content hover:bg-base-content/5 transition-all">
                 <lucide-icon name="chevron-left" class="w-4 h-4 flex-shrink-0"></lucide-icon>
                 <span class="text-sm">Anterior</span>
               </button>
@@ -1054,37 +721,26 @@
 
               <!-- Basura (centro) -->
               <div class="flex-1 flex justify-center">
-                <button
-                  type="button"
-                  (click)="limpiarFormulario()"
-                  *ngIf="!exito"
+                <button type="button" (click)="limpiarFormulario()" *ngIf="!exito"
                   class="p-2.5 rounded-lg text-error/50 hover:bg-error/10 hover:text-error transition-all flex items-center gap-1.5"
-                  title="Limpiar Formulario y Borrar Autoguardado"
-                >
+                  title="Limpiar Formulario y Borrar Autoguardado">
                   <lucide-icon name="trash-2" class="w-4 h-4 flex-shrink-0"></lucide-icon>
                   <span class="hidden sm:inline text-xs font-bold">Limpiar Todo</span>
                 </button>
               </div>
 
               <!-- Botón Siguiente -->
-              <button
-                type="button"
-                (click)="nextStep()"
-                *ngIf="currentStep < totalSteps"
-                class="flex-shrink-0 bg-base-content text-base-100 px-5 sm:px-8 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-xl flex items-center gap-2 text-sm sm:text-base"
-              >
+              <button type="button" (click)="nextStep()" *ngIf="currentStep < totalSteps"
+                class="flex-shrink-0 bg-base-content text-base-100 px-5 sm:px-8 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-xl flex items-center gap-2 text-sm sm:text-base">
                 Siguiente
                 <lucide-icon name="chevron-right" class="w-4 h-4 flex-shrink-0"></lucide-icon>
               </button>
 
               <!-- Botón Enviar (último step) -->
-              <button
-                type="submit"
-                *ngIf="currentStep === totalSteps && !exito"
-                [disabled]="enviando"
-                class="flex-shrink-0 btn btn-primary px-6 sm:px-10 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20 text-sm sm:text-base"
-              >
-                <span *ngIf="!enviando" class="flex items-center gap-2">🚀 <span class="hidden xs:inline">Enviar </span>Solicitud</span>
+              <button type="submit" *ngIf="currentStep === totalSteps && !exito" [disabled]="enviando"
+                class="flex-shrink-0 btn btn-primary px-6 sm:px-10 py-3 rounded-xl font-black hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20 text-sm sm:text-base">
+                <span *ngIf="!enviando" class="flex items-center gap-2">🚀 <span class="hidden xs:inline">Enviar
+                  </span>Solicitud</span>
                 <span *ngIf="enviando" class="flex items-center gap-2">
                   <span class="loading loading-spinner h-5 w-5"></span>
                   <span class="hidden sm:inline">Procesando...</span>
@@ -1099,8 +755,7 @@
     <!-- Simulator Detail Panel (Right) -->
     <aside class="lg:col-span-3 self-start top-24">
       <div
-        class="bg-base-100/50 backdrop-blur-xl border border-base-content/10 rounded-3xl p-6 max-h-[calc(100vh-8rem)] flex flex-col"
-      >
+        class="bg-base-100/50 backdrop-blur-xl border border-base-content/10 rounded-3xl p-6 max-h-[calc(100vh-8rem)] flex flex-col">
         <h3 class="text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
             <lucide-icon name="calculator" class="w-4 h-4"></lucide-icon>
@@ -1110,8 +765,7 @@
 
         <div *ngIf="cronogramaSimulado.length === 0" class="text-center py-20">
           <div
-            class="w-12 h-12 bg-base-content/5 rounded-full flex items-center justify-center mx-auto mb-4 opacity-20"
-          >
+            class="w-12 h-12 bg-base-content/5 rounded-full flex items-center justify-center mx-auto mb-4 opacity-20">
             <lucide-icon name="calendar-days" class="w-6 h-6"></lucide-icon>
           </div>
           <p class="text-xs text-base-content/40 italic px-4">
@@ -1119,18 +773,12 @@
           </p>
         </div>
 
-        <div
-          *ngIf="cronogramaSimulado.length > 0"
-          class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3 mb-6"
-        >
-          <div
-            *ngFor="let cuota of cronogramaSimulado"
-            class="bg-base-content/5 border border-base-content/5 rounded-2xl p-4 flex items-center justify-between group hover:bg-base-content/10 transition-all duration-300"
-          >
+        <div *ngIf="cronogramaSimulado.length > 0" class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3 mb-6">
+          <div *ngFor="let cuota of cronogramaSimulado"
+            class="bg-base-content/5 border border-base-content/5 rounded-2xl p-4 flex items-center justify-between group hover:bg-base-content/10 transition-all duration-300">
             <div class="flex items-center gap-3">
               <div
-                class="w-8 h-8 rounded-lg bg-base-200 flex items-center justify-center text-[10px] font-bold text-base-content/40 group-hover:bg-primary/20 group-hover:text-primary transition-colors"
-              >
+                class="w-8 h-8 rounded-lg bg-base-200 flex items-center justify-center text-[10px] font-bold text-base-content/40 group-hover:bg-primary/20 group-hover:text-primary transition-colors">
                 {{ cuota.numero }}
               </div>
               <div>
@@ -1149,24 +797,19 @@
           </div>
         </div>
 
-        <div
-          *ngIf="cronogramaSimulado.length > 0"
-          class="mt-auto p-5 bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-2xl relative overflow-hidden"
-        >
-          <div
-            class="absolute -right-4 -bottom-4 w-16 h-16 bg-accent/10 blur-xl rounded-full"
-          ></div>
+        <div *ngIf="cronogramaSimulado.length > 0"
+          class="mt-auto p-5 bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-2xl relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-accent/10 blur-xl rounded-full"></div>
           <div class="flex justify-between items-center relative z-10">
-            <span class="text-[10px] font-black text-accent uppercase tracking-widest"
-              >Interés Total</span
-            >
+            <span class="text-[10px] font-black text-accent uppercase tracking-widest">Interés Total</span>
             <span class="text-sm font-black">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
           </div>
         </div>
 
-        <button *ngIf="cronogramaSimulado.length > 0" type="button" class="btn btn-outline btn-primary w-full mt-4" (click)="abrirModalCronograma()">
-            <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
-            Ver Tabla Completa
+        <button *ngIf="cronogramaSimulado.length > 0" type="button" class="btn btn-outline btn-primary w-full mt-4"
+          (click)="abrirModalCronograma()">
+          <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+          Ver Tabla Completa
         </button>
 
       </div>
@@ -1189,11 +832,13 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
           <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Monto a Pagar</span>
-          <span class="text-lg font-black text-primary">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2' }}</span>
+          <span class="text-lg font-black text-primary">{{ getSimboloMoneda() }} {{ totalPagar | number:'1.2-2'
+            }}</span>
         </div>
         <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
           <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Interés Total</span>
-          <span class="text-lg font-black text-error">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2' }}</span>
+          <span class="text-lg font-black text-error">{{ getSimboloMoneda() }} {{ totalInteres | number:'1.2-2'
+            }}</span>
         </div>
         <div class="bg-base-200/50 p-4 rounded-2xl border border-base-content/5">
           <span class="text-xs font-bold text-base-content/60 uppercase block mb-1">Tasa Mensual (TEM)</span>
@@ -1219,13 +864,17 @@
           </thead>
           <tbody>
             @for (cuota of cronogramaSimulado; track cuota.numero) {
-            <tr class="hover:bg-base-200/50 transition-colors" [class.bg-warning]="cuota.esGracia" [class.bg-opacity-10]="cuota.esGracia">
-              <td class="font-medium">{{ cuota.numero }} <span *ngIf="cuota.esGracia" class="text-[10px] uppercase text-warning ml-1">(Gracia)</span></td>
+            <tr class="hover:bg-base-200/50 transition-colors" [class.bg-warning]="cuota.esGracia"
+              [class.bg-opacity-10]="cuota.esGracia">
+              <td class="font-medium">{{ cuota.numero }} <span *ngIf="cuota.esGracia"
+                  class="text-[10px] uppercase text-warning ml-1">(Gracia)</span></td>
               <td>{{ cuota.fecha | date:'dd/MM/yyyy' }}</td>
               <td class="text-right">{{ getSimboloMoneda() }} {{ cuota.capital | number:'1.2-2' }}</td>
               <td class="text-right text-error/80">{{ getSimboloMoneda() }} {{ cuota.interes | number:'1.2-2' }}</td>
-              <td class="text-right font-bold text-primary">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}</td>
-              <td class="text-right text-base-content/70">{{ getSimboloMoneda() }} {{ cuota.saldo | number:'1.2-2' }}</td>
+              <td class="text-right font-bold text-primary">{{ getSimboloMoneda() }} {{ cuota.total | number:'1.2-2' }}
+              </td>
+              <td class="text-right text-base-content/70">{{ getSimboloMoneda() }} {{ cuota.saldo | number:'1.2-2' }}
+              </td>
             </tr>
             }
           </tbody>

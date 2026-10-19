@@ -4,13 +4,19 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface ReporteDTO {
-  prestamosAprobados: number[];
-  prestamosRechazados: number[];
-  estadoCartera: number[];
-  clientesActivos: number[];
-  desembolsos: number[];
-  recuperacion: number[];
-  tiposCredito: number[];
+  gananciaMensual: number[];
+  gananciaAnual: number[];
+  aniosGanancia: string[];
+  capitalCanceladoMensual: number[];
+  interesesCanceladosMensual: number[];
+  clientesNormal: number;
+  clientesProblemas: number;
+  clientesDeficiente: number;
+  clientesDudoso: number;
+  clientesPerdida: number;
+  montoARecibirMensual: number[];
+  montoRecibidoMensual: number[];
+  perdidasMensuales: number[];
 }
 
 @Injectable({

@@ -158,7 +158,8 @@
         </div>
         <h3 class="text-2xl font-extrabold text-base-content mt-1">S/ {{ capitalTotalCard() | number:'1.0-0' }}</h3>
         <p class="text-xs font-semibold text-emerald-500 mt-2 flex items-center gap-1">
-          <span class="text-[10px]">▲</span> 18.5% <span class="text-base-content/40 font-normal">vs año anterior</span>
+          <lucide-icon name="check-circle" size="13"></lucide-icon>
+          <span class="text-base-content/60 font-medium">{{ getPeriodoLabel() }}</span>
         </p>
       </div>
 
@@ -174,7 +175,8 @@
         </div>
         <h3 class="text-2xl font-extrabold text-base-content mt-1">S/ {{ interesesGanadosCard() | number:'1.0-0' }}</h3>
         <p class="text-xs font-semibold text-emerald-500 mt-2 flex items-center gap-1">
-          <span class="text-[10px]">▲</span> 12.7% <span class="text-base-content/40 font-normal">vs año anterior</span>
+          <lucide-icon name="check-circle" size="13"></lucide-icon>
+          <span class="text-base-content/60 font-medium">{{ getPeriodoLabel() }}</span>
         </p>
       </div>
 
@@ -190,7 +192,8 @@
         </div>
         <h3 class="text-2xl font-extrabold text-base-content mt-1">S/ {{ carteraActivaCard() | number:'1.0-0' }}</h3>
         <p class="text-xs font-semibold text-emerald-500 mt-2 flex items-center gap-1">
-          <span class="text-[10px]">▲</span> 15.3% <span class="text-base-content/40 font-normal">vs año anterior</span>
+          <lucide-icon name="check-circle" size="13"></lucide-icon>
+          <span class="text-base-content/60 font-medium">{{ getPeriodoLabel() }}</span>
         </p>
       </div>
 
@@ -206,7 +209,8 @@
         </div>
         <h3 class="text-2xl font-extrabold text-base-content mt-1">{{ creditosVigentesCard() | number }}</h3>
         <p class="text-xs font-semibold text-emerald-500 mt-2 flex items-center gap-1">
-          <span class="text-[10px]">▲</span> 9.8% <span class="text-base-content/40 font-normal">vs año anterior</span>
+          <lucide-icon name="check-circle" size="13"></lucide-icon>
+          <span class="text-base-content/60 font-medium">{{ getPeriodoLabel() }}</span>
         </p>
       </div>
 

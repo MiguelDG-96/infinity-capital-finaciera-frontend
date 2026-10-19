@@ -31,16 +31,28 @@ export class Reportes implements OnInit, OnDestroy {
   isApplyingFilters = signal(false);
   isFullscreen = signal(false);
 
-  capitalTotalCard = signal(458760);
-  interesesGanadosCard = signal(32680);
-  carteraActivaCard = signal(325450);
-  creditosVigentesCard = signal(1248);
+  capitalTotalCard = signal(0);
+  interesesGanadosCard = signal(0);
+  carteraActivaCard = signal(0);
+  creditosVigentesCard = signal(0);
 
   textColor = computed(() => this.themeService.darkMode() ? '#e2e8f0' : '#334155');
   titleColor = computed(() => this.themeService.darkMode() ? '#ffffff' : '#0f172a');
   gridColor = computed(() => this.themeService.darkMode() ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)');
 
   mesesLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  mesesNombres = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+  getPeriodoLabel(): string {
+    if (this.selectedMonth === 'todos') {
+      return `Total año ${this.selectedYear}`;
+    }
+    const idx = parseInt(this.selectedMonth, 10) - 1;
+    if (idx >= 0 && idx < 12) {
+      return `${this.mesesNombres[idx]} ${this.selectedYear}`;
+    }
+    return `Año ${this.selectedYear}`;
+  }
 
   ngOnInit() {
     this.aplicarFiltros();
@@ -106,18 +118,30 @@ export class Reportes implements OnInit, OnDestroy {
           ]
         };
 
-        // Compute cards metrics
-        const totalCap = (data.capitalCanceladoMensual || []).reduce((a: number, b: number) => a + b, 0);
-        this.capitalTotalCard.set(totalCap || 458760);
-        
-        const totalInt = (data.interesesCanceladosMensual || []).reduce((a: number, b: number) => a + b, 0);
-        this.interesesGanadosCard.set(totalInt || 32680);
+        // Calcular métricas de tarjetas de acuerdo al filtro de mes
+        let totalCap = 0;
+        let totalInt = 0;
+        let totalCartera = 0;
 
-        const totalCartera = (data.montoARecibirMensual || []).reduce((a: number, b: number) => a + b, 0);
-        this.carteraActivaCard.set(totalCartera || 325450);
+        if (this.selectedMonth === 'todos') {
+          totalCap = (data.capitalCanceladoMensual || []).reduce((a: number, b: number) => a + b, 0);
+          totalInt = (data.interesesCanceladosMensual || []).reduce((a: number, b: number) => a + b, 0);
+          totalCartera = (data.montoARecibirMensual || []).reduce((a: number, b: number) => a + b, 0);
+        } else {
+          const monthIdx = parseInt(this.selectedMonth, 10) - 1;
+          if (monthIdx >= 0 && monthIdx < 12) {
+            totalCap = data.capitalCanceladoMensual?.[monthIdx] ?? 0;
+            totalInt = data.interesesCanceladosMensual?.[monthIdx] ?? 0;
+            totalCartera = data.montoARecibirMensual?.[monthIdx] ?? 0;
+          }
+        }
 
         const totalCreditos = (data.clientesNormal || 0) + (data.clientesProblemas || 0) + (data.clientesDeficiente || 0) + (data.clientesDudoso || 0);
-        this.creditosVigentesCard.set(totalCreditos || 1248);
+
+        this.capitalTotalCard.set(totalCap);
+        this.interesesGanadosCard.set(totalInt);
+        this.carteraActivaCard.set(totalCartera);
+        this.creditosVigentesCard.set(totalCreditos);
 
         this.isApplyingFilters.set(false);
       },
