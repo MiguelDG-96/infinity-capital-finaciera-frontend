@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Client, Message, IFrame } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import { environment } from '../../../environments/environment';
 
 export interface AppNotification {
@@ -19,15 +20,7 @@ export interface AppNotification {
 export class WebsocketService {
   private client: Client | null = null;
 
-  /**
-   * Construye la URL de WebSocket nativo (wss:// en producción, ws:// en local).
-   * Se elimina '/api/v1' del path porque el WebSocket en Spring Boot vive en la raíz.
-   * Usando brokerURL en lugar de SockJS para evitar el pre-chequeo HTTP /info que falla con 404.
-   */
-  private readonly wsUrl = environment.apiUrl
-    .replace('https://', 'wss://')
-    .replace('http://', 'ws://')
-    .replace('/api/v1', '') + '/ws';
+  private readonly socketUrl = environment.apiUrl.replace('/api/v1', '') + '/ws';
 
   // Señal que guarda las últimas notificaciones
   readonly notifications = signal<AppNotification[]>([]);
@@ -40,10 +33,12 @@ export class WebsocketService {
   connect(token: string) {
     if (this.client && this.client.active) return;
 
-    console.log('🔌 Conectando WebSocket nativo a:', this.wsUrl);
+    console.log('🔌 Conectando WebSocket a:', this.socketUrl);
 
     this.client = new Client({
-      brokerURL: this.wsUrl,
+      webSocketFactory: () => new SockJS(this.socketUrl, null, {
+        transports: ['websocket', 'xhr-streaming', 'xhr-polling']
+      }),
       connectHeaders: {
         Authorization: `Bearer ${token}`
       },
@@ -71,7 +66,7 @@ export class WebsocketService {
     };
 
     this.client.onWebSocketError = (evt: Event) => {
-      console.error('❌ Error de WebSocket nativo:', evt);
+      console.error('❌ Error de WebSocket:', evt);
     };
 
     this.client.activate();
@@ -85,15 +80,23 @@ export class WebsocketService {
           atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))
             .split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
         ));
-        const id = payload.id || payload.userId || payload.sub;
-        if (id && this.client) {
-          this.client.subscribe('/topic/logout/' + id, (message: Message) => {
-            const body = JSON.parse(message.body);
-            if (body.action === 'logout') {
-              this.forceLogoutEvent.set(body);
+        const ids = new Set<string>();
+        if (payload.id) ids.add(String(payload.id));
+        if (payload.userId) ids.add(String(payload.userId));
+        if (payload.sub) ids.add(String(payload.sub));
+
+        ids.forEach(id => {
+          this.client?.subscribe('/topic/logout/' + id, (message: Message) => {
+            try {
+              const body = JSON.parse(message.body);
+              if (body.action === 'logout') {
+                this.forceLogoutEvent.set(body);
+              }
+            } catch (err) {
+              console.error('Error parseando logout:', err);
             }
           });
-        }
+        });
       }
     } catch (e) {
       console.error('Error decoding token for WS logout', e);
@@ -101,8 +104,13 @@ export class WebsocketService {
   }
 
   disconnect() {
-    if (this.client && this.client.active) {
-      this.client.deactivate();
+    if (this.client) {
+      try {
+        this.client.deactivate();
+      } catch (e) {
+        console.error('Error desactivando cliente WS', e);
+      }
+      this.client = null;
     }
   }
 

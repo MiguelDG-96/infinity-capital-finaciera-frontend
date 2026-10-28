@@ -59,15 +59,20 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     effect(() => {
       const logoutEvent = this.websocketService.forceLogoutEvent();
       if (logoutEvent) {
-        alert(logoutEvent.mensaje || 'Tu sesión ha sido cerrada remotamente.');
+        this.websocketService.disconnect();
         this.authService.logout();
         this.router.navigate(['/login']);
+        alert(logoutEvent.mensaje || 'Tu sesión ha sido cerrada remotamente.');
       }
     });
   }
 
   ngOnInit() {
     const authData = this.authService.currentUser();
+    if (authData?.accessToken) {
+      this.websocketService.connect(authData.accessToken);
+    }
+
     const rol = this.authService.currentUserData()?.rol;
     if (rol === 'ROLE_ADMIN' || rol === 'ROLE_TRABAJADOR') {
       this.notificationService.iniciarPolling();
