@@ -20,7 +20,8 @@ export interface AppNotification {
 export class WebsocketService {
   private client: Client | null = null;
 
-  private readonly socketUrl = environment.apiUrl.replace('/api/v1', '') + '/ws';
+  // Usar la ruta de la API (/api/v1/ws) para atravesar el reverse proxy Apache/cPanel sin bloqueos
+  private readonly socketUrl = `${environment.apiUrl}/ws`;
 
   // Señal que guarda las últimas notificaciones
   readonly notifications = signal<AppNotification[]>([]);
