@@ -76,7 +76,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
     this.clearTimers();
     this.state = 'LOADING';
     this.statusMessage = 'Generando código QR seguro...';
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
 
     const url = `${this.baseUrl}/api/auth/qr/generate`;
     const payload = {
@@ -103,14 +103,14 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
           this.state = 'ERROR';
           this.statusMessage = 'Error al renderizar el código QR.';
         }
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al generar sesión QR:', err);
         if (this.isDestroyed) return;
         this.state = 'ERROR';
         this.statusMessage = 'No fue posible conectar con el servicio de autenticación ARGOS.';
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       }
     });
   }
@@ -128,7 +128,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
         if (this.secondsRemaining <= 0) {
           this.handleExpiration();
         }
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       }
     }, 1000);
   }
@@ -155,12 +155,12 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
             this.state = 'SCANNED';
             this.deviceName = res.deviceName || 'Dispositivo Móvil';
             this.statusMessage = res.message || 'Código escaneado. Confirma con tu huella/Face ID.';
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           } else if (res.status === 'Approved') {
             this.state = 'APPROVED';
             this.statusMessage = '¡Inicio de sesión aprobado!';
             this.clearTimers();
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
 
             setTimeout(() => {
               this.loginSuccess.emit(res.authPayload);
@@ -169,7 +169,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
             this.state = 'REJECTED';
             this.statusMessage = res.message || 'El inicio de sesión fue cancelado en tu teléfono.';
             this.clearTimers();
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           }
         },
         error: (err) => {
@@ -185,7 +185,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
     this.clearTimers();
     this.state = 'EXPIRED';
     this.statusMessage = 'El código QR ha expirado.';
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   private clearTimers(): void {
