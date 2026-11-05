@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -95,7 +95,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
         try {
           this.qrDataUrl = await this.qrService.generateQrWithLogo(challenge.qrData);
           this.state = 'PENDING';
-          this.statusMessage = 'Abre tu app KYVORA y apunta con tu cámara.';
+          this.statusMessage = 'Abre tu app ARGOS Mobile y apunta con tu cámara.';
           this.startCountdown();
           this.startPolling(challenge.token);
         } catch (err) {
@@ -109,7 +109,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
         console.error('Error al generar sesión QR:', err);
         if (this.isDestroyed) return;
         this.state = 'ERROR';
-        this.statusMessage = 'No fue posible conectar con el servicio de autenticación KYVORA.';
+        this.statusMessage = 'No fue posible conectar con el servicio de autenticación ARGOS.';
         this.cdr.markForCheck();
       }
     });
