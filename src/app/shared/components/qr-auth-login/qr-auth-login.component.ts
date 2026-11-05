@@ -38,8 +38,8 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
   state: QrState = 'LOADING';
   currentChallenge: QrChallenge | null = null;
   qrDataUrl: string | null = null;
-  secondsRemaining: number = 50;
-  totalSeconds: number = 50;
+  secondsRemaining: number = 120;
+  totalSeconds: number = 120;
   deviceName: string = '';
   statusMessage: string = '';
 
@@ -81,7 +81,7 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
     const url = `${this.baseUrl}/api/auth/qr/generate`;
     const payload = {
       targetSystem: this.targetSystem,
-      ttlSeconds: 50
+      ttlSeconds: 120
     };
 
     this.http.post<QrChallenge>(url, payload).subscribe({
