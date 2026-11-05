@@ -1,0 +1,133 @@
+<div class="qr-auth-card">
+  <!-- Encabezado -->
+  <div class="qr-header">
+    <div class="qr-badge">
+      <span class="qr-badge-pulse"></span>
+      <span>Acceso Biométrico Seguro</span>
+    </div>
+    <h3 class="qr-title">Inicia sesión con tu teléfono</h3>
+    <p class="qr-subtitle">{{ statusMessage }}</p>
+  </div>
+
+  <!-- Contenedor del Código QR estilo WhatsApp Web -->
+  <div class="qr-visual-container">
+    <!-- QR Box -->
+    <div class="qr-box" [class.is-blurred]="state === 'EXPIRED' || state === 'SCANNED' || state === 'APPROVED'">
+      @if (qrDataUrl) {
+        <img [src]="qrDataUrl" alt="Código QR de inicio de sesión" class="qr-image" />
+      } @else {
+        <div class="qr-placeholder-skeleton">
+          <div class="qr-spinner"></div>
+          <span>Generando código...</span>
+        </div>
+      }
+    </div>
+
+    <!-- OVERLAY: Código Expirado (Idéntico a WhatsApp Web) -->
+    @if (state === 'EXPIRED') {
+      <div class="qr-overlay expired-overlay">
+        <div class="expired-content">
+          <button type="button" class="btn-reload-qr" (click)="reloadQr()" title="Recargar código QR">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="reload-icon">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+              <path d="M21 21v-5h-5"></path>
+            </svg>
+          </button>
+          <p class="expired-title">El código QR ha expirado</p>
+          <button type="button" class="expired-link-btn" (click)="reloadQr()">
+            Haz clic para recargar el código QR
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- OVERLAY: Código Escaneado (Esperando confirmación biométrica) -->
+    @if (state === 'SCANNED') {
+      <div class="qr-overlay scanned-overlay">
+        <div class="scanned-content">
+          <div class="scanned-icon-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+          </div>
+          <p class="scanned-title">¡Código Escaneado!</p>
+          <p class="scanned-device">{{ deviceName }}</p>
+          <div class="scanned-waiting">
+            <div class="mini-spinner"></div>
+            <span>Confirma con tu huella / Face ID</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- OVERLAY: Aprobado / Login Exitoso -->
+    @if (state === 'APPROVED') {
+      <div class="qr-overlay approved-overlay">
+        <div class="approved-content">
+          <div class="approved-checkmark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <p class="approved-title">Identidad Verificada</p>
+          <p class="approved-subtitle">Ingresando al sistema...</p>
+        </div>
+      </div>
+    }
+
+    <!-- OVERLAY: Rechazado -->
+    @if (state === 'REJECTED') {
+      <div class="qr-overlay rejected-overlay">
+        <div class="rejected-content">
+          <div class="rejected-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <p class="rejected-title">Acceso Rechazado</p>
+          <button type="button" class="btn-retry" (click)="reloadQr()">Intentar de nuevo</button>
+        </div>
+      </div>
+    }
+
+    <!-- OVERLAY: Error de Conexión -->
+    @if (state === 'ERROR') {
+      <div class="qr-overlay error-overlay">
+        <div class="error-content">
+          <p class="error-title">Servicio no disponible</p>
+          <p class="error-desc">{{ statusMessage }}</p>
+          <button type="button" class="btn-retry" (click)="reloadQr()">Reintentar conexión</button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Barra de Tiempo Regresivo -->
+  @if (state === 'PENDING') {
+    <div class="timer-section">
+      <div class="timer-bar-track">
+        <div class="timer-bar-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+      <div class="timer-text-row">
+        <span class="timer-dot"></span>
+        <span class="timer-caption">Expira en {{ secondsRemaining }}s</span>
+      </div>
+    </div>
+  }
+
+  <!-- Instrucciones de uso -->
+  <div class="qr-instructions">
+    <ol class="steps-list">
+      <li>Abre la aplicación <strong>KYVORA / ARGOS</strong> en tu móvil.</li>
+      <li>Toca en el botón <strong>Escanear QR</strong>.</li>
+      <li>Apunta tu cámara a esta pantalla para entrar con tu biometría.</li>
+    </ol>
+  </div>
+</div>
+

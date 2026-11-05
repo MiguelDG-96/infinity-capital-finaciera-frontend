@@ -128,7 +128,41 @@
       </div>
 
       <!-- Formulario -->
+            <!-- Selector de Metodo de Inicio de Sesion (Tabs QR vs Password) -->
       @if (!requires2FA()) {
+        <div class="flex gap-2 p-1 bg-base-200/50 rounded-xl border border-base-content/10 mb-4">
+          <button 
+            type="button" 
+            class="flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2"
+            [class.bg-white]="loginMethod() === 'credentials'"
+            [class.text-primary]="loginMethod() === 'credentials'"
+            [class.shadow-sm]="loginMethod() === 'credentials'"
+            [class.text-base-content]="loginMethod() !== 'credentials'"
+            (click)="setLoginMethod('credentials')"
+          >
+            <lucide-icon name="lock" size="14"></lucide-icon>
+            <span>Contraseña</span>
+          </button>
+          <button 
+            type="button" 
+            class="flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2"
+            [class.bg-white]="loginMethod() === 'qr'"
+            [class.text-primary]="loginMethod() === 'qr'"
+            [class.shadow-sm]="loginMethod() === 'qr'"
+            [class.text-base-content]="loginMethod() !== 'qr'"
+            (click)="setLoginMethod('qr')"
+          >
+            <lucide-icon name="smartphone" size="14"></lucide-icon>
+            <span>Escanear QR</span>
+            <span class="badge badge-primary badge-xs text-[10px] text-white">Móvil</span>
+          </button>
+        </div>
+
+        @if (loginMethod() === 'qr') {
+          <div class="pt-2">
+            <app-qr-auth-login [targetSystem]="'infinity'" (loginSuccess)="onQrLoginSuccess($event)" (cancel)="setLoginMethod('credentials')"></app-qr-auth-login>
+          </div>
+        } @else {
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-8 flex flex-col gap-6">
           <!-- Error Message -->
           @if (errorMessage()) {
@@ -214,6 +248,7 @@
             </button>
           </div>
         </form>
+        }
       } @else {
         <form [formGroup]="otpForm" (ngSubmit)="onSubmit2FA()" class="mt-8 flex flex-col gap-6">
           <!-- Error Message -->

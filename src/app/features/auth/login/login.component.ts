@@ -6,11 +6,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { WebAuthnUtils } from '../../../core/utils/webauthn.utils';
+import { QrAuthLoginComponent } from '../../../shared/components/qr-auth-login/qr-auth-login.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, LucideAngularModule, ReactiveFormsModule, RouterLink, QrAuthLoginComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
+  loginMethod = signal<'credentials' | 'qr'>('credentials');
   showPassword = signal(false);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -207,6 +209,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       console.error('Passkey login error', err);
       this.isLoading.set(false);
       this.errorMessage.set('Fallo la autenticación con Passkey. Verifica tu dispositivo o usa tu contraseña.');
+    }
+  }
+
+  setLoginMethod(method: 'credentials' | 'qr'): void {
+    this.loginMethod.set(method);
+    this.errorMessage.set(null);
+  }
+
+  onQrLoginSuccess(authPayload: any): void {
+    try {
+      this.authService.applyQrLoginSession(authPayload);
+      this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      console.error('Error procesando sesión QR:', err);
+      this.errorMessage.set('Error al procesar la sesión autorizada por código QR.');
     }
   }
 }

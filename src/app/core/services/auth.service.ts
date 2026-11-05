@@ -168,6 +168,16 @@ export class AuthService {
     );
   }
 
+  applyQrLoginSession(payload: any): void {
+    if (!payload) return;
+    const auth: AuthModel = {
+      accessToken: payload.accessToken || payload.token,
+      refreshToken: payload.refreshToken || '',
+      message: 'SUCCESS'
+    };
+    this.saveToStorage(auth);
+  }
+
   logout(): void {
     const refreshToken = this.status()?.refreshToken;
 
