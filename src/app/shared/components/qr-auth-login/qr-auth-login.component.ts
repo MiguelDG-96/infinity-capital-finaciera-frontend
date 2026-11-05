@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -141,8 +141,14 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const url = `${this.baseUrl}/api/auth/qr/status/${token}`;
-      this.http.get<QrStatusResponse>(url).subscribe({
+      const url = `${this.baseUrl}/api/auth/qr/status/${token}?_t=${Date.now()}`;
+      this.http.get<QrStatusResponse>(url, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      }).subscribe({
         next: (res) => {
           if (this.isDestroyed) return;
 
