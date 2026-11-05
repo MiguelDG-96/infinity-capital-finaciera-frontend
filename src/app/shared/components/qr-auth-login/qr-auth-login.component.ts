@@ -146,17 +146,8 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
         next: (res) => {
           if (this.isDestroyed) return;
 
-          if (res.isExpired || res.status === 'Expired') {
-            this.handleExpiration();
-            return;
-          }
-
-          if (res.status === 'Scanned' && this.state !== 'SCANNED') {
-            this.state = 'SCANNED';
-            this.deviceName = res.deviceName || 'Dispositivo Móvil';
-            this.statusMessage = res.message || 'Código escaneado. Confirma con tu huella/Face ID.';
-            this.cdr.detectChanges();
-          } else if (res.status === 'Approved') {
+          // 1. Prioridad: Si ya fue aprobado, autenticar de inmediato
+          if (res.status === 'Approved') {
             this.state = 'APPROVED';
             this.statusMessage = '¡Inicio de sesión aprobado!';
             this.clearTimers();
@@ -164,11 +155,30 @@ export class QrAuthLoginComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
               this.loginSuccess.emit(res.authPayload);
-            }, 600);
-          } else if (res.status === 'Rejected') {
+            }, 400);
+            return;
+          }
+
+          // 2. Si fue rechazado
+          if (res.status === 'Rejected') {
             this.state = 'REJECTED';
             this.statusMessage = res.message || 'El inicio de sesión fue cancelado en tu teléfono.';
             this.clearTimers();
+            this.cdr.detectChanges();
+            return;
+          }
+
+          // 3. Expirado
+          if (res.isExpired || res.status === 'Expired') {
+            this.handleExpiration();
+            return;
+          }
+
+          // 4. Escaneado
+          if (res.status === 'Scanned' && this.state !== 'SCANNED') {
+            this.state = 'SCANNED';
+            this.deviceName = res.deviceName || 'Dispositivo Móvil';
+            this.statusMessage = res.message || 'Código escaneado. Confirma con tu huella/Face ID.';
             this.cdr.detectChanges();
           }
         },
